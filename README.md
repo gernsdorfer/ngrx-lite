@@ -8,7 +8,15 @@
 * ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools)
 * 💽 support session/locale Storage
 
-## Usage
+
+
+### install
+
+yarn: `yarn install @gernsdorfer/ngrx-lite`
+
+npm: `npm install @gernsdorfer/ngrx-lite`
+
+### Usage
 
 ```ts
 interface MyModel {
