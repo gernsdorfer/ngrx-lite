@@ -1,0 +1,93 @@
+{
+  "projectType": "application",
+  "root": "apps/ngrx-lite",
+  "sourceRoot": "apps/ngrx-lite/src",
+  "prefix": "ngrx-lite",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/ngrx-lite",
+        "index": "apps/ngrx-lite/src/index.html",
+        "main": "apps/ngrx-lite/src/main.ts",
+        "polyfills": "apps/ngrx-lite/src/polyfills.ts",
+        "tsConfig": "apps/ngrx-lite/tsconfig.app.json",
+        "assets": [
+          "apps/ngrx-lite/src/favicon.ico",
+          "apps/ngrx-lite/src/assets"
+        ],
+        "styles": ["apps/ngrx-lite/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/ngrx-lite/src/environments/environment.ts",
+              "with": "apps/ngrx-lite/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "ngrx-lite:build:production"
+        },
+        "development": {
+          "browserTarget": "ngrx-lite:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "ngrx-lite:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/ngrx-lite/src/**/*.ts",
+          "apps/ngrx-lite/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/ngrx-lite"],
+      "options": {
+        "jestConfig": "apps/ngrx-lite/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
