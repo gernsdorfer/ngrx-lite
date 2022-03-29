@@ -1,7 +1,7 @@
 {
   "npmScope": "ngrx-lite",
   "affected": {
-    "defaultBase": "main"
+    "defaultBase": "master"
   },
   "cli": {
     "defaultCollection": "@nrwl/angular",
