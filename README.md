@@ -1,6 +1,6 @@
 # NgrxLite
 
-### This Lib based on [ngrx](https://github.com/ngrx/platform) component-store but with some benefits 😎
+### This Lib based on [ngrx](https://github.com/ngrx/platform) component-store, with some benefits 😎
 
 * ⏱ create fast and easy a redux store
 * ⏳ integrated loading state

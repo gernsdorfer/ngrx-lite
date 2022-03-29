@@ -1,6 +1,6 @@
 {
   "name": "@gernsdorfer/ngrx-lite",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "peerDependencies": {
     "@angular/common": "^13.2.0",
     "@angular/core": "^13.2.0",
@@ -9,5 +9,19 @@
   },
   "dependencies": {
     "tslib": "^2.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gernsdorfer/ngrx-lite"
+  },
+  "keywords": [
+    "Angular",
+    "Redux",
+    "NgRx",
+    "Local State",
+    "Component State",
+    "State management"
+  ],
+  "author": "Lars Wiedemann <gernsdorferlo@gmail.com> (https://github.com/gernsdorfer)",
+  "license": "MIT"
 }
