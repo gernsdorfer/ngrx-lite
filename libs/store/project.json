@@ -1,0 +1,43 @@
+{
+  "projectType": "library",
+  "root": "libs/store",
+  "sourceRoot": "libs/store/src",
+  "prefix": "ngrx-lite",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "outputs": ["dist/libs/store"],
+      "options": {
+        "project": "libs/store/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/store/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/store/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "codeCoverage": true,
+        "main": "libs/store/src/test.ts",
+        "tsConfig": "libs/store/tsconfig.spec.json",
+        "karmaConfig": "libs/store/karma.conf.js"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/store/src/**/*.ts",
+          "libs/store/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
