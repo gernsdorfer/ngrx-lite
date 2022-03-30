@@ -69,7 +69,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
               (error: ERROR) => {
                 const newState = { isLoading: false, error };
                 this.ngrxStore.dispatch({
-                  type: `[${this.storeName}] SUCCESS`,
+                  type: `[${this.storeName}] ERROR`,
                   payload: newState,
                 });
                 this.setState(newState);
