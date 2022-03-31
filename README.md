@@ -1,6 +1,6 @@
 # NgrxLite
 
-### This Lib based on [ngrx](https://github.com/ngrx/platform) component-store, with some benefits 😎
+> small angular State Mangement based on [ngrx](https://github.com/ngrx/platform) component-store, with some benefits 😎
 
 * ⏱ create fast and easy a redux store
 * ⏳ integrated loading state
@@ -8,36 +8,29 @@
 * ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools)
 * 💽 support session/locale Storage
 
+<hr />
 
+[![Build Status](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/ci.yml/badge.svg)]()
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()
 
-### install
+## Install
 
 yarn: `yarn install @gernsdorfer/ngrx-lite`
 
 npm: `npm install @gernsdorfer/ngrx-lite`
 
-### Usage
+## Usage
 
 ```ts
-interface MyModel {
-  name: string;
-}
-
-interface MyError {
-  name: string;
-}
-
-@Injectable({
-  providedIn: 'root',
+@Component({
+  selector: 'my-component',
+  template: '<button (click)="load(\'test\')">',
 })
-class MyStore {
-  // 1. create your Store
+class MyComponent {
   private store = this.storeFactory.getStore<MyModel, MyError>('MyStore');
-
-  // 2. make your state public
+  
   public myState = this.readAssetKiStore.state$;
-
-  // 3. add your effects
   public load = this.readAssetKiStore.createEffect('myEffect', (name) => of({name}));
 
   constructor(private storeFactory: StoreFactory) {
@@ -45,35 +38,17 @@ class MyStore {
 }
 ```
 
-That's it 🥳
+## What's going on ? Let's have a look into the the redux devtools
 
-It's time to use your new Store 👏
 
-```ts
 
-@Component({
-  selector: 'my-component',
-  templateUrl: './my-component.html',
-})
-export class EditorContainerComponent {
-  constructor(public myStore: MyStore) {
-  }
-
-  load() {
-    this.myStore.load('stuff');
-  }
-}
-```
-
-### What's going on ? Let's have a look into the the redux devtools
-
-#### Loader State `isloading` changed
+### Loader State `isloading` changed
 
 You can now show an Loader for your Application
 
 ![State-Loading](screens/store-start.png)
 
-#### Date is ready
+### Date is ready
 
 You can now show your Data
 
@@ -99,7 +74,7 @@ You can now show your Data
 1. Create your new Store with a session Storage Sync Option
 
 ```ts
-class {
+class MyLCass {
   private store = this.storeFactory.getStore<MyModel, MyError>('MyStore', {storage: 'sessionStoragePlugin'});
 }
 ```
