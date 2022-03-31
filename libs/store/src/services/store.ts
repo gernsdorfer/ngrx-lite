@@ -1,5 +1,5 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
 import { StoreState } from '../models';
 import {
@@ -32,38 +32,33 @@ export class Store<ITEM, ERROR> extends ComponentStore<
   ) =>
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
-        tap(() => {
-          this.patchState((state) => {
-            const newState = { isLoading: true };
-            this.ngrxStore.dispatch({
-              type: `[${this.storeName}] LOAD`,
-              payload: { ...state, ...newState },
-            });
-            return { isLoading: true };
-          });
-        }),
+        tap(() =>
+          this.patchState((state) =>
+            this.setNewState('LOAD', { ...state, isLoading: true })
+          )
+        ),
         switchMap((params) =>
           effect(params).pipe(
             tapResponse(
-              (item) => {
-                const newState = { isLoading: false, item };
-                this.ngrxStore.dispatch({
-                  type: `[${this.storeName}] SUCCESS`,
-                  payload: newState,
-                });
-                this.setState(newState);
-              },
-              (error: ERROR) => {
-                const newState = { isLoading: false, error };
-                this.ngrxStore.dispatch({
-                  type: `[${this.storeName}] ERROR`,
-                  payload: newState,
-                });
-                this.setState(newState);
-              }
+              (item) =>
+                this.setState(
+                  this.setNewState('SUCCESS', { isLoading: false, item })
+                ),
+              (error: ERROR) =>
+                this.setState(
+                  this.setNewState('ERROR', { isLoading: false, error })
+                )
             )
           )
         )
       )
     );
+
+  private setNewState<T>(action: string, state: T): T {
+    this.ngrxStore.dispatch({
+      type: `[${this.storeName}] ${action}`,
+      payload: { ...state },
+    });
+    return state;
+  }
 }
