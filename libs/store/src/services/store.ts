@@ -1,5 +1,5 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
 import { StoreState } from '../models';
 import {
@@ -23,19 +23,6 @@ export class Store<ITEM, ERROR> extends ComponentStore<
   ) {
     super(state);
   }
-
-  public reset = this.effect((action$: Observable<void>) =>
-    action$.pipe(
-      tap(() => {
-        const newState = getDefaultState<ITEM, ERROR>();
-        this.ngrxStore.dispatch({
-          type: `[${this.storeName}] RESET`,
-          payload: newState,
-        });
-        this.setState(newState);
-      })
-    )
-  );
 
   createEffect = <EFFECT_PARAMS>(
     name: string,

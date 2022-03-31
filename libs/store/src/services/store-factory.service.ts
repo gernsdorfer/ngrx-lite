@@ -11,6 +11,7 @@ import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { filter, map, switchMap, take } from 'rxjs';
 
+export { getDefaultState } from './store';
 type storagePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 
 @Injectable({ providedIn: 'root' })
@@ -110,9 +111,7 @@ export class StoreFactory {
           )
         )
       )
-      .subscribe((state) => {
-        store.setState(state);
-      });
+      .subscribe((state) => store.setState(state));
   }
 
   private addStoreReducer<ITEM, ERROR>(

@@ -1,0 +1,6 @@
+<ng-container *ngIf="counterState$ | async as counterState">
+  <button (click)="inrement(counterState.item)">+</button>
+
+  <pre>{{ counterState | json }}</pre>
+  <div class="lds-dual-ring" *ngIf="counterState.isLoading"></div>
+</ng-container>

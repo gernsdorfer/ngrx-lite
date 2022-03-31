@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@gernsdorfer/ngrx-lite": ["libs/store/src/index.ts"]
+      "@gernsdorfer/ngrx-lite": ["libs/store/src/index.ts"],
+      "@gernsdorfer/ngrx-lite/testing": ["libs/store/src/testing/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

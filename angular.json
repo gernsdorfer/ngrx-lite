@@ -1,8 +1,7 @@
 {
   "version": 2,
   "projects": {
-    "ngrx-lite": "apps/ngrx-lite",
-    "ngrx-lite-e2e": "apps/ngrx-lite-e2e",
+    "sample-app": "apps/sample-app",
     "store": "libs/store"
   }
 }

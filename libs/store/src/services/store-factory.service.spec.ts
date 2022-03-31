@@ -48,24 +48,6 @@ describe('StoreFactory', () => {
     };
   };
 
-  describe('reset', () => {
-    it('should reset state to default state', () => {
-      const { storeFactory } = getStoreFactory();
-
-      const store = storeFactory.getStore<MyTestModel, MyErrorState>(
-        'testStore'
-      );
-
-      store.setState({ isLoading: true, item: { name: 'testName' } });
-
-      store.reset();
-
-      expect(store.state$).toBeObservable(
-        cold('a', { a: { isLoading: false } })
-      );
-    });
-  });
-
   it('should run without plugins', () => {
     const { storeFactory } = getStoreFactory({});
 
