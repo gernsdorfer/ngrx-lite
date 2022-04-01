@@ -1,0 +1,20 @@
+{
+  "github": {
+    "release": true,
+    "releaseName": "${version}",
+    "tokenRef": "GITHUB_AUTH"
+  },
+  "plugins": {
+    "release-it-lerna-changelog": {
+      "infile": "CHANGELOG.md"
+    },
+    "release-it-yarn-workspaces": {
+      "skipChecks": true,
+      "publish": false
+    }
+  },
+  "npm": false,
+  "git": {
+    "commitMessage": "chore: release ${version}"
+  }
+}
