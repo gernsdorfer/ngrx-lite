@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '16'
-      - run: npm install
+      - run: yarn
       - run: npx nx affected --target=build --all --parallel=3
       - run: npx nx affected --target=test --all --parallel=2
   pr:
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '16'
-      - run: npm install
+      - run: yarn
       - run: npx nx affected --target=build --parallel=3
       - run: npx nx affected --target=test --parallel=2
       - run: npx nx affected --target=lint --parallel=2

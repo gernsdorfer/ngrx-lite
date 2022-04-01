@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { delay, of } from 'rxjs';
+import { of } from 'rxjs';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 @Component({
