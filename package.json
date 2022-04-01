@@ -10,6 +10,10 @@
     "test": "nx test",
     "build:release": "nx run store:build:production"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gernsdorfer/ngrx-lite.git"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~13.2.0",
