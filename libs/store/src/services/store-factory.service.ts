@@ -66,6 +66,7 @@ export class StoreFactory {
           this.ngrxStore.pipe(
             take(1),
             filter(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (ngrxState: { [index: string]: any }) =>
                 JSON.stringify(currentState) !==
                 JSON.stringify(ngrxState[storeName])
@@ -98,6 +99,7 @@ export class StoreFactory {
   ) {
     this.ngrxStore
       .pipe(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         switchMap((ngrxState: { [index: string]: any }) =>
           store.state$.pipe(
             take(1),
