@@ -15,7 +15,7 @@
 [![Node.js Package](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml/badge.svg?branch=master)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml)
 
 
-- 🚀 Try out on [StackBlitz](https://stackblitz.com/edit/ngrx-lite)
+- 🚀 Try out on [StackBlitz](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app)
 - 👩‍💻 checkout the [Sample-App](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
 
 ## Install

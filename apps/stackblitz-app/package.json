@@ -1,0 +1,37 @@
+{
+  "name": "ngxrx-lite-stackblitz-app",
+  "version": "0.0.4",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "dependencies": {
+    "@angular/common": "^13.2.0",
+    "@angular/compiler": "^13.2.0",
+    "@angular/core": "^13.2.0",
+    "@angular/forms": "^13.2.0",
+    "@angular/platform-browser": "^13.2.0",
+    "@angular/platform-browser-dynamic": "^13.2.0",
+    "@angular/router": "^13.2.0",
+    "@gernsdorfer/ngrx-lite": "^0.0.4",
+    "@ngrx/component-store": "^13.1.0",
+    "@ngrx/store": "^13.1.0",
+    "@ngrx/store-devtools": "^13.1.0",
+    "rxjs": "^7.5.2",
+    "tslib": "^2.3.1",
+    "zone.js": "^0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~13.3.1",
+    "@angular/cli": "~13.3.1",
+    "@angular/compiler-cli": "~13.3.1",
+    "@types/node": "17.0.23",
+    "tslint": "~6.1.0",
+    "typescript": "~4.6.3"
+  }
+}
