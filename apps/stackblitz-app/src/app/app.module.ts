@@ -3,16 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import {
   LocalStoragePlugin,
-  SessionStoragePlugin,
   localStoragePlugin,
+  SessionStoragePlugin,
   sessionStoragePlugin,
 } from '@gernsdorfer/ngrx-lite';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
-import { BasicExampleComponent } from './basic/basic.component';
-import { StorageExampleComponent } from './storage/storage.component';
+import { BasicExampleComponent } from './components/basic/basic.component';
+import { StorageExampleComponent } from './components/storage/storage.component';
+import { StorageFromServiceComponent } from './components/service-counter/storage-from-service.component';
+import { CounterStore } from './services/counter-service';
+import {StorageFromGlobalServiceComponent} from "./components/global-counter/storage-from-global-service.component";
 
 @NgModule({
   imports: [
@@ -26,14 +29,23 @@ import { StorageExampleComponent } from './storage/storage.component';
     RouterModule.forRoot([
       { path: '', component: BasicExampleComponent },
       { path: 'storage', component: StorageExampleComponent },
+      { path: 'storage-from-service', component: StorageFromServiceComponent },
+      { path: 'storage-from-global-service', component: StorageFromGlobalServiceComponent },
       { path: '**', redirectTo: '' },
     ]),
   ],
   providers: [
+    CounterStore,
     { provide: SessionStoragePlugin, useValue: sessionStoragePlugin },
     { provide: LocalStoragePlugin, useValue: localStoragePlugin },
   ],
-  declarations: [AppComponent, BasicExampleComponent, StorageExampleComponent],
+  declarations: [
+    AppComponent,
+    BasicExampleComponent,
+    StorageExampleComponent,
+    StorageFromServiceComponent,
+    StorageFromGlobalServiceComponent
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

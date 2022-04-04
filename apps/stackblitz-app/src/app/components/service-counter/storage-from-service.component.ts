@@ -1,0 +1,16 @@
+import { Component } from '@angular/core';
+import { CounterStore } from '../../services/counter-service';
+
+@Component({
+  selector: 'my-service-counter',
+  templateUrl: 'service-counter.html',
+})
+export class StorageFromServiceComponent {
+  public counterState$ = this.counterStore.counterState$;
+
+  constructor(private counterStore: CounterStore) {}
+
+  increment(counter?: number) {
+    this.counterStore.inrement(counter);
+  }
+}

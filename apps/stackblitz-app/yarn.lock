@@ -1175,10 +1175,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@gernsdorfer/ngrx-lite@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@gernsdorfer/ngrx-lite/-/ngrx-lite-0.0.4.tgz#d5c4f867c31c46b5c503115bad8b3ca68c72537e"
-  integrity sha512-nGU6ipy5g8mg4fMe1Jh/sLpYrSqvfpBmVe8hcxcu06Cl+mepvnXsACg3OglNgJQIL3HaSMYKq40qvNY+QdZAGg==
+"@gernsdorfer/ngrx-lite@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@gernsdorfer/ngrx-lite/-/ngrx-lite-0.2.0.tgz#eaab77d8adb3d94365dc203fbe0cd0b5ad899c07"
+  integrity sha512-UVDGbJ4KDhIvVlhTg31nYs1W+/Q87CNNhSmX4Aq5+84mGR+2v395IzWv0T7SUBHCP0V1VlupKhuNwExatm+fsw==
   dependencies:
     tslib "^2.3.0"
 
