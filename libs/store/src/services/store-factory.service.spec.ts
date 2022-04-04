@@ -6,6 +6,7 @@ import { InjectionToken } from '@angular/core';
 import { StoreFactory } from './store-factory.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Action, ReducerManager } from '@ngrx/store';
+import SpyObj = jasmine.SpyObj;
 
 interface MyTestModel {
   name: string;
@@ -28,8 +29,17 @@ describe('StoreFactory', () => {
   } = {}): {
     storeFactory: StoreFactory;
     mockStore: MockStore;
-    reducerManager: ReducerManager;
+    reducerManager: SpyObj<ReducerManager>;
   } => {
+    const reducerManager = jasmine.createSpyObj<ReducerManager>(
+      'ReducerManager',
+      { addReducer: undefined, removeReducer: undefined },
+      {
+        currentReducers: {
+          oldStore: () => undefined,
+        },
+      }
+    );
     TestBed.configureTestingModule({
       providers: [
         StoreFactory,
@@ -37,6 +47,10 @@ describe('StoreFactory', () => {
         provideMockStore({
           initialState: {},
         }),
+        {
+          provide: ReducerManager,
+          useValue: reducerManager,
+        },
       ].filter((provider) => provider),
       teardown: { destroyAfterEach: false },
     });
@@ -44,7 +58,7 @@ describe('StoreFactory', () => {
     return {
       storeFactory: TestBed.inject(StoreFactory),
       mockStore: TestBed.inject(MockStore),
-      reducerManager: TestBed.inject(ReducerManager),
+      reducerManager: reducerManager,
     };
   };
   it('should run without plugins', () => {
@@ -76,11 +90,30 @@ describe('StoreFactory', () => {
   });
 
   describe('ngrxStore', () => {
+    it('should call removeReducer for destory the store', () => {
+      const { storeFactory, reducerManager } = getStoreFactory();
+      const myStore = storeFactory.getStore<MyTestModel, MyErrorState>(
+        'myStory'
+      );
+
+      myStore.ngOnDestroy();
+
+      expect(reducerManager.removeReducer).toHaveBeenCalledWith('myStory');
+    });
+    it('should warn for create same store', () => {
+      const { storeFactory } = getStoreFactory();
+      const spyWarn = spyOn(console, 'warn');
+      storeFactory.getStore<MyTestModel, MyErrorState>('oldStore');
+      expect(spyWarn).toHaveBeenCalledWith(
+        'store oldStore exists, changes will be override. Please destroy your store or rename it before create a new one'
+      );
+    });
     it('should set state from ngrx store', () => {
       const { storeFactory, mockStore } = getStoreFactory();
       const store = storeFactory.getStore<MyTestModel, MyErrorState>(
         'testStore'
       );
+
       mockStore.setState({
         testStore: <MyState>{ isLoading: false },
       });
@@ -158,7 +191,7 @@ describe('StoreFactory', () => {
     describe('addStoreReducer', () => {
       it('should return undefined for unknown actiontype', (done) => {
         const { storeFactory, reducerManager } = getStoreFactory();
-        spyOn(reducerManager, 'addReducer').and.callFake((name, callback) => {
+        reducerManager.addReducer.and.callFake((name, callback) => {
           expect(callback({}, { type: 'unknownType' })).toEqual({});
 
           expect(

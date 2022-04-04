@@ -1,24 +1,27 @@
 import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { getDefaultState, StoreState } from '@gernsdorfer/ngrx-lite';
+import { cold } from 'jasmine-marbles';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
+import {HomeComponent} from "./home.component";
 
-describe('AppComponent', () => {
+describe('HomeComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AppComponent],
+      declarations: [HomeComponent],
       providers: [storeTestingFactory()],
     }).compileComponents();
   });
 
-  const getApp = () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  const getComponent = () => {
+    const fixture = TestBed.createComponent(HomeComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return {
       component,
     };
   };
+
   it('should be defined', () => {
-    expect(getApp()).toBeDefined();
+    expect(getComponent()).toBeDefined();
   });
 });

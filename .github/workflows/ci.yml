@@ -20,8 +20,8 @@ jobs:
         with:
           node-version: '16'
       - run: yarn
-      - run: npx nx affected --target=build --all --parallel=3
-      - run: npx nx affected --target=test --all --parallel=2
+      - run: yarn run affected:lint --target=build --all --parallel=3
+      - run: yarn run affected:test --target=test --all --parallel=2
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}

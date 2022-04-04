@@ -44,7 +44,7 @@ npm: `npm install @gernsdorfer/ngrx-lite`
   selector: 'my-component',
   template: '<button (click)="load(\'test\')">',
 })
-class MyComponent {
+class MyComponent implements OnDestroy {
   private store = this.storeFactory.getStore<MyModel, MyError>('MyStore');
 
   public myState = this.readAssetKiStore.state$;
@@ -53,6 +53,10 @@ class MyComponent {
   );
 
   constructor(private storeFactory: StoreFactory) {
+  }
+
+  ngOnDestroy() {
+    this.store.ngOnDestroy();
   }
 }
 ```
@@ -111,7 +115,7 @@ see an Action named `[MyStore] RESET`.
 If you didn't define an Action name you can see an Action `[MyStore] UNKNOWN`.
 
 ```ts
-class MyComponent {
+class MyComponent implements OnDestroy {
   private store = this.storeFactory.getStore<MyModel, MyError>('MyStore');
 
   constructor(private storeFactory: StoreFactory) {
@@ -120,6 +124,10 @@ class MyComponent {
   reset() {
     // you cann see a `RESET` action in your Devtools
     store.setState({isLoading: false}, 'RESET')
+  }
+
+  ngOnDestroy() {
+    this.store.ngOnDestroy();
   }
 }
 ```

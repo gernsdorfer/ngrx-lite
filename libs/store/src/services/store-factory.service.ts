@@ -9,7 +9,7 @@ import { ClientStoragePlugin, StoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ReducerManager, Store as NgrxStore } from '@ngrx/store';
-import { filter, map, switchMap, take } from 'rxjs';
+import { filter, map, switchMap, take, takeUntil } from 'rxjs';
 
 export { getDefaultState } from './store';
 type storagePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
@@ -40,6 +40,7 @@ export class StoreFactory {
     { storage }: { storage?: storagePluginTypes } = {}
   ): Store<ITEM, ERROR> {
     const initialState = this.getInitialState<ITEM, ERROR>(storeName, storage);
+    this.addStoreReducer<ITEM, ERROR>(storeName, initialState);
     const store = Injector.create({
       providers: [
         { provide: Store },
@@ -49,9 +50,11 @@ export class StoreFactory {
       ],
     }).get(Store);
 
-    this.addStoreReducer<ITEM, ERROR>(storeName, initialState);
     this.storeStateChangesToClientStorage(storeName, store, storage);
     this.changeStateFromExternalChanges<ITEM, ERROR>(storeName, store);
+    store.destroy$.subscribe(() =>
+      this.reducerManager.removeReducer(storeName)
+    );
     return store;
   }
 
@@ -60,9 +63,10 @@ export class StoreFactory {
     store: Store<ITEM, ERROR>,
     storage?: storagePluginTypes
   ) {
-    store.state$.subscribe((state) =>
-      this.getStorageByKey(storage)?.setStateToStorage(storeName, state)
-    );
+    store.state$.pipe(takeUntil(store.destroy$)).subscribe({
+      next: (state) =>
+        this.getStorageByKey(storage)?.setStateToStorage(storeName, state),
+    });
   }
 
   private changeStateFromExternalChanges<ITEM, ERROR>(
@@ -71,11 +75,13 @@ export class StoreFactory {
   ) {
     this.ngrxStore
       .pipe(
+        takeUntil(store.destroy$),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         filter((ngrxState: { [index: string]: any }) => !!ngrxState[storeName]),
         map((ngrxState) => ngrxState[storeName]),
         switchMap((storeFromgrxStore) =>
           store.state$.pipe(
+            takeUntil(store.destroy$),
             take(1),
             filter(
               (currentState) =>
@@ -86,13 +92,23 @@ export class StoreFactory {
           )
         )
       )
-      .subscribe((state) => store.setState(state, '', true));
+      .subscribe({
+        next: (state) => store.setState(state, '', true),
+      });
   }
 
   private addStoreReducer<ITEM, ERROR>(
     storeName: string,
     initialState: StoreState<ITEM, ERROR>
   ): void {
+    if (
+      this.reducerManager.currentReducers &&
+      this.reducerManager.currentReducers[storeName]
+    ) {
+      console.warn(
+        `store ${storeName} exists, changes will be override. Please destroy your store or rename it before create a new one`
+      );
+    }
     this.reducerManager.addReducer(
       storeName,
       (
