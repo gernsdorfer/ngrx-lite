@@ -10,9 +10,12 @@ import {
   sessionStoragePlugin,
   SessionStoragePlugin,
 } from '@gernsdorfer/ngrx-lite';
+import { RouterModule } from '@angular/router';
+import { CounterComponent } from './counter/counter.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CounterComponent, HomeComponent],
   imports: [
     BrowserModule,
     StoreModule.forRoot({}),
@@ -20,6 +23,20 @@ import {
       maxAge: 25, // Retains last 25 states
       logOnly: false,
     }),
+    RouterModule.forRoot([
+      {
+        path: '',
+        component: HomeComponent,
+      },
+      {
+        path: 'counter',
+        component: CounterComponent,
+      },
+      {
+        path: '**',
+        redirectTo: 'counter',
+      },
+    ]),
   ],
   providers: [
     { provide: SessionStoragePlugin, useValue: sessionStoragePlugin },

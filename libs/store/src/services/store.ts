@@ -22,6 +22,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     @Inject(DefaultStateToken) state: StoreState<ITEM, ERROR>
   ) {
     super(state);
+    this.sendActionToStore('init')
   }
 
   override setState(
@@ -44,6 +45,10 @@ export class Store<ITEM, ERROR> extends ComponentStore<
   ) {
     super.patchState(partialStateOrUpdaterFn);
     this.sendActionToStore(action);
+  }
+
+  override ngOnDestroy() {
+    super.ngOnDestroy();
   }
 
   createEffect = <EFFECT_PARAMS>(

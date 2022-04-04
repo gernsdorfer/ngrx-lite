@@ -1,9 +1,4 @@
-<ng-container *ngIf="counterState$ | async as counterState">
-  <button (click)="increment(counterState.item)">+</button>
-  <button (click)="reset()">Reset</button>
-
-  <pre>{{ counterState | json }}</pre>
-  <div class="lds-dual-ring" *ngIf="counterState.isLoading"></div>
-
-
-</ng-container>
+<a routerLink="/">Home</a>
+|
+<a routerLink="/counter">Counter Example</a>
+<router-outlet></router-outlet>
