@@ -52,35 +52,7 @@ export class StoreFactory {
     this.addStoreReducer<ITEM, ERROR>(storeName, initialState);
     this.storeStateChangesToClientStorage(storeName, store, storage);
     this.changeStateFromExternalChanges<ITEM, ERROR>(storeName, store);
-    this.sendStateChangesToNrgxStore(storeName, store);
     return store;
-  }
-
-  private sendStateChangesToNrgxStore<ITEM, ERROR>(
-    storeName: string,
-    store: Store<ITEM, ERROR>
-  ) {
-    store.state$
-      .pipe(
-        switchMap((currentState) =>
-          this.ngrxStore.pipe(
-            take(1),
-            filter(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (ngrxState: { [index: string]: any }) =>
-                JSON.stringify(currentState) !==
-                JSON.stringify(ngrxState[storeName])
-            ),
-            map(() => currentState)
-          )
-        )
-      )
-      .subscribe((state) => {
-        this.ngrxStore.dispatch({
-          type: `[${storeName}] CUSTOM`,
-          payload: state,
-        });
-      });
   }
 
   private storeStateChangesToClientStorage<ITEM, ERROR>(
@@ -100,20 +72,21 @@ export class StoreFactory {
     this.ngrxStore
       .pipe(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        switchMap((ngrxState: { [index: string]: any }) =>
+        filter((ngrxState: { [index: string]: any }) => !!ngrxState[storeName]),
+        map((ngrxState) => ngrxState[storeName]),
+        switchMap((storeFromgrxStore) =>
           store.state$.pipe(
             take(1),
-            filter(() => !!ngrxState[storeName]),
             filter(
               (currentState) =>
                 JSON.stringify(currentState) !==
-                JSON.stringify(ngrxState[storeName])
+                JSON.stringify(storeFromgrxStore)
             ),
-            map(() => ngrxState[storeName])
+            map(() => storeFromgrxStore)
           )
         )
       )
-      .subscribe((state) => store.setState(state));
+      .subscribe((state) => store.setState(state, '', true));
   }
 
   private addStoreReducer<ITEM, ERROR>(
@@ -122,10 +95,10 @@ export class StoreFactory {
   ): void {
     this.reducerManager.addReducer(
       storeName,
-      <T>(
+      (
         state: StoreState<ITEM, ERROR> = initialState,
         action: { payload: StoreState<ITEM, ERROR>; type: string }
-      ): T | StoreState<ITEM, ERROR> =>
+      ): StoreState<ITEM, ERROR> =>
         action.type.startsWith(`[${storeName}]`)
           ? { ...state, ...action.payload }
           : state

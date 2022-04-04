@@ -5,7 +5,7 @@ import { cold } from 'jasmine-marbles';
 import { InjectionToken } from '@angular/core';
 import { StoreFactory } from './store-factory.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { ReducerManager } from '@ngrx/store';
+import { Action, ReducerManager } from '@ngrx/store';
 
 interface MyTestModel {
   name: string;
@@ -27,7 +27,7 @@ describe('StoreFactory', () => {
     };
   } = {}): {
     storeFactory: StoreFactory;
-    ngrxStore: MockStore;
+    mockStore: MockStore;
     reducerManager: ReducerManager;
   } => {
     TestBed.configureTestingModule({
@@ -35,7 +35,7 @@ describe('StoreFactory', () => {
         StoreFactory,
         clientStorage,
         provideMockStore({
-          initialState: { counter: 0 },
+          initialState: {},
         }),
       ].filter((provider) => provider),
       teardown: { destroyAfterEach: false },
@@ -43,11 +43,10 @@ describe('StoreFactory', () => {
 
     return {
       storeFactory: TestBed.inject(StoreFactory),
-      ngrxStore: TestBed.inject(MockStore),
+      mockStore: TestBed.inject(MockStore),
       reducerManager: TestBed.inject(ReducerManager),
     };
   };
-
   it('should run without plugins', () => {
     const { storeFactory } = getStoreFactory({});
 
@@ -75,17 +74,17 @@ describe('StoreFactory', () => {
       })
     );
   });
+
   describe('ngrxStore', () => {
     it('should set state from ngrx store', () => {
-      const { storeFactory, ngrxStore } = getStoreFactory();
+      const { storeFactory, mockStore } = getStoreFactory();
       const store = storeFactory.getStore<MyTestModel, MyErrorState>(
-        'testStore',
-        { storage: 'sessionStoragePlugin' }
+        'testStore'
       );
-      ngrxStore.setState({
+      mockStore.setState({
         testStore: <MyState>{ isLoading: false },
       });
-      ngrxStore.setState({
+      mockStore.setState({
         testStore: <MyState>{
           isLoading: false,
           item: <MyTestModel>{ name: 'test' },
@@ -98,14 +97,74 @@ describe('StoreFactory', () => {
         })
       );
     });
-    describe('add reducer', () => {
+
+    it('should patch with name', () => {
+      const { storeFactory, mockStore } = getStoreFactory();
+      const spyMockStoreDispatch = spyOn(mockStore, 'dispatch');
+      const store = storeFactory.getStore<MyTestModel, MyErrorState>(
+        'testStore'
+      );
+      store.patchState(
+        {
+          isLoading: false,
+          item: { name: 'XX' },
+          error: { message: 'myErrorMessage' },
+        },
+        'CUSTOM_ACTION'
+      );
+
+      expect(store.state$).toBeObservable(
+        cold('a', {
+          a: <MyState>{
+            isLoading: false,
+            item: { name: 'XX' },
+            error: { message: 'myErrorMessage' },
+          },
+        })
+      );
+      expect(spyMockStoreDispatch).toHaveBeenCalledWith({
+        type: '[testStore] CUSTOM_ACTION',
+        payload: {
+          isLoading: false,
+          item: { name: 'XX' },
+          error: { message: 'myErrorMessage' },
+        },
+      } as Action);
+    });
+
+    it('should patchState without name', () => {
+      const { storeFactory, mockStore } = getStoreFactory();
+      const spyMockStoreDispatch = spyOn(mockStore, 'dispatch');
+      const store = storeFactory.getStore<MyTestModel, MyErrorState>(
+        'testStore'
+      );
+      store.patchState({ isLoading: true });
+
+      expect(store.state$).toBeObservable(
+        cold('a', {
+          a: <MyState>{ isLoading: true },
+        })
+      );
+      expect(spyMockStoreDispatch).toHaveBeenCalledWith({
+        type: '[testStore] UNKNOWN',
+        payload: {
+          isLoading: true,
+          item: undefined,
+          error: undefined,
+        },
+      } as Action);
+    });
+
+    describe('addStoreReducer', () => {
       it('should return undefined for unknown actiontype', (done) => {
         const { storeFactory, reducerManager } = getStoreFactory();
         spyOn(reducerManager, 'addReducer').and.callFake((name, callback) => {
           expect(callback({}, { type: 'unknownType' })).toEqual({});
+
           expect(
             callback({}, { type: '[testStore]', payload: { isLoading: true } })
           ).toEqual({ isLoading: true });
+
           expect(
             callback(undefined, {
               type: '[testStore]',
@@ -121,6 +180,7 @@ describe('StoreFactory', () => {
       });
     });
   });
+
   describe('ClientStorage Plugin', () => {
     it('should return state and store to session plugin ', () => {
       const sessionStore = jasmine.createSpyObj<ClientStoragePlugin>(

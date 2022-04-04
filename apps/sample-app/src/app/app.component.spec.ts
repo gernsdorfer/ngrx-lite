@@ -21,15 +21,42 @@ describe('AppComponent', () => {
     };
   };
 
-  describe('counterStore', () => {
-    it('should run ', () => {
+  describe('increment', () => {
+    it('should auto increment', () => {
       const { component } = getApp();
 
-      component.inrement(undefined);
+      component.increment(undefined);
 
       expect(component.counterState$).toBeObservable(
         cold('a', {
           a: <StoreState<number, never>>{ ...getDefaultState(), item: 1 },
+        })
+      );
+    });
+
+    it('should increment current item', () => {
+      const { component } = getApp();
+
+      component.increment(1);
+
+      expect(component.counterState$).toBeObservable(
+        cold('a', {
+          a: <StoreState<number, never>>{ ...getDefaultState(), item: 2 },
+        })
+      );
+    });
+  });
+
+  describe('reset', () => {
+    it('reset state ', () => {
+      const { component } = getApp();
+      component.increment(1);
+
+      component.reset();
+
+      expect(component.counterState$).toBeObservable(
+        cold('a', {
+          a: <StoreState<number, never>>{ ...getDefaultState() },
         })
       );
     });

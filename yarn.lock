@@ -190,13 +190,6 @@
     "@angular-eslint/bundled-angular-compiler" "13.1.0"
     "@typescript-eslint/experimental-utils" "5.11.0"
 
-"@angular/animations@~13.3.1":
-  version "13.3.1"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-13.3.1.tgz#58ae68f5ee6118687dc6d8da055472a94b1eade2"
-  integrity sha512-O6DVOk++Bz8Bcz2AAnd1wz1OFzsy3XjmA4o1Mx+DNLRwrLvWHuq33rTVs0Pur7psiKz1lym9kMrY9YwE3s0SJA==
-  dependencies:
-    tslib "^2.3.0"
-
 "@angular/cli@~13.3.1":
   version "13.3.1"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-13.3.1.tgz#d958c20f8fdc6b2a6e3f8de5fb172749e7499595"
@@ -256,13 +249,6 @@
   version "13.3.1"
   resolved "https://registry.yarnpkg.com/@angular/core/-/core-13.3.1.tgz#2ab132e0c588bd774c5f190bf65778a79adb1e0c"
   integrity sha512-ZU/B9jEiZ0jadRkRL9Sb2btzqgQ0ylx380PfRQaojVIsij/EO6+jOSHIo5upMIGu/OvkggfweShJGlylCOrOXA==
-  dependencies:
-    tslib "^2.3.0"
-
-"@angular/forms@~13.3.1":
-  version "13.3.1"
-  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-13.3.1.tgz#2ae8882eab248292d9a9c288dcce1b5d721455ed"
-  integrity sha512-S6a/CEq1ht0vw2epuESiO551dsyLQTb/HuwceIBlsX2JqRRccynYlyx92gsDAo4hD2F0q+EeqZEPuq3oQIK43A==
   dependencies:
     tslib "^2.3.0"
 
