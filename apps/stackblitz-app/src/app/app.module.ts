@@ -16,6 +16,7 @@ import { StorageExampleComponent } from './components/storage/storage.component'
 import { StorageFromServiceComponent } from './components/service-counter/storage-from-service.component';
 import { CounterStore } from './services/counter-service';
 import {StorageFromGlobalServiceComponent} from "./components/global-counter/storage-from-global-service.component";
+import {CustomActionComponent} from "./components/custom-actions/custom-action.component";
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import {StorageFromGlobalServiceComponent} from "./components/global-counter/sto
     }),
     RouterModule.forRoot([
       { path: '', component: BasicExampleComponent },
+      { path: 'custom-action', component: CustomActionComponent },
       { path: 'storage', component: StorageExampleComponent },
       { path: 'storage-from-service', component: StorageFromServiceComponent },
       { path: 'storage-from-global-service', component: StorageFromGlobalServiceComponent },
@@ -42,6 +44,7 @@ import {StorageFromGlobalServiceComponent} from "./components/global-counter/sto
   declarations: [
     AppComponent,
     BasicExampleComponent,
+    CustomActionComponent,
     StorageExampleComponent,
     StorageFromServiceComponent,
     StorageFromGlobalServiceComponent

@@ -1,27 +1,22 @@
 import { Component, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { of } from 'rxjs';
 
 @Component({
-  selector: 'my-session',
-  templateUrl: 'storage.html',
+  selector: 'my-basic-customAction',
+  templateUrl: 'custom-action.html',
 })
-export class StorageExampleComponent implements OnDestroy {
+export class CustomActionComponent implements OnDestroy {
   private counterStore = this.storeFactory.getStore<number, never>(
-    'sessionCounter',
-    {
-      storage: 'localStoragePlugin',
-    }
+    'customActionCounter'
   );
 
   public counterState$ = this.counterStore.state$;
 
-  public increment = this.counterStore.createEffect(
-    'increment',
-    (counter: number = 0) => of(counter + 1)
-  );
-
   constructor(private storeFactory: StoreFactory) {}
+
+  increment(counter: number = 0) {
+    this.counterStore.patchState({ item: counter + 1 }, 'INCREMENT');
+  }
 
   ngOnDestroy() {
     this.counterStore.ngOnDestroy();
