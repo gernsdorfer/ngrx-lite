@@ -1,6 +1,6 @@
-import { Component, OnDestroy, VERSION } from '@angular/core';
+import { Component } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { of, delay } from 'rxjs';
+import { delay, of } from 'rxjs';
 
 @Component({
   selector: 'my-basic-app',

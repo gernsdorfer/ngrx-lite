@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { of } from 'rxjs';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { getDefaultState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 @Component({
   selector: 'ngrx-lite-root',
@@ -9,13 +9,20 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 })
 export class AppComponent {
   private counterStore = this.storeFactory.getStore<number, never>('counter');
+  private incrementEffect = this.counterStore.createEffect(
+    'increment',
+    (counter: number) => of(counter + 1)
+  );
 
   public counterState$ = this.counterStore.state$;
 
-  public inrement = this.counterStore.createEffect(
-    'increment',
-    (counter: number = 0) => of(counter + 1)
-  );
-
   constructor(private storeFactory: StoreFactory) {}
+
+  increment(counter: number = 0) {
+    this.incrementEffect(counter);
+  }
+
+  reset() {
+    this.counterStore.setState({ ...getDefaultState() }, 'RESET');
+  }
 }

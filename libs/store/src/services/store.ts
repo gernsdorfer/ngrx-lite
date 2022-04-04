@@ -24,6 +24,28 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     super(state);
   }
 
+  override setState(
+    stateOrUpdaterFn:
+      | ((state: StoreState<ITEM, ERROR>) => StoreState<ITEM, ERROR>)
+      | StoreState<ITEM, ERROR>,
+    action: string = 'UNKNOWN',
+    skipLog?: boolean
+  ) {
+    super.setState(stateOrUpdaterFn);
+    if (!skipLog) this.sendActionToStore(action);
+  }
+
+  override patchState(
+    partialStateOrUpdaterFn:
+      | Partial<StoreState<ITEM, ERROR>>
+      | Observable<Partial<StoreState<ITEM, ERROR>>>
+      | ((state: StoreState<ITEM, ERROR>) => Partial<StoreState<ITEM, ERROR>>),
+    action: string = 'UNKNOWN'
+  ) {
+    super.patchState(partialStateOrUpdaterFn);
+    this.sendActionToStore(action);
+  }
+
   createEffect = <EFFECT_PARAMS>(
     name: string,
     effect: (
@@ -32,33 +54,30 @@ export class Store<ITEM, ERROR> extends ComponentStore<
   ) =>
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
-        tap(() =>
-          this.patchState((state) =>
-            this.setNewState('LOAD', { ...state, isLoading: true })
-          )
-        ),
+        tap(() => {
+          this.patchState({ isLoading: true }, 'LOAD');
+        }),
         switchMap((params) =>
           effect(params).pipe(
             tapResponse(
-              (item) =>
-                this.setState(
-                  this.setNewState('SUCCESS', { isLoading: false, item })
-                ),
+              (item) => this.setState({ isLoading: false, item }, 'SUCCESS'),
               (error: ERROR) =>
-                this.setState(
-                  this.setNewState('ERROR', { isLoading: false, error })
-                )
+                this.setState({ isLoading: false, error }, 'ERROR')
             )
           )
         )
       )
     );
 
-  private setNewState<T>(action: string, state: T): T {
+  private sendActionToStore(action: string) {
     this.ngrxStore.dispatch({
       type: `[${this.storeName}] ${action}`,
-      payload: { ...state },
+      payload: {
+        ...getDefaultState,
+        item: undefined,
+        error: undefined,
+        ...this.get(),
+      },
     });
-    return state;
   }
 }
