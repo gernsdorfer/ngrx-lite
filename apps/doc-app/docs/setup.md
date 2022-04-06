@@ -5,11 +5,11 @@ sidebar_position: 2
 
 # Quick Setup
 
-## Create new Store 👉 `getStore`
+## Create new Store 👉 `createStore`
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -17,14 +17,14 @@ export class AppComponent {
 ```
 
 :::note
-More Information for `getStore` you can find [here](/docs/api/store-factory#getstore)
+More Information for `createStore` you can find [here](/docs/api/store-factory#createStore)
 :::
 
 ## Read State 👉 `state$`
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
   public state$ = this.counterStore.state$;
 
   constructor(private storeFactory: StoreFactory) {
@@ -46,7 +46,7 @@ Choose between [synchronous](#synchronous-state-change) and [asynchronous](#asyn
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -64,7 +64,7 @@ Information for `setstate` you can find [here](docs/api/store#setstate)
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -86,7 +86,7 @@ Information for `patchState` you can find [here](docs/api/store#patchState)
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
   private nameEffect = this.myStore.createEffect('LOAD_NAME', (name: string) => of({name: name}));
 
   constructor(private storeFactory: StoreFactory) {

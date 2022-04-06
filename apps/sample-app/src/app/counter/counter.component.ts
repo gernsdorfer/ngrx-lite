@@ -7,7 +7,7 @@ import { of } from 'rxjs';
   templateUrl: 'basic.html',
 })
 export class CounterComponent implements OnDestroy {
-  private counterStore = this.storeFactory.getStore<number, never>('counter');
+  private counterStore = this.storeFactory.createStore<number, never>('counter');
 
   private incrementEffect = this.counterStore.createEffect(
     'increment',

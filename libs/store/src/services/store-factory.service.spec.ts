@@ -64,7 +64,7 @@ describe('StoreFactory', () => {
   it('should run without plugins', () => {
     const { storeFactory } = getStoreFactory({});
 
-    const store = storeFactory.getStore<MyTestModel, MyErrorState>('testStore');
+    const store = storeFactory.createStore<MyTestModel, MyErrorState>('testStore');
     const testEffect = store.createEffect('testEffect', () =>
       cold('-a-#', { a: <MyState['item']>{ name: 'test' } }, <MyState['error']>{
         message: 'testErrorMessage',
@@ -92,7 +92,7 @@ describe('StoreFactory', () => {
   describe('ngrxStore', () => {
     it('should call removeReducer for destory the store', () => {
       const { storeFactory, reducerManager } = getStoreFactory();
-      const myStore = storeFactory.getStore<MyTestModel, MyErrorState>(
+      const myStore = storeFactory.createStore<MyTestModel, MyErrorState>(
         'myStory'
       );
 
@@ -103,14 +103,14 @@ describe('StoreFactory', () => {
     it('should warn for create same store', () => {
       const { storeFactory } = getStoreFactory();
       const spyWarn = spyOn(console, 'warn');
-      storeFactory.getStore<MyTestModel, MyErrorState>('oldStore');
+      storeFactory.createStore<MyTestModel, MyErrorState>('oldStore');
       expect(spyWarn).toHaveBeenCalledWith(
         'store oldStore exists, changes will be override. Please destroy your store or rename it before create a new one'
       );
     });
     it('should set state from ngrx store', () => {
       const { storeFactory, mockStore } = getStoreFactory();
-      const store = storeFactory.getStore<MyTestModel, MyErrorState>(
+      const store = storeFactory.createStore<MyTestModel, MyErrorState>(
         'testStore'
       );
 
@@ -134,7 +134,7 @@ describe('StoreFactory', () => {
     it('should patch with name', () => {
       const { storeFactory, mockStore } = getStoreFactory();
       const spyMockStoreDispatch = spyOn(mockStore, 'dispatch');
-      const store = storeFactory.getStore<MyTestModel, MyErrorState>(
+      const store = storeFactory.createStore<MyTestModel, MyErrorState>(
         'testStore'
       );
       store.patchState(
@@ -168,7 +168,7 @@ describe('StoreFactory', () => {
     it('should patchState without name', () => {
       const { storeFactory, mockStore } = getStoreFactory();
       const spyMockStoreDispatch = spyOn(mockStore, 'dispatch');
-      const store = storeFactory.getStore<MyTestModel, MyErrorState>(
+      const store = storeFactory.createStore<MyTestModel, MyErrorState>(
         'testStore'
       );
       store.patchState({ isLoading: true });
@@ -207,7 +207,7 @@ describe('StoreFactory', () => {
 
           done();
         });
-        storeFactory.getStore<MyTestModel, MyErrorState>('testStore', {
+        storeFactory.createStore<MyTestModel, MyErrorState>('testStore', {
           storage: 'sessionStoragePlugin',
         });
       });
@@ -233,7 +233,7 @@ describe('StoreFactory', () => {
         },
       });
 
-      const store = storeFactory.getStore<MyTestModel, MyErrorState>(
+      const store = storeFactory.createStore<MyTestModel, MyErrorState>(
         'testStore',
         { storage: 'sessionStoragePlugin' }
       );
@@ -272,7 +272,7 @@ describe('StoreFactory', () => {
         },
       });
 
-      const store = storeFactory.getStore<MyTestModel, MyErrorState>(
+      const store = storeFactory.createStore<MyTestModel, MyErrorState>(
         'testStore',
         { storage: 'localStoragePlugin' }
       );

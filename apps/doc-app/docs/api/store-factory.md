@@ -6,13 +6,13 @@ sidebar_position: 2
 
 Here you can find a list of the `StoreFactory` API and their usages:
 
-## `getStore`
+## `createStore`
 
 Create a new Store based on [ngrx Component Store](https://ngrx.io/guide/component-store).
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  myStore = this.storeFactory.getStore<number, never>('myStore');
+  myStore = this.storeFactory.createStore<number, never>('myStore');
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -27,7 +27,7 @@ The second Argument is a Callback Function. The Callback Function returns an Obs
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
   private nameEffect = this.myStore.createEffect('LOAD_NAME', (name: string) => of({name: name}));
 
   constructor(private storeFactory: StoreFactory) {
