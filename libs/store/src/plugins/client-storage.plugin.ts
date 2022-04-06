@@ -1,6 +1,6 @@
-import { StoreState } from '../models';
+import { ClientStoragePlugin, StoreState } from '../models';
 
-export class ClientStoragePlugin {
+class ClientStorage implements ClientStoragePlugin {
   constructor(private store: Storage) {}
 
   getDefaultState<T, E>(storeName: string): StoreState<T, E> | undefined {
@@ -14,8 +14,8 @@ export class ClientStoragePlugin {
   }
 }
 
-export const sessionStoragePlugin = new ClientStoragePlugin(
+export const sessionStoragePlugin = new ClientStorage(
   window.sessionStorage
 );
 
-export const localStoragePlugin = new ClientStoragePlugin(window.localStorage);
+export const localStoragePlugin = new ClientStorage(window.localStorage);
