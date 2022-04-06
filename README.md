@@ -19,6 +19,7 @@
 
 - 🚀 Try out on [StackBlitz](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app)
 - 👩‍💻 checkout the [Sample-App](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
+- 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
 
 ## Install
 
