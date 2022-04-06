@@ -9,12 +9,12 @@ const config = {
   title: 'ngrx/lite',
   tagline: 'A Small And fast Redux Store',
   url: 'https://www.google.de',
-  baseUrl: '/',
+  baseUrl: '/ngrx-lite/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'gernsdorfer', // Usually your GitHub org/user name.
-  projectName: 'ngrx-lite', // Usually your repo name.
+  organizationName: 'gernsdorfer',
+  projectName: 'ngrx-lite',
 
   presets: [
     [
@@ -23,8 +23,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          editUrl: 'https://github.com/gernsdorfer/ngrx-lite/apps/doc-app/',
+          editUrl: 'https://github.com/gernsdorfer/ngrx-lite/edit/master/apps/doc-app/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
