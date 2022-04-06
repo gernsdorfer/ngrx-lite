@@ -14,6 +14,7 @@
     "type": "git",
     "url": "https://github.com/gernsdorfer/ngrx-lite"
   },
+  "homepage": "https://gernsdorfer.github.io/ngrx-lite/",
   "keywords": [
     "Angular",
     "Redux",
