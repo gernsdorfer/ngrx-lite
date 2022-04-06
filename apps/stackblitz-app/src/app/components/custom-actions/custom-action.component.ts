@@ -6,7 +6,7 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
   templateUrl: 'custom-action.html',
 })
 export class CustomActionComponent implements OnDestroy {
-  private counterStore = this.storeFactory.getStore<number, never>(
+  private counterStore = this.storeFactory.createStore<number, never>(
     'customActionCounter'
   );
 

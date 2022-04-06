@@ -7,7 +7,7 @@ import { of } from 'rxjs';
   templateUrl: 'basic.html',
 })
 export class BasicExampleComponent implements OnDestroy {
-  private counterStore = this.storeFactory.getStore<number, never>(
+  private counterStore = this.storeFactory.createStore<number, never>(
     'basicCounter'
   );
 
