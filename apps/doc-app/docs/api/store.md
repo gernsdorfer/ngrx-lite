@@ -13,7 +13,7 @@ The `state$` property is a wrapper of the [ngrx Component Store](https://ngrx.io
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
   public state$ = this.counterStore.state$;
 
   constructor(private storeFactory: StoreFactory) {
@@ -49,7 +49,7 @@ Update the complete state with the Action name `UPDATE_NAME`
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -66,7 +66,7 @@ patch partial State with Action name `PATCH_NAME`
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.getStore<{ name: string }, { errorCode: number }>('myStore');
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
 
   constructor(private storeFactory: StoreFactory) {
   }

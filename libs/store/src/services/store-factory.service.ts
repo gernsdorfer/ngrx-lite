@@ -35,7 +35,7 @@ export class StoreFactory {
     return;
   }
 
-  getStore<ITEM, ERROR>(
+  createStore<ITEM, ERROR>(
     storeName: string,
     { storage }: { storage?: storagePluginTypes } = {}
   ): Store<ITEM, ERROR> {

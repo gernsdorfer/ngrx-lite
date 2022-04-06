@@ -15,7 +15,7 @@ import {StoreFactory} from '@gernsdorfer/ngrx-lite';
 
 @Injectable()
 export class MyStore implements OnDestroy {
-  private myStore = this.storeFactory.getStore<number, string>('serviceCounter');
+  private myStore = this.storeFactory.createStore<number, string>('serviceCounter');
 
   public myStoreState$ = this.myStore.state$;
 
