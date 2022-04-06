@@ -1,6 +1,18 @@
 
 
 
+
+## 1.0.0 (2022-04-06)
+
+#### :boom: Breaking Change
+* [#12](https://github.com/gernsdorfer/ngrx-lite/pull/12) better store create naming ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :house: Internal
+* [#7](https://github.com/gernsdorfer/ngrx-lite/pull/7) update Stackblitz demo for version 0.2.0 ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 0.2.0 (2022-04-04)
 
 #### :rocket: Enhancement
