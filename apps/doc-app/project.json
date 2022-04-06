@@ -1,0 +1,20 @@
+{
+  "root": "apps/doc-app",
+  "projectType": "application",
+  "sourceRoot": "apps/doc-app/src",
+  "targets": {
+    "build": {
+      "executor": "@nx-plus/docusaurus:browser",
+      "options": {
+        "outputPath": "dist/apps/doc-app"
+      }
+    },
+    "serve": {
+      "executor": "@nx-plus/docusaurus:dev-server",
+      "options": {
+        "port": 3000
+      }
+    }
+  },
+  "tags": []
+}

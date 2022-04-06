@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "doc-app": "apps/doc-app",
     "sample-app": "apps/sample-app",
     "store": "libs/store"
   }

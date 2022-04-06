@@ -1,6 +1,6 @@
 import { StoreState } from '../models';
 
-class ClientStoragePlugin implements ClientStoragePlugin {
+export class ClientStoragePlugin {
   constructor(private store: Storage) {}
 
   getDefaultState<T, E>(storeName: string): StoreState<T, E> | undefined {
