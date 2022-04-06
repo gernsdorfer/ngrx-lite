@@ -4,7 +4,7 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalCounterStore implements OnDestroy {
-  private counterStore = this.storeFactory.getStore<number, never>(
+  private counterStore = this.storeFactory.createStore<number, never>(
     'globalServiceCounter'
   );
 

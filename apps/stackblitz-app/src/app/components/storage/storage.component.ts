@@ -7,7 +7,7 @@ import { of } from 'rxjs';
   templateUrl: 'storage.html',
 })
 export class StorageExampleComponent implements OnDestroy {
-  private counterStore = this.storeFactory.getStore<number, never>(
+  private counterStore = this.storeFactory.createStore<number, never>(
     'sessionCounter',
     {
       storage: 'localStoragePlugin',
