@@ -91,6 +91,10 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/gernsdorfer/ngrx-lite',
               },
+              {
+                label: 'Twitter',
+                href: 'https://twitter.com/gernsdorfer',
+              },
             ],
           },
         ],
