@@ -10,7 +10,7 @@ const config = {
   tagline: 'A Small And fast Redux Store',
   url: 'https://www.google.de',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'gernsdorfer', // Usually your GitHub org/user name.
