@@ -1,0 +1,25 @@
+name: Build and Deploy to Github Pages
+on:
+  release:
+    types: [created]
+  pull_request:
+
+jobs:
+  build-and-deploy:
+    #concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn
+      - run: yarn run build:docs
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.3.0
+        with:
+          branch: gh-pages
+          folder: dist/apps/doc-app

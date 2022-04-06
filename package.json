@@ -11,6 +11,7 @@
     "build": "nx build",
     "test": "nx test",
     "build:release": "nx run store:build:production",
+    "build:docs": "nx run doc-app:build",
     "release": "release-it"
   },
   "repository": {
