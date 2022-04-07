@@ -40,7 +40,7 @@ export class StoreFactory {
     { storage }: { storage?: storagePluginTypes } = {}
   ): Store<ITEM, ERROR> {
     const initialState = this.getInitialState<ITEM, ERROR>(storeName, storage);
-    this.addStoreReducer<ITEM, ERROR>(storeName, initialState);
+    this.addStoreReducerToNgrx<ITEM, ERROR>(storeName, initialState);
     const store = Injector.create({
       providers: [
         { provide: Store },
@@ -51,7 +51,7 @@ export class StoreFactory {
     }).get(Store);
 
     this.storeStateChangesToClientStorage(storeName, store, storage);
-    this.changeStateFromExternalChanges<ITEM, ERROR>(storeName, store);
+    this.setStateFromExternalChanges<ITEM, ERROR>(storeName, store);
     store.destroy$.subscribe(() =>
       this.reducerManager.removeReducer(storeName)
     );
@@ -69,7 +69,7 @@ export class StoreFactory {
     });
   }
 
-  private changeStateFromExternalChanges<ITEM, ERROR>(
+  private setStateFromExternalChanges<ITEM, ERROR>(
     storeName: string,
     store: Store<ITEM, ERROR>
   ) {
@@ -97,7 +97,7 @@ export class StoreFactory {
       });
   }
 
-  private addStoreReducer<ITEM, ERROR>(
+  private addStoreReducerToNgrx<ITEM, ERROR>(
     storeName: string,
     initialState: StoreState<ITEM, ERROR>
   ): void {
