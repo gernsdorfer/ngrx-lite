@@ -72,9 +72,9 @@ You can now show an Loader for your Application
 
 ![State-Loading](screens/store-start.png)
 
-### Date is ready
+### Data is ready
 
-You can now show your Data
+Now you can  show your Data
 
 ![State-Done](screens/store-success.png)
 
