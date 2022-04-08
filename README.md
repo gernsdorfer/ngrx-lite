@@ -46,7 +46,7 @@ npm: `npm install @gernsdorfer/ngrx-lite`
   template: '<button (click)="load(\'test\')">',
 })
 class MyComponent implements OnDestroy {
-  private store = this.storeFactory.getStore<MyModel, MyError>('MyStore');
+  private store = this.storeFactory.createStore<MyModel, MyError>('MyStore');
 
   public myState = this.readAssetKiStore.state$;
   public load = this.readAssetKiStore.createEffect('myEffect', (name) =>

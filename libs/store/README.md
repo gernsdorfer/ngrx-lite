@@ -19,6 +19,7 @@
 
 - 🚀 Try out on [StackBlitz](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app)
 - 👩‍💻 checkout the [Sample-App](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
+- 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
 
 ## Install
 
@@ -45,7 +46,7 @@ npm: `npm install @gernsdorfer/ngrx-lite`
   template: '<button (click)="load(\'test\')">',
 })
 class MyComponent implements OnDestroy {
-  private store = this.storeFactory.getStore<MyModel, MyError>('MyStore');
+  private store = this.storeFactory.createStore<MyModel, MyError>('MyStore');
 
   public myState = this.readAssetKiStore.state$;
   public load = this.readAssetKiStore.createEffect('myEffect', (name) =>
@@ -71,9 +72,9 @@ You can now show an Loader for your Application
 
 ![State-Loading](screens/store-start.png)
 
-### Date is ready
+### Data is ready
 
-You can now show your Data
+Now you can  show your Data
 
 ![State-Done](screens/store-success.png)
 
