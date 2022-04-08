@@ -318,6 +318,13 @@
     "@angular-eslint/bundled-angular-compiler" "13.1.0"
     "@typescript-eslint/experimental-utils" "5.11.0"
 
+"@angular/animations@~13.2.0":
+  version "13.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-13.2.7.tgz#d45e067124b469392eeee030eadb9c1fc960b1a2"
+  integrity sha512-FthGqRPQ1AOcOx/NIW65xeFYkQZJ7PpXcX59Kt+qkoUzngAQEY+UUpOteG52tmL0iZSVwOCjtxRFi9w4heVgEg==
+  dependencies:
+    tslib "^2.3.0"
+
 "@angular/cli@~13.3.1":
   version "13.3.1"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-13.3.1.tgz#d958c20f8fdc6b2a6e3f8de5fb172749e7499595"
@@ -377,6 +384,13 @@
   version "13.3.1"
   resolved "https://registry.yarnpkg.com/@angular/core/-/core-13.3.1.tgz#2ab132e0c588bd774c5f190bf65778a79adb1e0c"
   integrity sha512-ZU/B9jEiZ0jadRkRL9Sb2btzqgQ0ylx380PfRQaojVIsij/EO6+jOSHIo5upMIGu/OvkggfweShJGlylCOrOXA==
+  dependencies:
+    tslib "^2.3.0"
+
+"@angular/forms@~13.2.0":
+  version "13.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-13.2.7.tgz#176f7f64d9b3d46fa99b495d700dd440831cd07f"
+  integrity sha512-Did5ShmHTu52cljmNtMxUBUGEYHJ/FV5ZpKhbI7sd/VSFhXp9KWYUbfma0m7+CUJMGmpt6bmDaN0G2WS8Es1LQ==
   dependencies:
     tslib "^2.3.0"
 
@@ -2342,8 +2356,15 @@
 
 "@ngrx/component-store@^13.1.0":
   version "13.1.0"
-  resolved "https://registry.npmjs.org/@ngrx/component-store/-/component-store-13.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-13.1.0.tgz#67d3e8ef4f9476521fe7ad2d8a64a130be0580bb"
   integrity sha512-ge7fA5/MnDnC0myRrWf3L7+uy7D6qlMiMBsqgiIZv+aAjvPid26quzqN2ieulopjvd2vfvkzmhYq+eLvVvj8DQ==
+  dependencies:
+    tslib "^2.0.0"
+
+"@ngrx/effects@^13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-13.1.0.tgz#06d3fb04e7a37a3176f05054682ba353e8e6dce6"
+  integrity sha512-b0kaC1yly1WawtQils3Bxy2FhE9OwlQD/bptVd3s+bskdZ+iw9VlAMH9Spk2mfX+MyOEOk2FyrWlrOePtkw+7Q==
   dependencies:
     tslib "^2.0.0"
 

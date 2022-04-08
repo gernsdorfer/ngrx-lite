@@ -1,7 +1,11 @@
 {
   "version": 2,
   "projects": {
+    "compare-stores-ngrx-component-store": "apps/compare-stores/ngrx-component-store",
+    "compare-stores-ngrx-effects": "apps/compare-stores/ngrx-effects",
+    "compare-stores-ngrx-lite": "apps/compare-stores/ngrx-lite",
     "doc-app": "apps/doc-app",
+    "movie": "libs/movie",
     "sample-app": "apps/sample-app",
     "store": "libs/store"
   }

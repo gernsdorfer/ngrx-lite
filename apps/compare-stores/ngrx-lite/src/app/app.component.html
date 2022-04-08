@@ -1,0 +1,7 @@
+<ng-container *ngIf="movieState$ | async as movieState">
+  <button (click)="loadMovies()">Load Movies</button>
+  <div *ngIf="movieState.isLoading">Loading....</div>
+  <div *ngFor="let movie of movieState?.item">
+    {{movie.name}} ({{movie.id}})
+  </div>
+</ng-container>

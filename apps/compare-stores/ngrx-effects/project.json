@@ -1,0 +1,93 @@
+{
+  "projectType": "application",
+  "root": "apps/compare-stores/ngrx-effects",
+  "sourceRoot": "apps/compare-stores/ngrx-effects/src",
+  "prefix": "ngrx-lite",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/compare-stores/ngrx-effects",
+        "index": "apps/compare-stores/ngrx-effects/src/index.html",
+        "main": "apps/compare-stores/ngrx-effects/src/main.ts",
+        "polyfills": "apps/compare-stores/ngrx-effects/src/polyfills.ts",
+        "tsConfig": "apps/compare-stores/ngrx-effects/tsconfig.app.json",
+        "assets": [
+          "apps/compare-stores/ngrx-effects/src/favicon.ico",
+          "apps/compare-stores/ngrx-effects/src/assets"
+        ],
+        "styles": ["apps/compare-stores/ngrx-effects/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/compare-stores/ngrx-effects/src/environments/environment.ts",
+              "with": "apps/compare-stores/ngrx-effects/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "compare-stores-ngrx-effects:build:production"
+        },
+        "development": {
+          "browserTarget": "compare-stores-ngrx-effects:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "compare-stores-ngrx-effects:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/compare-stores/ngrx-effects/src/**/*.ts",
+          "apps/compare-stores/ngrx-effects/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/compare-stores/ngrx-effects"],
+      "options": {
+        "jestConfig": "apps/compare-stores/ngrx-effects/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/movie",
+  "sourceRoot": "libs/movie/src",
+  "prefix": "ngrx-lite",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/movie"],
+      "options": {
+        "jestConfig": "libs/movie/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/movie/src/**/*.ts",
+          "libs/movie/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
