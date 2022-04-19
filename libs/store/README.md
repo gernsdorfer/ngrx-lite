@@ -23,9 +23,9 @@
 
 ## Install
 
-yarn: `yarn install @gernsdorfer/ngrx-lite`
+yarn: `yarn add @ngrx/store @gernsdorfer/ngrx-lite`
 
-npm: `npm install @gernsdorfer/ngrx-lite`
+npm: `npm install @ngrx/store @gernsdorfer/ngrx-lite`
 
 ## Usage
 

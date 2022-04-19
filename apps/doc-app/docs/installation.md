@@ -8,11 +8,11 @@ Install the library using Yarn or NPM
 
 yarn
 ```shell
-yarn: yarn install @gernsdorfer/ngrx-lite
+yarn add @ngrx/store @gernsdorfer/ngrx-lite
 ```
 npm
 ```shell
-npm: npm install @gernsdorfer/ngrx-lite
+npm install @ngrx/store @gernsdorfer/ngrx-lite
 ```
 
 # Import StoreModule 
