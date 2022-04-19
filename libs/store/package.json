@@ -2,8 +2,8 @@
   "name": "@gernsdorfer/ngrx-lite",
   "version": "1.0.0",
   "peerDependencies": {
-    "@angular/common": "^13.2.0",
-    "@angular/core": "^13.2.0",
+    "@angular/common": "13.3.3",
+    "@angular/core": "13.3.3",
     "@ngrx/component-store": "^13.1.0",
     "@ngrx/store": "^13.1.0"
   },
