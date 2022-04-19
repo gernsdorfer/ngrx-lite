@@ -18,7 +18,12 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
         "accessToken": "YTFmYTdmMmYtN2Q1My00MWUxLThmN2QtMzgyYjJkN2JhMDE4fHJlYWQtd3JpdGU="
       }
     }
@@ -35,12 +40,12 @@
     "@nrwl/angular:application": {
       "style": "css",
       "linter": "eslint",
-      "unitTestRunner": "jest",
+      "unitTestRunner": "karma",
       "e2eTestRunner": "cypress"
     },
     "@nrwl/angular:library": {
       "linter": "eslint",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "karma"
     },
     "@nrwl/angular:component": {
       "style": "css"
