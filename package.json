@@ -1,6 +1,6 @@
 {
   "name": "ngrx-lite",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "scripts": {
     "affected:lint": "nx affected:lint",

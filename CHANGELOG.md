@@ -2,6 +2,18 @@
 
 
 
+
+## 1.0.1 (2022-04-19)
+
+#### :memo: Documentation
+* [#14](https://github.com/gernsdorfer/ngrx-lite/pull/14) fix install infos ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :house: Internal
+* [#15](https://github.com/gernsdorfer/ngrx-lite/pull/15) Update libs ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 1.0.0 (2022-04-06)
 
 #### :boom: Breaking Change
