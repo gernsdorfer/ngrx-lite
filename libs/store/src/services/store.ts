@@ -22,7 +22,11 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     @Inject(DefaultStateToken) state: StoreState<ITEM, ERROR>
   ) {
     super(state);
-    this.sendActionToStore('init')
+    this.sendActionToStore('init',state);
+  }
+
+  get state(): StoreState<ITEM, ERROR> {
+    return super.get();
   }
 
   override setState(
@@ -32,19 +36,21 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     action: string = 'UNKNOWN',
     skipLog?: boolean
   ) {
-    super.setState(stateOrUpdaterFn);
-    if (!skipLog) this.sendActionToStore(action);
+    const newState = typeof stateOrUpdaterFn === 'function' ?  stateOrUpdaterFn(this.get()) : stateOrUpdaterFn;
+    super.setState(newState);
+    if (!skipLog) this.sendActionToStore(action, newState);
   }
 
   override patchState(
     partialStateOrUpdaterFn:
       | Partial<StoreState<ITEM, ERROR>>
-      | Observable<Partial<StoreState<ITEM, ERROR>>>
       | ((state: StoreState<ITEM, ERROR>) => Partial<StoreState<ITEM, ERROR>>),
     action: string = 'UNKNOWN'
   ) {
-    super.patchState(partialStateOrUpdaterFn);
-    this.sendActionToStore(action);
+    const newState = typeof partialStateOrUpdaterFn === 'function' ?  partialStateOrUpdaterFn(this.get()) : partialStateOrUpdaterFn;
+    super.patchState(newState);
+
+    this.sendActionToStore(action, { ...this.get(), ...newState });
   }
 
   override ngOnDestroy() {
@@ -74,14 +80,14 @@ export class Store<ITEM, ERROR> extends ComponentStore<
       )
     );
 
-  private sendActionToStore(action: string) {
+  private sendActionToStore(action: string, state :StoreState<ITEM, ERROR> ) {
     this.ngrxStore.dispatch({
       type: `[${this.storeName}] ${action}`,
       payload: {
         ...getDefaultState,
         item: undefined,
         error: undefined,
-        ...this.get(),
+        ...state,
       },
     });
   }

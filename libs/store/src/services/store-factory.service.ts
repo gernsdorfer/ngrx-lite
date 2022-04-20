@@ -9,7 +9,7 @@ import { ClientStoragePlugin, StoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ReducerManager, Store as NgrxStore } from '@ngrx/store';
-import { filter, map, switchMap, take, takeUntil } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs';
 
 export { getDefaultState } from './store';
 type storagePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
@@ -79,18 +79,7 @@ export class StoreFactory {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         filter((ngrxState: { [index: string]: any }) => !!ngrxState[storeName]),
         map((ngrxState) => ngrxState[storeName]),
-        switchMap((storeFromgrxStore) =>
-          store.state$.pipe(
-            takeUntil(store.destroy$),
-            take(1),
-            filter(
-              (currentState) =>
-                JSON.stringify(currentState) !==
-                JSON.stringify(storeFromgrxStore)
-            ),
-            map(() => storeFromgrxStore)
-          )
-        )
+        filter((storeFromgrxStore) => JSON.stringify(store.state) !== JSON.stringify(storeFromgrxStore))
       )
       .subscribe({
         next: (state) => store.setState(state, '', true),
