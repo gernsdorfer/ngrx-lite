@@ -43,6 +43,19 @@ import { StoreState} from '@gernsdorfer/ngrx-lite';
 type MyStoreState = StoreState<{ name: string }, { errorCode: number }>;
 ```
 
+## `state`
+
+Read your State synchronously, but be carefully ⚠️
+
+
+```ts title="app.component.ts"
+export class AppComponent {
+  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
+  public state = this.counterStore.state;
+
+}
+```
+
 ## `setState`
 
 Update the complete state with the Action name `UPDATE_NAME`
@@ -59,6 +72,7 @@ export class AppComponent {
   }
 }
 ```
+
 
 ## `patchState`
 
