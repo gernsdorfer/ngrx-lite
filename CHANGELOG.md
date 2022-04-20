@@ -3,6 +3,15 @@
 
 
 
+
+## 1.0.2 (2022-04-20)
+
+#### :bug: Bug Fix
+* [#16](https://github.com/gernsdorfer/ngrx-lite/pull/16) update ngrx store with current state ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 1.0.1 (2022-04-19)
 
 #### :memo: Documentation
