@@ -64,7 +64,9 @@ describe('StoreFactory', () => {
   it('should run without plugins', () => {
     const { storeFactory } = getStoreFactory({});
 
-    const store = storeFactory.createStore<MyTestModel, MyErrorState>('testStore');
+    const store = storeFactory.createStore<MyTestModel, MyErrorState>(
+      'testStore'
+    );
     const testEffect = store.createEffect('testEffect', () =>
       cold('-a-#', { a: <MyState['item']>{ name: 'test' } }, <MyState['error']>{
         message: 'testErrorMessage',
@@ -90,7 +92,7 @@ describe('StoreFactory', () => {
   });
 
   describe('ngrxStore', () => {
-    it('should call removeReducer for destory the store', () => {
+    it('should call removeReducer for destroy the store', () => {
       const { storeFactory, reducerManager } = getStoreFactory();
       const myStore = storeFactory.createStore<MyTestModel, MyErrorState>(
         'myStory'
@@ -108,15 +110,85 @@ describe('StoreFactory', () => {
         'store oldStore exists, changes will be override. Please destroy your store or rename it before create a new one'
       );
     });
+    describe('setState', () => {
+      it('should setState with object', () => {
+        const { storeFactory } = getStoreFactory();
+        const store = storeFactory.createStore<MyTestModel, MyErrorState>(
+          'testStore'
+        );
+
+        store.setState({
+          isLoading: false,
+          item: { name: 'test' },
+        });
+
+        expect(store.state).toEqual({
+          isLoading: false,
+          item: { name: 'test' },
+        });
+      });
+
+      it('should setState with callback function', () => {
+        const { storeFactory } = getStoreFactory();
+        const store = storeFactory.createStore<MyTestModel, MyErrorState>(
+          'testStore'
+        );
+
+        store.setState((state) => ({
+          ...state,
+          item: { name: 'test' },
+        }));
+
+        expect(store.state).toEqual({
+          isLoading: false,
+          item: { name: 'test' },
+        });
+      });
+    });
+
+    describe('patchState', () => {
+      it('should patchState with object', () => {
+        const { storeFactory } = getStoreFactory();
+        const store = storeFactory.createStore<MyTestModel, MyErrorState>(
+          'testStore'
+        );
+
+        store.patchState({
+          item: { name: 'test' },
+        });
+
+        expect(store.state).toEqual({
+          isLoading: false,
+          item: { name: 'test' },
+        });
+      });
+
+      it('should patchState with callback function', () => {
+        const { storeFactory } = getStoreFactory();
+        const store = storeFactory.createStore<MyTestModel, MyErrorState>(
+          'testStore'
+        );
+
+        store.patchState(
+          () =>
+            <MyState>{
+              item: <MyTestModel>{ name: 'test' },
+            }
+        );
+
+        expect(store.state).toEqual({
+          isLoading: false,
+          item: <MyTestModel>{ name: 'test' },
+        });
+      });
+    });
+
     it('should set state from ngrx store', () => {
       const { storeFactory, mockStore } = getStoreFactory();
       const store = storeFactory.createStore<MyTestModel, MyErrorState>(
         'testStore'
       );
 
-      mockStore.setState({
-        testStore: <MyState>{ isLoading: false },
-      });
       mockStore.setState({
         testStore: <MyState>{
           isLoading: false,
