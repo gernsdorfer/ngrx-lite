@@ -11,7 +11,6 @@ import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { filter, map, takeUntil } from 'rxjs';
 
-export { getDefaultState } from './store';
 type storagePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 
 @Injectable({ providedIn: 'root' })
@@ -79,7 +78,10 @@ export class StoreFactory {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         filter((ngrxState: { [index: string]: any }) => !!ngrxState[storeName]),
         map((ngrxState) => ngrxState[storeName]),
-        filter((storeFromgrxStore) => JSON.stringify(store.state) !== JSON.stringify(storeFromgrxStore))
+        filter(
+          (storeFromgrxStore) =>
+            JSON.stringify(store.state) !== JSON.stringify(storeFromgrxStore)
+        )
       )
       .subscribe({
         next: (state) => store.setState(state, '', true),
