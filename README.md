@@ -15,8 +15,8 @@
 [![Build Status](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/ci.yml/badge.svg)]()
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()
-[![Node.js Package](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml/badge.svg?branch=master)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml)
-
+[![Publish to NPM](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml)
+- 
 - 🚀 Try out on [StackBlitz](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app)
 - 👩‍💻 checkout the [Sample-App](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
 - 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
