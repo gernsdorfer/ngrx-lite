@@ -20,11 +20,13 @@ import { CustomActionComponent } from './custom-actions/custom-action.component'
 import { MultipleInstancesComponent } from './muliple-instances/multiple-instances.component';
 import { DemoAComponent } from './muliple-instances/demo-a.component';
 import { DemoBComponent } from './muliple-instances/demo-b.component';
+import {EffectsModule} from "@ngrx/effects";
 
 @NgModule({
   imports: [
     BrowserModule,
     StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       name: 'ngrx-lite-demo',
       maxAge: 25,
@@ -34,11 +36,21 @@ import { DemoBComponent } from './muliple-instances/demo-b.component';
       { path: '', component: BasicExampleComponent },
       { path: 'custom-action', component: CustomActionComponent },
       { path: 'storage', component: StorageExampleComponent },
-      { path: 'storage-from-service', component:  StorageFromServiceComponent},
-      { path: 'multiple-storage-instances', component: MultipleInstancesComponent },
+      { path: 'storage-from-service', component: StorageFromServiceComponent },
+      {
+        path: 'multiple-storage-instances',
+        component: MultipleInstancesComponent,
+      },
       {
         path: 'storage-from-global-service',
         component: StorageFromGlobalServiceComponent,
+      },
+      {
+        path: 'share-actions',
+        loadChildren: () =>
+          import('./share-actions/shared-actions.module').then(
+            (m) => m.SharedActionsModule
+          ),
       },
       { path: '**', redirectTo: '' },
     ]),

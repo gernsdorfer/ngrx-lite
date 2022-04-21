@@ -1,0 +1,6 @@
+<h1>Share Actions</h1>
+<ng-container *ngIf="counterState$ | async as counterState">
+  <button (click)="increment(counterState.item || 0)">+</button>
+  <pre>{{ counterState | json }}</pre>
+  <div class="lds-dual-ring" *ngIf="counterState.isLoading"></div>
+</ng-container>
