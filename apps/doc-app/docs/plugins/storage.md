@@ -4,6 +4,10 @@ sidebar_position: 1
 
 # Storage
 
+[Demo](https://parivnzjy.github.stackblitz.io/storage-from-service)
+
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app/src/app/storage)
+
 ## Session Storage
 
 Store your State in the Client Session Storage

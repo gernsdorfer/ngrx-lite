@@ -4,6 +4,10 @@ sidebar_position: 4
 
 # Share Action events for ngrx
 
+[Demo](https://parivnzjy.github.stackblitz.io/share-actions)
+
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app/src/app/share-actions)
+
 Create a [ngrx Actions](https://ngrx.io/guide/store/actions) to share your State Change Event.
 
 ## Define the Effect Action

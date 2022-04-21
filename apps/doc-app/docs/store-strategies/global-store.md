@@ -4,6 +4,11 @@ sidebar_position: 3
 
 # Global Store
 
+[Demo](https://parivnzjy.github.stackblitz.io/storage-from-global-service)
+
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app/src/app/global-counter)
+
+
 A Module Store live in your Application
 
 ## Define the Store as Service
