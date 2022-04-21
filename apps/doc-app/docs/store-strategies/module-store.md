@@ -21,7 +21,8 @@ export class MyStore implements OnDestroy {
 
   public incrementEffect = this.myStore.createEffect('increment', (counter: number = 0) => of(counter + 1));
 
-  constructor(private storeFactory: StoreFactory) {}
+  constructor(private storeFactory: StoreFactory) {
+  }
 
   ngOnDestroy() {
     this.myStore.ngOnDestroy();
@@ -45,6 +46,7 @@ import {MyComponent} from './my-component.component';
     BrowserModule,
   ],
   providers: [
+    // Procide your Store  
     MyStore
   ],
   declarations: [
@@ -56,20 +58,25 @@ import {MyComponent} from './my-component.component';
 ## Consume your Store in your Component
 
 ```ts title="my-component.component.ts"
-import { Component, OnDestroy } from '@angular/core';
-import { MyStore } from './my-store.service';
+import {Component, OnDestroy} from '@angular/core';
+import {MyStore} from './my-store.service';
 
 @Component()
 export class CounterComponent implements OnDestroy {
-  
+
   public myStoreState$ = this.myStore.myStoreState$;
 
   constructor(private myStore: MyStore) {
   }
 
-  public increment (counter: number): void {
-      this.myStore.incrementEffect(counter);
+  public increment(counter: number): void {
+    this.myStore.incrementEffect(counter);
   }
-  
+
 }
 ```
+
+:::note if you provide your store in Multiple Modules create your Store with a dynamic storeName. How you define a
+dynamic storeName you can find [here](/docs/store-strategies/multiple-store-instances)
+
+:::

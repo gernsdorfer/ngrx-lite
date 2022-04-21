@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CounterStore } from '../../services/counter-service';
+import { CounterStore } from './counter-service';
 
 @Component({
   selector: 'my-service-counter',
