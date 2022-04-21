@@ -12,6 +12,12 @@ export const getDefaultState = <ITEM, ERROR>(): StoreState<ITEM, ERROR> => ({
   isLoading: false,
 });
 
+export enum EffectStates {
+  ERROR = 'ERROR',
+  LOAD = 'LOAD',
+  SUCCESS = 'SUCCESS',
+}
+
 @Injectable({ providedIn: 'root' })
 export class Store<ITEM, ERROR> extends ComponentStore<
   StoreState<ITEM, ERROR>
@@ -22,7 +28,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     @Inject(DefaultStateToken) state: StoreState<ITEM, ERROR>
   ) {
     super(state);
-    this.sendActionToStore('init',state);
+    this.sendActionToStore('init', state);
   }
 
   get state(): StoreState<ITEM, ERROR> {
@@ -36,7 +42,10 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     action: string = 'UNKNOWN',
     skipLog?: boolean
   ) {
-    const newState = typeof stateOrUpdaterFn === 'function' ?  stateOrUpdaterFn(this.get()) : stateOrUpdaterFn;
+    const newState =
+      typeof stateOrUpdaterFn === 'function'
+        ? stateOrUpdaterFn(this.get())
+        : stateOrUpdaterFn;
     super.setState(newState);
     if (!skipLog) this.sendActionToStore(action, newState);
   }
@@ -47,7 +56,10 @@ export class Store<ITEM, ERROR> extends ComponentStore<
       | ((state: StoreState<ITEM, ERROR>) => Partial<StoreState<ITEM, ERROR>>),
     action: string = 'UNKNOWN'
   ) {
-    const newState = typeof partialStateOrUpdaterFn === 'function' ?  partialStateOrUpdaterFn(this.get()) : partialStateOrUpdaterFn;
+    const newState =
+      typeof partialStateOrUpdaterFn === 'function'
+        ? partialStateOrUpdaterFn(this.get())
+        : partialStateOrUpdaterFn;
     super.patchState(newState);
 
     this.sendActionToStore(action, { ...this.get(), ...newState });
@@ -66,21 +78,22 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
         tap(() => {
-          this.patchState({ isLoading: true }, 'LOAD');
+          this.patchState({ isLoading: true }, `${name}:${EffectStates.LOAD}`);
         }),
         switchMap((params) =>
           effect(params).pipe(
             tapResponse(
-              (item) => this.setState({ isLoading: false, item }, 'SUCCESS'),
+              (item) =>
+                this.setState({ isLoading: false, item }, `${name}:${EffectStates.SUCCESS}`),
               (error: ERROR) =>
-                this.setState({ isLoading: false, error }, 'ERROR')
+                this.setState({ isLoading: false, error }, `${name}:${EffectStates.ERROR}`)
             )
           )
         )
       )
     );
 
-  private sendActionToStore(action: string, state :StoreState<ITEM, ERROR> ) {
+  private sendActionToStore(action: string, state: StoreState<ITEM, ERROR>) {
     this.ngrxStore.dispatch({
       type: `[${this.storeName}] ${action}`,
       payload: {
