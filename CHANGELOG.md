@@ -4,6 +4,18 @@
 
 
 
+
+## 1.1.0 (2022-04-21)
+
+#### :rocket: Enhancement
+* [#18](https://github.com/gernsdorfer/ngrx-lite/pull/18) get action for effect/state change ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :memo: Documentation
+* [#17](https://github.com/gernsdorfer/ngrx-lite/pull/17) add example for multiple instances ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 1.0.2 (2022-04-20)
 
 #### :bug: Bug Fix
