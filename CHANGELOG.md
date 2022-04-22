@@ -5,6 +5,15 @@
 
 
 
+
+## 1.2.0 (2022-04-22)
+
+#### :rocket: Enhancement
+* [#19](https://github.com/gernsdorfer/ngrx-lite/pull/19) support empty arguments for create effects ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 1.1.0 (2022-04-21)
 
 #### :rocket: Enhancement
