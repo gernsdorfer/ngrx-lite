@@ -3,9 +3,9 @@ sidebar_position: 2
 ---
 
 # Module Store
-[Demo](https://parivnzjy.github.stackblitz.io/storage-from-service)
+[Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/#/storage-from-service)
 
-[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app/src/app/service-counter)
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/service-counter)
 
 A Module Store live in Your Module Scope.
 

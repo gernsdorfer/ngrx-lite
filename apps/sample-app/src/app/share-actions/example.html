@@ -1,8 +1,6 @@
-<h1>COUNTER EXAMPLE</h1>
+<h1>Share Actions (With Effect)</h1>
 <ng-container *ngIf="counterState$ | async as counterState">
-  <button (click)="increment(counterState.item)">+</button>
-  <button (click)="reset()">Reset</button>
-
+  <button (click)="increment(counterState.item || 0)">+</button>
   <pre>{{ counterState | json }}</pre>
   <div class="lds-dual-ring" *ngIf="counterState.isLoading"></div>
 </ng-container>

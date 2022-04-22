@@ -19,5 +19,5 @@ TestBed.configureTestingModule({
 ```
 
 :::note A full Test Example you can
-find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/counter/counter.component.spec.ts)
+find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/basic/basic.component.spec.ts)
 :::

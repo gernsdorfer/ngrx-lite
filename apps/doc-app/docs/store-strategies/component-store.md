@@ -4,9 +4,9 @@ sidebar_position: 1
 
 # Component Store
 
-[Demo](https://parivnzjy.github.stackblitz.io)
+[Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app)
 
-[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app/src/app/basic)
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/basic)
 
 Create a Store that lives in Your Component Lifecycle
 

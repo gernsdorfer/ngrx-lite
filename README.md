@@ -136,7 +136,7 @@ class MyComponent implements OnDestroy {
 ## Testing
 
 Import `storeTestingFactory` and write your test's An Example you can
-find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/app.component.spec.ts)
+find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/basic/basic.component.spec.ts)
 
 ```ts
 TestBed.configureTestingModule({

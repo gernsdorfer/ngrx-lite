@@ -50,13 +50,13 @@ const config = {
             label: 'Docs',
           },
           {
-            href: 'https://parivnzjy.github.stackblitz.io/',
+            href: 'https://gernsdorfer.github.io/ngrx-lite/sample-app/#/',
             label: 'Demo',
             position: 'left',
             className: 'header-playground-link',
           },
           {
-            href: 'https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app',
+            href: 'https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/sample-app',
             label: 'Playground',
             position: 'left',
             className: 'header-playground-link',

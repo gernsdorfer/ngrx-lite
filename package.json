@@ -11,7 +11,7 @@
     "build": "nx build",
     "test": "nx test",
     "build:release": "nx run store:build:production",
-    "build:docs": "nx run doc-app:build",
+    "build:docs": "nx run doc-app:build && nx run sample-app:build --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
     "release": "release-it"
   },
   "repository": {
@@ -33,6 +33,7 @@
     "@docusaurus/preset-classic": "2.0.0-beta.13",
     "@mdx-js/react": "^1.6.21",
     "@ngrx/component-store": "^13.1.0",
+    "@ngrx/effects": "^13.1.0",
     "@ngrx/store": "^13.1.0",
     "@ngrx/store-devtools": "^13.1.0",
     "@nrwl/angular": "13.10.2",
@@ -94,4 +95,3 @@
     "typescript": "4.6.3"
   }
 }
-

@@ -4,9 +4,9 @@ sidebar_position: 2
 
 # Multiple Store instances
 
-[Demo](https://parivnzjy.github.stackblitz.io/multiple-storage-instances)
+[Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/#/multiple-storage-instances)
 
-[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app/src/app/muliple-instances)
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/muliple-instances)
 
 
 A Store can live in multiple Components/Module with own Scope

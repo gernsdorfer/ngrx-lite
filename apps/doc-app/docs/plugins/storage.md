@@ -4,9 +4,9 @@ sidebar_position: 1
 
 # Storage
 
-[Demo](https://parivnzjy.github.stackblitz.io/storage-from-service)
+[Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/#/storage)
 
-[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app/src/app/storage)
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/storage)
 
 ## Session Storage
 
