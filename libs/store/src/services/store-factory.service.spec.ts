@@ -77,7 +77,7 @@ describe('StoreFactory', () => {
       isLoading: false,
     });
 
-    testEffect(undefined);
+    testEffect();
 
     expect(store.state$).toBeObservable(
       cold('ab-c', {

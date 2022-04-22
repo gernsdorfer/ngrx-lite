@@ -69,7 +69,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     super.ngOnDestroy();
   }
 
-  createEffect = <EFFECT_PARAMS>(
+  createEffect = <EFFECT_PARAMS = void>(
     name: string,
     effect: (
       params: EFFECT_PARAMS
