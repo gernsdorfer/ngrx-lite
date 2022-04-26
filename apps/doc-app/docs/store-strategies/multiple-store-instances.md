@@ -14,7 +14,7 @@ A Store can live in multiple Components/Module with own Scope
 ## Define the Store as Service and a dynamic Store Name
 
 ```ts title="my-store.service.ts"
-import {Inject, Injectable, OnDestroy} from '@angular/core';
+import {Inject, Injectable, OnDestroy, Optional} from '@angular/core';
 import {of} from 'rxjs';
 import {StoreFactory} from '@gernsdorfer/ngrx-lite';
 
@@ -26,7 +26,7 @@ export class MyStore implements OnDestroy {
 
   private myStore = this.storeFactory.createStore<number, string>(
     // use the provided StoreName
-    this.storeName
+    this.storeName || 'myStore'
   );
 
   public myStoreState$ = this.myStore.state$;
@@ -35,7 +35,7 @@ export class MyStore implements OnDestroy {
 
   constructor(private storeFactory: StoreFactory,
               // import your StoreName
-              @Inject(MyStoreSuffix) private storeName: string = 'myStore'
+              @Optional() @Inject(MyStoreSuffix) private storeName: string
   ) {
   }
 
