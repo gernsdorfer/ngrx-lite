@@ -2,13 +2,15 @@
 
 > A small angular State Mangement based on [ngrx](https://github.com/ngrx/platform) component-store, with some benefits 😎
 
-- ⏱ create fast and easy a redux store
+- ⏱ create fast and easy a dynamic redux store
 - ⏳ integrated loading state
 - ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools) for
   - patchState
   - setState
   - created effects
 - 💽 support session/locale Storage
+- 🏘 You Decide where your Store lives: Root, Module or in the Component Scope
+- 🤝 Shared your State Changes and Actions in the ngrx Store
 
 <hr />
 
