@@ -16,7 +16,7 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {delay, of} from 'rxjs';
 import {StoreFactory} from '@gernsdorfer/ngrx-lite';
 
-@Injectable()
+@Injectable({providedIn: 'any'})
 export class MyStore implements OnDestroy {
   private myStore = this.storeFactory.createStore<number, string>('serviceCounter');
 
