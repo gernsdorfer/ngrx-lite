@@ -2,6 +2,15 @@
 
 > A small angular State Mangement based on [ngrx](https://github.com/ngrx/platform) component-store, with some benefits 😎
 
+## Why we need this ?
+
+The current [@ngrx/component-store](https://ngrx.io/guide/component-store) implementation works with its own isolated Store.
+Unfortunately, there is no connection to the global [@ngrx/Store](https://ngrx.io/guide/store) or the [@ngrx/store-devtools](https://ngrx.io/guide/store-devtools).
+
+This Library connects your [@ngrx/component-store](https://ngrx.io/guide/component-store) with the [@ngrx/Store](https://ngrx.io/guide/store) to share and debug the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
+
+## Benefits
+
 - ⏱ create fast and easy a dynamic redux store
 - ⏳ integrated loading state
 - ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools) for
@@ -18,7 +27,8 @@
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()
 [![Publish to NPM](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml)
-- 
+
+-
 - 🚀 Try out on [StackBlitz](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app)
 - 👩‍💻 checkout the [Sample-App](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
 - 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
@@ -76,7 +86,7 @@ You can now show an Loader for your Application
 
 ### Data is ready
 
-Now you can  show your Data
+Now you can show your Data
 
 ![State-Done](screens/store-success.png)
 

@@ -251,7 +251,7 @@ describe('StoreFactory', () => {
         })
       );
       expect(spyMockStoreDispatch).toHaveBeenCalledWith({
-        type: '[testStore] UNKNOWN',
+        type: '[testStore] PATCH_STATE',
         payload: {
           isLoading: true,
           item: undefined,

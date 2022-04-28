@@ -39,7 +39,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     stateOrUpdaterFn:
       | ((state: StoreState<ITEM, ERROR>) => StoreState<ITEM, ERROR>)
       | StoreState<ITEM, ERROR>,
-    action: string = 'UNKNOWN',
+    action: string = 'SET_STATE',
     skipLog?: boolean
   ) {
     const newState =
@@ -54,7 +54,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     partialStateOrUpdaterFn:
       | Partial<StoreState<ITEM, ERROR>>
       | ((state: StoreState<ITEM, ERROR>) => Partial<StoreState<ITEM, ERROR>>),
-    action: string = 'UNKNOWN'
+    action: string = 'PATCH_STATE'
   ) {
     const newState =
       typeof partialStateOrUpdaterFn === 'function'
