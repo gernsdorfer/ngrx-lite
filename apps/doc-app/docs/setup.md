@@ -99,5 +99,5 @@ export class AppComponent {
 ```
 
 :::note More
-Information for `createLoadingEffect` you can find [here](/docs/api/store-factory#createLoadingEffect)
+Information for `createLoadingEffect` you can find [here](/docs/api/store#createLoadingEffect)
 :::
