@@ -4,7 +4,7 @@ import {
   DefaultStateToken,
   StoreNameToken,
 } from '../injection-tokens/default-state.token';
-import { getDefaultState, Store } from './store';
+import { getDefaultState, Store } from './store.service';
 import { ClientStoragePlugin, StoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 

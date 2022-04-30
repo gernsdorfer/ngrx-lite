@@ -7,7 +7,7 @@ import {
   StoreNameToken,
 } from '../injection-tokens/default-state.token';
 import { Store as NgrxStore } from '@ngrx/store';
-import { getCustomAction, getEffectAction } from './actions';
+import { getCustomAction, getEffectAction } from './action-creator';
 
 export const getDefaultState = <ITEM, ERROR>(): StoreState<ITEM, ERROR> => ({
   isLoading: false,
@@ -29,7 +29,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     @Inject(DefaultStateToken) state: StoreState<ITEM, ERROR>
   ) {
     super(state);
-    this.sendCustomActionToStore('init', state);
+    this.dispatchCustomAction('init', state);
   }
 
   override setState(
@@ -44,7 +44,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
         ? stateOrUpdaterFn(this.get())
         : stateOrUpdaterFn;
     super.setState(newState);
-    if (!skipLog) this.sendCustomActionToStore(action, newState);
+    if (!skipLog) this.dispatchCustomAction(action, newState);
   }
 
   override patchState(
@@ -58,7 +58,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
         ? partialStateOrUpdaterFn(this.get())
         : partialStateOrUpdaterFn;
     super.patchState(newState);
-    this.sendCustomActionToStore(action, { ...this.get(), ...newState });
+    this.dispatchCustomAction(action, { ...this.get(), ...newState });
   }
 
   get state(): StoreState<ITEM, ERROR> {
@@ -75,18 +75,18 @@ export class Store<ITEM, ERROR> extends ComponentStore<
       params$.pipe(
         tap(() => {
           super.patchState({ isLoading: true });
-          this.sendEffectActionToStore(name, EffectStates.LOAD);
+          this.dispatchEffectAction(name, EffectStates.LOAD);
         }),
         switchMap((params) =>
           effect(params).pipe(
             tapResponse(
               (item) => {
                 super.setState({ isLoading: false, item });
-                this.sendEffectActionToStore(name, EffectStates.SUCCESS);
+                this.dispatchEffectAction(name, EffectStates.SUCCESS);
               },
               (error: ERROR) => {
                 super.setState({ isLoading: false, error });
-                this.sendEffectActionToStore(name, EffectStates.ERROR);
+                this.dispatchEffectAction(name, EffectStates.ERROR);
               }
             )
           )
@@ -94,7 +94,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
       )
     );
 
-  private sendCustomActionToStore(
+  private dispatchCustomAction(
     action: string,
     state: StoreState<ITEM, ERROR>
   ) {
@@ -110,7 +110,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     );
   }
 
-  private sendEffectActionToStore(effectName: string, type: EffectStates) {
+  private dispatchEffectAction(effectName: string, type: EffectStates) {
     this.ngrxStore.dispatch(
       getEffectAction({
         effectName,

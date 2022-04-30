@@ -1,4 +1,4 @@
-import { EffectStates } from './store';
+import { EffectStates } from './store.service';
 import { StoreState } from '../models';
 import { createAction, props } from '@ngrx/store';
 

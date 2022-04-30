@@ -4,23 +4,8 @@ import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { StoreFactory } from './store-factory.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ReducerManager } from '@ngrx/store';
-import {
-  EffectStates,
-  getCustomAction,
-  getDefaultState,
-  getEffectAction,
-} from '@gernsdorfer/ngrx-lite';
+import { getCustomAction, getDefaultState } from '@gernsdorfer/ngrx-lite';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
-import { cold } from 'jasmine-marbles';
-import Spy = jasmine.Spy;
-
-interface MyTestModel {
-  name: string;
-}
-
-interface MyErrorState {
-  message: string;
-}
 
 describe('StoreFactory', () => {
   const sessionStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
@@ -68,7 +53,7 @@ describe('StoreFactory', () => {
           provide: ReducerManager,
           useValue: reducerManager,
         },
-      ].filter((provider) => provider),
+      ],
       teardown: { destroyAfterEach: false },
     });
     storeFactory = TestBed.inject(StoreFactory);
@@ -79,47 +64,39 @@ describe('StoreFactory', () => {
     beforeEach(() => {
       localStoragePlugin.getDefaultState.and.returnValue({
         ...getDefaultState(),
-        item: { name: 'defaultValueFromSessionStore' },
+        item: 'defaultValueFromSessionStore',
       });
       sessionStoragePlugin.getDefaultState.and.returnValue({
         ...getDefaultState(),
-        item: { name: 'defaultValueFromLocalStore' },
+        item: 'defaultValueFromLocalStore',
       });
     });
 
     it('should return default initial state', () => {
-      const { state } = storeFactory.createStore<MyTestModel, MyErrorState>(
-        'testStore'
-      );
+      const { state } = storeFactory.createStore<string, number>('testStore');
 
       expect(state).toEqual(getDefaultState());
     });
 
     it('should return state from sessionStorage plugin', () => {
-      const { state } = storeFactory.createStore<MyTestModel, MyErrorState>(
-        'testStore',
-        {
-          storage: 'sessionStoragePlugin',
-        }
-      );
+      const { state } = storeFactory.createStore<string, number>('testStore', {
+        storage: 'sessionStoragePlugin',
+      });
 
       expect(state).toEqual({
         ...getDefaultState(),
-        item: { name: 'defaultValueFromLocalStore' },
+        item: 'defaultValueFromLocalStore',
       });
     });
 
     it('should return state from localeStorage plugin', () => {
-      const { state } = storeFactory.createStore<MyTestModel, MyErrorState>(
-        'testStore',
-        {
-          storage: 'localStoragePlugin',
-        }
-      );
+      const { state } = storeFactory.createStore<string, number>('testStore', {
+        storage: 'localStoragePlugin',
+      });
 
       expect(state).toEqual({
         ...getDefaultState(),
-        item: { name: 'defaultValueFromSessionStore' },
+        item: 'defaultValueFromSessionStore',
       });
     });
   });
@@ -129,14 +106,14 @@ describe('StoreFactory', () => {
       it('should add addReducer for store', () => {
         reducerManager.addReducer.calls.reset();
 
-        storeFactory.createStore<MyTestModel, MyErrorState>('testStore');
+        storeFactory.createStore<string, number>('testStore');
 
         expect(reducerManager.addReducer.calls.argsFor(0)[0]).toBe('testStore');
       });
 
       it('should warn for override store', () => {
         const spyWarn = spyOn(console, 'warn');
-        storeFactory.createStore<MyTestModel, MyErrorState>('oldStore');
+        storeFactory.createStore<string, number>('oldStore');
 
         expect(spyWarn).toHaveBeenCalledWith(
           'store oldStore exists, changes will be override. Please destroy your store or rename it before create a new one'
@@ -152,7 +129,7 @@ describe('StoreFactory', () => {
         });
       });
       it('should ignore action from other store', () => {
-        storeFactory.createStore<MyTestModel, never>('testStore');
+        storeFactory.createStore<string, never>('testStore');
 
         expect(
           actionReducer(
@@ -258,9 +235,7 @@ describe('StoreFactory', () => {
     });
 
     it('should removeReducer after destroy the store', () => {
-      const myStore = storeFactory.createStore<MyTestModel, MyErrorState>(
-        'myStory'
-      );
+      const myStore = storeFactory.createStore<string, number>('myStory');
       reducerManager.removeReducer.calls.reset();
 
       myStore.ngOnDestroy();
@@ -296,227 +271,6 @@ describe('StoreFactory', () => {
         'myStore',
         { isLoading: true, item: 'test' }
       );
-    });
-  });
-
-  describe('store', () => {
-    let mockStoreDispatch: Spy;
-    beforeEach(() => {
-      mockStoreDispatch = spyOn(mockStore, 'dispatch');
-    });
-    const getDispatchAction = <ITEM, ERROR>({
-      storeName,
-      actionName,
-      storeState,
-    }: {
-      storeName: string;
-      actionName: string;
-      storeState: StoreState<ITEM, ERROR>;
-    }) =>
-      getCustomAction({ storeName, actionName })({
-        payload: {
-          ...getDefaultState,
-          item: undefined,
-          error: undefined,
-          ...storeState,
-        },
-      });
-
-    it('should send init action after create', () => {
-      storeFactory.createStore('myTestStore');
-
-      expect(mockStoreDispatch).toHaveBeenCalledWith(
-        getDispatchAction({
-          storeName: 'myTestStore',
-          actionName: 'init',
-          storeState: getDefaultState(),
-        })
-      );
-    });
-
-    describe('state', () => {
-      it('should return state from store', () => {
-        const { state } = storeFactory.createStore('myStore');
-        expect(state).toEqual(getDefaultState());
-      });
-    });
-
-    describe('setState', () => {
-      it('should set state to store with object', () => {
-        const store = storeFactory.createStore('myStore');
-
-        store.setState({ isLoading: true, item: 'test' });
-
-        expect(store.state).toEqual({ isLoading: true, item: 'test' });
-      });
-
-      it('should set state to store with function', () => {
-        const store = storeFactory.createStore('myStore');
-
-        store.setState((state) => ({ ...state, item: 'test' }));
-
-        expect(store.state).toEqual({ isLoading: false, item: 'test' });
-      });
-
-      it('should dispatch action with default actionName `SET_STATE`', () => {
-        const store = storeFactory.createStore('myStore');
-
-        mockStoreDispatch.calls.reset();
-        store.setState({ isLoading: true, item: 'test' });
-
-        expect(mockStoreDispatch).toHaveBeenCalledWith(
-          getDispatchAction({
-            storeName: 'myStore',
-            actionName: 'SET_STATE',
-            storeState: { isLoading: true, item: 'test' },
-          })
-        );
-      });
-
-      it('should dispatch action with custom actionName', () => {
-        const store = storeFactory.createStore('myStore');
-
-        mockStoreDispatch.calls.reset();
-        store.setState({ isLoading: true, item: 'test' }, 'myCustomAction');
-
-        expect(mockStoreDispatch).toHaveBeenCalledWith(
-          getDispatchAction({
-            storeName: 'myStore',
-            actionName: 'myCustomAction',
-            storeState: { isLoading: true, item: 'test' },
-          })
-        );
-      });
-
-      it('should not dispatch action for skipLog', () => {
-        const store = storeFactory.createStore('myStore');
-
-        mockStoreDispatch.calls.reset();
-        store.setState(
-          { isLoading: true, item: 'test' },
-          'myCustomAction',
-          true
-        );
-
-        expect(mockStoreDispatch).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('patchState', () => {
-      it('should set state to store with object', () => {
-        const store = storeFactory.createStore('myStore');
-
-        store.patchState({ item: 'test' });
-
-        expect(store.state).toEqual({ isLoading: false, item: 'test' });
-      });
-
-      it('should set state to store with function', () => {
-        const store = storeFactory.createStore('myStore');
-
-        store.patchState((state) => ({ ...state, item: 'test' }));
-
-        expect(store.state).toEqual({ isLoading: false, item: 'test' });
-      });
-
-      it('should dispatch action with default actionName `PATCH_STATE`', () => {
-        const store = storeFactory.createStore('myStore');
-
-        mockStoreDispatch.calls.reset();
-        store.patchState({ item: 'test' });
-
-        expect(mockStoreDispatch).toHaveBeenCalledWith(
-          getDispatchAction({
-            storeName: 'myStore',
-            actionName: 'PATCH_STATE',
-            storeState: { ...getDefaultState(), item: 'test' },
-          })
-        );
-      });
-
-      it('should dispatch action with custom actionName', () => {
-        const store = storeFactory.createStore('myStore');
-
-        mockStoreDispatch.calls.reset();
-        store.patchState({ item: 'test' }, 'myCustomAction');
-
-        expect(mockStoreDispatch).toHaveBeenCalledWith(
-          getDispatchAction({
-            storeName: 'myStore',
-            actionName: 'myCustomAction',
-            storeState: { ...getDefaultState(), item: 'test' },
-          })
-        );
-      });
-    });
-
-    describe('createLoadingEffect', () => {
-      it('should change state while effect is running', () => {
-        const store = storeFactory.createStore<string, number>('testStore');
-        const testEffect = store.createLoadingEffect('testEffect', () =>
-          cold('-a-#', { a: 'newValue' }, 500)
-        );
-        store.patchState({ item: 'oldValue' });
-
-        mockStoreDispatch.calls.reset();
-
-        testEffect();
-
-        expect(store.state$).toBeObservable(
-          cold('ab-c', {
-            a: <StoreState<string, number>>{
-              isLoading: true,
-              item: 'oldValue',
-            },
-            b: <StoreState<string, number>>{
-              isLoading: false,
-              item: 'newValue',
-            },
-            c: <StoreState<string, number>>{
-              isLoading: false,
-              error: 500,
-            },
-          })
-        );
-        expect(mockStoreDispatch.calls.allArgs()).toEqual([
-          [
-            getEffectAction({
-              storeName: 'testStore',
-              effectName: 'testEffect',
-              type: EffectStates.LOAD,
-            })({
-              payload: {
-                isLoading: true,
-                item: 'oldValue',
-              },
-            }),
-          ],
-          [
-            getEffectAction({
-              storeName: 'testStore',
-              effectName: 'testEffect',
-              type: EffectStates.SUCCESS,
-            })({
-              payload: {
-                isLoading: false,
-                item: 'newValue',
-              },
-            }),
-          ],
-          [
-            getEffectAction({
-              storeName: 'testStore',
-              effectName: 'testEffect',
-              type: EffectStates.ERROR,
-            })({
-              payload: {
-                isLoading: false,
-                error: 500,
-              },
-            }),
-          ],
-        ]);
-      });
     });
   });
 });
