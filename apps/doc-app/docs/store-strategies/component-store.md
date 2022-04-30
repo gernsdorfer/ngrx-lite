@@ -18,7 +18,7 @@ import { of } from 'rxjs';
 @Component()
 export class CounterComponent implements OnDestroy {
   private myStore = this.storeFactory.createStore<number, string>('counter');
-  private incrementEffect = this.myStore.createEffect('increment', (counter: number) => of(counter + 1));
+  private incrementEffect = this.myStore.createLoadingEffect('increment', (counter: number) => of(counter + 1));
 
   public myStoreState$ = this.counterStore.state$;
 

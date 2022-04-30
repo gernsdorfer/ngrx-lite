@@ -1,6 +1,6 @@
-import { EffectStates } from './store';
-import {  StoreState } from '../models';
+import { StoreState } from '../models';
 import { createAction, props } from '@ngrx/store';
+import { EffectStates } from '../enums';
 
 export const getEffectAction = <P extends StoreState<unknown, unknown>>({
   storeName,
@@ -10,11 +10,7 @@ export const getEffectAction = <P extends StoreState<unknown, unknown>>({
   storeName: string;
   effectName?: string;
   type: EffectStates;
-}) =>
-  createAction<string, { payload: P }>(
-    `[${storeName}] ${effectName}:${type}`,
-    props()
-  );
+}) => getCustomAction<P>({ storeName, actionName: `${effectName}:${type}` });
 
 export const getCustomAction = <P extends StoreState<unknown, unknown>>({
   storeName,

@@ -26,7 +26,7 @@ export class ExampleComponent {
   );
   counterState$ = this.counterStore.state$;
 
-  increment = this.counterStore.createEffect(
+  increment = this.counterStore.createLoadingEffect(
     incrementEffectName,
     (counter: number) => of(counter + 1)
   );

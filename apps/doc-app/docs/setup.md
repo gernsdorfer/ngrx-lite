@@ -36,7 +36,7 @@ export class AppComponent {
 More Information for `state$` you can find [here](/docs/api/store#state$)
 :::
 
-## Modify state 👉 `createEffect`  👉 `setState` 👉 `patchState`
+## Modify state 👉 `createLoadingEffect`  👉 `setState` 👉 `patchState`
 
 Choose between [synchronous](#synchronous-state-change) and [asynchronous](#asynchronous-state-change) State Changes.
 
@@ -82,12 +82,12 @@ Information for `patchState` you can find [here](docs/api/store#patchState)
 
 ### Asynchronous State Change
 
-#### Change State via effects `createEffect`
+#### Change State via effects `createLoadingEffect`
 
 ```ts title="app.component.ts"
 export class AppComponent {
   private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
-  private nameEffect = this.myStore.createEffect('LOAD_NAME', (name: string) => of({name: name}));
+  private nameEffect = this.myStore.createLoadingEffect('LOAD_NAME', (name: string) => of({name: name}));
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -99,5 +99,5 @@ export class AppComponent {
 ```
 
 :::note More
-Information for `createEffect` you can find [here](/docs/api/store-factory#createeffect)
+Information for `createLoadingEffect` you can find [here](/docs/api/store#createLoadingEffect)
 :::

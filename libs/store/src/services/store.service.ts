@@ -7,16 +7,12 @@ import {
   StoreNameToken,
 } from '../injection-tokens/default-state.token';
 import { Store as NgrxStore } from '@ngrx/store';
+import { getCustomAction, getEffectAction } from './action-creator';
+import { EffectStates } from '../enums/effect-states.enum';
 
 export const getDefaultState = <ITEM, ERROR>(): StoreState<ITEM, ERROR> => ({
   isLoading: false,
 });
-
-export enum EffectStates {
-  ERROR = 'ERROR',
-  LOAD = 'LOAD',
-  SUCCESS = 'SUCCESS',
-}
 
 @Injectable({ providedIn: 'root' })
 export class Store<ITEM, ERROR> extends ComponentStore<
@@ -28,11 +24,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     @Inject(DefaultStateToken) state: StoreState<ITEM, ERROR>
   ) {
     super(state);
-    this.sendActionToStore('init', state);
-  }
-
-  get state(): StoreState<ITEM, ERROR> {
-    return super.get();
+    this.dispatchCustomAction('init', state);
   }
 
   override setState(
@@ -47,7 +39,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
         ? stateOrUpdaterFn(this.get())
         : stateOrUpdaterFn;
     super.setState(newState);
-    if (!skipLog) this.sendActionToStore(action, newState);
+    if (!skipLog) this.dispatchCustomAction(action, newState);
   }
 
   override patchState(
@@ -61,15 +53,14 @@ export class Store<ITEM, ERROR> extends ComponentStore<
         ? partialStateOrUpdaterFn(this.get())
         : partialStateOrUpdaterFn;
     super.patchState(newState);
-
-    this.sendActionToStore(action, { ...this.get(), ...newState });
+    this.dispatchCustomAction(action, { ...this.get(), ...newState });
   }
 
-  override ngOnDestroy() {
-    super.ngOnDestroy();
+  get state(): StoreState<ITEM, ERROR> {
+    return super.get();
   }
 
-  createEffect = <EFFECT_PARAMS = void>(
+  createLoadingEffect = <EFFECT_PARAMS = void>(
     name: string,
     effect: (
       params: EFFECT_PARAMS
@@ -78,30 +69,46 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
         tap(() => {
-          this.patchState({ isLoading: true }, `${name}:${EffectStates.LOAD}`);
+          super.patchState({ isLoading: true });
+          this.dispatchEffectAction(name, EffectStates.LOAD);
         }),
         switchMap((params) =>
           effect(params).pipe(
             tapResponse(
-              (item) =>
-                this.setState({ isLoading: false, item }, `${name}:${EffectStates.SUCCESS}`),
-              (error: ERROR) =>
-                this.setState({ isLoading: false, error }, `${name}:${EffectStates.ERROR}`)
+              (item) => {
+                super.setState({ isLoading: false, item });
+                this.dispatchEffectAction(name, EffectStates.SUCCESS);
+              },
+              (error: ERROR) => {
+                super.setState({ isLoading: false, error });
+                this.dispatchEffectAction(name, EffectStates.ERROR);
+              }
             )
           )
         )
       )
     );
 
-  private sendActionToStore(action: string, state: StoreState<ITEM, ERROR>) {
-    this.ngrxStore.dispatch({
-      type: `[${this.storeName}] ${action}`,
-      payload: {
-        ...getDefaultState,
-        item: undefined,
-        error: undefined,
-        ...state,
-      },
-    });
+  private dispatchCustomAction(action: string, state: StoreState<ITEM, ERROR>) {
+    this.ngrxStore.dispatch(
+      getCustomAction({ actionName: action, storeName: this.storeName })({
+        payload: {
+          ...getDefaultState(),
+          item: undefined,
+          error: undefined,
+          ...state,
+        },
+      })
+    );
+  }
+
+  private dispatchEffectAction(effectName: string, type: EffectStates) {
+    this.ngrxStore.dispatch(
+      getEffectAction({
+        effectName,
+        storeName: this.storeName,
+        type: type,
+      })({ payload: this.get() })
+    );
   }
 }

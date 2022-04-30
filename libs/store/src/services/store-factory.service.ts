@@ -4,11 +4,11 @@ import {
   DefaultStateToken,
   StoreNameToken,
 } from '../injection-tokens/default-state.token';
-import { getDefaultState, Store } from './store';
+import { getDefaultState, Store } from './store.service';
 import { ClientStoragePlugin, StoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
-import { ReducerManager, Store as NgrxStore } from '@ngrx/store';
+import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { filter, map, takeUntil } from 'rxjs';
 
 type storagePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
@@ -16,25 +16,19 @@ type storagePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 @Injectable({ providedIn: 'root' })
 export class StoreFactory {
   constructor(
-    private reducerManager: ReducerManager,
-    private ngrxStore: NgrxStore,
+    @Optional() private reducerManager: ReducerManager,
+    @Optional() private ngrxStore: NgrxStore,
     @Optional()
     @Inject(SessionStoragePlugin)
     private sessionStoragePlugin: ClientStoragePlugin,
     @Optional()
     @Inject(LocalStoragePlugin)
     private localStoragePlugin: ClientStoragePlugin
-  ) {}
-
-  private getStorageByKey(
-    storage?: storagePluginTypes
-  ): ClientStoragePlugin | undefined {
-    if (storage === 'sessionStoragePlugin') return this.sessionStoragePlugin;
-    if (storage === 'localStoragePlugin') return this.localStoragePlugin;
-    return;
+  ) {
+    this.checkNgrxStoreIsInstalled();
   }
 
-  createStore<ITEM, ERROR>(
+  public createStore<ITEM, ERROR>(
     storeName: string,
     { storage }: { storage?: storagePluginTypes } = {}
   ): Store<ITEM, ERROR> {
@@ -57,6 +51,58 @@ export class StoreFactory {
     return store;
   }
 
+  private getInitialState<ITEM, ERROR>(
+    storeName: string,
+    storage?: storagePluginTypes
+  ): StoreState<ITEM, ERROR> {
+    return (
+      this.getStorageByKey(storage)?.getDefaultState(storeName) ||
+      getDefaultState()
+    );
+  }
+
+  private getStorageByKey(
+    storage?: storagePluginTypes
+  ): ClientStoragePlugin | undefined {
+    if (storage === 'sessionStoragePlugin') return this.sessionStoragePlugin;
+    if (storage === 'localStoragePlugin') return this.localStoragePlugin;
+    return;
+  }
+
+  private addStoreReducerToNgrx<ITEM, ERROR>(
+    storeName: string,
+    initialState: StoreState<ITEM, ERROR>
+  ): void {
+    if (
+      this.reducerManager.currentReducers &&
+      this.reducerManager.currentReducers[storeName]
+    ) {
+      console.warn(
+        `store ${storeName} exists, changes will be override. Please destroy your store or rename it before create a new one`
+      );
+    }
+    this.reducerManager.addReducer(
+      storeName,
+      this.getActionReducer(storeName, initialState)
+    );
+  }
+
+  private getActionReducer<ITEM, ERROR>(
+    storeName: string,
+    initialState: StoreState<ITEM, ERROR>
+  ): ActionReducer<
+    StoreState<ITEM, ERROR>,
+    { payload: StoreState<ITEM, ERROR>; type: string }
+  > {
+    return (
+      state: StoreState<ITEM, ERROR> = initialState,
+      action: { payload: StoreState<ITEM, ERROR>; type: string }
+    ): StoreState<ITEM, ERROR> =>
+      action.type.startsWith(`[${storeName}]`)
+        ? { ...state, ...action.payload }
+        : state;
+  }
+
   private storeStateChangesToClientStorage<ITEM, ERROR>(
     storeName: string,
     store: Store<ITEM, ERROR>,
@@ -77,48 +123,16 @@ export class StoreFactory {
         takeUntil(store.destroy$),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         filter((ngrxState: { [index: string]: any }) => !!ngrxState[storeName]),
-        map((ngrxState) => ngrxState[storeName]),
-        filter(
-          (storeFromgrxStore) =>
-            JSON.stringify(store.state) !== JSON.stringify(storeFromgrxStore)
-        )
+        map((ngrxState) => ngrxState[storeName])
       )
       .subscribe({
         next: (state) => store.setState(state, '', true),
       });
   }
 
-  private addStoreReducerToNgrx<ITEM, ERROR>(
-    storeName: string,
-    initialState: StoreState<ITEM, ERROR>
-  ): void {
-    if (
-      this.reducerManager.currentReducers &&
-      this.reducerManager.currentReducers[storeName]
-    ) {
-      console.warn(
-        `store ${storeName} exists, changes will be override. Please destroy your store or rename it before create a new one`
-      );
+  private checkNgrxStoreIsInstalled() {
+    if (!this.reducerManager || !this.ngrxStore) {
+      throw '@ngrx/store is not imported. Please install `@ngrx/store` and import `StoreModule.forRoot({})` in your root module';
     }
-    this.reducerManager.addReducer(
-      storeName,
-      (
-        state: StoreState<ITEM, ERROR> = initialState,
-        action: { payload: StoreState<ITEM, ERROR>; type: string }
-      ): StoreState<ITEM, ERROR> =>
-        action.type.startsWith(`[${storeName}]`)
-          ? { ...state, ...action.payload }
-          : state
-    );
-  }
-
-  private getInitialState<ITEM, ERROR>(
-    storeName: string,
-    storage?: storagePluginTypes
-  ): StoreState<ITEM, ERROR> {
-    return (
-      this.getStorageByKey(storage)?.getDefaultState(storeName) ||
-      getDefaultState()
-    );
   }
 }
