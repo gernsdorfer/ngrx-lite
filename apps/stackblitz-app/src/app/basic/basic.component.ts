@@ -13,7 +13,7 @@ export class BasicExampleComponent implements OnDestroy {
 
   public counterState$ = this.counterStore.state$;
 
-  public increment = this.counterStore.createEffect(
+  public increment = this.counterStore.createLoadingEffect(
     'increment',
     (counter: number = 0) => of(counter + 1)
   );
