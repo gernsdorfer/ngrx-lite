@@ -61,7 +61,7 @@ class MyComponent implements OnDestroy {
   private store = this.storeFactory.createStore<MyModel, MyError>('MyStore');
 
   public myState = this.readAssetKiStore.state$;
-  public load = this.readAssetKiStore.createEffect('myEffect', (name) =>
+  public load = this.readAssetKiStore.createLoadingEffect('myEffect', (name) =>
     of({name})
   );
 
