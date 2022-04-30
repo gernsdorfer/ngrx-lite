@@ -8,16 +8,11 @@ import {
 } from '../injection-tokens/default-state.token';
 import { Store as NgrxStore } from '@ngrx/store';
 import { getCustomAction, getEffectAction } from './action-creator';
+import { EffectStates } from '../enums/effect-states.enum';
 
 export const getDefaultState = <ITEM, ERROR>(): StoreState<ITEM, ERROR> => ({
   isLoading: false,
 });
-
-export enum EffectStates {
-  ERROR = 'ERROR',
-  LOAD = 'LOAD',
-  SUCCESS = 'SUCCESS',
-}
 
 @Injectable({ providedIn: 'root' })
 export class Store<ITEM, ERROR> extends ComponentStore<
@@ -94,10 +89,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
       )
     );
 
-  private dispatchCustomAction(
-    action: string,
-    state: StoreState<ITEM, ERROR>
-  ) {
+  private dispatchCustomAction(action: string, state: StoreState<ITEM, ERROR>) {
     this.ngrxStore.dispatch(
       getCustomAction({ actionName: action, storeName: this.storeName })({
         payload: {

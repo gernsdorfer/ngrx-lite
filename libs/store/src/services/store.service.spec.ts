@@ -1,14 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { StoreState } from '../models';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import {
-  EffectStates,
-  getCustomAction,
-  getDefaultState,
-  getEffectAction,
-} from '@gernsdorfer/ngrx-lite';
+import { EffectStates } from '../enums';
+import { getCustomAction, getEffectAction } from './action-creator';
 import { cold } from 'jasmine-marbles';
-import { Store } from './store.service';
+import {getDefaultState, Store} from './store.service';
 import {
   DefaultStateToken,
   StoreNameToken,
