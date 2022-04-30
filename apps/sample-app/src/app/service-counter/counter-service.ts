@@ -10,7 +10,7 @@ export class CounterStore implements OnDestroy {
 
   public counterState$ = this.counterStore.state$;
 
-  public inrement = this.counterStore.createEffect(
+  public inrement = this.counterStore.createLoadingEffect(
     'increment',
     (counter: number = 0) => of(counter + 1).pipe(delay(200))
   );

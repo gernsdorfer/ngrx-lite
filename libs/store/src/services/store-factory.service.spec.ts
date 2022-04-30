@@ -450,10 +450,10 @@ describe('StoreFactory', () => {
       });
     });
 
-    describe('createEffect', () => {
+    describe('createLoadingEffect', () => {
       it('should change state while effect is running', () => {
         const store = storeFactory.createStore<string, number>('testStore');
-        const testEffect = store.createEffect('testEffect', () =>
+        const testEffect = store.createLoadingEffect('testEffect', () =>
           cold('-a-#', { a: 'newValue' }, 500)
         );
         store.patchState({ item: 'oldValue' });

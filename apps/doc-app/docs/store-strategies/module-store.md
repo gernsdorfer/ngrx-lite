@@ -22,7 +22,7 @@ export class MyStore implements OnDestroy {
 
   public myStoreState$ = this.myStore.state$;
 
-  public incrementEffect = this.myStore.createEffect('increment', (counter: number = 0) => of(counter + 1));
+  public incrementEffect = this.myStore.createLoadingEffect('increment', (counter: number = 0) => of(counter + 1));
 
   constructor(private storeFactory: StoreFactory) {
   }

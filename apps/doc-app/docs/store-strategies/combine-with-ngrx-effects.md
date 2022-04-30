@@ -33,7 +33,7 @@ export const MyIncrementAction = getEffectAction<StoreState<number, never>>({
 export class CounterComponent {
   private counterStore = this.storeFactory.createStore<number, never>(storeName);
 
-  private incrementEffect = this.counterStore.createEffect(incrementEffectName,
+  private incrementEffect = this.counterStore.createLoadingEffect(incrementEffectName,
     (counter: number) => of(counter + 1)
   );
 }
@@ -44,7 +44,7 @@ export class CounterComponent {
 Listen in [@ngrx/Effects](https://ngrx.io/guide/store/actions) for Counter Success Action
 
 ```ts title="my-effect.effect.ts"
-import {Actions, createEffect, ofType,} from "@ngrx/effects";
+import {Actions, createLoadingEffect, ofType,} from "@ngrx/effects";
 import {MyIncrementAction} from "./my-counter.component.ts";
 
 @Injectable()
@@ -52,7 +52,7 @@ export class DemoEffect {
   constructor(private actions$: Actions) {
   }
 
-  logActions$ = createEffect(
+  logActions$ = createLoadingEffect(
     () =>
       this.actions$.pipe(
         ofType(MyIncrementAction),

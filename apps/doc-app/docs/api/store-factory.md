@@ -19,16 +19,16 @@ export class AppComponent {
 }
 ```
 
-## createEffect
+## createLoadingEffect
 
-Create your custom Effect. Here you must define your EffectName, in this Example below it's `LOAD_NAME`
+Create your custom Effect, the lib set's loader state while effect is running. Here you must define your EffectName, in this Example below it's `LOAD_NAME`
 The second Argument is a Callback Function. The Callback Function returns an Observable based on the created Store Interface.
 
 
 ```ts title="app.component.ts"
 export class AppComponent {
   private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
-  private nameEffect = this.myStore.createEffect('LOAD_NAME', (name: string) => of({name: name}));
+  private nameEffect = this.myStore.createLoadingEffect('LOAD_NAME', (name: string) => of({name: name}));
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -46,14 +46,14 @@ indicator in your ui.
 ### Example for a successfully callback Observable
 
 ```ts
-  nameEffect = this.myStore.createEffect('LOAD_NAME', (name: string) => of({name: name}));
+  nameEffect = this.myStore.createLoadingEffect('LOAD_NAME', (name: string) => of({name: name}));
 ```
 
 ### Example for a Error Callback Observable
 
 ```ts
 
-nameEffect = this.myStore.createEffect('LOAD_NAME', (name: string) => throwError(() => {
+nameEffect = this.myStore.createLoadingEffect('LOAD_NAME', (name: string) => throwError(() => {
   errorCode: 'myError'
 }));
 ```

@@ -65,7 +65,7 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     return super.get();
   }
 
-  createEffect = <EFFECT_PARAMS = void>(
+  createLoadingEffect = <EFFECT_PARAMS = void>(
     name: string,
     effect: (
       params: EFFECT_PARAMS
