@@ -6,6 +6,18 @@
 
 
 
+
+## 2.0.0 (2022-04-30)
+
+#### :boom: Breaking Change
+* [#21](https://github.com/gernsdorfer/ngrx-lite/pull/21) Refactor tests ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :rocket: Enhancement
+* [#21](https://github.com/gernsdorfer/ngrx-lite/pull/21) Refactor tests ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 1.2.0 (2022-04-22)
 
 #### :rocket: Enhancement
