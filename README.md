@@ -84,10 +84,9 @@ class MyComponent implements OnDestroy {
 ```
 
 That's it 🥳
+## Features
 
-## What's going on ? Let's have a look into the the redux devtools
-
-## Loading Effects
+### Loading Effects
 
 Create `createLoadingEffect` to set Loader State while an Effect is running
 
@@ -118,32 +117,58 @@ export class LoadingEffectComponent implements OnDestroy {
 }
 
 ```
+#### What's going on ? Let's have a look into the the redux devtools
 
-### Store is init
+##### Store is init
 
 After the store is init you can find the store in the @ngrx/devtools
 
 ![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/init.png)
 
-### Loader State `isloading` changed
+##### Loader State `isloading` changed
 
 For a running Effect `isLoading` is true and you can show a spinner in your UI.
 
 ![State-Loading](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/load.png)
 
-### Effect run successfully
+##### Effect run successfully
 
 After an Effect run Successfully the `item` key is updated
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/success.png)
 
-### Effect run unsuccessfully
+##### Effect run unsuccessfully
 
 After an Effect run unsuccessfully the `error` key contains the error
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/error.png)
 
-## Session/Local Storage
+
+### Change State without effects
+
+Every State Change's should have an custom name, to identify the action in your devtools. In the Example below you can
+see an Action named `[MyStore] RESET`.   
+If you didn't define an Action name you can see an Action `[MyStore] SET_STATE`.
+
+```ts
+class MyComponent implements OnDestroy {
+  private store = this.storeFactory.getStore<MyModel, MyError>('MyStore');
+
+  constructor(private storeFactory: StoreFactory) {
+  }
+
+  reset() {
+    // you cann see a `RESET` action in your Devtools
+    store.setState({isLoading: false}, 'RESET')
+  }
+
+  ngOnDestroy() {
+    this.store.ngOnDestroy();
+  }
+}
+```
+
+### Session/Local Storage
 
 #### Register Session/Locale-Storage Service
 
@@ -170,35 +195,11 @@ class MyLCass {
 }
 ```
 
-## Devtool support
+### Devtool support
 
 your must only use and install the [ngrx/store-devtools](https://ngrx.io/guide/store-devtools)
 
-## Change State without effects
-
-Every State Change's should have an custom name, to identify the action in your devtools. In the Example below you can
-see an Action named `[MyStore] RESET`.   
-If you didn't define an Action name you can see an Action `[MyStore] SET_STATE`.
-
-```ts
-class MyComponent implements OnDestroy {
-  private store = this.storeFactory.getStore<MyModel, MyError>('MyStore');
-
-  constructor(private storeFactory: StoreFactory) {
-  }
-
-  reset() {
-    // you cann see a `RESET` action in your Devtools
-    store.setState({isLoading: false}, 'RESET')
-  }
-
-  ngOnDestroy() {
-    this.store.ngOnDestroy();
-  }
-}
-```
-
-## Testing
+### Testing
 
 Import `storeTestingFactory` and write your test's An Example you can
 find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/basic/basic.component.spec.ts)
