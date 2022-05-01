@@ -14,7 +14,7 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 
 ## Benefits
 
-- 🤝 same API like [@ngrx/component-store](https://ngrx.io/guide/component-store) with optional parameters 
+- 🤝 same API like [@ngrx/component-store](https://ngrx.io/guide/component-store) with optional parameters
 - ⏱ create fast and easy a dynamic redux store
 - ⏳ optional integrated loading state for effects
 - ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools) for
@@ -32,7 +32,6 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 [![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()
 [![Publish to NPM](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml)
 
--
 - 🚀 Try out on [StackBlitz](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app)
 - 👩‍💻 checkout the [Sample-App](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
 - 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
@@ -57,24 +56,28 @@ npm: `npm install @ngrx/store @gernsdorfer/ngrx-lite`
 2. Create Your Store
 
 ```ts
-import {tapResponse} from "@ngrx/component-store";
-import {Observable} from "rxjs";
+
 
 @Component({
   selector: 'my-component',
   template: '<button (click)="load(\'test\')">',
 })
 class MyComponent implements OnDestroy {
+  // create your store
   private store = this.storeFactory.createStore<MyModel, MyError>('MyStore');
+  // listen on changes
   public myState = this.store.state$;
-  
+
   constructor(private storeFactory: StoreFactory) {
   }
 
-  load () {
+  load() {
+    // update state
     this.store.patchState({item: name}, 'UPDATE_NAME');
   }
+
   ngOnDestroy() {
+    // destory the store
     this.store.ngOnDestroy();
   }
 }
@@ -84,10 +87,9 @@ That's it 🥳
 
 ## What's going on ? Let's have a look into the the redux devtools
 
-
 ## Loading Effects
 
-Create loader Effects to set Loader State while Effect is running
+Create `createLoadingEffect` to set Loader State while an Effect is running
 
 ```ts
 
@@ -107,7 +109,8 @@ export class LoadingEffectComponent implements OnDestroy {
     (counter: number = 0) => of(counter + 1)
   );
 
-  constructor(private storeFactory: StoreFactory) {}
+  constructor(private storeFactory: StoreFactory) {
+  }
 
   ngOnDestroy() {
     this.counterStore.ngOnDestroy();
@@ -115,12 +118,12 @@ export class LoadingEffectComponent implements OnDestroy {
 }
 
 ```
+
 ### Store is init
 
 After the store is init you can find the store in the @ngrx/devtools
 
 ![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/init.png)
-
 
 ### Loader State `isloading` changed
 
@@ -175,7 +178,7 @@ your must only use and install the [ngrx/store-devtools](https://ngrx.io/guide/s
 
 Every State Change's should have an custom name, to identify the action in your devtools. In the Example below you can
 see an Action named `[MyStore] RESET`.   
-If you didn't define an Action name you can see an Action `[MyStore] UNKNOWN`.
+If you didn't define an Action name you can see an Action `[MyStore] SET_STATE`.
 
 ```ts
 class MyComponent implements OnDestroy {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {MultipleCounterStore, MultipleCounterStoreName} from './counter-service';
 
 @Component({
-  selector: 'my-multi-instance-demo-a',
+  selector: 'my-app-multi-instance-demo-a',
   templateUrl: 'demo.html',
   providers: [
     MultipleCounterStore,
@@ -18,7 +18,7 @@ export class DemoAComponent {
 
   constructor(private counterStore: MultipleCounterStore) {}
 
-  increment(counter?: number) {
-    this.counterStore.inrement(counter);
+  increment() {
+    this.counterStore.increment();
   }
 }

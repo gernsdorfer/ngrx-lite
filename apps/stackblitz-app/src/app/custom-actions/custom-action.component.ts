@@ -2,23 +2,23 @@ import { Component, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 @Component({
-  selector: 'my-basic-customAction',
+  selector: 'my-app-basic-custom-action',
   templateUrl: 'custom-action.html',
 })
 export class CustomActionComponent implements OnDestroy {
-  private counterStore = this.storeFactory.createStore<number, never>(
-    'customActionCounter'
+  private store = this.storeFactory.createStore<number, never>(
+    'CUSTOM_ACTION_STORE'
   );
 
-  public counterState$ = this.counterStore.state$;
+  public counterState$ = this.store.state$;
 
   constructor(private storeFactory: StoreFactory) {}
 
-  increment(counter: number = 0) {
-    this.counterStore.patchState({ item: counter + 1 }, 'INCREMENT');
+  increment() {
+    this.store.patchState( ({item=0}) => ({ item: item + 1 }), 'INCREMENT');
   }
 
   ngOnDestroy() {
-    this.counterStore.ngOnDestroy();
+    this.store.ngOnDestroy();
   }
 }

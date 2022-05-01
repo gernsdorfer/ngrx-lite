@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CounterStore } from './counter-service';
 
 @Component({
-  selector: 'my-service-counter',
+  selector: 'my-app-service-counter',
   templateUrl: 'service-counter.html',
 })
 export class StorageFromServiceComponent {
@@ -10,7 +10,7 @@ export class StorageFromServiceComponent {
 
   constructor(private counterStore: CounterStore) {}
 
-  increment(counter?: number) {
-    this.counterStore.inrement(counter);
+  increment() {
+    this.counterStore.increment();
   }
 }

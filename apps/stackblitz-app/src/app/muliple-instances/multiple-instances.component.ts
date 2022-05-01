@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'my-multi-instance',
+  selector: 'my-app-multi-instance',
   template: `<h1>Multiple State Instances</h1>
-    <my-multi-instance-demo-a></my-multi-instance-demo-a>
-    <my-multi-instance-demo-b></my-multi-instance-demo-b> `,
+    <my-app-multi-instance-demo-a></my-app-multi-instance-demo-a>
+    <my-app-multi-instance-demo-b></my-app-multi-instance-demo-b> `,
 })
 export class MultipleInstancesComponent {}

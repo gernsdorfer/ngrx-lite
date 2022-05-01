@@ -11,7 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
-import { BasicExampleComponent } from './basic/basic.component';
+import { LoadingEffectComponent } from './loading-effect/loading-effect.component';
 import { StorageExampleComponent } from './storage/storage.component';
 import { StorageFromServiceComponent } from './service-counter/storage-from-service.component';
 import { CounterStore } from './service-counter/counter-service';
@@ -21,6 +21,7 @@ import { MultipleInstancesComponent } from './muliple-instances/multiple-instanc
 import { DemoAComponent } from './muliple-instances/demo-a.component';
 import { DemoBComponent } from './muliple-instances/demo-b.component';
 import {EffectsModule} from "@ngrx/effects";
+import {BasicComponent} from "./basic/basic.component";
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import {EffectsModule} from "@ngrx/effects";
       logOnly: false,
     }),
     RouterModule.forRoot([
-      { path: '', component: BasicExampleComponent },
+      { path: '', component: BasicComponent },
+      { path: 'loading-effect', component: LoadingEffectComponent },
       { path: 'custom-action', component: CustomActionComponent },
       { path: 'storage', component: StorageExampleComponent },
       { path: 'storage-from-service', component: StorageFromServiceComponent },
@@ -53,7 +55,9 @@ import {EffectsModule} from "@ngrx/effects";
           ),
       },
       { path: '**', redirectTo: '' },
-    ]),
+    ], {
+      useHash: true
+    }),
   ],
   providers: [
     CounterStore,
@@ -62,7 +66,7 @@ import {EffectsModule} from "@ngrx/effects";
   ],
   declarations: [
     AppComponent,
-    BasicExampleComponent,
+    LoadingEffectComponent,
     CustomActionComponent,
     StorageExampleComponent,
     StorageFromServiceComponent,
@@ -70,6 +74,7 @@ import {EffectsModule} from "@ngrx/effects";
     MultipleInstancesComponent,
     DemoAComponent,
     DemoBComponent,
+    BasicComponent
   ],
   bootstrap: [AppComponent],
 })

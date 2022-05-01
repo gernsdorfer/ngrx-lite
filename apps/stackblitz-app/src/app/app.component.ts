@@ -1,6 +1,4 @@
-import { Component, VERSION } from '@angular/core';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { of, delay } from 'rxjs';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'my-app',
