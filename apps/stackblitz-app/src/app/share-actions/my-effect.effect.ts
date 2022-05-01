@@ -11,7 +11,7 @@ export class DemoEffect {
     () =>
       this.actions$.pipe(
         ofType(MyIncrementAction),
-        tap((data) => console.log('DemoEffect receive Data',data))
+        tap((data) => console.log('MyIncrementAction received',data))
       ),
     { dispatch: false }
   );
