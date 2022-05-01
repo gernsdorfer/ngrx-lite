@@ -33,7 +33,6 @@ export class StoreFactory {
     { storage }: { storage?: storagePluginTypes } = {}
   ): Store<ITEM, ERROR> {
     const initialState = this.getInitialState<ITEM, ERROR>(storeName, storage);
-    this.addStoreReducerToNgrx<ITEM, ERROR>(storeName, initialState);
     const store = Injector.create({
       providers: [
         { provide: Store },
@@ -43,6 +42,7 @@ export class StoreFactory {
       ],
     }).get(Store);
 
+    this.addStoreReducerToNgrx<ITEM, ERROR>(storeName, initialState);
     this.syncStoreChangesToClientStorage(storeName, store, storage);
     this.syncNgrxStoreChangesToStore<ITEM, ERROR>(storeName, store);
     store.destroy$.subscribe(() =>
