@@ -197,7 +197,7 @@ class MyLCass {
 
 ### Devtool support
 
-your must only use and install the [ngrx/store-devtools](https://ngrx.io/guide/store-devtools)
+Install and import [ngrx/store-devtools](https://ngrx.io/guide/store-devtools)
 
 ### Testing
 
