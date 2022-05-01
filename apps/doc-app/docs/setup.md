@@ -16,8 +16,7 @@ export class AppComponent {
 }
 ```
 
-:::note
-More Information for `createStore` you can find [here](/docs/api/store-factory#createStore)
+:::note More Information for `createStore` you can find [here](/docs/api/store-factory#createStore)
 :::
 
 ## Read State 👉 `state$`
@@ -32,8 +31,7 @@ export class AppComponent {
 }
 ```
 
-:::note
-More Information for `state$` you can find [here](/docs/api/store#state$)
+:::note More Information for `state$` you can find [here](/docs/api/store#state$)
 :::
 
 ## Modify state 👉 `createLoadingEffect`  👉 `setState` 👉 `patchState`
@@ -56,8 +54,8 @@ export class AppComponent {
   }
 }
 ```
-:::note More
-Information for `setstate` you can find [here](docs/api/store#setstate)
+
+:::note More Information for `setstate` you can find [here](docs/api/store#setstate)
 :::
 
 #### Partial Changes
@@ -75,29 +73,39 @@ export class AppComponent {
 }
 ```
 
-:::note More
-Information for `patchState` you can find [here](docs/api/store#patchState)
+:::note More Information for `patchState` you can find [here](docs/api/store#patchState)
 :::
 
-
 ### Asynchronous State Change
+
+#### Change State with the original `effect` from [@ngrx/component-store](https://ngrx.io/guide/component-store/effect)
+
+```ts title="app.component.ts"
+export class AppComponent {
+  private store = this.storeFactory.createStore<number, string>('myStore');
+  increment = this.myStore.effect((counter$: Observable<number>) => counter$.pipe(
+    tapResponse(
+      (counter) => this.store.patchState({item: counter + 1}),
+      (error) => this.store.patchState({error: error})
+    )
+  ));
+
+  constructor(private storeFactory: StoreFactory) {
+  }
+}
+```
 
 #### Change State via effects `createLoadingEffect`
 
 ```ts title="app.component.ts"
 export class AppComponent {
-  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
-  private nameEffect = this.myStore.createLoadingEffect('LOAD_NAME', (name: string) => of({name: name}));
+  private store = this.storeFactory.createStore<number, string>('myStore');
+  private increment = this.store.createLoadingEffect('LOAD_NAME', (counter: string) => of(counter + 1));
 
   constructor(private storeFactory: StoreFactory) {
-  }
-
-  public setName(name: string): void {
-    this.nameEffect(name);
   }
 }
 ```
 
-:::note More
-Information for `createLoadingEffect` you can find [here](/docs/api/store#createLoadingEffect)
+:::note More Information for `createLoadingEffect` you can find [here](/docs/api/store#createLoadingEffect)
 :::

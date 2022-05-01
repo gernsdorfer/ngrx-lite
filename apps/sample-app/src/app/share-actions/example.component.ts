@@ -5,10 +5,9 @@ import {
   StoreFactory,
   StoreState,
 } from '@gernsdorfer/ngrx-lite';
-import { of } from 'rxjs';
 
-const storeName = 'counter';
-const incrementEffectName = 'increment';
+const storeName = 'SHARED_ACTIONS';
+const incrementEffectName = 'INCREMENT';
 
 export const MyIncrementAction = getEffectAction<StoreState<number, never>>({
   storeName: storeName,
@@ -21,15 +20,12 @@ export const MyIncrementAction = getEffectAction<StoreState<number, never>>({
   templateUrl: 'example.html',
 })
 export class ExampleComponent {
-  private counterStore = this.storeFactory.createStore<number, never>(
-    storeName
-  );
-  counterState$ = this.counterStore.state$;
+  private store = this.storeFactory.createStore<number, never>(storeName);
+  counterState$ = this.store.state$;
 
-  increment = this.counterStore.createLoadingEffect(
-    incrementEffectName,
-    (counter: number) => of(counter + 1)
-  );
+  increment() {
+    this.store.patchState(({ item = 0 }) => ({ item: item + 1 }), 'INCREMENT');
+  }
 
   constructor(private storeFactory: StoreFactory) {}
 }

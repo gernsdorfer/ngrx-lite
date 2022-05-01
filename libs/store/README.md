@@ -4,22 +4,26 @@
 
 ## Why we need this ?
 
-The current [@ngrx/component-store](https://ngrx.io/guide/component-store) implementation works with its own isolated Store.
-Unfortunately, there is no connection to the global [@ngrx/Store](https://ngrx.io/guide/store) or the [@ngrx/store-devtools](https://ngrx.io/guide/store-devtools).
+The current [@ngrx/component-store](https://ngrx.io/guide/component-store) implementation works with its own isolated
+Store. Unfortunately, there is no connection to the global [@ngrx/Store](https://ngrx.io/guide/store) or
+the [@ngrx/store-devtools](https://ngrx.io/guide/store-devtools).
 
-This Library connects your [@ngrx/component-store](https://ngrx.io/guide/component-store) with the [@ngrx/Store](https://ngrx.io/guide/store) to share and debug the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
+This Library connects your [@ngrx/component-store](https://ngrx.io/guide/component-store) with
+the [@ngrx/Store](https://ngrx.io/guide/store) to share and debug
+the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 
 ## Benefits
 
+- 🤝 same API like [@ngrx/component-store](https://ngrx.io/guide/component-store) with optional parameters
 - ⏱ create fast and easy a dynamic redux store
-- ⏳ integrated loading state
+- ⏳ optional integrated loading state for effects
 - ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools) for
   - patchState
   - setState
   - created effects
 - 💽 support session/locale Storage
 - 🏘 You Decide where your Store lives: Root, Module or in the Component Scope
-- 🤝 Shared your State Changes and Actions in the ngrx Store
+- 🔛 Shared your State Changes and Actions in the ngrx Store
 
 <hr />
 
@@ -53,21 +57,23 @@ npm: `npm install @ngrx/store @gernsdorfer/ngrx-lite`
 2. Create Your Store
 
 ```ts
+import {tapResponse} from "@ngrx/component-store";
+import {Observable} from "rxjs";
+
 @Component({
   selector: 'my-component',
   template: '<button (click)="load(\'test\')">',
 })
 class MyComponent implements OnDestroy {
   private store = this.storeFactory.createStore<MyModel, MyError>('MyStore');
-
-  public myState = this.readAssetKiStore.state$;
-  public load = this.readAssetKiStore.createLoadingEffect('myEffect', (name) =>
-    of({name})
-  );
-
+  public myState = this.store.state$;
+  
   constructor(private storeFactory: StoreFactory) {
   }
 
+  load () {
+    this.store.patchState({item: name}, 'UPDATE_NAME');
+  }
   ngOnDestroy() {
     this.store.ngOnDestroy();
   }
@@ -78,17 +84,61 @@ That's it 🥳
 
 ## What's going on ? Let's have a look into the the redux devtools
 
+
+## Loading Effects
+
+Create loader Effects to set Loader State while Effect is running
+
+```ts
+
+@Component({
+  selector: 'my-app-basic-app',
+  templateUrl: 'loading-effect.html',
+})
+export class LoadingEffectComponent implements OnDestroy {
+  private counterStore = this.storeFactory.createStore<number, never>(
+    'COUNTER_STORE'
+  );
+
+  public counterState$ = this.counterStore.state$;
+
+  public increment = this.counterStore.createLoadingEffect(
+    'increment',
+    (counter: number = 0) => of(counter + 1)
+  );
+
+  constructor(private storeFactory: StoreFactory) {}
+
+  ngOnDestroy() {
+    this.counterStore.ngOnDestroy();
+  }
+}
+
+```
+### Store is init
+
+After the store is init you can find the store in the @ngrx/devtools
+
+![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/init.png)
+
+
 ### Loader State `isloading` changed
 
-You can now show an Loader for your Application
+For a running Effect `isLoading` is true and you can show a spinner in your UI.
 
-![State-Loading](screens/store-start.png)
+![State-Loading](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/load.png)
 
-### Data is ready
+### Effect run successfully
 
-Now you can show your Data
+After an Effect run Successfully the `item` key is updated
 
-![State-Done](screens/store-success.png)
+![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/success.png)
+
+### Effect run unsuccessfully
+
+After an Effect run unsuccessfully the `error` key contains the error
+
+![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/error.png)
 
 ## Session/Local Storage
 

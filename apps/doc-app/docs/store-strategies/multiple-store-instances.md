@@ -8,7 +8,6 @@ sidebar_position: 2
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/muliple-instances)
 
-
 A Store can live in multiple Components/Module with own Scope
 
 ## Define the Store as Service and a dynamic Store Name
@@ -30,8 +29,6 @@ export class MyStore implements OnDestroy {
   );
 
   public myStoreState$ = this.myStore.state$;
-
-  public incrementEffect = this.myStore.createLoadingEffect('increment', (counter: number = 0) => of(counter + 1));
 
   constructor(private storeFactory: StoreFactory,
               // import your StoreName
@@ -71,10 +68,5 @@ export class CounterComponent implements OnDestroy {
 
   constructor(private myStore: MyStore) {
   }
-
-  public increment(counter: number): void {
-    this.myStore.incrementEffect(counter);
-  }
-
 }
 ```

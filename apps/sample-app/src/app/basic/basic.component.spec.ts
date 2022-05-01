@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { BasicExampleComponent } from './basic.component';
+import { BasicComponent } from './basic.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import {cold} from "jasmine-marbles";
 import {getDefaultState} from "@gernsdorfer/ngrx-lite";
@@ -7,13 +7,13 @@ import {getDefaultState} from "@gernsdorfer/ngrx-lite";
 describe('BasicExampleComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [BasicExampleComponent],
+      declarations: [BasicComponent],
       providers: [storeTestingFactory()],
     }).compileComponents();
   });
 
   const getApp = () => {
-    const fixture = TestBed.createComponent(BasicExampleComponent);
+    const fixture = TestBed.createComponent(BasicComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return {
@@ -28,8 +28,8 @@ describe('BasicExampleComponent', () => {
     it('should increment state', ( )=> {
       const component = getApp().component;
 
-      component.increment(undefined);
-      component.increment(1);
+      component.increment();
+      component.increment();
 
       expect(component.counterState$).toBeObservable(cold('a',{
         a: {

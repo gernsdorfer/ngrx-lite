@@ -4,7 +4,9 @@ sidebar_position: 2
 
 # Store
 
-The Store is a wrapper on the [ngrx Component Store](https://ngrx.io/guide/component-store)
+The Store is a wrapper on the [ngrx Component Store](https://ngrx.io/guide/component-store).
+You have the exact same API with some extra Stuff.
+The extra Stuff you can find below.
 
 ## `state$`
 

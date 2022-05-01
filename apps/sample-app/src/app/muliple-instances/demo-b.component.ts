@@ -18,7 +18,7 @@ export class DemoBComponent {
 
   constructor(private counterStore: MultipleCounterStore) {}
 
-  increment(counter?: number) {
-    this.counterStore.inrement(counter);
+  increment() {
+    this.counterStore.increment();
   }
 }

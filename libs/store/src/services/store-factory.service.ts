@@ -43,8 +43,8 @@ export class StoreFactory {
       ],
     }).get(Store);
 
-    this.storeStateChangesToClientStorage(storeName, store, storage);
-    this.setStateFromExternalChanges<ITEM, ERROR>(storeName, store);
+    this.syncStoreChangesToClientStorage(storeName, store, storage);
+    this.syncNgrxStoreChangesToStore<ITEM, ERROR>(storeName, store);
     store.destroy$.subscribe(() =>
       this.reducerManager.removeReducer(storeName)
     );
@@ -103,7 +103,7 @@ export class StoreFactory {
         : state;
   }
 
-  private storeStateChangesToClientStorage<ITEM, ERROR>(
+  private syncStoreChangesToClientStorage<ITEM, ERROR>(
     storeName: string,
     store: Store<ITEM, ERROR>,
     storage?: storagePluginTypes
@@ -114,7 +114,7 @@ export class StoreFactory {
     });
   }
 
-  private setStateFromExternalChanges<ITEM, ERROR>(
+  private syncNgrxStoreChangesToStore<ITEM, ERROR>(
     storeName: string,
     store: Store<ITEM, ERROR>
   ) {

@@ -1,23 +1,17 @@
 import { Inject, Injectable, InjectionToken, OnDestroy } from '@angular/core';
-import { delay, of } from 'rxjs';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-export const MultipleCounterStoreName = new InjectionToken(
-  'MultipleCounterStore'
-);
+export const MultipleCounterStoreName = new InjectionToken('MULTIPLE_COUNTER');
 
 @Injectable()
 export class MultipleCounterStore implements OnDestroy {
-  private counterStore = this.storeFactory.createStore<number, never>(
-    this.storeName
-  );
+  private store = this.storeFactory.createStore<number, never>(this.storeName);
 
-  public counterState$ = this.counterStore.state$;
+  public counterState$ = this.store.state$;
 
-  public inrement = this.counterStore.createLoadingEffect(
-    'increment',
-    (counter: number = 0) => of(counter + 1).pipe(delay(200))
-  );
+  increment() {
+    this.store.patchState(({ item = 0 }) => ({ item: item + 1 }), 'INCREMENT');
+  }
 
   constructor(
     private storeFactory: StoreFactory,
@@ -26,6 +20,6 @@ export class MultipleCounterStore implements OnDestroy {
   ) {}
 
   ngOnDestroy() {
-    this.counterStore.ngOnDestroy();
+    this.store.ngOnDestroy();
   }
 }

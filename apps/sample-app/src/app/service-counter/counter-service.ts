@@ -1,23 +1,21 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { delay, of } from 'rxjs';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-@Injectable({providedIn: 'any'})
+@Injectable({ providedIn: 'any' })
 export class CounterStore implements OnDestroy {
-  private counterStore = this.storeFactory.createStore<number, never>(
-    'serviceCounter'
+  private store = this.storeFactory.createStore<number, never>(
+    'SERVICE_COUNTER'
   );
 
-  public counterState$ = this.counterStore.state$;
+  public counterState$ = this.store.state$;
 
-  public inrement = this.counterStore.createLoadingEffect(
-    'increment',
-    (counter: number = 0) => of(counter + 1).pipe(delay(200))
-  );
+  increment() {
+    this.store.patchState(({ item = 0 }) => ({ item: item + 1 }), 'INCREMENT');
+  }
 
   constructor(private storeFactory: StoreFactory) {}
 
   ngOnDestroy() {
-    this.counterStore.ngOnDestroy();
+    this.store.ngOnDestroy();
   }
 }

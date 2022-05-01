@@ -10,7 +10,7 @@ export class StorageFromServiceComponent {
 
   constructor(private counterStore: CounterStore) {}
 
-  increment(counter?: number) {
-    this.counterStore.inrement(counter);
+  increment() {
+    this.counterStore.increment();
   }
 }

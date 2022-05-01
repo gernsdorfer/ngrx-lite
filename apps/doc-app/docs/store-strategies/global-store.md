@@ -28,9 +28,7 @@ export class MyStore implements OnDestroy {
   private myStore = this.storeFactory.createStore<number, string>('serviceCounter');
 
   public myStoreState$ = this.myStore.state$;
-
-  public incrementEffect = this.myStore.createLoadingEffect('increment', (counter: number = 0) => of(counter + 1));
-
+  
   constructor(private storeFactory: StoreFactory) {}
 } 
 ```
@@ -48,11 +46,6 @@ export class CounterComponent implements OnDestroy {
 
   constructor(private myStore: MyStore) {
   }
-
-  public increment (counter: number): void {
-      this.myStore.incrementEffect(counter);
-  }
-  
 }
 ```
 

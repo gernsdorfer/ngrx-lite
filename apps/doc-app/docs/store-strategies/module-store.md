@@ -3,6 +3,7 @@ sidebar_position: 2
 ---
 
 # Module Store
+
 [Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/#/storage-from-service)
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/service-counter)
@@ -21,8 +22,6 @@ export class MyStore implements OnDestroy {
   private myStore = this.storeFactory.createStore<number, string>('serviceCounter');
 
   public myStoreState$ = this.myStore.state$;
-
-  public incrementEffect = this.myStore.createLoadingEffect('increment', (counter: number = 0) => of(counter + 1));
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -71,11 +70,6 @@ export class CounterComponent implements OnDestroy {
 
   constructor(private myStore: MyStore) {
   }
-
-  public increment(counter: number): void {
-    this.myStore.incrementEffect(counter);
-  }
-
 }
 ```
 
