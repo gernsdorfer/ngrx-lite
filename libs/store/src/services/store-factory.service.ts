@@ -56,12 +56,12 @@ export class StoreFactory {
     storage?: storagePluginTypes
   ): StoreState<ITEM, ERROR> {
     return (
-      this.getStorageByKey(storage)?.getDefaultState(storeName) ||
+      this.getStoragePluginByKey(storage)?.getDefaultState(storeName) ||
       getDefaultState()
     );
   }
 
-  private getStorageByKey(
+  private getStoragePluginByKey(
     storage?: storagePluginTypes
   ): ClientStoragePlugin | undefined {
     if (storage === 'sessionStoragePlugin') return this.sessionStoragePlugin;
@@ -110,7 +110,7 @@ export class StoreFactory {
   ) {
     store.state$.pipe(takeUntil(store.destroy$)).subscribe({
       next: (state) =>
-        this.getStorageByKey(storage)?.setStateToStorage(storeName, state),
+        this.getStoragePluginByKey(storage)?.setStateToStorage(storeName, state),
     });
   }
 
