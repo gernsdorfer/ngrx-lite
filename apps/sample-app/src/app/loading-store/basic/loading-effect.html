@@ -1,20 +1,20 @@
-<ng-container *ngIf="counterState$ | async as counterState">
+<div *ngIf="counterState$ | async as counterState">
   <mat-card class="demo-card">
     <mat-card-header>
+      <div *ngIf="counterState.isLoading" class="spinner">
+        <mat-spinner color="warn"></mat-spinner>
+      </div>
       <mat-card-title>Loading-Store</mat-card-title>
-      <mat-card-subtitle>Basic</mat-card-subtitle>
+      <mat-card-subtitle>Loading with default value</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <ng-container *ngIf="counterState.isLoading; else content">
-        <mat-spinner color="warn"></mat-spinner>
-      </ng-container>
-      <ng-template #content>
-        <h2>{{ counterState.item?.counter }}</h2>
-      </ng-template>
+
+      <h2>{{ counterState.item?.counter }}</h2>
+
     </mat-card-content>
     <mat-card-actions>
       <button (click)="increment()" mat-fab> +</button>
     </mat-card-actions>
   </mat-card>
 
-</ng-container>
+</div>
