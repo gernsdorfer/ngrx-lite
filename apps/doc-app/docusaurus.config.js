@@ -56,7 +56,7 @@ const config = {
             className: 'header-playground-link',
           },
           {
-            href: 'https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/sample-app',
+            href: 'https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-app',
             label: 'Playground',
             position: 'left',
             className: 'header-playground-link',
