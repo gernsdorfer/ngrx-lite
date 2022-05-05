@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/sample-app",
         "index": "apps/sample-app/src/index.html",
@@ -17,7 +19,10 @@
           "apps/sample-app/src/favicon.ico",
           "apps/sample-app/src/assets"
         ],
-        "styles": ["apps/sample-app/src/styles.css"],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+          "apps/sample-app/src/styles.css"
+        ],
         "scripts": []
       },
       "configurations": {

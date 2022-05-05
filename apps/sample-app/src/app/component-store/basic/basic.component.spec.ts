@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { BasicComponent } from './basic.component';
+import { BasicComponent, MyState } from './basic.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import {cold} from "jasmine-marbles";
-import {getDefaultState} from "@gernsdorfer/ngrx-lite";
+import { cold } from 'jasmine-marbles';
 
 describe('BasicExampleComponent', () => {
   beforeEach(() => {
@@ -24,19 +23,20 @@ describe('BasicExampleComponent', () => {
     expect(getApp()).toBeDefined();
   });
 
-  describe('increment' , () => {
-    it('should increment state', ( )=> {
+  describe('increment', () => {
+    it('should increment state', () => {
       const component = getApp().component;
 
       component.increment();
       component.increment();
 
-      expect(component.counterState$).toBeObservable(cold('a',{
-        a: {
-          ...getDefaultState(),
-          item: 2
-        }
-      }))
-    })
-  })
+      expect(component.counterState$).toBeObservable(
+        cold('a', {
+          a: <MyState>{
+            counter: 2,
+          },
+        })
+      );
+    });
+  });
 });

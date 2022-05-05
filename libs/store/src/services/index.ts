@@ -1,3 +1,3 @@
 export * from './store-factory.service';
-export { getDefaultState } from './store.service';
-export * from './action-creator';
+export { getDefaultState } from './loading-store.service';
+export {getEffectAction,getCustomAction} from './action-creator';

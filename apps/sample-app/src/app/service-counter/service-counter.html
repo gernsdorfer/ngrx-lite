@@ -1,6 +1,0 @@
-<h1>State from Service (Provided in Module)</h1>
-<ng-container *ngIf="counterState$ | async as counterState">
-  <button (click)="increment()">+</button>
-  <pre>{{ counterState | json }}</pre>
-  <div class="lds-dual-ring" *ngIf="counterState.isLoading"></div>
-</ng-container>

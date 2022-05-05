@@ -1,0 +1,14 @@
+<ng-container *ngIf="counterState$ | async as counterState">
+  <mat-card class="demo-card">
+    <mat-card-header>
+      <mat-card-title>Component-Store</mat-card-title>
+      <mat-card-subtitle>Share Actions with @ngrx/Effects</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <h2> {{ counterState.counter }}</h2>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-fab (click)="increment()">+</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-container>

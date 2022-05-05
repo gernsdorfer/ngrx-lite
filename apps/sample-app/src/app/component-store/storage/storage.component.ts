@@ -6,17 +6,20 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
   templateUrl: 'storage.html',
 })
 export class StorageExampleComponent implements OnDestroy {
-  private store = this.storeFactory.createStore<number, never>(
-    'sessionCounter',
-    {
+  private store = this.storeFactory.createComponentStore<{counter: number}>({
+    storeName: 'LOCAL_COUNTER',
+    defaultState: {
+      counter:0
+    },
+    plugins: {
       storage: 'localStoragePlugin',
-    }
-  );
+    },
+  });
 
   public counterState$ = this.store.state$;
 
   increment() {
-    this.store.patchState(({ item = 0 }) => ({ item: item + 1 }), 'INCREMENT');
+    this.store.patchState(({ counter }) => ({ counter: counter + 1 }), 'INCREMENT');
   }
 
   constructor(private storeFactory: StoreFactory) {}

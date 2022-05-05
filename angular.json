@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "defaultProject": "sample-app",
   "projects": {
     "doc-app": "apps/doc-app",
     "sample-app": "apps/sample-app",

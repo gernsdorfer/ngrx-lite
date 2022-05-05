@@ -1,9 +1,24 @@
-<a routerLink="/">Basic Example</a>
-<a routerLink="/loading-effect">Loading Effect</a>
-<a routerLink="/custom-action">Custom Action Example</a>
-<a routerLink="/storage">Storage Example</a>
-<a routerLink="/storage-from-service">Storage from Service (Provided in Module)</a>
-<a routerLink="/multiple-storage-instances">Multiple Storage instances (Provided in Component)</a>
-<a routerLink="/storage-from-global-service">Storage from Service (Provided in Root)</a>
-<a routerLink="/share-actions">Share Actions</a>
-<router-outlet></router-outlet>
+<nav>
+  <mat-toolbar>
+    <button mat-button [matMenuTriggerFor]="menuComponentStore">Component-Store</button>
+    <mat-menu #menuComponentStore="matMenu">
+      <a mat-menu-item routerLink="/">Basic Example</a>
+      <a mat-menu-item routerLink="/custom-action">Custom Action Example</a>
+      <a mat-menu-item routerLink="/storage-from-global-service">Root Storage</a>
+      <a mat-menu-item routerLink="/multiple-storage-instances">Multiple Storage instances (Provided in Component)</a>
+      <a mat-menu-item routerLink="/storage-from-service">Storage from Service (Provided in Module)</a>
+      <a mat-menu-item routerLink="/share-actions">Share Actions with @ngrx/Effects</a>
+      <a mat-menu-item routerLink="/storage">Sync with Storage</a>
+    </mat-menu>
+
+    <button mat-button [matMenuTriggerFor]="menuLoadingComponentStore">Loading-Component-Store</button>
+    <mat-menu #menuLoadingComponentStore="matMenu">
+      <a mat-menu-item routerLink="/loading-basic">Basic</a>
+      <a mat-menu-item routerLink="/loading-with-default-values">Loading with default values</a>
+    </mat-menu>
+  </mat-toolbar>
+</nav>
+<main class="content">
+  <router-outlet></router-outlet>
+</main>
+
