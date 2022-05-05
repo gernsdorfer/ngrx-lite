@@ -128,6 +128,22 @@
     ora "5.4.1"
     rxjs "6.6.7"
 
+"@angular/animations@13.3.3":
+  version "13.3.3"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-13.3.3.tgz#53b153451b03a367489d80cbf98a46b2a9b3ee6e"
+  integrity sha512-rP1e0XYjHxPCnvSN3k0ZCBTfIvpKbFI8fxlZMD85PI9HAko5Dc1Y5XCWrcMzdCF4C5nfqbzfzuZke5H3Y46AVQ==
+  dependencies:
+    tslib "^2.3.0"
+
+"@angular/cdk@^13.3.6":
+  version "13.3.6"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-13.3.6.tgz#4b62d33f82bd4cddaae78c53d2485ca385a26bae"
+  integrity sha512-sPwEGCHARxuUMzPLRiiN51GQP0P39ev+eL06NcyYXZ3AxyZIH5N/PWmGKf7EDOXIof4ata13jsIeW38mFe+wvg==
+  dependencies:
+    tslib "^2.3.0"
+  optionalDependencies:
+    parse5 "^5.0.0"
+
 "@angular/cli@~13.3.1":
   version "13.3.3"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-13.3.3.tgz#dd789bfbb92dd713301f064dfcaf6353623d1a84"
@@ -194,6 +210,13 @@
   version "13.3.3"
   resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-13.3.3.tgz#3b39e7b87e4930a28c399a9853dc395c52f95ab3"
   integrity sha512-C89b7Uu7Acpm+0/JDczIqhNJTEJPdskmnx7AybAoSfBPs9QUSP8irRFKY7UtmE8E/Q2m03xqWRDa8CpP9Rt6Hw==
+  dependencies:
+    tslib "^2.3.0"
+
+"@angular/material@^13.3.6":
+  version "13.3.6"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-13.3.6.tgz#95a55f37c40b39d3593efe02b5e59f864e31a72f"
+  integrity sha512-V+3Fs9JK+7KlcdJG/Oa/IQuLHC8WYzuL8ffH1Q06ANSzGxSjsAHs4FZQpKUpVBoL3E+p9Yz+zkKe91k5L62VoQ==
   dependencies:
     tslib "^2.3.0"
 
@@ -1167,10 +1190,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@gernsdorfer/ngrx-lite@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@gernsdorfer/ngrx-lite/-/ngrx-lite-2.0.0.tgz#4ae3d084236c1957ceaf4d6c9987c1ec6fec7587"
-  integrity sha512-1e8lbU+kRzSdpCBwV+Xv8iwrEfNZtcE9kOea9w/OPJBNIBZE9tR53L6MfkFn8ZBpCnulAOw4X+1oiIelaDj2+Q==
+"@gernsdorfer/ngrx-lite@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@gernsdorfer/ngrx-lite/-/ngrx-lite-2.1.0.tgz#d81e6e8c67df064c7e4054e2a71707550fa53bda"
+  integrity sha512-sXVhBqBuqs/1Ye30pFcrMzFok04wJSg3/l1Sevb0zksIhbm7zA6vV4iqD2izsHn6UrX9Arfl2TWlcv+A0gg1Kw==
   dependencies:
     tslib "^2.3.0"
 
@@ -4498,6 +4521,11 @@ parse5-sax-parser@^6.0.1:
   integrity sha512-kXX+5S81lgESA0LsDuGjAlBybImAChYRMT+/uKCEXFBFOeEhS52qUCydGhU3qLRD8D9DVjaUo821WK7DM4iCeg==
   dependencies:
     parse5 "^6.0.1"
+
+parse5@^5.0.0:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/parse5/-/parse5-5.1.1.tgz#f68e4e5ba1852ac2cadc00f4555fff6c2abb6178"
+  integrity sha512-ugq4DFI0Ptb+WWjAdOK16+u/nHfiIrcE+sh8kZMaM0WllQKLI9rOUq6c2b7cwPkXdzfQESqvoqK6ug7U/Yyzug==
 
 parse5@^6.0.1:
   version "6.0.1"

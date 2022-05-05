@@ -1,6 +1,6 @@
 {
   "name": "ngxrx-lite-stackblitz-app",
-  "version": "0.0.4",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "ng": "ng",
@@ -9,14 +9,17 @@
     "e2e": "ng e2e"
   },
   "dependencies": {
+    "@angular/animations": "13.3.3",
+    "@angular/cdk": "^13.3.6",
     "@angular/common": "^13.2.0",
     "@angular/compiler": "^13.2.0",
     "@angular/core": "^13.2.0",
     "@angular/forms": "^13.2.0",
+    "@angular/material": "^13.3.6",
     "@angular/platform-browser": "^13.2.0",
     "@angular/platform-browser-dynamic": "^13.2.0",
     "@angular/router": "^13.2.0",
-    "@gernsdorfer/ngrx-lite": "^2.0.0",
+    "@gernsdorfer/ngrx-lite": "^2.1.0",
     "@ngrx/component-store": "^13.1.0",
     "@ngrx/effects": "^13.1.0",
     "@ngrx/store": "^13.1.0",
