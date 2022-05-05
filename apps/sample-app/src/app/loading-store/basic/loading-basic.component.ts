@@ -1,25 +1,25 @@
 import { Component, OnDestroy } from '@angular/core';
-import {LoadingStoreState, StoreFactory, StoreState} from '@gernsdorfer/ngrx-lite';
+import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
 
-type State = StoreState<number, string>;
+type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
 @Component({
-  selector: 'my-app-basic-app',
+  selector: 'my-app-loading-store-basic',
   templateUrl: 'loading-effect.html',
 })
-export class LoadingEffectComponent implements OnDestroy {
+export class LoadingBasicComponent implements OnDestroy {
   private store = this.storeFactory.createLoadingStore<
     State['item'],
     State['error']
   >({
-    storeName: 'LOADING_EFFECT',
+    storeName: 'LOADING_BASIC',
   });
 
   public counterState$ = this.store.state$;
 
   increment = this.store.loadingEffect('INCREMENT', () =>
-    of((this.store.state?.item || 0) + 1).pipe(delay(400))
+    of({ counter: (this.store.state?.item?.counter || 0) + 1 }).pipe(delay(400))
   );
 
   constructor(private storeFactory: StoreFactory) {}

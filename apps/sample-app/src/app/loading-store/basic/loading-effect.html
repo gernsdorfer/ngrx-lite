@@ -2,14 +2,14 @@
   <mat-card class="demo-card">
     <mat-card-header>
       <mat-card-title>Loading-Store</mat-card-title>
-      <mat-card-subtitle>Loading Store</mat-card-subtitle>
+      <mat-card-subtitle>Basic</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <ng-container *ngIf="counterState.isLoading; else content">
         <mat-spinner color="warn"></mat-spinner>
       </ng-container>
       <ng-template #content>
-        <h2>{{ counterState.item | json }}</h2>
+        <h2>{{ counterState.item?.counter }}</h2>
       </ng-template>
     </mat-card-content>
     <mat-card-actions>

@@ -3,5 +3,6 @@ export interface LoadingStoreState<ITEM, ERROR> {
   error?: ERROR;
   item?: ITEM;
 }
+
 /** @deprecated use LoadingStoreState instead, this methode will be removed in the next major version */
-export type StoreState<ITEM, ERROR> = LoadingStoreState<ITEM, ERROR>
+export type StoreState<ITEM, ERROR> = LoadingStoreState<ITEM, ERROR>;

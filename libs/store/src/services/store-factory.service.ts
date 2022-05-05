@@ -57,9 +57,14 @@ export class StoreFactory {
 
   public createLoadingStore<ITEM, ERROR>({
     storeName,
+    defaultState,
     plugins = {},
   }: {
     storeName: string;
+    defaultState?: {
+      item?: ITEM,
+      error?: ERROR
+    };
     plugins?: { storage?: StoragePluginTypes };
   }): LoadingStore<ITEM, ERROR> {
     return this.createStoreByStoreType<
@@ -68,7 +73,7 @@ export class StoreFactory {
     >({
       storeName,
       plugins,
-      defaultState: getDefaultLoadingState(),
+      defaultState: getDefaultLoadingState(defaultState),
       CreatedStore: LoadingStore,
     });
   }

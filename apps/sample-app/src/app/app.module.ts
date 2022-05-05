@@ -11,7 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
-import { LoadingEffectComponent } from './loading-store/loading-effect/loading-effect.component';
+import { LoadingBasicComponent } from './loading-store/basic/loading-basic.component';
 import { StorageExampleComponent } from './component-store/storage/storage.component';
 import { StorageFromServiceComponent } from './component-store/service-counter/storage-from-service.component';
 import { CounterStore } from './component-store/service-counter/counter-service';
@@ -20,14 +20,15 @@ import { CustomActionComponent } from './component-store/custom-actions/custom-a
 import { MultipleInstancesComponent } from './component-store/muliple-instances/multiple-instances.component';
 import { DemoAComponent } from './component-store/muliple-instances/demo-a.component';
 import { DemoBComponent } from './component-store/muliple-instances/demo-b.component';
-import {EffectsModule} from "@ngrx/effects";
-import {BasicComponent} from "./component-store/basic/basic.component";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatButtonModule} from "@angular/material/button";
-import {MatCardModule} from "@angular/material/card";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { EffectsModule } from '@ngrx/effects';
+import { BasicComponent } from './component-store/basic/basic.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
 
 @NgModule({
   imports: [
@@ -43,7 +44,11 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     RouterModule.forRoot(
       [
         { path: '', component: BasicComponent },
-        { path: 'loading-effect', component: LoadingEffectComponent },
+        { path: 'loading-basic', component: LoadingBasicComponent },
+        {
+          path: 'loading-with-default-values',
+          component: LoadingWithDefaultValuesComponent,
+        },
         { path: 'custom-action', component: CustomActionComponent },
         { path: 'storage', component: StorageExampleComponent },
         {
@@ -84,7 +89,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
   ],
   declarations: [
     AppComponent,
-    LoadingEffectComponent,
+    LoadingBasicComponent,
     CustomActionComponent,
     StorageExampleComponent,
     StorageFromServiceComponent,
@@ -93,6 +98,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     DemoAComponent,
     DemoBComponent,
     BasicComponent,
+    LoadingWithDefaultValuesComponent,
   ],
   bootstrap: [AppComponent],
 })
