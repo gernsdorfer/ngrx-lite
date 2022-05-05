@@ -6,9 +6,9 @@ import { getCustomAction, getEffectAction } from './action-creator';
 import { cold } from 'jasmine-marbles';
 import { getDefaultState, LoadingStore } from './loading-store.service';
 import {
-  DefaultStateToken,
+  DefaultLoadingStateToken,
   StoreNameToken,
-} from '../injection-tokens/default-state.token';
+} from '../injection-tokens/default-loading-state.token';
 
 describe('LoadingStore', () => {
   let store: LoadingStore<string, number>;
@@ -25,7 +25,7 @@ describe('LoadingStore', () => {
           useValue: storeName,
         },
         {
-          provide: DefaultStateToken,
+          provide: DefaultLoadingStateToken,
           useValue: getDefaultState(),
         },
         provideMockStore({

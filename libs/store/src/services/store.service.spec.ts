@@ -3,9 +3,9 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { getCustomAction } from './action-creator';
 import { Store } from './store.service';
 import {
-  DefaultStateToken,
+  DefaultLoadingStateToken,
   StoreNameToken,
-} from '../injection-tokens/default-state.token';
+} from '../injection-tokens/default-loading-state.token';
 
 interface MyState {
   myState: string;
@@ -28,7 +28,7 @@ describe('Store', () => {
           useValue: storeName,
         },
         {
-          provide: DefaultStateToken,
+          provide: DefaultLoadingStateToken,
           useValue: <MyState>{ myState: '' },
         },
         provideMockStore({

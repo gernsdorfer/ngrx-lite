@@ -1,9 +1,9 @@
 import { Inject, Injectable, Injector, Optional } from '@angular/core';
 
 import {
-  DefaultStateToken,
+  DefaultLoadingStateToken,
   StoreNameToken,
-} from '../injection-tokens/default-state.token';
+} from '../injection-tokens/default-loading-state.token';
 import { getDefaultState, LoadingStore } from './loading-store.service';
 import { ClientStoragePlugin, LoadingStoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
@@ -98,7 +98,7 @@ export class StoreFactory {
         { provide: CreatedStore },
         { provide: NgrxStore, useValue: this.ngrxStore },
         { provide: StoreNameToken, useValue: storeName },
-        { provide: DefaultStateToken, useValue: initialState },
+        { provide: DefaultLoadingStateToken, useValue: initialState },
       ],
     }).get(CreatedStore);
     this.addStoreReducerToNgrx<STATE>(storeName, initialState);

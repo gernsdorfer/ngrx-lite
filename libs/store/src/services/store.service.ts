@@ -1,9 +1,9 @@
 import { ComponentStore } from '@ngrx/component-store';
 import { Inject, Injectable } from '@angular/core';
 import {
-  DefaultStateToken,
+  DefaultLoadingStateToken,
   StoreNameToken,
-} from '../injection-tokens/default-state.token';
+} from '../injection-tokens/default-loading-state.token';
 import { Store as NgrxStore } from '@ngrx/store';
 import { getCustomAction } from './action-creator';
 
@@ -12,7 +12,7 @@ export class Store<STATE extends object> extends ComponentStore<STATE> {
   constructor(
     protected ngrxStore: NgrxStore,
     @Inject(StoreNameToken) protected storeName: string,
-    @Inject(DefaultStateToken) state: STATE
+    @Inject(DefaultLoadingStateToken) state: STATE
   ) {
     super(state);
     this.dispatchCustomAction('init', state);
