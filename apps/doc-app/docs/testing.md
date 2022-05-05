@@ -18,6 +18,6 @@ TestBed.configureTestingModule({
 });
 ```
 
-:::note A full Test Example you can
-find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/basic/basic.component.spec.ts)
+:::note Many Test Example you can
+find [here](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
 :::
