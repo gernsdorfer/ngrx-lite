@@ -16,3 +16,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: center;
 
 }
+.spinner {
+  position: absolute;
+  opacity: 0.2;
+}
