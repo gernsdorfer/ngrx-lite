@@ -1,13 +1,10 @@
+## 2.1.2 (2022-05-05)
 
+#### :memo: Documentation
+* [#27](https://github.com/gernsdorfer/ngrx-lite/pull/27) Add test demo app ([@gernsdorfer](https://github.com/gernsdorfer))
 
-
-
-
-
-
-
-
-
+#### :house: Internal
+* [#26](https://github.com/gernsdorfer/ngrx-lite/pull/26) Update libs ([@gernsdorfer](https://github.com/gernsdorfer))
 
 ## 2.1.1 (2022-05-05)
 
