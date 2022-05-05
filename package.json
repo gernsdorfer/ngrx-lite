@@ -14,6 +14,10 @@
     "build:docs": "nx run doc-app:build && nx run sample-app:build --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
     "release": "release-it"
   },
+  "private": true,
+  "workspaces": [
+    "libs/store"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/gernsdorfer/ngrx-lite.git"
