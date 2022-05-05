@@ -4,7 +4,8 @@ import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { StoreFactory } from './store-factory.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ReducerManager } from '@ngrx/store';
-import { getCustomAction, getDefaultState } from '@gernsdorfer/ngrx-lite';
+import { getDefaultLoadingState } from '../services/loading-store.service';
+import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 
 interface MyState {
@@ -18,14 +19,14 @@ describe('StoreFactory', () => {
   const sessionStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
     'SessionStoragePlugin',
     {
-      getDefaultState: getDefaultState(),
+      getDefaultState: <MyState>({myState: ''}),
       setStateToStorage: undefined,
     }
   );
   const localStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
     'LocalStoragePlugin',
     {
-      getDefaultState: getDefaultState(),
+      getDefaultState: <MyState>({myState: ''}),
       setStateToStorage: undefined,
     }
   );
@@ -125,11 +126,11 @@ describe('StoreFactory', () => {
     describe('initialState', () => {
       beforeEach(() => {
         localStoragePlugin.getDefaultState.and.returnValue({
-          ...getDefaultState(),
+          ...getDefaultLoadingState(),
           item: 'defaultValueFromSessionStore',
         });
         sessionStoragePlugin.getDefaultState.and.returnValue({
-          ...getDefaultState(),
+          ...getDefaultLoadingState(),
           item: 'defaultValueFromLocalStore',
         });
       });
@@ -137,7 +138,7 @@ describe('StoreFactory', () => {
       it('should return default initial state', () => {
         const { state } = storeFactory.createStore<string, number>('testStore');
 
-        expect(state).toEqual(getDefaultState());
+        expect(state).toEqual(getDefaultLoadingState());
       });
 
       it('should return state from sessionStorage plugin', () => {
@@ -149,7 +150,7 @@ describe('StoreFactory', () => {
         );
 
         expect(state).toEqual({
-          ...getDefaultState(),
+          ...getDefaultLoadingState(),
           item: 'defaultValueFromLocalStore',
         });
       });
@@ -163,7 +164,7 @@ describe('StoreFactory', () => {
         );
 
         expect(state).toEqual({
-          ...getDefaultState(),
+          ...getDefaultLoadingState(),
           item: 'defaultValueFromSessionStore',
         });
       });
@@ -208,7 +209,7 @@ describe('StoreFactory', () => {
               storeName: 'otherStore',
             })({
               payload: {
-                ...getDefaultState(),
+                ...getDefaultLoadingState(),
               },
             })
           )
@@ -245,7 +246,11 @@ describe('StoreFactory', () => {
                 payload: { isLoading: true, item: 'test' },
               })
             )
-          ).toEqual({ ...getDefaultState(), isLoading: true, item: 'test' });
+          ).toEqual({
+            ...getDefaultLoadingState(),
+            isLoading: true,
+            item: 'test',
+          });
         });
       });
     });
@@ -299,7 +304,7 @@ describe('StoreFactory', () => {
           },
         });
 
-        expect(store.state).toEqual(getDefaultState());
+        expect(store.state).toEqual(getDefaultLoadingState());
       });
     });
 

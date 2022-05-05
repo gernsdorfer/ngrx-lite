@@ -4,7 +4,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { EffectStates } from '../enums';
 import { getCustomAction, getEffectAction } from './action-creator';
 import { cold } from 'jasmine-marbles';
-import { getDefaultState, LoadingStore } from './loading-store.service';
+import { getDefaultLoadingState, LoadingStore } from './loading-store.service';
 import {
   DefaultLoadingStateToken,
   StoreNameToken,
@@ -26,7 +26,7 @@ describe('LoadingStore', () => {
         },
         {
           provide: DefaultLoadingStateToken,
-          useValue: getDefaultState(),
+          useValue: getDefaultLoadingState(),
         },
         provideMockStore({
           initialState: {},
@@ -50,7 +50,7 @@ describe('LoadingStore', () => {
   }) =>
     getCustomAction({ storeName, actionName })({
       payload: {
-        ...getDefaultState,
+        ...getDefaultLoadingState,
 
         ...storeState,
       },
@@ -60,7 +60,7 @@ describe('LoadingStore', () => {
     expect(mockStore.dispatch).toHaveBeenCalledWith(
       getDispatchAction({
         actionName: 'init',
-        storeState: getDefaultState(),
+        storeState: getDefaultLoadingState(),
       })
     );
   });
@@ -68,7 +68,7 @@ describe('LoadingStore', () => {
   describe('state', () => {
     it('should return state from store', () => {
       const { state } = store;
-      expect(state).toEqual(getDefaultState());
+      expect(state).toEqual(getDefaultLoadingState());
     });
   });
 
@@ -145,7 +145,7 @@ describe('LoadingStore', () => {
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'PATCH_STATE',
-          storeState: { ...getDefaultState(), item: 'test' },
+          storeState: { ...getDefaultLoadingState(), item: 'test' },
         })
       );
     });
@@ -158,7 +158,7 @@ describe('LoadingStore', () => {
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'myCustomAction',
-          storeState: { ...getDefaultState(), item: 'test' },
+          storeState: { ...getDefaultLoadingState(), item: 'test' },
         })
       );
     });

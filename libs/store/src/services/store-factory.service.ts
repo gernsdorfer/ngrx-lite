@@ -4,7 +4,7 @@ import {
   DefaultLoadingStateToken,
   StoreNameToken,
 } from '../injection-tokens/default-loading-state.token';
-import { getDefaultState, LoadingStore } from './loading-store.service';
+import { getDefaultLoadingState, LoadingStore } from './loading-store.service';
 import { ClientStoragePlugin, LoadingStoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
@@ -68,7 +68,7 @@ export class StoreFactory {
     >({
       storeName,
       plugins,
-      defaultState: getDefaultState(),
+      defaultState: getDefaultLoadingState(),
       CreatedStore: LoadingStore,
     });
   }

@@ -11,12 +11,15 @@ import { getEffectActionName } from './action-creator';
 import { EffectStates } from '../enums/effect-states.enum';
 import { Store } from './store.service';
 
-export const getDefaultState = <ITEM, ERROR>(): LoadingStoreState<
-  ITEM,
-  ERROR
-> => ({
+export const getDefaultLoadingState = <ITEM, ERROR>(
+  state: Pick<LoadingStoreState<ITEM, ERROR>, 'item' | 'error'> = {}
+): LoadingStoreState<ITEM, ERROR> => ({
   isLoading: false,
+  ...state,
 });
+
+/** @deprecated use getDefaultLoadingState instead, this methode will be removed in the next major version */
+export const getDefaultState = getDefaultLoadingState;
 
 @Injectable({ providedIn: 'root' })
 export class LoadingStore<ITEM, ERROR> extends Store<
