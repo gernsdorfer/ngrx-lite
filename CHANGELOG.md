@@ -7,6 +7,18 @@
 
 
 
+
+## 2.1.0 (2022-05-05)
+
+#### :rocket: Enhancement
+* [#23](https://github.com/gernsdorfer/ngrx-lite/pull/23) Split Store into Store and LoadingStore for better State Support without loading state ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :memo: Documentation
+* [#24](https://github.com/gernsdorfer/ngrx-lite/pull/24) Update docs ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.0.0 (2022-04-30)
 
 #### :boom: Breaking Change
