@@ -4,8 +4,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { DemoEffect } from './my-effect.effect';
 import { ExampleComponent } from './example.component';
 import { RouterModule } from '@angular/router';
-import {MatCardModule} from "@angular/material/card";
-import {MatButtonModule} from "@angular/material/button";
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   imports: [

@@ -1,6 +1,6 @@
 <nav>
   <mat-toolbar>
-    <button mat-button [matMenuTriggerFor]="menuComponentStore">Component-Store</button>
+    <button [matMenuTriggerFor]="menuComponentStore" mat-button>Component-Store</button>
     <mat-menu #menuComponentStore="matMenu">
       <a mat-menu-item routerLink="/">Basic Example</a>
       <a mat-menu-item routerLink="/custom-action">Custom Action Example</a>
@@ -11,7 +11,7 @@
       <a mat-menu-item routerLink="/storage">Sync with Storage</a>
     </mat-menu>
 
-    <button mat-button [matMenuTriggerFor]="menuLoadingComponentStore">Loading-Component-Store</button>
+    <button [matMenuTriggerFor]="menuLoadingComponentStore" mat-button>Loading-Component-Store</button>
     <mat-menu #menuLoadingComponentStore="matMenu">
       <a mat-menu-item routerLink="/loading-basic">Basic</a>
       <a mat-menu-item routerLink="/loading-with-default-values">Loading with default values</a>

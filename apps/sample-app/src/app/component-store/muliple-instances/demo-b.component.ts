@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import {MultipleCounterStore, MultipleCounterStoreName} from './counter-service';
+import {
+  MultipleCounterStore,
+  MultipleCounterStoreName,
+} from './counter-service';
 
 @Component({
   selector: 'my-app-multi-instance-demo-b',
@@ -8,9 +11,9 @@ import {MultipleCounterStore, MultipleCounterStoreName} from './counter-service'
     MultipleCounterStore,
     {
       provide: MultipleCounterStoreName,
-      useValue: 'DemoBComponentStore'
-    }
-  ]
+      useValue: 'DemoBComponentStore',
+    },
+  ],
 })
 export class DemoBComponent {
   title = 'Demo B Component';

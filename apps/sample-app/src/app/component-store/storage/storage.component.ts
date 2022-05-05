@@ -6,10 +6,10 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
   templateUrl: 'storage.html',
 })
 export class StorageExampleComponent implements OnDestroy {
-  private store = this.storeFactory.createComponentStore<{counter: number}>({
+  private store = this.storeFactory.createComponentStore<{ counter: number }>({
     storeName: 'LOCAL_COUNTER',
     defaultState: {
-      counter:0
+      counter: 0,
     },
     plugins: {
       storage: 'localStoragePlugin',
@@ -18,11 +18,14 @@ export class StorageExampleComponent implements OnDestroy {
 
   public counterState$ = this.store.state$;
 
-  increment() {
-    this.store.patchState(({ counter }) => ({ counter: counter + 1 }), 'INCREMENT');
-  }
-
   constructor(private storeFactory: StoreFactory) {}
+
+  increment() {
+    this.store.patchState(
+      ({ counter }) => ({ counter: counter + 1 }),
+      'INCREMENT'
+    );
+  }
 
   ngOnDestroy() {
     this.store.ngOnDestroy();

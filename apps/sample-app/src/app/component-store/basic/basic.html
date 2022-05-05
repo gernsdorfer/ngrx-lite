@@ -5,10 +5,10 @@
       <mat-card-subtitle>Basic Example</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-     <h2> {{ counterState.counter }}</h2>
+      <h2> {{ counterState.counter }}</h2>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-fab (click)="increment(counterState.counter+1)">+</button>
+      <button (click)="increment(counterState.counter+1)" mat-fab>+</button>
     </mat-card-actions>
   </mat-card>
 </ng-container>

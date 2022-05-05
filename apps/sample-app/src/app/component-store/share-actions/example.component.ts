@@ -3,9 +3,11 @@ import { getCustomAction, StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 const storeName = 'SHARED_ACTIONS';
 const actionName = 'increment';
+
 interface MyState {
-  counter: number
+  counter: number;
 }
+
 export const MyIncrementAction = getCustomAction<MyState>({
   storeName: storeName,
   actionName: actionName,
@@ -24,12 +26,12 @@ export class ExampleComponent {
   });
   counterState$ = this.store.state$;
 
+  constructor(private storeFactory: StoreFactory) {}
+
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
       actionName
     );
   }
-
-  constructor(private storeFactory: StoreFactory) {}
 }

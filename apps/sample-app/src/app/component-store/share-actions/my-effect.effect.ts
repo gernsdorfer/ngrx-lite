@@ -5,14 +5,14 @@ import { MyIncrementAction } from './example.component';
 
 @Injectable()
 export class DemoEffect {
-  constructor(private actions$: Actions) {}
-
   logActions$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(MyIncrementAction),
-        tap((data) => console.log('DemoEffect receive Data',data))
+        tap((data) => console.log('DemoEffect receive Data', data))
       ),
     { dispatch: false }
   );
+
+  constructor(private actions$: Actions) {}
 }

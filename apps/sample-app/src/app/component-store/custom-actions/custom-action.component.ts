@@ -6,9 +6,9 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
   templateUrl: 'custom-action.html',
 })
 export class CustomActionComponent implements OnDestroy {
-  private store = this.storeFactory.createComponentStore<{counter: number}>({
+  private store = this.storeFactory.createComponentStore<{ counter: number }>({
     storeName: 'CUSTOM_ACTION_STORE',
-    defaultState:{counter: 0}
+    defaultState: { counter: 0 },
   });
 
   public counterState$ = this.store.state$;
@@ -16,7 +16,10 @@ export class CustomActionComponent implements OnDestroy {
   constructor(private storeFactory: StoreFactory) {}
 
   increment() {
-    this.store.patchState(({ counter }) => ({ counter: counter + 1 }), 'INCREMENT');
+    this.store.patchState(
+      ({ counter }) => ({ counter: counter + 1 }),
+      'INCREMENT'
+    );
   }
 
   ngOnDestroy() {
