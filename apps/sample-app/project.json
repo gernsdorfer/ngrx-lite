@@ -1,14 +1,11 @@
 {
   "projectType": "application",
-  "root": "apps/sample-app",
   "sourceRoot": "apps/sample-app/src",
   "prefix": "sample-app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/sample-app",
         "index": "apps/sample-app/src/index.html",
