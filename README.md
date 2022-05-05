@@ -201,8 +201,14 @@ After an Effect run unsuccessfully the `error` key contains the error
 
 ```ts
 class MyLCass {
-  private store = this.storeFactory.getStore<MyModel, MyError>('MyStore', {
-    storage: 'sessionStoragePlugin',
+  private store = this.storeFactory.createComponentStore<{ counter: number }>({
+    storeName: 'SESSION_COUNTER',
+    defaultState: {
+      counter: 0,
+    },
+    plugins: {
+      storage: 'sessionStoragePlugin',
+    },
   });
 }
 ```

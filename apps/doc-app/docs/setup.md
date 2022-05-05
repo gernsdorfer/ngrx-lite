@@ -24,7 +24,7 @@ export class AppComponent {
 }
 ```
 
-:::note More Information for `createStore` you can find [here](/docs/api/component-store-factory#createComponentStore)
+:::note More Information for `createStore` you can find [here](/docs/api/store-factory#createComponentStore)
 :::
 
 ## Read State 👉 `state$`

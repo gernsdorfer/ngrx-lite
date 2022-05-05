@@ -34,7 +34,7 @@ export class AppModule {
 
 ### create a new Store sync to Session Storage
 
-Based on [Created Store](/docs/api/component-store-factory#createStore) you can add the storage option `localStoragePlugin` for the new Store.
+Based on [Created Store](/docs/api/store-factory#createStore) you can add the storage option `localStoragePlugin` for the new Store.
 The data will write and read from the SessionStorage the Session Storage Key is the StoreName in the Example above it's named `myStore` 
 
 ```ts title="app.component.ts"
@@ -109,7 +109,7 @@ export class AppModule {
 
 ### create a new Store sync to Local Storage
 
-Based on [Created Store](/docs/api/component-store-factory#createStore) you can add the storage option `localStoragePlugin` for the new Store.
+Based on [Created Store](/docs/api/store-factory#createStore) you can add the storage option `localStoragePlugin` for the new Store.
 The data will write and read from the LocalStorage the Local Storage Key is the StoreName in the Example above it's named `myStore`
 
 ```ts title="app.component.ts"
