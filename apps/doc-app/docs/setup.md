@@ -24,7 +24,7 @@ export class AppComponent {
 }
 ```
 
-:::note More Information for `createStore` you can find [here](/docs/api/store-factory#createComponentStore)
+:::note More Information for `createStore` you can find [here](/docs/api/component-store-factory#createComponentStore)
 :::
 
 ## Read State 👉 `state$`
@@ -47,7 +47,7 @@ export class AppComponent {
 }
 ```
 
-:::note More Information for `state$` you can find [here](/docs/api/store#state$)
+:::note More Information for `state$` you can find [here](/docs/api/component-store#state$)
 :::
 
 ## Modify state 👉 `effect`  👉 `setState` 👉 `patchState` 👉 `createLoadingEffect`
@@ -78,7 +78,7 @@ export class AppComponent {
 }
 ```
 
-:::note More Information for `setState` you can find [here](/docs/api/store#setstate)
+:::note More Information for `setState` you can find [here](/docs/api/component-store#setstate)
 :::
 
 #### Partial Changes
@@ -103,7 +103,7 @@ export class AppComponent {
 }
 ```
 
-:::note More Information for `patchState` you can find [here](/docs/api/store#patchState)
+:::note More Information for `patchState` you can find [here](/docs/api/component-store#patchstate)
 :::
 
 ### Asynchronous State Change
@@ -134,14 +134,14 @@ export class AppComponent {
 
 #### Change State via effects `loadingEffect`
 
-create your store with [`loadingEffect`](/docs/api/loading-store#loadingEffect)
+create your store with [`loadingEffect`](/docs/api/component-loading-store#loadingEffect)
 
 ```ts title="app.component.ts"
 
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
 export class AppComponent {
-  private store = this.storeFactory.createLoadingStore<State['item'], State['error']>({
+  private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
     storeName: 'LOADING_STORE',
   });
   private increment = this.store.createLoadingEffect('LOAD_NAME', (counter: number) => of(counter + 1));
@@ -151,5 +151,5 @@ export class AppComponent {
 }
 ```
 
-:::note More Information for `createLoadingEffect` you can find [here](/docs/api/loading-store#loadingEffect)
+:::note More Information for `createLoadingEffect` you can find [here](/docs/api/component-loading-store#loadingEffect)
 :::

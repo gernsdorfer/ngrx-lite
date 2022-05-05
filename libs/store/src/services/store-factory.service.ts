@@ -47,15 +47,15 @@ export class StoreFactory {
     });
   }
 
-  /** @deprecated use createLoadingStore instead, this methode will be removed in the next major version */
+  /** @deprecated use createComponentLoadingStore instead, this methode will be removed in the next major version */
   public createStore<ITEM, ERROR>(
     storeName: string,
     plugins?: { storage?: StoragePluginTypes }
   ): LoadingStore<ITEM, ERROR> {
-    return this.createLoadingStore({ storeName, plugins });
+    return this.createComponentLoadingStore({ storeName, plugins });
   }
 
-  public createLoadingStore<ITEM, ERROR>({
+  public createComponentLoadingStore<ITEM, ERROR>({
     storeName,
     defaultState,
     plugins = {},

@@ -2,9 +2,9 @@
 sidebar_position: 3
 ---
 
-# LoadingStore
+# ComponentLoadingStore
 
-The LoadingStore is on [ngrx-lite/component-store](/docs/api/store#loadingEffect)
+The LoadingStore is on [ngrx-lite/component-store](/docs/api/component-store#loadingEffect)
 You have the exact same API with `createLoadingEffect`
 
 ## loadingEffect
@@ -18,7 +18,7 @@ A `tapResponse` to change your state is not necessary. The Effects change your s
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
 export class AppComponent {
-  private store = this.storeFactory.createLoadingStore<State['item'],
+  private store = this.storeFactory.createComponentLoadingStore<State['item'],
     State['error']>({
     storeName: 'LOADING_STORE',
   });

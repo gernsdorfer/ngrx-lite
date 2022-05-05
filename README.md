@@ -129,7 +129,7 @@ type State = LoadingStoreState<{ counter: number }, { message: string }>;
 })
 export class LoadingEffectComponent implements OnDestroy {
   // create your loading store 
-  private store = this.storeFactory.createLoadingStore<State['item'],
+  private store = this.storeFactory.createComponentLoadingStore<State['item'],
     State['error']>({
     storeName: 'LOADING_STORE',
   });

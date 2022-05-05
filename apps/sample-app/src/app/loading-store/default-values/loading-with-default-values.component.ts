@@ -9,7 +9,7 @@ type State = LoadingStoreState<{ counter: number }, { message: string }>;
   templateUrl: 'loading-effect.html',
 })
 export class LoadingWithDefaultValuesComponent implements OnDestroy {
-  private store = this.storeFactory.createLoadingStore<
+  private store = this.storeFactory.createComponentLoadingStore<
     State['item'],
     State['error']
   >({

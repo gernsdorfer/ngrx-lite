@@ -91,7 +91,7 @@ export const MyIncrementSuccessAction = getCustomAction<LoadingStoreState<number
 @Component({
 })
 export class CounterComponent {
-  private store = this.storeFactory.createLoadingStore<State['item'],
+  private store = this.storeFactory.createComponentLoadingStore<State['item'],
     State['error']>({
     storeName: 'LOADING_STORE',
   });
