@@ -12,7 +12,7 @@ A Module Store live in Your Module Scope.
 
 ## Define the Store as Service
 
-```ts title="my-store.service.ts"
+```ts title="my-component-store.service.ts"
 export interface MyState {
   counter: number
 }

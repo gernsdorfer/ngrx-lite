@@ -9,7 +9,7 @@ import {
 import { Store as NgrxStore } from '@ngrx/store';
 import { getEffectActionName } from './action-creator';
 import { EffectStates } from '../enums/effect-states.enum';
-import { Store } from './store.service';
+import { ComponentStoreStore } from './component-store.service';
 
 export const getDefaultLoadingState = <ITEM, ERROR>(
   state: Pick<LoadingStoreState<ITEM, ERROR>, 'item' | 'error'> = {}
@@ -22,7 +22,7 @@ export const getDefaultLoadingState = <ITEM, ERROR>(
 export const getDefaultState = getDefaultLoadingState;
 
 @Injectable({ providedIn: 'root' })
-export class LoadingStore<ITEM, ERROR> extends Store<
+export class LoadingStore<ITEM, ERROR> extends ComponentStoreStore<
   LoadingStoreState<ITEM, ERROR>
 > {
   constructor(

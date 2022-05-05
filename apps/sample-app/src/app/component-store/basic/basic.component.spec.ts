@@ -2,12 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { BasicComponent, MyState } from './basic.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('BasicExampleComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [BasicComponent],
       providers: [storeTestingFactory()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
@@ -27,8 +29,7 @@ describe('BasicExampleComponent', () => {
     it('should increment state', () => {
       const component = getApp().component;
 
-      component.increment();
-      component.increment();
+      component.increment(2);
 
       expect(component.counterState$).toBeObservable(
         cold('a', {

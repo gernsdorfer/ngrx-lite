@@ -10,10 +10,10 @@ import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { filter, map, takeUntil } from 'rxjs';
-import { Store } from './store.service';
+import { ComponentStoreStore } from './component-store.service';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
-type Stores = typeof Store | typeof LoadingStore;
+type Stores = typeof ComponentStoreStore | typeof LoadingStore;
 
 @Injectable({ providedIn: 'root' })
 export class StoreFactory {
@@ -38,12 +38,12 @@ export class StoreFactory {
     defaultState: STATE;
     storeName: string;
     plugins?: { storage?: StoragePluginTypes };
-  }): Store<STATE> {
+  }): ComponentStoreStore<STATE> {
     return this.createStoreByStoreType({
       storeName,
       plugins,
       defaultState,
-      CreatedStore: Store,
+      CreatedStore: ComponentStoreStore,
     });
   }
 
@@ -79,7 +79,7 @@ export class StoreFactory {
   }
 
   private createStoreByStoreType<
-    CREATED_STORE extends Store<STATE>,
+    CREATED_STORE extends ComponentStoreStore<STATE>,
     STATE extends object
   >({
     CreatedStore,
@@ -167,7 +167,7 @@ export class StoreFactory {
 
   private syncStoreChangesToClientStorage<STATE extends object>(
     storeName: string,
-    store: Store<STATE>,
+    store: ComponentStoreStore<STATE>,
     storage?: StoragePluginTypes
   ) {
     store.state$.pipe(takeUntil(store.destroy$)).subscribe({
@@ -181,7 +181,7 @@ export class StoreFactory {
 
   private syncNgrxStoreChangesToStore<STATE extends object>(
     storeName: string,
-    store: Store<STATE>
+    store: ComponentStoreStore<STATE>
   ) {
     this.ngrxStore
       .pipe(

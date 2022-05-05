@@ -15,7 +15,7 @@ A Module Store live in your Application
 
 Define your Service providedIn in `root`
 
-```ts title="my-store.service.ts"
+```ts title="my-component-store.service.ts"
 export interface MyState {
   counter: number
 }
