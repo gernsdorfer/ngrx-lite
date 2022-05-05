@@ -8,6 +8,15 @@
 
 
 
+
+## 2.1.1 (2022-05-05)
+
+#### :bug: Bug Fix
+* [#25](https://github.com/gernsdorfer/ngrx-lite/pull/25) export and fix getDefaultComponentLoadingState ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.1.0 (2022-05-05)
 
 #### :rocket: Enhancement
