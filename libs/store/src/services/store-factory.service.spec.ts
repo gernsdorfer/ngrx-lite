@@ -19,14 +19,14 @@ describe('StoreFactory', () => {
   const sessionStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
     'SessionStoragePlugin',
     {
-      getDefaultState: <MyState>({myState: ''}),
+      getDefaultState: <MyState>{ myState: '' },
       setStateToStorage: undefined,
     }
   );
   const localStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
     'LocalStoragePlugin',
     {
-      getDefaultState: <MyState>({myState: ''}),
+      getDefaultState: <MyState>{ myState: '' },
       setStateToStorage: undefined,
     }
   );

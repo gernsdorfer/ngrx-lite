@@ -81,8 +81,10 @@ describe('localStorageHandlerForStores', () => {
           JSON.stringify(<MyState>{ myState: 'testValue' })
         );
 
-        expect(localStoragePlugin.getDefaultState<MyState>('testStore1')).toEqual({
-          myState: 'testValue'
+        expect(
+          localStoragePlugin.getDefaultState<MyState>('testStore1')
+        ).toEqual({
+          myState: 'testValue',
         });
       });
     });
