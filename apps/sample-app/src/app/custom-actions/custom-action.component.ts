@@ -6,16 +6,17 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
   templateUrl: 'custom-action.html',
 })
 export class CustomActionComponent implements OnDestroy {
-  private store = this.storeFactory.createStore<number, never>(
-    'CUSTOM_ACTION_STORE'
-  );
+  private store = this.storeFactory.createComponentStore<{counter: number}>({
+    storeName: 'CUSTOM_ACTION_STORE',
+    defaultState:{counter: 0}
+  });
 
   public counterState$ = this.store.state$;
 
   constructor(private storeFactory: StoreFactory) {}
 
   increment() {
-    this.store.patchState( ({item=0}) => ({ item: item + 1 }), 'INCREMENT');
+    this.store.patchState(({ counter }) => ({ counter: counter + 1 }), 'INCREMENT');
   }
 
   ngOnDestroy() {

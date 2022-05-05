@@ -6,14 +6,17 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
   templateUrl: 'basic.html',
 })
 export class BasicComponent implements OnDestroy {
-  private store = this.storeFactory.createStore<number, never>('BASIC_COUNTER');
+  private store = this.storeFactory.createComponentStore<{ counter: number }>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: { counter: 0 },
+  });
 
   public counterState$ = this.store.state$;
 
   constructor(private storeFactory: StoreFactory) {}
 
   increment() {
-    this.store.patchState(({ item = 0 }) => ({ item: item + 1 }), 'INCREMENT');
+    this.store.patchState(({ counter }) => ({ counter: counter + 1 }));
   }
 
   ngOnDestroy() {

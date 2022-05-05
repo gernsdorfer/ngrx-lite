@@ -7,15 +7,14 @@ import { of } from 'rxjs';
   templateUrl: 'loading-effect.html',
 })
 export class LoadingEffectComponent implements OnDestroy {
-  private store = this.storeFactory.createStore<number, string>(
-    'LOADING_EFFECT'
-  );
+  private store = this.storeFactory.createLoadingStore<number, string>({
+    storeName: 'LOADING_EFFECT',
+  });
 
   public counterState$ = this.store.state$;
 
-  increment = this.store.createLoadingEffect(
-    'INCREMENT',
-    (counter: number = 0) => of(counter + 1)
+  increment = this.store.loadingEffect('INCREMENT', (counter: number = 0) =>
+    of(counter + 1)
   );
 
   constructor(private storeFactory: StoreFactory) {}

@@ -1,18 +1,11 @@
 import { Component } from '@angular/core';
-import {
-  EffectStates,
-  getEffectAction,
-  StoreFactory,
-  StoreState,
-} from '@gernsdorfer/ngrx-lite';
+import { getCustomAction, StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 const storeName = 'SHARED_ACTIONS';
-const incrementEffectName = 'INCREMENT';
-
-export const MyIncrementAction = getEffectAction<StoreState<number, never>>({
+const actionName = 'increment';
+export const MyIncrementAction = getCustomAction<{ counter: number }>({
   storeName: storeName,
-  effectName: incrementEffectName,
-  type: EffectStates.SUCCESS,
+  actionName: actionName,
 });
 
 @Component({
@@ -20,11 +13,19 @@ export const MyIncrementAction = getEffectAction<StoreState<number, never>>({
   templateUrl: 'example.html',
 })
 export class ExampleComponent {
-  private store = this.storeFactory.createStore<number, never>(storeName);
+  private store = this.storeFactory.createComponentStore<{ counter: number }>({
+    storeName,
+    defaultState: {
+      counter: 0,
+    },
+  });
   counterState$ = this.store.state$;
 
   increment() {
-    this.store.patchState(({ item = 0 }) => ({ item: item + 1 }), 'INCREMENT');
+    this.store.patchState(
+      ({ counter }) => ({ counter: counter + 1 }),
+      actionName
+    );
   }
 
   constructor(private storeFactory: StoreFactory) {}
