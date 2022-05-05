@@ -63,7 +63,7 @@ const config = {
           },
           {
             href: 'https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test',
-            label: 'Playground-unit Tests',
+            label: 'Playground-Unit-Tests',
             position: 'left',
             className: 'header-playground-link',
           },
