@@ -8,7 +8,7 @@ import { Store as NgrxStore } from '@ngrx/store';
 import { getCustomAction } from './action-creator';
 
 @Injectable({ providedIn: 'root' })
-export class ComponentStoreStore<STATE extends object> extends NgrxComponentStore<STATE> {
+export class ComponentStore<STATE extends object> extends NgrxComponentStore<STATE> {
   constructor(
     protected ngrxStore: NgrxStore,
     @Inject(StoreNameToken) protected storeName: string,

@@ -4,16 +4,16 @@ import {
   DefaultLoadingStateToken,
   StoreNameToken,
 } from '../injection-tokens/default-loading-state.token';
-import { getDefaultLoadingState, LoadingStore } from './loading-store.service';
+import { getDefaultComponentLoadingState, ComponentLoadingStore } from './component-loading-store.service';
 import { ClientStoragePlugin, LoadingStoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { filter, map, takeUntil } from 'rxjs';
-import { ComponentStoreStore } from './component-store.service';
+import { ComponentStore } from './component-store.service';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
-type Stores = typeof ComponentStoreStore | typeof LoadingStore;
+type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
 
 @Injectable({ providedIn: 'root' })
 export class StoreFactory {
@@ -38,12 +38,12 @@ export class StoreFactory {
     defaultState: STATE;
     storeName: string;
     plugins?: { storage?: StoragePluginTypes };
-  }): ComponentStoreStore<STATE> {
+  }): ComponentStore<STATE> {
     return this.createStoreByStoreType({
       storeName,
       plugins,
       defaultState,
-      CreatedStore: ComponentStoreStore,
+      CreatedStore: ComponentStore,
     });
   }
 
@@ -51,7 +51,7 @@ export class StoreFactory {
   public createStore<ITEM, ERROR>(
     storeName: string,
     plugins?: { storage?: StoragePluginTypes }
-  ): LoadingStore<ITEM, ERROR> {
+  ): ComponentLoadingStore<ITEM, ERROR> {
     return this.createComponentLoadingStore({ storeName, plugins });
   }
 
@@ -66,20 +66,20 @@ export class StoreFactory {
       error?: ERROR
     };
     plugins?: { storage?: StoragePluginTypes };
-  }): LoadingStore<ITEM, ERROR> {
+  }): ComponentLoadingStore<ITEM, ERROR> {
     return this.createStoreByStoreType<
-      LoadingStore<ITEM, ERROR>,
+      ComponentLoadingStore<ITEM, ERROR>,
       LoadingStoreState<ITEM, ERROR>
     >({
       storeName,
       plugins,
-      defaultState: getDefaultLoadingState(defaultState),
-      CreatedStore: LoadingStore,
+      defaultState: getDefaultComponentLoadingState(defaultState),
+      CreatedStore: ComponentLoadingStore,
     });
   }
 
   private createStoreByStoreType<
-    CREATED_STORE extends ComponentStoreStore<STATE>,
+    CREATED_STORE extends ComponentStore<STATE>,
     STATE extends object
   >({
     CreatedStore,
@@ -167,7 +167,7 @@ export class StoreFactory {
 
   private syncStoreChangesToClientStorage<STATE extends object>(
     storeName: string,
-    store: ComponentStoreStore<STATE>,
+    store: ComponentStore<STATE>,
     storage?: StoragePluginTypes
   ) {
     store.state$.pipe(takeUntil(store.destroy$)).subscribe({
@@ -181,7 +181,7 @@ export class StoreFactory {
 
   private syncNgrxStoreChangesToStore<STATE extends object>(
     storeName: string,
-    store: ComponentStoreStore<STATE>
+    store: ComponentStore<STATE>
   ) {
     this.ngrxStore
       .pipe(
