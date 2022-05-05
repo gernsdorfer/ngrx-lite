@@ -1,13 +1,18 @@
 import { Component, OnDestroy } from '@angular/core';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+import {LoadingStoreState, StoreFactory, StoreState} from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
+
+type State = StoreState<number, string>;
 
 @Component({
   selector: 'my-app-basic-app',
   templateUrl: 'loading-effect.html',
 })
 export class LoadingEffectComponent implements OnDestroy {
-  private store = this.storeFactory.createLoadingStore<number, string>({
+  private store = this.storeFactory.createLoadingStore<
+    State['item'],
+    State['error']
+  >({
     storeName: 'LOADING_EFFECT',
   });
 

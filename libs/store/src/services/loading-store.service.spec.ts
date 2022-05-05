@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { StoreState } from '../models';
+import { LoadingStoreState } from '../models';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { EffectStates } from '../enums';
 import { getCustomAction, getEffectAction } from './action-creator';
@@ -46,7 +46,7 @@ describe('LoadingStore', () => {
     storeState,
   }: {
     actionName: string;
-    storeState: StoreState<ITEM, ERROR>;
+    storeState: LoadingStoreState<ITEM, ERROR>;
   }) =>
     getCustomAction({ storeName, actionName })({
       payload: {
@@ -180,23 +180,23 @@ describe('LoadingStore', () => {
 
       expect(store.state$).toBeObservable(
         cold('ab-c', {
-          a: <StoreState<string, number>>{
+          a: <LoadingStoreState<string, number>>{
             isLoading: true,
             item: 'oldValue',
           },
-          b: <StoreState<string, number>>{
+          b: <LoadingStoreState<string, number>>{
             isLoading: false,
             item: 'newValue',
-            error: undefined
+            error: undefined,
           },
-          c: <StoreState<string, number>>{
+          c: <LoadingStoreState<string, number>>{
             isLoading: false,
             error: 500,
-            item: undefined
+            item: undefined,
           },
         })
       );
-console.log(mockStore.dispatch.calls.allArgs().length)
+      console.log(mockStore.dispatch.calls.allArgs().length);
       expect(mockStore.dispatch.calls.allArgs()).toEqual([
         [
           getEffectAction({
@@ -219,7 +219,7 @@ console.log(mockStore.dispatch.calls.allArgs().length)
             payload: {
               isLoading: false,
               item: 'newValue',
-              error: undefined
+              error: undefined,
             },
           }),
         ],
@@ -232,7 +232,7 @@ console.log(mockStore.dispatch.calls.allArgs().length)
             payload: {
               isLoading: false,
               error: 500,
-              item: undefined
+              item: undefined,
             },
           }),
         ],

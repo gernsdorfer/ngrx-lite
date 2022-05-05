@@ -5,7 +5,7 @@ import {
   StoreNameToken,
 } from '../injection-tokens/default-state.token';
 import { getDefaultState, LoadingStore } from './loading-store.service';
-import { ClientStoragePlugin, StoreState } from '../models';
+import { ClientStoragePlugin, LoadingStoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
@@ -64,7 +64,7 @@ export class StoreFactory {
   }): LoadingStore<ITEM, ERROR> {
     return this.createStoreByStoreType<
       LoadingStore<ITEM, ERROR>,
-      StoreState<ITEM, ERROR>
+      LoadingStoreState<ITEM, ERROR>
     >({
       storeName,
       plugins,
@@ -73,16 +73,15 @@ export class StoreFactory {
     });
   }
 
-
   private createStoreByStoreType<
     CREATED_STORE extends Store<STATE>,
     STATE extends object
-    >({
-        CreatedStore,
-        storeName,
-        defaultState,
-        plugins = {},
-      }: {
+  >({
+    CreatedStore,
+    storeName,
+    defaultState,
+    plugins = {},
+  }: {
     CreatedStore: Stores;
     defaultState: STATE;
     storeName: string;

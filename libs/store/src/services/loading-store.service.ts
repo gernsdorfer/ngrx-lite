@@ -1,7 +1,7 @@
 import { tapResponse } from '@ngrx/component-store';
-import {Observable, retryWhen, switchMap, tap} from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
-import { StoreState } from '../models';
+import { LoadingStoreState } from '../models';
 import {
   DefaultStateToken,
   StoreNameToken,
@@ -11,16 +11,21 @@ import { getEffectActionName } from './action-creator';
 import { EffectStates } from '../enums/effect-states.enum';
 import { Store } from './store.service';
 
-export const getDefaultState = <ITEM, ERROR>(): StoreState<ITEM, ERROR> => ({
+export const getDefaultState = <ITEM, ERROR>(): LoadingStoreState<
+  ITEM,
+  ERROR
+> => ({
   isLoading: false,
 });
 
 @Injectable({ providedIn: 'root' })
-export class LoadingStore<ITEM, ERROR> extends Store<StoreState<ITEM, ERROR>> {
+export class LoadingStore<ITEM, ERROR> extends Store<
+  LoadingStoreState<ITEM, ERROR>
+> {
   constructor(
     ngrxStore: NgrxStore,
     @Inject(StoreNameToken) storeName: string,
-    @Inject(DefaultStateToken) state: StoreState<ITEM, ERROR>
+    @Inject(DefaultStateToken) state: LoadingStoreState<ITEM, ERROR>
   ) {
     super(ngrxStore, storeName, state);
   }
@@ -29,7 +34,7 @@ export class LoadingStore<ITEM, ERROR> extends Store<StoreState<ITEM, ERROR>> {
     name: string,
     effect: (
       params: EFFECT_PARAMS
-    ) => Observable<StoreState<ITEM, ERROR>['item']>
+    ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>
   ) =>
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
