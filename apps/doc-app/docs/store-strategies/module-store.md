@@ -6,22 +6,24 @@ sidebar_position: 2
 
 [Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/#/storage-from-service)
 
-[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/service-counter)
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/service-counter)
 
 A Module Store live in Your Module Scope.
 
 ## Define the Store as Service
 
-```ts title="my-store.service.ts"
-import {Injectable, OnDestroy} from '@angular/core';
-import {delay, of} from 'rxjs';
-import {StoreFactory} from '@gernsdorfer/ngrx-lite';
+```ts title="my-component-store.service.ts"
+export interface MyState {
+  counter: number
+}
 
 @Injectable({providedIn: 'any'})
 export class MyStore implements OnDestroy {
-  private myStore = this.storeFactory.createStore<number, string>('serviceCounter');
-
-  public myStoreState$ = this.myStore.state$;
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });
+  public counterState$ = this.store.state$;
 
   constructor(private storeFactory: StoreFactory) {
   }
@@ -48,7 +50,7 @@ import {MyComponent} from './my-component.component';
     BrowserModule,
   ],
   providers: [
-    // Procide your Store  
+    // Provide your Store  
     MyStore
   ],
   declarations: [
@@ -66,7 +68,7 @@ import {MyStore} from './my-store.service';
 @Component()
 export class CounterComponent implements OnDestroy {
 
-  public myStoreState$ = this.myStore.myStoreState$;
+  public myStoreState$ = this.myStore.counterState$;
 
   constructor(private myStore: MyStore) {
   }

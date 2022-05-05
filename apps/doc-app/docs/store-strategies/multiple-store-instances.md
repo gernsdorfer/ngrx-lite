@@ -6,29 +6,33 @@ sidebar_position: 2
 
 [Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/#/multiple-storage-instances)
 
-[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/muliple-instances)
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/muliple-instances)
 
 A Store can live in multiple Components/Module with own Scope
 
 ## Define the Store as Service and a dynamic Store Name
 
-```ts title="my-store.service.ts"
+```ts title="my-component-store.service.ts"
 import {Inject, Injectable, OnDestroy, Optional} from '@angular/core';
 import {of} from 'rxjs';
 import {StoreFactory} from '@gernsdorfer/ngrx-lite';
 
 // define an InjectionToken for your StoreName
 export const MyStoreName = new InjectionToken('MyStoreName');
+export interface MyState {
+  counter: number
+}
 
 @Injectable()
 export class MyStore implements OnDestroy {
 
-  private myStore = this.storeFactory.createStore<number, string>(
+  private store = this.storeFactory.createComponentStore<MyState>({
     // use the provided StoreName
-    this.storeName || 'myStore'
-  );
-
-  public myStoreState$ = this.myStore.state$;
+    storeName: this.storeName || 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  })
+  
+  public counterState$ = this.store.state$;
 
   constructor(private storeFactory: StoreFactory,
               // import your StoreName
@@ -37,7 +41,7 @@ export class MyStore implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.myStore.ngOnDestroy();
+    this.store.ngOnDestroy();
   }
 } 
 ```
@@ -64,7 +68,7 @@ import {MyStore, MyStoreName} from './my-store.service';
 })
 export class CounterComponent implements OnDestroy {
 
-  public myStoreState$ = this.myStore.myStoreState$;
+  public myStoreState$ = this.myStore.counterState$;
 
   constructor(private myStore: MyStore) {
   }

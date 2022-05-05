@@ -1,5 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+import {Component, OnDestroy} from '@angular/core';
+import {StoreFactory} from '@gernsdorfer/ngrx-lite';
+import {Observable} from "rxjs";
+import {tapResponse} from "@ngrx/component-store";
 
 export interface MyState {
   counter: number
@@ -12,15 +14,17 @@ export interface MyState {
 export class BasicComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: { counter: 0 },
+    defaultState: {counter: 0},
   });
 
   public counterState$ = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {}
+  constructor(private storeFactory: StoreFactory) {
+  }
 
-  increment() {
-    this.store.patchState(({ counter }) => ({ counter: counter + 1 }));
+  increment(counter: number) {
+    // patch your state
+    this.store.patchState({counter});
   }
 
   ngOnDestroy() {

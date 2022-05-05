@@ -8,33 +8,49 @@ sidebar_position: 2
 ## Create new Store 👉 `createStore`
 
 ```ts title="app.component.ts"
+
+export interface MyState {
+  counter: number
+}
+
 export class AppComponent {
-  myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });
 
   constructor(private storeFactory: StoreFactory) {
   }
 }
 ```
 
-:::note More Information for `createStore` you can find [here](/docs/api/store-factory#createStore)
+:::note More Information for `createStore` you can find [here](/docs/api/component-store-factory#createComponentStore)
 :::
 
 ## Read State 👉 `state$`
 
 ```ts title="app.component.ts"
+
+export interface MyState {
+  counter: number
+}
+
 export class AppComponent {
-  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
-  public state$ = this.counterStore.state$;
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });
+  public state$: Observable<MyState> = this.store.state$;
 
   constructor(private storeFactory: StoreFactory) {
   }
 }
 ```
 
-:::note More Information for `state$` you can find [here](/docs/api/store#state$)
+:::note More Information for `state$` you can find [here](/docs/api/component-store#state$)
 :::
 
-## Modify state 👉 `createLoadingEffect`  👉 `setState` 👉 `patchState`
+## Modify state 👉 `effect`  👉 `setState` 👉 `patchState` 👉 `createLoadingEffect`
 
 Choose between [synchronous](#synchronous-state-change) and [asynchronous](#asynchronous-state-change) State Changes.
 
@@ -43,37 +59,51 @@ Choose between [synchronous](#synchronous-state-change) and [asynchronous](#asyn
 #### Complete State Change
 
 ```ts title="app.component.ts"
+export interface MyState {
+  counter: number
+}
+
 export class AppComponent {
-  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });
 
   constructor(private storeFactory: StoreFactory) {
   }
 
-  update() {
-    this.myStore.setState({isLoading: false, item: {name: 'Demo'}}, 'UPDATE_NAME');
+  update(counter: number) {
+    this.store.setState({counter: 2});
   }
 }
 ```
 
-:::note More Information for `setstate` you can find [here](docs/api/store#setstate)
+:::note More Information for `setState` you can find [here](/docs/api/component-store#setstate)
 :::
 
 #### Partial Changes
 
 ```ts title="app.component.ts"
+export interface MyState {
+  counter: number
+}
+
 export class AppComponent {
-  private myStore = this.storeFactory.createStore<{ name: string }, { errorCode: number }>('myStore');
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });
 
   constructor(private storeFactory: StoreFactory) {
   }
 
-  patch() {
-    this.myStore.patchState({item: {name: 'Demo'}}, 'PATCH_NAME');
+  patch(counter: number) {
+    this.store.patchState({counter: counter});
   }
 }
 ```
 
-:::note More Information for `patchState` you can find [here](docs/api/store#patchState)
+:::note More Information for `patchState` you can find [here](/docs/api/component-store#patchstate)
 :::
 
 ### Asynchronous State Change
@@ -81,12 +111,19 @@ export class AppComponent {
 #### Change State with the original `effect` from [@ngrx/component-store](https://ngrx.io/guide/component-store/effect)
 
 ```ts title="app.component.ts"
+export interface MyState {
+  counter: number
+}
+
 export class AppComponent {
-  private store = this.storeFactory.createStore<number, string>('myStore');
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });
   increment = this.myStore.effect((counter$: Observable<number>) => counter$.pipe(
     tapResponse(
-      (counter) => this.store.patchState({item: counter + 1}),
-      (error) => this.store.patchState({error: error})
+      (counter) => this.store.patchState({counter: counter + 1}),
+      (error) => console.error('error', error)
     )
   ));
 
@@ -95,17 +132,24 @@ export class AppComponent {
 }
 ```
 
-#### Change State via effects `createLoadingEffect`
+#### Change State via effects `loadingEffect`
+
+create your store with [`loadingEffect`](/docs/api/component-loading-store#loadingEffect)
 
 ```ts title="app.component.ts"
+
+type State = LoadingStoreState<{ counter: number }, { message: string }>;
+
 export class AppComponent {
-  private store = this.storeFactory.createStore<number, string>('myStore');
-  private increment = this.store.createLoadingEffect('LOAD_NAME', (counter: string) => of(counter + 1));
+  private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
+    storeName: 'LOADING_STORE',
+  });
+  private increment = this.store.createLoadingEffect('LOAD_NAME', (counter: number) => of(counter + 1));
 
   constructor(private storeFactory: StoreFactory) {
   }
 }
 ```
 
-:::note More Information for `createLoadingEffect` you can find [here](/docs/api/store#createLoadingEffect)
+:::note More Information for `createLoadingEffect` you can find [here](/docs/api/component-loading-store#loadingEffect)
 :::

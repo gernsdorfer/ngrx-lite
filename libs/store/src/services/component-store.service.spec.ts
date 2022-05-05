@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { getCustomAction } from './action-creator';
-import { Store } from './store.service';
+import { ComponentStoreStore } from './component-store.service';
 import {
   DefaultLoadingStateToken,
   StoreNameToken,
@@ -13,7 +13,7 @@ interface MyState {
 }
 
 describe('Store', () => {
-  let store: Store<MyState>;
+  let store: ComponentStoreStore<MyState>;
   const defaultStore: MyState = { myState: '' };
   const mockStore = jasmine.createSpyObj<MockStore>('MockStore', {
     dispatch: undefined,
@@ -41,7 +41,7 @@ describe('Store', () => {
       ],
       teardown: { destroyAfterEach: false },
     });
-    store = TestBed.inject<Store<MyState>>(Store);
+    store = TestBed.inject<ComponentStoreStore<MyState>>(ComponentStoreStore);
   });
 
   const getDispatchAction = ({
