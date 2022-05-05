@@ -13,8 +13,8 @@ export class LoadingEffectComponent implements OnDestroy {
 
   public counterState$ = this.store.state$;
 
-  increment = this.store.loadingEffect('INCREMENT', (counter: number = 0) =>
-    of(counter + 1)
+  increment = this.store.loadingEffect('INCREMENT', () =>
+    of((this.store.state?.item || 0) + 1)
   );
 
   constructor(private storeFactory: StoreFactory) {}

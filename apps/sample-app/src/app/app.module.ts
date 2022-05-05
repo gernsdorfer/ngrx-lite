@@ -11,17 +11,17 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
-import { LoadingEffectComponent } from './loading-effect/loading-effect.component';
-import { StorageExampleComponent } from './storage/storage.component';
-import { StorageFromServiceComponent } from './service-counter/storage-from-service.component';
-import { CounterStore } from './service-counter/counter-service';
-import { StorageFromGlobalServiceComponent } from './global-counter/storage-from-global-service.component';
-import { CustomActionComponent } from './custom-actions/custom-action.component';
-import { MultipleInstancesComponent } from './muliple-instances/multiple-instances.component';
-import { DemoAComponent } from './muliple-instances/demo-a.component';
-import { DemoBComponent } from './muliple-instances/demo-b.component';
+import { LoadingEffectComponent } from './loading-store/loading-effect/loading-effect.component';
+import { StorageExampleComponent } from './component-store/storage/storage.component';
+import { StorageFromServiceComponent } from './component-store/service-counter/storage-from-service.component';
+import { CounterStore } from './component-store/service-counter/counter-service';
+import { StorageFromGlobalServiceComponent } from './component-store/global-counter/storage-from-global-service.component';
+import { CustomActionComponent } from './component-store/custom-actions/custom-action.component';
+import { MultipleInstancesComponent } from './component-store/muliple-instances/multiple-instances.component';
+import { DemoAComponent } from './component-store/muliple-instances/demo-a.component';
+import { DemoBComponent } from './component-store/muliple-instances/demo-b.component';
 import {EffectsModule} from "@ngrx/effects";
-import {BasicComponent} from "./basic/basic.component";
+import {BasicComponent} from "./component-store/basic/basic.component";
 
 @NgModule({
   imports: [
@@ -50,7 +50,7 @@ import {BasicComponent} from "./basic/basic.component";
       {
         path: 'share-actions',
         loadChildren: () =>
-          import('./share-actions/shared-actions.module').then(
+          import('./component-store/share-actions/shared-actions.module').then(
             (m) => m.SharedActionsModule
           ),
       },
