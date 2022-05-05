@@ -22,42 +22,60 @@ import { DemoAComponent } from './component-store/muliple-instances/demo-a.compo
 import { DemoBComponent } from './component-store/muliple-instances/demo-b.component';
 import {EffectsModule} from "@ngrx/effects";
 import {BasicComponent} from "./component-store/basic/basic.component";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatButtonModule} from "@angular/material/button";
+import {MatCardModule} from "@angular/material/card";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   imports: [
     BrowserModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
+    BrowserAnimationsModule,
     StoreDevtoolsModule.instrument({
       name: 'ngrx-lite-demo',
       maxAge: 25,
       logOnly: false,
     }),
-    RouterModule.forRoot([
-      { path: '', component: BasicComponent },
-      { path: 'loading-effect', component: LoadingEffectComponent },
-      { path: 'custom-action', component: CustomActionComponent },
-      { path: 'storage', component: StorageExampleComponent },
-      { path: 'storage-from-service', component: StorageFromServiceComponent },
+    RouterModule.forRoot(
+      [
+        { path: '', component: BasicComponent },
+        { path: 'loading-effect', component: LoadingEffectComponent },
+        { path: 'custom-action', component: CustomActionComponent },
+        { path: 'storage', component: StorageExampleComponent },
+        {
+          path: 'storage-from-service',
+          component: StorageFromServiceComponent,
+        },
+        {
+          path: 'multiple-storage-instances',
+          component: MultipleInstancesComponent,
+        },
+        {
+          path: 'storage-from-global-service',
+          component: StorageFromGlobalServiceComponent,
+        },
+        {
+          path: 'share-actions',
+          loadChildren: () =>
+            import(
+              './component-store/share-actions/shared-actions.module'
+            ).then((m) => m.SharedActionsModule),
+        },
+        { path: '**', redirectTo: '' },
+      ],
       {
-        path: 'multiple-storage-instances',
-        component: MultipleInstancesComponent,
-      },
-      {
-        path: 'storage-from-global-service',
-        component: StorageFromGlobalServiceComponent,
-      },
-      {
-        path: 'share-actions',
-        loadChildren: () =>
-          import('./component-store/share-actions/shared-actions.module').then(
-            (m) => m.SharedActionsModule
-          ),
-      },
-      { path: '**', redirectTo: '' },
-    ], {
-      useHash: true
-    }),
+        useHash: true,
+      }
+    ),
+    MatMenuModule,
+    MatButtonModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     CounterStore,
@@ -74,7 +92,7 @@ import {BasicComponent} from "./component-store/basic/basic.component";
     MultipleInstancesComponent,
     DemoAComponent,
     DemoBComponent,
-    BasicComponent
+    BasicComponent,
   ],
   bootstrap: [AppComponent],
 })

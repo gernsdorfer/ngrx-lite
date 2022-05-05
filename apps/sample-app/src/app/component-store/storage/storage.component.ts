@@ -7,7 +7,7 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 })
 export class StorageExampleComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<{counter: number}>({
-    storeName: 'SESSION_COUNTER',
+    storeName: 'LOCAL_COUNTER',
     defaultState: {
       counter:0
     },

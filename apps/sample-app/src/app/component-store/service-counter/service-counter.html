@@ -1,5 +1,14 @@
-<h1>State from Service (Provided in Module)</h1>
 <ng-container *ngIf="counterState$ | async as counterState">
-  <button (click)="increment()">+</button>
-  {{ counterState.counter }}
+  <mat-card class="demo-card">
+    <mat-card-header>
+      <mat-card-title>Component-Store</mat-card-title>
+      <mat-card-subtitle>Storage from Service (Provided in Module)</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <h2> {{ counterState.counter }}</h2>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-fab (click)="increment()">+</button>
+    </mat-card-actions>
+  </mat-card>
 </ng-container>

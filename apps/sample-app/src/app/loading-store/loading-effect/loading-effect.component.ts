@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { of } from 'rxjs';
+import { delay, of } from 'rxjs';
 
 @Component({
   selector: 'my-app-basic-app',
@@ -14,7 +14,7 @@ export class LoadingEffectComponent implements OnDestroy {
   public counterState$ = this.store.state$;
 
   increment = this.store.loadingEffect('INCREMENT', () =>
-    of((this.store.state?.item || 0) + 1)
+    of((this.store.state?.item || 0) + 1).pipe(delay(400))
   );
 
   constructor(private storeFactory: StoreFactory) {}
