@@ -9,20 +9,22 @@ import {
 import { Store as NgrxStore } from '@ngrx/store';
 import { getEffectActionName } from './action-creator';
 import { EffectStates } from '../enums/effect-states.enum';
-import { ComponentStoreStore } from './component-store.service';
+import { ComponentStore } from './component-store.service';
 
-export const getDefaultLoadingState = <ITEM, ERROR>(
-  state: Pick<LoadingStoreState<ITEM, ERROR>, 'item' | 'error'> = {}
+export const getDefaultComponentLoadingState = <ITEM, ERROR>(
+  state: Partial<LoadingStoreState<ITEM, ERROR>> = {}
 ): LoadingStoreState<ITEM, ERROR> => ({
   isLoading: false,
+  error: undefined,
+  item: undefined,
   ...state,
 });
 
 /** @deprecated use getDefaultLoadingState instead, this methode will be removed in the next major version */
-export const getDefaultState = getDefaultLoadingState;
+export const getDefaultState = getDefaultComponentLoadingState;
 
 @Injectable({ providedIn: 'root' })
-export class LoadingStore<ITEM, ERROR> extends ComponentStoreStore<
+export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   LoadingStoreState<ITEM, ERROR>
 > {
   constructor(
@@ -52,12 +54,12 @@ export class LoadingStore<ITEM, ERROR> extends ComponentStoreStore<
             tapResponse(
               (item) =>
                 super.setState(
-                  { isLoading: false, item, error: undefined },
+                  getDefaultComponentLoadingState({ item }),
                   getEffectActionName(name, EffectStates.SUCCESS)
                 ),
               (error: ERROR) =>
                 super.setState(
-                  { isLoading: false, error, item: undefined },
+                  getDefaultComponentLoadingState({ error }),
                   getEffectActionName(name, EffectStates.ERROR)
                 )
             )
