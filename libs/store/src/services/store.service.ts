@@ -1,42 +1,31 @@
-import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Observable, switchMap, tap } from 'rxjs';
+import { ComponentStore } from '@ngrx/component-store';
 import { Inject, Injectable } from '@angular/core';
-import { StoreState } from '../models';
 import {
   DefaultStateToken,
   StoreNameToken,
 } from '../injection-tokens/default-state.token';
 import { Store as NgrxStore } from '@ngrx/store';
-import { getCustomAction, getEffectAction } from './action-creator';
-import { EffectStates } from '../enums/effect-states.enum';
-
-export const getDefaultState = <ITEM, ERROR>(): StoreState<ITEM, ERROR> => ({
-  isLoading: false,
-});
+import { getCustomAction } from './action-creator';
 
 @Injectable({ providedIn: 'root' })
-export class Store<ITEM, ERROR> extends ComponentStore<
-  StoreState<ITEM, ERROR>
-> {
+export class Store<STATE extends object> extends ComponentStore<STATE> {
   constructor(
-    private ngrxStore: NgrxStore,
-    @Inject(StoreNameToken) private storeName: string,
-    @Inject(DefaultStateToken) state: StoreState<ITEM, ERROR>
+    protected ngrxStore: NgrxStore,
+    @Inject(StoreNameToken) protected storeName: string,
+    @Inject(DefaultStateToken) state: STATE
   ) {
     super(state);
     this.dispatchCustomAction('init', state);
   }
 
   override setState(
-    stateOrUpdaterFn:
-      | ((state: StoreState<ITEM, ERROR>) => StoreState<ITEM, ERROR>)
-      | StoreState<ITEM, ERROR>,
+    stateOrUpdaterFn: ((state: STATE) => STATE) | STATE,
     action: string = 'SET_STATE',
     skipLog?: boolean
   ) {
     const newState =
       typeof stateOrUpdaterFn === 'function'
-        ? stateOrUpdaterFn(this.get())
+        ? (stateOrUpdaterFn as unknown as any)(this.get())
         : stateOrUpdaterFn;
     super.setState(newState);
     if (!skipLog) this.dispatchCustomAction(action, newState);
@@ -44,8 +33,8 @@ export class Store<ITEM, ERROR> extends ComponentStore<
 
   override patchState(
     partialStateOrUpdaterFn:
-      | Partial<StoreState<ITEM, ERROR>>
-      | ((state: StoreState<ITEM, ERROR>) => Partial<StoreState<ITEM, ERROR>>),
+      | Partial<STATE>
+      | ((state: STATE) => Partial<STATE>),
     action: string = 'PATCH_STATE'
   ) {
     const newState =
@@ -56,60 +45,15 @@ export class Store<ITEM, ERROR> extends ComponentStore<
     this.dispatchCustomAction(action, { ...this.get(), ...newState });
   }
 
-  get state(): StoreState<ITEM, ERROR> {
+  get state(): STATE {
     return super.get();
   }
 
-
-  createLoadingEffect = <EFFECT_PARAMS = void>(
-    name: string,
-    effect: (
-      params: EFFECT_PARAMS
-    ) => Observable<StoreState<ITEM, ERROR>['item']>
-  ) =>
-    this.effect((params$: Observable<EFFECT_PARAMS>) =>
-      params$.pipe(
-        tap(() => {
-          super.patchState({ isLoading: true });
-          this.dispatchEffectAction(name, EffectStates.LOAD);
-        }),
-        switchMap((params) =>
-          effect(params).pipe(
-            tapResponse(
-              (item) => {
-                super.setState({ isLoading: false, item });
-                this.dispatchEffectAction(name, EffectStates.SUCCESS);
-              },
-              (error: ERROR) => {
-                super.setState({ isLoading: false, error });
-                this.dispatchEffectAction(name, EffectStates.ERROR);
-              }
-            )
-          )
-        )
-      )
-    );
-
-  private dispatchCustomAction(action: string, state: StoreState<ITEM, ERROR>) {
+  protected dispatchCustomAction(action: string, state: STATE) {
     this.ngrxStore.dispatch(
       getCustomAction({ actionName: action, storeName: this.storeName })({
-        payload: {
-          ...getDefaultState(),
-          item: undefined,
-          error: undefined,
-          ...state,
-        },
+        payload: state,
       })
-    );
-  }
-
-  private dispatchEffectAction(effectName: string, type: EffectStates) {
-    this.ngrxStore.dispatch(
-      getEffectAction({
-        effectName,
-        storeName: this.storeName,
-        type: type,
-      })({ payload: this.get() })
     );
   }
 }

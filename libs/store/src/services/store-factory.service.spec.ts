@@ -7,6 +7,13 @@ import { ReducerManager } from '@ngrx/store';
 import { getCustomAction, getDefaultState } from '@gernsdorfer/ngrx-lite';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 
+interface MyState {
+  myState: string;
+  optionalValue?: string;
+}
+
+const defaultMyState: MyState = { myState: '' };
+
 describe('StoreFactory', () => {
   const sessionStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
     'SessionStoragePlugin',
@@ -60,43 +67,107 @@ describe('StoreFactory', () => {
     mockStore = TestBed.inject(MockStore);
   });
 
-  describe('initialState', () => {
-    beforeEach(() => {
-      localStoragePlugin.getDefaultState.and.returnValue({
-        ...getDefaultState(),
-        item: 'defaultValueFromSessionStore',
+  describe('createStore', () => {
+    describe('initialState', () => {
+      beforeEach(() => {
+        localStoragePlugin.getDefaultState.and.returnValue(<MyState>{
+          ...defaultMyState,
+          optionalValue: 'testDataFromLocalStorage'
+        });
+        sessionStoragePlugin.getDefaultState.and.returnValue(<MyState>{
+          ...defaultMyState,
+          optionalValue: 'testDataFromSessionStorage'
+        });
       });
-      sessionStoragePlugin.getDefaultState.and.returnValue({
-        ...getDefaultState(),
-        item: 'defaultValueFromLocalStore',
+
+      it('should return default initial state', () => {
+        const { state } = storeFactory.createComponentStore<MyState>({
+          storeName: 'myStore',
+          defaultState: defaultMyState,
+        });
+
+        expect(state).toEqual(defaultMyState);
+      });
+
+      it('should return state from sessionStorage plugin', () => {
+        const { state } = storeFactory.createComponentStore<MyState>({
+          storeName: 'myStore',
+          defaultState: defaultMyState,
+          plugins: {
+            storage: 'sessionStoragePlugin',
+          }
+        });
+
+        expect(state).toEqual({
+          ...defaultMyState,
+          optionalValue: 'testDataFromSessionStorage'
+        });
+      });
+
+      it('should return state from localeStorage plugin', () => {
+        const { state } = storeFactory.createComponentStore<MyState>({
+          storeName: 'myStore',
+          defaultState: defaultMyState,
+          plugins: {
+            storage: 'localStoragePlugin',
+          }
+        });
+
+        expect(state).toEqual({
+          ...defaultMyState,
+          optionalValue: 'testDataFromLocalStorage'
+        });
       });
     });
+  });
 
-    it('should return default initial state', () => {
-      const { state } = storeFactory.createStore<string, number>('testStore');
-
-      expect(state).toEqual(getDefaultState());
-    });
-
-    it('should return state from sessionStorage plugin', () => {
-      const { state } = storeFactory.createStore<string, number>('testStore', {
-        storage: 'sessionStoragePlugin',
+  describe('createStore', () => {
+    describe('initialState', () => {
+      beforeEach(() => {
+        localStoragePlugin.getDefaultState.and.returnValue({
+          ...getDefaultState(),
+          item: 'defaultValueFromSessionStore',
+        });
+        sessionStoragePlugin.getDefaultState.and.returnValue({
+          ...getDefaultState(),
+          item: 'defaultValueFromLocalStore',
+        });
       });
 
-      expect(state).toEqual({
-        ...getDefaultState(),
-        item: 'defaultValueFromLocalStore',
-      });
-    });
+      it('should return default initial state', () => {
+        const { state } = storeFactory.createStore<string, number>(
+          'testStore'
+        );
 
-    it('should return state from localeStorage plugin', () => {
-      const { state } = storeFactory.createStore<string, number>('testStore', {
-        storage: 'localStoragePlugin',
+        expect(state).toEqual(getDefaultState());
       });
 
-      expect(state).toEqual({
-        ...getDefaultState(),
-        item: 'defaultValueFromSessionStore',
+      it('should return state from sessionStorage plugin', () => {
+        const { state } = storeFactory.createStore<string, number>(
+          'testStore',
+          {
+            storage: 'sessionStoragePlugin',
+          }
+        );
+
+        expect(state).toEqual({
+          ...getDefaultState(),
+          item: 'defaultValueFromLocalStore',
+        });
+      });
+
+      it('should return state from localeStorage plugin', () => {
+        const { state } = storeFactory.createStore<string, number>(
+          'testStore',
+          {
+            storage: 'localStoragePlugin',
+          }
+        );
+
+        expect(state).toEqual({
+          ...getDefaultState(),
+          item: 'defaultValueFromSessionStore',
+        });
       });
     });
   });
@@ -184,7 +255,9 @@ describe('StoreFactory', () => {
     describe('set state from ngrx/store', () => {
       describe('ngrx/Store change is current store', () => {
         it('should set state from ngrx/store', () => {
-          const store = storeFactory.createStore<string, never>('testStore');
+          const store = storeFactory.createStore<string, never>(
+            'testStore'
+          );
           mockStore.setState({
             testStore: <StoreState<string, never>>{
               isLoading: false,
@@ -199,7 +272,9 @@ describe('StoreFactory', () => {
         });
 
         it('should log setState to avoid deduplicate actions', () => {
-          const store = storeFactory.createStore<string, never>('testStore');
+          const store = storeFactory.createStore<string, never>(
+            'testStore'
+          );
           const setStateSpy = spyOn(store, 'setState');
 
           mockStore.setState({
@@ -221,7 +296,9 @@ describe('StoreFactory', () => {
       });
 
       it('should ignore other store', () => {
-        const store = storeFactory.createStore<string, never>('testStore');
+        const store = storeFactory.createStore<string, never>(
+          'testStore'
+        );
 
         mockStore.setState({
           otherStore: <StoreState<string, never>>{
@@ -235,7 +312,9 @@ describe('StoreFactory', () => {
     });
 
     it('should removeReducer after destroy the store', () => {
-      const myStore = storeFactory.createStore<string, number>('myStory');
+      const myStore = storeFactory.createStore<string, number>(
+        'myStory'
+      );
       reducerManager.removeReducer.calls.reset();
 
       myStore.ngOnDestroy();

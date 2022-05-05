@@ -4,14 +4,16 @@ import {
   DefaultStateToken,
   StoreNameToken,
 } from '../injection-tokens/default-state.token';
-import { getDefaultState, Store } from './store.service';
+import { getDefaultState, LoadingStore } from './loading-store.service';
 import { ClientStoragePlugin, StoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { filter, map, takeUntil } from 'rxjs';
+import { Store } from './store.service';
 
-type storagePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
+type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
+type Stores = typeof Store | typeof LoadingStore;
 
 @Injectable({ providedIn: 'root' })
 export class StoreFactory {
@@ -28,50 +30,109 @@ export class StoreFactory {
     this.checkNgrxStoreIsInstalled();
   }
 
+  public createComponentStore<STATE extends object>({
+    storeName,
+    plugins,
+    defaultState,
+  }: {
+    defaultState: STATE;
+    storeName: string;
+    plugins?: { storage?: StoragePluginTypes };
+  }): Store<STATE> {
+    return this.createStoreByStoreType({
+      storeName,
+      plugins,
+      defaultState,
+      CreatedStore: Store,
+    });
+  }
+
+  /** @deprecated use createLoadingStore instead, this methode will be removed in the next major version */
   public createStore<ITEM, ERROR>(
     storeName: string,
-    { storage }: { storage?: storagePluginTypes } = {}
-  ): Store<ITEM, ERROR> {
-    const initialState = this.getInitialState<ITEM, ERROR>(storeName, storage);
+    plugins?: { storage?: StoragePluginTypes }
+  ): LoadingStore<ITEM, ERROR> {
+    return this.createLoadingStore({ storeName, plugins });
+  }
+
+  public createLoadingStore<ITEM, ERROR>({
+    storeName,
+    plugins = {},
+  }: {
+    storeName: string;
+    plugins?: { storage?: StoragePluginTypes };
+  }): LoadingStore<ITEM, ERROR> {
+    return this.createStoreByStoreType<
+      LoadingStore<ITEM, ERROR>,
+      StoreState<ITEM, ERROR>
+    >({
+      storeName,
+      plugins,
+      defaultState: getDefaultState(),
+      CreatedStore: LoadingStore,
+    });
+  }
+
+
+  private createStoreByStoreType<
+    CREATED_STORE extends Store<STATE>,
+    STATE extends object
+    >({
+        CreatedStore,
+        storeName,
+        defaultState,
+        plugins = {},
+      }: {
+    CreatedStore: Stores;
+    defaultState: STATE;
+    storeName: string;
+    plugins?: { storage?: StoragePluginTypes };
+  }): CREATED_STORE {
+    const { storage } = plugins;
+    const initialState = this.getInitialState<STATE>(
+      storeName,
+      defaultState,
+      storage
+    );
     const store = Injector.create({
       providers: [
-        { provide: Store },
+        { provide: CreatedStore },
         { provide: NgrxStore, useValue: this.ngrxStore },
         { provide: StoreNameToken, useValue: storeName },
         { provide: DefaultStateToken, useValue: initialState },
       ],
-    }).get(Store);
-
-    this.addStoreReducerToNgrx<ITEM, ERROR>(storeName, initialState);
+    }).get(CreatedStore);
+    this.addStoreReducerToNgrx<STATE>(storeName, initialState);
     this.syncStoreChangesToClientStorage(storeName, store, storage);
-    this.syncNgrxStoreChangesToStore<ITEM, ERROR>(storeName, store);
+    this.syncNgrxStoreChangesToStore<STATE>(storeName, store);
     store.destroy$.subscribe(() =>
       this.reducerManager.removeReducer(storeName)
     );
     return store;
   }
 
-  private getInitialState<ITEM, ERROR>(
+  private getInitialState<STATE>(
     storeName: string,
-    storage?: storagePluginTypes
-  ): StoreState<ITEM, ERROR> {
+    defaultState: STATE,
+    storage?: StoragePluginTypes
+  ): STATE {
     return (
       this.getStoragePluginByKey(storage)?.getDefaultState(storeName) ||
-      getDefaultState()
+      defaultState
     );
   }
 
   private getStoragePluginByKey(
-    storage?: storagePluginTypes
+    storage?: StoragePluginTypes
   ): ClientStoragePlugin | undefined {
     if (storage === 'sessionStoragePlugin') return this.sessionStoragePlugin;
     if (storage === 'localStoragePlugin') return this.localStoragePlugin;
     return;
   }
 
-  private addStoreReducerToNgrx<ITEM, ERROR>(
+  private addStoreReducerToNgrx<STATE>(
     storeName: string,
-    initialState: StoreState<ITEM, ERROR>
+    initialState: STATE
   ): void {
     if (
       this.reducerManager.currentReducers &&
@@ -87,36 +148,36 @@ export class StoreFactory {
     );
   }
 
-  private getActionReducer<ITEM, ERROR>(
+  private getActionReducer<STATE>(
     storeName: string,
-    initialState: StoreState<ITEM, ERROR>
-  ): ActionReducer<
-    StoreState<ITEM, ERROR>,
-    { payload: StoreState<ITEM, ERROR>; type: string }
-  > {
+    initialState: STATE
+  ): ActionReducer<STATE, { payload: STATE; type: string }> {
     return (
-      state: StoreState<ITEM, ERROR> = initialState,
-      action: { payload: StoreState<ITEM, ERROR>; type: string }
-    ): StoreState<ITEM, ERROR> =>
+      state: STATE = initialState,
+      action: { payload: STATE; type: string }
+    ): STATE =>
       action.type.startsWith(`[${storeName}]`)
         ? { ...state, ...action.payload }
         : state;
   }
 
-  private syncStoreChangesToClientStorage<ITEM, ERROR>(
+  private syncStoreChangesToClientStorage<STATE extends object>(
     storeName: string,
-    store: Store<ITEM, ERROR>,
-    storage?: storagePluginTypes
+    store: Store<STATE>,
+    storage?: StoragePluginTypes
   ) {
     store.state$.pipe(takeUntil(store.destroy$)).subscribe({
       next: (state) =>
-        this.getStoragePluginByKey(storage)?.setStateToStorage(storeName, state),
+        this.getStoragePluginByKey(storage)?.setStateToStorage(
+          storeName,
+          state
+        ),
     });
   }
 
-  private syncNgrxStoreChangesToStore<ITEM, ERROR>(
+  private syncNgrxStoreChangesToStore<STATE extends object>(
     storeName: string,
-    store: Store<ITEM, ERROR>
+    store: Store<STATE>
   ) {
     this.ngrxStore
       .pipe(

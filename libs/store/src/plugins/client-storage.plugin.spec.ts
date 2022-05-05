@@ -6,6 +6,11 @@ import {
 const getSpyGetItem = (storage: Storage) => spyOn(storage, 'getItem');
 const getSpySetItem = (storage: Storage) => spyOn(storage, 'setItem');
 
+interface MyState {
+  myState: string;
+  optionalValue?: string;
+}
+
 describe('sessionStorageHandlerForStores', () => {
   let storage: Storage;
   beforeEach(() => {
@@ -19,21 +24,20 @@ describe('sessionStorageHandlerForStores', () => {
 
         spyGetItem.and.returnValue(null);
 
-        expect(sessionStoragePlugin.getDefaultState('testStore1')).toEqual(
-          undefined
-        );
+        expect(
+          sessionStoragePlugin.getDefaultState<MyState>('testStore1')
+        ).toEqual(undefined);
       });
 
       it('should return state from storage', () => {
         const spyGetItem = getSpyGetItem(storage);
         spyGetItem.and.returnValue(
-          JSON.stringify({ isLoading: false, item: 'x' })
+          JSON.stringify(<MyState>{ myState: 'testValue' })
         );
 
-        expect(sessionStoragePlugin.getDefaultState('testStore1')).toEqual({
-          isLoading: false,
-          item: 'x',
-        });
+        expect(
+          sessionStoragePlugin.getDefaultState<MyState>('testStore1')
+        ).toEqual({ myState: 'testValue' });
       });
     });
   });
@@ -41,13 +45,13 @@ describe('sessionStorageHandlerForStores', () => {
   describe('onStateChange', () => {
     it('should set state to storage', () => {
       const spySetItem = getSpySetItem(storage);
-      sessionStoragePlugin.setStateToStorage('testStore1', {
-        isLoading: false,
+      sessionStoragePlugin.setStateToStorage<MyState>('testStore1', {
+        myState: 'testValue',
       });
 
       expect(spySetItem).toHaveBeenCalledWith(
         'testStore1',
-        JSON.stringify({ isLoading: false })
+        JSON.stringify(<MyState>{ myState: 'testValue' })
       );
     });
   });
@@ -74,12 +78,11 @@ describe('localStorageHandlerForStores', () => {
       it('should return state from storage', () => {
         const spyGetItem = getSpyGetItem(storage);
         spyGetItem.and.returnValue(
-          JSON.stringify({ isLoading: false, item: 'x' })
+          JSON.stringify(<MyState>{ myState: 'testValue' })
         );
 
-        expect(localStoragePlugin.getDefaultState('testStore1')).toEqual({
-          isLoading: false,
-          item: 'x',
+        expect(localStoragePlugin.getDefaultState<MyState>('testStore1')).toEqual({
+          myState: 'testValue'
         });
       });
     });
