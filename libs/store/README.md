@@ -55,25 +55,33 @@ npm: `npm install @ngrx/store @gernsdorfer/ngrx-lite`
 
 2. Create Your Store
 
+You have the same API as [@ngrx/component-store](https://ngrx.io/guide/component-store)
+
 ```ts
 
+export interface MyState {
+  counter: number
+}
 
 @Component({
   selector: 'my-component',
   template: '<button (click)="load(\'test\')">',
 })
 class MyComponent implements OnDestroy {
-  // create your store
-  private store = this.storeFactory.createStore<MyModel, MyError>('MyStore');
-  // listen on changes
-  public myState = this.store.state$;
+  // create a componentStore
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });
+  // read the state
+  public counterState$: Observable<MyState> = this.store.state$;
 
   constructor(private storeFactory: StoreFactory) {
   }
 
-  load() {
-    // update state
-    this.store.patchState({item: name}, 'UPDATE_NAME');
+  increment(counter: number) {
+    // patch your state
+    this.store.patchState({counter});
   }
 
   ngOnDestroy() {
@@ -84,26 +92,53 @@ class MyComponent implements OnDestroy {
 ```
 
 That's it 🥳
+
 ## Features
 
-### Loading Effects
+### Devtool support
 
-Create `createLoadingEffect` to set Loader State while an Effect is running
+Install and import [ngrx/store-devtools](https://ngrx.io/guide/store-devtools) und have all Features from the devtools
+for your component store
+
+Let's have a look into the the redux devtools whats going on, in the example above.
+
+##### Store is init
+
+After the store is init you can find the store in the @ngrx/devtools
+
+![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/component-store-devtools-init.png)
+
+##### Patch State
+
+After patch State you see this in your redux devtool.
+It's possbile to define an custom Actionname for your patch/set State
+
+![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/component-store-devtools-patch.png)
+
+### Loading Store
+
+Create LoaderStore to set a Loader State while an Effect is running. You have the same API as `createComponentStore` with an extra methode `loadingEffect`
 
 ```ts
+
+type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
 @Component({
   selector: 'my-app-basic-app',
   templateUrl: 'loading-effect.html',
 })
 export class LoadingEffectComponent implements OnDestroy {
-  private counterStore = this.storeFactory.createStore<number, never>(
-    'COUNTER_STORE'
-  );
+  // create your loading store 
+  private store = this.storeFactory.createLoadingStore<State['item'],
+    State['error']>({
+    storeName: 'LOADING_STORE',
+  });
 
-  public counterState$ = this.counterStore.state$;
+  // read the state
+  public counterState$: Observable<State> = this.store.state$;
 
-  public increment = this.counterStore.createLoadingEffect(
+  // define your loadingEffect to change the state
+  public increment = this.store.loadingEffect(
     'increment',
     (counter: number = 0) => of(counter + 1)
   );
@@ -112,11 +147,13 @@ export class LoadingEffectComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
+    // destory the store
     this.counterStore.ngOnDestroy();
   }
 }
 
 ```
+
 #### What's going on ? Let's have a look into the the redux devtools
 
 ##### Store is init
@@ -142,31 +179,6 @@ After an Effect run Successfully the `item` key is updated
 After an Effect run unsuccessfully the `error` key contains the error
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/error.png)
-
-
-### Change State without effects
-
-Every State Change's should have an custom name, to identify the action in your devtools. In the Example below you can
-see an Action named `[MyStore] RESET`.   
-If you didn't define an Action name you can see an Action `[MyStore] SET_STATE`.
-
-```ts
-class MyComponent implements OnDestroy {
-  private store = this.storeFactory.getStore<MyModel, MyError>('MyStore');
-
-  constructor(private storeFactory: StoreFactory) {
-  }
-
-  reset() {
-    // you cann see a `RESET` action in your Devtools
-    store.setState({isLoading: false}, 'RESET')
-  }
-
-  ngOnDestroy() {
-    this.store.ngOnDestroy();
-  }
-}
-```
 
 ### Session/Local Storage
 
@@ -195,14 +207,10 @@ class MyLCass {
 }
 ```
 
-### Devtool support
-
-Install and import [ngrx/store-devtools](https://ngrx.io/guide/store-devtools)
-
 ### Testing
 
 Import `storeTestingFactory` and write your test's An Example you can
-find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/basic/basic.component.spec.ts)
+find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts)
 
 ```ts
 TestBed.configureTestingModule({

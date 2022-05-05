@@ -3,7 +3,10 @@ import { getCustomAction, StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 const storeName = 'SHARED_ACTIONS';
 const actionName = 'increment';
-export const MyIncrementAction = getCustomAction<{ counter: number }>({
+interface MyState {
+  counter: number
+}
+export const MyIncrementAction = getCustomAction<MyState>({
   storeName: storeName,
   actionName: actionName,
 });
@@ -13,7 +16,7 @@ export const MyIncrementAction = getCustomAction<{ counter: number }>({
   templateUrl: 'example.html',
 })
 export class ExampleComponent {
-  private store = this.storeFactory.createComponentStore<{ counter: number }>({
+  private store = this.storeFactory.createComponentStore<MyState>({
     storeName,
     defaultState: {
       counter: 0,

@@ -6,26 +6,28 @@ sidebar_position: 1
 
 [Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app)
 
-[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/basic)
+[Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/basic)
 
 Create a Store that lives in Your Component Lifecycle
 
 ```ts title="app.component.ts"
-import { Component, OnDestroy } from '@angular/core';
-import { getDefaultState, StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { of } from 'rxjs';
+export interface MyState {
+  counter: number
+}
 
 @Component()
 export class CounterComponent implements OnDestroy {
-  private myStore = this.storeFactory.createStore<number, string>('counter');
-  
-  public myStoreState$ = this.counterStore.state$;
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });  
+  public myStoreState$ = this.store.state$;
 
   constructor(private storeFactory: StoreFactory) {
   }
 
   ngOnDestroy() {
-    this.counterStore.ngOnDestroy();
+    this.store.ngOnDestroy();
   }
 }
 ```
