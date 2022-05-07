@@ -34,6 +34,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PersistFormComponent } from './form-store/basic/persist-form.component';
+import { CombineWithEntityComponent } from './component-store/combine-with-entity/combine-with-entity.component';
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   imports: [
@@ -49,6 +51,7 @@ import { PersistFormComponent } from './form-store/basic/persist-form.component'
     RouterModule.forRoot(
       [
         { path: '', component: BasicComponent },
+        { path: 'combine-with-entity', component: CombineWithEntityComponent },
         { path: 'persist-form', component: PersistFormComponent },
         { path: 'loading-basic', component: LoadingBasicComponent },
         {
@@ -89,6 +92,7 @@ import { PersistFormComponent } from './form-store/basic/persist-form.component'
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     FormsModule,
+    MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     RouterStoreModule,
@@ -110,6 +114,7 @@ import { PersistFormComponent } from './form-store/basic/persist-form.component'
     DemoBComponent,
     BasicComponent,
     LoadingWithDefaultValuesComponent,
+    CombineWithEntityComponent,
     PersistFormComponent,
   ],
   bootstrap: [AppComponent],
