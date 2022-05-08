@@ -12,6 +12,7 @@ import {
   StateToken,
   StoreNameToken,
 } from '../injection-tokens/state.token';
+import {DevToolHelper} from "./component-store.service";
 
 describe('LoadingStore', () => {
   let store: ComponentLoadingStore<string, number>;
@@ -19,6 +20,7 @@ describe('LoadingStore', () => {
     dispatch: undefined,
   });
   const storeName = 'myStore';
+  const devToolHelper = new DevToolHelper()
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -30,6 +32,10 @@ describe('LoadingStore', () => {
         {
           provide: StateToken,
           useValue: getDefaultComponentLoadingState(),
+        },
+        {
+          provide: DevToolHelper,
+          useValue: devToolHelper,
         },
         provideMockStore({
           initialState: {},

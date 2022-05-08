@@ -1,11 +1,20 @@
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
 import { Inject, Injectable } from '@angular/core';
-import {
-  StateToken,
-  StoreNameToken,
-} from '../injection-tokens/state.token';
+import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
 import { Store as NgrxStore } from '@ngrx/store';
 import { getCustomAction } from './action-creator';
+
+export class DevToolHelper {
+  private _canChangeState = true;
+
+  set canChangeState(isLastIndex: boolean) {
+    this._canChangeState = isLastIndex;
+  }
+
+  get canChangeState() {
+    return this._canChangeState;
+  }
+}
 
 @Injectable({ providedIn: 'root' })
 export class ComponentStore<
@@ -13,6 +22,7 @@ export class ComponentStore<
 > extends NgrxComponentStore<STATE> {
   constructor(
     protected ngrxStore: NgrxStore,
+    protected devToolHelper: DevToolHelper,
     @Inject(StoreNameToken) protected storeName: string,
     @Inject(StateToken) state: STATE
   ) {
@@ -27,8 +37,17 @@ export class ComponentStore<
   override setState(
     stateOrUpdaterFn: ((state: STATE) => STATE) | STATE,
     action: string = 'SET_STATE',
-    skipLog?: boolean
+    {
+      skipLog,
+      forced,
+    }: {
+      skipLog?: boolean;
+      forced?: boolean;
+    } = {}
   ) {
+    if (!this.devToolHelper.canChangeState && !forced) {
+      return;
+    }
     const newState =
       typeof stateOrUpdaterFn === 'function'
         ? (stateOrUpdaterFn as unknown as any)(this.get())
@@ -43,6 +62,10 @@ export class ComponentStore<
       | ((state: STATE) => Partial<STATE>),
     action: string = 'PATCH_STATE'
   ) {
+    if (!this.devToolHelper.canChangeState) {
+      return;
+    }
+
     const newState =
       typeof partialStateOrUpdaterFn === 'function'
         ? partialStateOrUpdaterFn(this.get())
