@@ -20,6 +20,7 @@ type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
 @Injectable({ providedIn: 'root' })
 export class StoreFactory {
   constructor(
+    private devToolHelper: DevToolHelper,
     @Optional() private reducerManager: ReducerManager,
     @Optional() private ngrxStore: NgrxStore,
     @Optional() private storeDevtools: StoreDevtools,
@@ -54,12 +55,12 @@ export class StoreFactory {
     storeName,
     plugins,
     formGroup,
-                                                               skipLog
+    skipLog,
   }: {
     formGroup: FormGroup;
     storeName: string;
     plugins?: { storage?: StoragePluginTypes };
-    skipLog?: boolean
+    skipLog?: boolean;
   }): ComponentStore<FORM_STATE> {
     const store = this.createStoreByStoreType({
       storeName,
@@ -68,9 +69,11 @@ export class StoreFactory {
       CreatedStore: ComponentStore,
     });
     formGroup.patchValue(store.state);
-    formGroup.valueChanges
-      .pipe(takeUntil(store.destroy$))
-      .subscribe({ next: (value) => store.setState(value, 'Form_CHANGED',{skipLog}) });
+    formGroup.valueChanges.pipe(takeUntil(store.destroy$)).subscribe({
+      next: (value) => {
+        store.setState(value, 'Form_CHANGED', { skipLog });
+      },
+    });
 
     store.state$
       .pipe(
@@ -128,7 +131,7 @@ export class StoreFactory {
     plugins = {},
     additionalProviders = [],
   }: {
-    additionalProviders?: any[];
+    additionalProviders?: never[];
     CreatedStore: Stores;
     defaultState: STATE;
     storeName: string;
@@ -140,11 +143,11 @@ export class StoreFactory {
       defaultState,
       storage
     );
-    const devToolHelper = new DevToolHelper();
+
     const store = Injector.create({
       providers: [
         { provide: CreatedStore },
-        { provide: DevToolHelper, useValue: devToolHelper },
+        { provide: DevToolHelper, useValue: this.devToolHelper },
         { provide: NgrxStore, useValue: this.ngrxStore },
         { provide: StoreNameToken, useValue: storeName },
         { provide: StateToken, useValue: initialState },
@@ -153,7 +156,7 @@ export class StoreFactory {
     }).get(CreatedStore);
     this.addStoreReducerToNgrx<STATE>(storeName, initialState);
     this.syncStoreChangesToClientStorage(storeName, store, storage);
-    this.syncNgrxDevtoolStateToStore<STATE>(storeName, store, devToolHelper);
+    this.syncNgrxDevtoolStateToStore<STATE>(storeName, store);
 
     return store;
   }
@@ -216,14 +219,14 @@ export class StoreFactory {
 
   private syncNgrxDevtoolStateToStore<STATE extends object>(
     storeName: string,
-    store: ComponentStore<STATE>,
-    devToolHelper: DevToolHelper
+    store: ComponentStore<STATE>
   ) {
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
       next: ({ computedStates, currentStateIndex, stagedActionIds }) => {
-        devToolHelper.canChangeState =
-          currentStateIndex === stagedActionIds.length - 1;
-        if (!devToolHelper.canChangeState) {
+        this.devToolHelper.setCanChangeState(
+          currentStateIndex === stagedActionIds.length - 1
+        );
+        if (!this.devToolHelper.canChangeState()) {
           store.setState(
             computedStates[currentStateIndex].state[storeName],
             '',
