@@ -11,7 +11,7 @@ import { cold } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
 import { defer, EMPTY } from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { StoreFactory } from './store-factory.service';
 import { DevToolHelper } from './component-store.service';
 
 interface MyState {

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterStore } from './router-service';
-import { RouterStoreModule } from '@gernsdorfer/ngrx-lite';
+import { RouterStoreModule } from './router-store.module';
 
 describe('RouterStoreModule', () => {
   const routerStore = jasmine.createSpyObj<RouterStore>('router', {

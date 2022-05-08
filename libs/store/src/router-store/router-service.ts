@@ -1,10 +1,10 @@
-import { Injectable, OnInit } from '@angular/core';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { Injectable } from '@angular/core';
+import { StoreFactory } from '../services';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, from, map, switchMap, takeUntil } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class RouterStore  {
+export class RouterStore {
   private store = this.storeFactory.createComponentStore<{ url?: string }>({
     storeName: 'ROUTER_STORE',
     defaultState: {},
