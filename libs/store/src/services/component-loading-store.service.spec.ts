@@ -9,9 +9,9 @@ import {
   getDefaultComponentLoadingState,
 } from './component-loading-store.service';
 import {
-  DefaultLoadingStateToken,
+  StateToken,
   StoreNameToken,
-} from '../injection-tokens/default-loading-state.token';
+} from '../injection-tokens/state.token';
 
 describe('LoadingStore', () => {
   let store: ComponentLoadingStore<string, number>;
@@ -28,7 +28,7 @@ describe('LoadingStore', () => {
           useValue: storeName,
         },
         {
-          provide: DefaultLoadingStateToken,
+          provide: StateToken,
           useValue: getDefaultComponentLoadingState(),
         },
         provideMockStore({

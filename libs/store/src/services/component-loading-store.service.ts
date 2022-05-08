@@ -3,9 +3,9 @@ import { Observable, switchMap, tap } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
 import { LoadingStoreState } from '../models';
 import {
-  DefaultLoadingStateToken,
+  StateToken,
   StoreNameToken,
-} from '../injection-tokens/default-loading-state.token';
+} from '../injection-tokens/state.token';
 import { Store as NgrxStore } from '@ngrx/store';
 import { getEffectActionName } from './action-creator';
 import { EffectStates } from '../enums/effect-states.enum';
@@ -30,7 +30,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   constructor(
     ngrxStore: NgrxStore,
     @Inject(StoreNameToken) storeName: string,
-    @Inject(DefaultLoadingStateToken) state: LoadingStoreState<ITEM, ERROR>
+    @Inject(StateToken) state: LoadingStoreState<ITEM, ERROR>
   ) {
     super(ngrxStore, storeName, state);
   }

@@ -1,9 +1,9 @@
 import { Inject, Injectable, Injector, Optional } from '@angular/core';
 
 import {
-  DefaultLoadingStateToken,
+  StateToken,
   StoreNameToken,
-} from '../injection-tokens/default-loading-state.token';
+} from '../injection-tokens/state.token';
 import {
   ComponentLoadingStore,
   getDefaultComponentLoadingState,
@@ -144,7 +144,7 @@ export class StoreFactory {
         { provide: CreatedStore },
         { provide: NgrxStore, useValue: this.ngrxStore },
         { provide: StoreNameToken, useValue: storeName },
-        { provide: DefaultLoadingStateToken, useValue: initialState },
+        { provide: StateToken, useValue: initialState },
         ...additionalProviders,
       ],
     }).get(CreatedStore);
