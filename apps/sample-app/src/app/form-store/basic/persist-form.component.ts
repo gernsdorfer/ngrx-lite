@@ -19,12 +19,10 @@ export class PersistFormComponent implements OnDestroy {
   private store = this.storeFactory.createFormComponentStore<Product>({
     storeName: 'PRODUCT_FORM',
     plugins: {
-      storage: 'sessionStoragePlugin'
+      storage: 'sessionStoragePlugin',
     },
-    formGroup: this.productForm
+    formGroup: this.productForm,
   });
-
-
 
   constructor(private storeFactory: StoreFactory) {}
 

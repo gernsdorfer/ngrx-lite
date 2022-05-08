@@ -54,10 +54,12 @@ export class StoreFactory {
     storeName,
     plugins,
     formGroup,
+                                                               skipLog
   }: {
     formGroup: FormGroup;
     storeName: string;
     plugins?: { storage?: StoragePluginTypes };
+    skipLog?: boolean
   }): ComponentStore<FORM_STATE> {
     const store = this.createStoreByStoreType({
       storeName,
@@ -68,7 +70,7 @@ export class StoreFactory {
     formGroup.patchValue(store.state);
     formGroup.valueChanges
       .pipe(takeUntil(store.destroy$))
-      .subscribe({ next: (value) => store.setState(value) });
+      .subscribe({ next: (value) => store.setState(value, 'Form_CHANGED',{skipLog}) });
 
     store.state$
       .pipe(
