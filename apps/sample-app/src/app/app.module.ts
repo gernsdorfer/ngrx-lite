@@ -29,6 +29,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { PersistFormComponent } from './form-store/basic/persist-form.component';
 
 @NgModule({
   imports: [
@@ -44,6 +48,7 @@ import { LoadingWithDefaultValuesComponent } from './loading-store/default-value
     RouterModule.forRoot(
       [
         { path: '', component: BasicComponent },
+        { path: 'persist-form', component: PersistFormComponent },
         { path: 'loading-basic', component: LoadingBasicComponent },
         {
           path: 'loading-with-default-values',
@@ -81,6 +86,10 @@ import { LoadingWithDefaultValuesComponent } from './loading-store/default-value
     MatCardModule,
     MatToolbarModule,
     MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [
     CounterStore,
@@ -99,6 +108,7 @@ import { LoadingWithDefaultValuesComponent } from './loading-store/default-value
     DemoBComponent,
     BasicComponent,
     LoadingWithDefaultValuesComponent,
+    PersistFormComponent,
   ],
   bootstrap: [AppComponent],
 })

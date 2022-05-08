@@ -12,7 +12,7 @@ interface MyState {
   optionalValue?: string;
 }
 
-describe('Store', () => {
+describe('ComponentStore', () => {
   let store: ComponentStore<MyState>;
   const defaultStore: MyState = { myState: '' };
   const mockStore = jasmine.createSpyObj<MockStore>('MockStore', {

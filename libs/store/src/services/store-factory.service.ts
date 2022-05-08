@@ -14,6 +14,7 @@ import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { filter, map, takeUntil } from 'rxjs';
 import { ComponentStore } from './component-store.service';
+import { FormGroup } from '@angular/forms';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
@@ -48,6 +49,41 @@ export class StoreFactory {
       defaultState,
       CreatedStore: ComponentStore,
     });
+  }
+
+  public createFormComponentStore<FORM_STATE extends object>({
+    storeName,
+    plugins,
+    formGroup,
+  }: {
+    formGroup: FormGroup;
+    storeName: string;
+    plugins?: { storage?: StoragePluginTypes };
+  }): ComponentStore<FORM_STATE> {
+    const store = this.createStoreByStoreType({
+      storeName,
+      plugins,
+      defaultState: formGroup.getRawValue(),
+      CreatedStore: ComponentStore,
+    });
+    formGroup.patchValue(store.state);
+    formGroup.valueChanges
+      .pipe(takeUntil(store.destroy$))
+      .subscribe({ next: (value) => store.setState(value) });
+
+    store.state$
+      .pipe(
+        takeUntil(store.destroy$),
+        filter(
+          (state) =>
+            JSON.stringify(state) !== JSON.stringify(formGroup.getRawValue())
+        )
+      )
+      .subscribe({
+        next: (state) => formGroup.patchValue(state),
+      });
+
+    return store;
   }
 
   /** @deprecated use createComponentLoadingStore instead, this methode will be removed in the next major version */
@@ -89,7 +125,9 @@ export class StoreFactory {
     storeName,
     defaultState,
     plugins = {},
+    additionalProviders = [],
   }: {
+    additionalProviders?: any[];
     CreatedStore: Stores;
     defaultState: STATE;
     storeName: string;
@@ -107,6 +145,7 @@ export class StoreFactory {
         { provide: NgrxStore, useValue: this.ngrxStore },
         { provide: StoreNameToken, useValue: storeName },
         { provide: DefaultLoadingStateToken, useValue: initialState },
+        ...additionalProviders,
       ],
     }).get(CreatedStore);
     this.addStoreReducerToNgrx<STATE>(storeName, initialState);

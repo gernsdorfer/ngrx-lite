@@ -7,6 +7,8 @@ import { ReducerManager } from '@ngrx/store';
 import { getDefaultComponentLoadingState } from './component-loading-store.service';
 import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { cold } from 'jasmine-marbles';
 
 interface MyState {
   myState: string;
@@ -68,7 +70,7 @@ describe('StoreFactory', () => {
     mockStore = TestBed.inject(MockStore);
   });
 
-  describe('createStore', () => {
+  describe('createComponentStore', () => {
     describe('initialState', () => {
       beforeEach(() => {
         localStoragePlugin.getDefaultState.and.returnValue(<MyState>{
@@ -122,6 +124,113 @@ describe('StoreFactory', () => {
     });
   });
 
+  describe('createFormComponentStore', () => {
+    const myForm = new FormGroup(<{ [index in keyof MyState]: FormControl }>{
+      myState: new FormControl('', [Validators.required]),
+      optionalValue: new FormControl(''),
+    });
+    const defaultFormState = {
+      ...defaultMyState,
+      optionalValue: '',
+    };
+    beforeEach(() => {
+      myForm.reset({ ...defaultMyState, optionalValue: '' });
+    });
+    describe('initialState', () => {
+      beforeEach(() => {
+        myForm.reset({ ...defaultFormState, optionalValue: '' });
+        localStoragePlugin.getDefaultState.and.returnValue(<MyState>{
+          ...defaultFormState,
+          optionalValue: 'testDataFromLocalStorage',
+        });
+        sessionStoragePlugin.getDefaultState.and.returnValue(<MyState>{
+          ...defaultFormState,
+          optionalValue: 'testDataFromSessionStorage',
+        });
+      });
+
+      it('should return default initial state', () => {
+        const { state } = storeFactory.createFormComponentStore<MyState>({
+          storeName: 'myStore',
+          formGroup: myForm,
+        });
+
+        expect(state).toEqual(defaultFormState);
+      });
+
+      it('should return state from sessionStorage plugin', () => {
+        const { state } = storeFactory.createFormComponentStore<MyState>({
+          storeName: 'myStore',
+          formGroup: myForm,
+          plugins: {
+            storage: 'sessionStoragePlugin',
+          },
+        });
+
+        expect(state).toEqual({
+          ...defaultFormState,
+          optionalValue: 'testDataFromSessionStorage',
+        });
+      });
+
+      it('should return state from localeStorage plugin', () => {
+        const { state } = storeFactory.createFormComponentStore<MyState>({
+          storeName: 'myStore',
+          formGroup: myForm,
+          plugins: {
+            storage: 'localStoragePlugin',
+          },
+        });
+
+        expect(state).toEqual({
+          ...defaultFormState,
+          optionalValue: 'testDataFromLocalStorage',
+        });
+      });
+    });
+
+    it('should set formChanges to state', () => {
+      const { state$ } = storeFactory.createFormComponentStore<MyState>({
+        storeName: 'myStore',
+        formGroup: myForm,
+      });
+
+      myForm.patchValue({ myState: 'Test' });
+
+      expect(state$).toBeObservable(
+        cold('a', {
+          a: {
+            ...defaultFormState,
+            myState: 'Test',
+          },
+        })
+      );
+    });
+
+    it('should set stateChanges to store', () => {
+      const { state$ } = storeFactory.createFormComponentStore<MyState>({
+        storeName: 'myStore',
+        formGroup: myForm,
+      });
+
+      mockStore.setState({
+        myStore: <MyState>{
+          ...defaultFormState,
+          myState: 'newValue',
+        },
+      });
+
+      expect(state$).toBeObservable(
+        cold('a', {
+          a: {
+            ...defaultFormState,
+            myState: 'newValue',
+          },
+        })
+      );
+    });
+  });
+
   describe('createStore', () => {
     describe('initialState', () => {
       beforeEach(() => {
@@ -162,6 +271,64 @@ describe('StoreFactory', () => {
             storage: 'localStoragePlugin',
           }
         );
+
+        expect(state).toEqual({
+          ...getDefaultComponentLoadingState(),
+          item: 'defaultValueFromSessionStore',
+        });
+      });
+    });
+  });
+
+  describe('createComponentLoadingStore', () => {
+    describe('initialState', () => {
+      beforeEach(() => {
+        localStoragePlugin.getDefaultState.and.returnValue({
+          ...getDefaultComponentLoadingState(),
+          item: 'defaultValueFromSessionStore',
+        });
+        sessionStoragePlugin.getDefaultState.and.returnValue({
+          ...getDefaultComponentLoadingState(),
+          item: 'defaultValueFromLocalStore',
+        });
+      });
+
+      it('should return default initial state', () => {
+        const { state } = storeFactory.createComponentLoadingStore<
+          string,
+          number
+        >({ storeName: 'testStore' });
+
+        expect(state).toEqual(getDefaultComponentLoadingState());
+      });
+
+      it('should return state from sessionStorage plugin', () => {
+        const { state } = storeFactory.createComponentLoadingStore<
+          string,
+          number
+        >({
+          storeName: 'testStore',
+          plugins: {
+            storage: 'sessionStoragePlugin',
+          },
+        });
+
+        expect(state).toEqual({
+          ...getDefaultComponentLoadingState(),
+          item: 'defaultValueFromLocalStore',
+        });
+      });
+
+      it('should return state from localeStorage plugin', () => {
+        const { state } = storeFactory.createComponentLoadingStore<
+          string,
+          number
+        >({
+          storeName: 'testStore',
+          plugins: {
+            storage: 'localStoragePlugin',
+          },
+        });
 
         expect(state).toEqual({
           ...getDefaultComponentLoadingState(),
