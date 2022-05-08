@@ -1,9 +1,6 @@
 import { Inject, Injectable, Injector, Optional } from '@angular/core';
 
-import {
-  StateToken,
-  StoreNameToken,
-} from '../injection-tokens/state.token';
+import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
 import {
   ComponentLoadingStore,
   getDefaultComponentLoadingState,
@@ -12,9 +9,10 @@ import { ClientStoragePlugin, LoadingStoreState } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
-import { filter, map, takeUntil } from 'rxjs';
-import { ComponentStore } from './component-store.service';
+import { filter, takeUntil } from 'rxjs';
+import { ComponentStore, DevToolHelper } from './component-store.service';
 import { FormGroup } from '@angular/forms';
+import { StoreDevtools } from '@ngrx/store-devtools';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
@@ -24,6 +22,7 @@ export class StoreFactory {
   constructor(
     @Optional() private reducerManager: ReducerManager,
     @Optional() private ngrxStore: NgrxStore,
+    @Optional() private storeDevtools: StoreDevtools,
     @Optional()
     @Inject(SessionStoragePlugin)
     private sessionStoragePlugin: ClientStoragePlugin,
@@ -139,9 +138,11 @@ export class StoreFactory {
       defaultState,
       storage
     );
+    const devToolHelper = new DevToolHelper();
     const store = Injector.create({
       providers: [
         { provide: CreatedStore },
+        { provide: DevToolHelper, useValue: devToolHelper },
         { provide: NgrxStore, useValue: this.ngrxStore },
         { provide: StoreNameToken, useValue: storeName },
         { provide: StateToken, useValue: initialState },
@@ -150,7 +151,7 @@ export class StoreFactory {
     }).get(CreatedStore);
     this.addStoreReducerToNgrx<STATE>(storeName, initialState);
     this.syncStoreChangesToClientStorage(storeName, store, storage);
-    this.syncNgrxStoreChangesToStore<STATE>(storeName, store);
+    this.syncNgrxDevtoolStateToStore<STATE>(storeName, store, devToolHelper);
 
     return store;
   }
@@ -178,7 +179,6 @@ export class StoreFactory {
     storeName: string,
     initialState: STATE
   ): void {
-
     this.reducerManager.addReducer(
       storeName,
       this.getActionReducer(storeName, initialState)
@@ -212,20 +212,27 @@ export class StoreFactory {
     });
   }
 
-  private syncNgrxStoreChangesToStore<STATE extends object>(
+  private syncNgrxDevtoolStateToStore<STATE extends object>(
     storeName: string,
-    store: ComponentStore<STATE>
+    store: ComponentStore<STATE>,
+    devToolHelper: DevToolHelper
   ) {
-    this.ngrxStore
-      .pipe(
-        takeUntil(store.destroy$),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        filter((ngrxState: { [index: string]: any }) => !!ngrxState[storeName]),
-        map((ngrxState) => ngrxState[storeName])
-      )
-      .subscribe({
-        next: (state) => store.setState(state, '', true),
-      });
+    this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
+      next: ({ computedStates, currentStateIndex, stagedActionIds }) => {
+        devToolHelper.canChangeState =
+          currentStateIndex === stagedActionIds.length - 1;
+        if (!devToolHelper.canChangeState) {
+          store.setState(
+            computedStates[currentStateIndex].state[storeName],
+            '',
+            {
+              skipLog: true,
+              forced: true,
+            }
+          );
+        }
+      },
+    });
   }
 
   private checkNgrxStoreIsInstalled() {

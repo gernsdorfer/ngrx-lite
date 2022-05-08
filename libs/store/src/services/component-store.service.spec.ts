@@ -1,11 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { getCustomAction } from './action-creator';
-import { ComponentStore } from './component-store.service';
-import {
-  StateToken,
-  StoreNameToken,
-} from '../injection-tokens/state.token';
+import { ComponentStore, DevToolHelper } from './component-store.service';
+import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
 
 interface MyState {
   myState: string;
@@ -18,14 +15,20 @@ describe('ComponentStore', () => {
   const mockStore = jasmine.createSpyObj<MockStore>('MockStore', {
     dispatch: undefined,
   });
+  const devToolHelper = new DevToolHelper();
   const storeName = 'myStore';
 
   beforeEach(() => {
+    devToolHelper.canChangeState = true;
     TestBed.configureTestingModule({
       providers: [
         {
           provide: StoreNameToken,
           useValue: storeName,
+        },
+        {
+          provide: DevToolHelper,
+          useValue: devToolHelper,
         },
         {
           provide: StateToken,
@@ -87,6 +90,26 @@ describe('ComponentStore', () => {
       expect(store.state).toEqual({ ...defaultStore, optionalValue: 'test' });
     });
 
+    describe('can not change state', () => {
+      beforeEach(() => {
+        devToolHelper.canChangeState = false;
+      });
+      it('should not set state if can not changed', () => {
+        store.setState((state) => ({ ...state, optionalValue: 'test' }));
+
+        expect(store.state).toEqual({ ...defaultStore });
+      });
+
+      it('should not set state setState is forced', () => {
+        store.setState((state) => ({ ...state, optionalValue: 'test' }), '', {
+          skipLog: true,
+          forced: true,
+        });
+
+        expect(store.state).toEqual({ ...defaultStore, optionalValue: 'test' });
+      });
+    });
+
     it('should dispatch action with default actionName `SET_STATE`', () => {
       mockStore.dispatch.calls.reset();
 
@@ -115,7 +138,7 @@ describe('ComponentStore', () => {
 
     it('should not dispatch action for skipLog', () => {
       mockStore.dispatch.calls.reset();
-      store.setState(defaultStore, 'myCustomAction', true);
+      store.setState(defaultStore, 'myCustomAction', { skipLog: true });
 
       expect(mockStore.dispatch).not.toHaveBeenCalled();
     });
@@ -143,6 +166,17 @@ describe('ComponentStore', () => {
       expect(store.state).toEqual({
         ...defaultStore,
         optionalValue: 'newValue',
+      });
+    });
+
+    describe('can not change state', () => {
+      beforeEach(() => {
+        devToolHelper.canChangeState = false;
+      });
+      it('should not set state if can not changed', () => {
+        store.patchState((state) => ({ ...state, optionalValue: 'test' }));
+
+        expect(store.state).toEqual({ ...defaultStore });
       });
     });
 
