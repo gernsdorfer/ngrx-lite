@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ClientStoragePlugin, LoadingStoreState } from '../models';
+import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { StoreFactory } from './store-factory.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -7,6 +7,8 @@ import { ReducerManager } from '@ngrx/store';
 import { getDefaultComponentLoadingState } from './component-loading-store.service';
 import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { cold } from 'jasmine-marbles';
 
 interface MyState {
   myState: string;
@@ -68,7 +70,7 @@ describe('StoreFactory', () => {
     mockStore = TestBed.inject(MockStore);
   });
 
-  describe('createStore', () => {
+  describe('createComponentStore', () => {
     describe('initialState', () => {
       beforeEach(() => {
         localStoragePlugin.getDefaultState.and.returnValue(<MyState>{
@@ -122,6 +124,113 @@ describe('StoreFactory', () => {
     });
   });
 
+  describe('createFormComponentStore', () => {
+    const myForm = new FormGroup(<{ [index in keyof MyState]: FormControl }>{
+      myState: new FormControl('', [Validators.required]),
+      optionalValue: new FormControl(''),
+    });
+    const defaultFormState = {
+      ...defaultMyState,
+      optionalValue: '',
+    };
+    beforeEach(() => {
+      myForm.reset({ ...defaultMyState, optionalValue: '' });
+    });
+    describe('initialState', () => {
+      beforeEach(() => {
+        myForm.reset({ ...defaultFormState, optionalValue: '' });
+        localStoragePlugin.getDefaultState.and.returnValue(<MyState>{
+          ...defaultFormState,
+          optionalValue: 'testDataFromLocalStorage',
+        });
+        sessionStoragePlugin.getDefaultState.and.returnValue(<MyState>{
+          ...defaultFormState,
+          optionalValue: 'testDataFromSessionStorage',
+        });
+      });
+
+      it('should return default initial state', () => {
+        const { state } = storeFactory.createFormComponentStore<MyState>({
+          storeName: 'myStore',
+          formGroup: myForm,
+        });
+
+        expect(state).toEqual(defaultFormState);
+      });
+
+      it('should return state from sessionStorage plugin', () => {
+        const { state } = storeFactory.createFormComponentStore<MyState>({
+          storeName: 'myStore',
+          formGroup: myForm,
+          plugins: {
+            storage: 'sessionStoragePlugin',
+          },
+        });
+
+        expect(state).toEqual({
+          ...defaultFormState,
+          optionalValue: 'testDataFromSessionStorage',
+        });
+      });
+
+      it('should return state from localeStorage plugin', () => {
+        const { state } = storeFactory.createFormComponentStore<MyState>({
+          storeName: 'myStore',
+          formGroup: myForm,
+          plugins: {
+            storage: 'localStoragePlugin',
+          },
+        });
+
+        expect(state).toEqual({
+          ...defaultFormState,
+          optionalValue: 'testDataFromLocalStorage',
+        });
+      });
+    });
+
+    it('should set formChanges to state', () => {
+      const { state$ } = storeFactory.createFormComponentStore<MyState>({
+        storeName: 'myStore',
+        formGroup: myForm,
+      });
+
+      myForm.patchValue({ myState: 'Test' });
+
+      expect(state$).toBeObservable(
+        cold('a', {
+          a: {
+            ...defaultFormState,
+            myState: 'Test',
+          },
+        })
+      );
+    });
+
+    it('should set stateChanges to store', () => {
+      const { state$ } = storeFactory.createFormComponentStore<MyState>({
+        storeName: 'myStore',
+        formGroup: myForm,
+      });
+
+      mockStore.setState({
+        myStore: <MyState>{
+          ...defaultFormState,
+          myState: 'newValue',
+        },
+      });
+
+      expect(state$).toBeObservable(
+        cold('a', {
+          a: {
+            ...defaultFormState,
+            myState: 'newValue',
+          },
+        })
+      );
+    });
+  });
+
   describe('createStore', () => {
     describe('initialState', () => {
       beforeEach(() => {
@@ -171,12 +280,73 @@ describe('StoreFactory', () => {
     });
   });
 
+  describe('createComponentLoadingStore', () => {
+    describe('initialState', () => {
+      beforeEach(() => {
+        localStoragePlugin.getDefaultState.and.returnValue({
+          ...getDefaultComponentLoadingState(),
+          item: 'defaultValueFromSessionStore',
+        });
+        sessionStoragePlugin.getDefaultState.and.returnValue({
+          ...getDefaultComponentLoadingState(),
+          item: 'defaultValueFromLocalStore',
+        });
+      });
+
+      it('should return default initial state', () => {
+        const { state } = storeFactory.createComponentLoadingStore<
+          string,
+          number
+        >({ storeName: 'testStore' });
+
+        expect(state).toEqual(getDefaultComponentLoadingState());
+      });
+
+      it('should return state from sessionStorage plugin', () => {
+        const { state } = storeFactory.createComponentLoadingStore<
+          string,
+          number
+        >({
+          storeName: 'testStore',
+          plugins: {
+            storage: 'sessionStoragePlugin',
+          },
+        });
+
+        expect(state).toEqual({
+          ...getDefaultComponentLoadingState(),
+          item: 'defaultValueFromLocalStore',
+        });
+      });
+
+      it('should return state from localeStorage plugin', () => {
+        const { state } = storeFactory.createComponentLoadingStore<
+          string,
+          number
+        >({
+          storeName: 'testStore',
+          plugins: {
+            storage: 'localStoragePlugin',
+          },
+        });
+
+        expect(state).toEqual({
+          ...getDefaultComponentLoadingState(),
+          item: 'defaultValueFromSessionStore',
+        });
+      });
+    });
+  });
+
   describe('ngrxStore', () => {
     describe('add store to reducerManager', () => {
       it('should add addReducer for store', () => {
         reducerManager.addReducer.calls.reset();
 
-        storeFactory.createStore<string, number>('testStore');
+        storeFactory.createComponentStore<MyState>({
+          storeName: 'testStore',
+          defaultState: defaultMyState,
+        });
 
         expect(reducerManager.addReducer.calls.argsFor(0)[0]).toBe('testStore');
       });
@@ -192,7 +362,10 @@ describe('StoreFactory', () => {
         });
       });
       it('should ignore action from other store', () => {
-        storeFactory.createStore<string, never>('testStore');
+        storeFactory.createComponentStore<MyState>({
+          storeName: 'testStore',
+          defaultState: defaultMyState,
+        });
 
         expect(
           actionReducer(
@@ -211,7 +384,10 @@ describe('StoreFactory', () => {
 
       describe('action is current store action', () => {
         it('should merge state with payload', () => {
-          storeFactory.createStore<string, never>('testStore');
+          storeFactory.createComponentStore<MyState>({
+            storeName: 'testStore',
+            defaultState: defaultMyState,
+          });
 
           expect(
             actionReducer(
@@ -227,7 +403,10 @@ describe('StoreFactory', () => {
         });
 
         it('should return merge default state with payload', () => {
-          storeFactory.createStore<string, never>('testStore');
+          storeFactory.createComponentStore<MyState>({
+            storeName: 'testStore',
+            defaultState: defaultMyState,
+          });
 
           expect(
             actionReducer(
@@ -236,14 +415,10 @@ describe('StoreFactory', () => {
                 actionName: 'LOAD',
                 storeName: 'testStore',
               })({
-                payload: { isLoading: true, item: 'test' },
+                payload: defaultMyState,
               })
             )
-          ).toEqual({
-            ...getDefaultComponentLoadingState(),
-            isLoading: true,
-            item: 'test',
-          });
+          ).toEqual(defaultMyState);
         });
       });
     });
@@ -251,53 +426,44 @@ describe('StoreFactory', () => {
     describe('set state from ngrx/store', () => {
       describe('ngrx/Store change is current store', () => {
         it('should set state from ngrx/store', () => {
-          const store = storeFactory.createStore<string, never>('testStore');
-          mockStore.setState({
-            testStore: <LoadingStoreState<string, never>>{
-              isLoading: false,
-              item: 'testValue',
-            },
+          const store = storeFactory.createComponentStore<MyState>({
+            storeName: 'testStore',
+            defaultState: defaultMyState,
           });
 
-          expect(store.state).toEqual(<LoadingStoreState<string, never>>{
-            isLoading: false,
-            item: 'testValue',
+          mockStore.setState({
+            testStore: defaultMyState,
           });
+
+          expect(store.state).toEqual(defaultMyState);
         });
 
         it('should log setState to avoid deduplicate actions', () => {
-          const store = storeFactory.createStore<string, never>('testStore');
+          const store = storeFactory.createComponentStore<MyState>({
+            storeName: 'testStore',
+            defaultState: defaultMyState,
+          });
           const setStateSpy = spyOn(store, 'setState');
 
           mockStore.setState({
-            testStore: <LoadingStoreState<string, never>>{
-              isLoading: false,
-              item: 'testValue',
-            },
+            testStore: defaultMyState,
           });
 
-          expect(setStateSpy).toHaveBeenCalledWith(
-            {
-              isLoading: false,
-              item: 'testValue',
-            },
-            '',
-            true
-          );
+          expect(setStateSpy).toHaveBeenCalledWith(defaultMyState, '', true);
         });
       });
 
       it('should ignore other store', () => {
-        const store = storeFactory.createStore<string, never>('testStore');
-
-        mockStore.setState({
-          otherStore: <LoadingStoreState<string, never>>{
-            isLoading: false,
-            item: 'testValue',
-          },
+        const store = storeFactory.createComponentStore<MyState>({
+          storeName: 'testStore',
+          defaultState: defaultMyState,
         });
 
-        expect(store.state).toEqual(getDefaultComponentLoadingState());
+        mockStore.setState({
+          otherStore: { ...defaultMyState, myState: 'newValue' },
+        });
+
+        expect(store.state).toEqual(defaultMyState);
       });
     });
 
@@ -305,30 +471,38 @@ describe('StoreFactory', () => {
 
   describe('store state changes to ClientStoragePlugins', () => {
     it('should store changes to session storage', () => {
-      const store = storeFactory.createStore<string, never>('myStore', {
-        storage: 'sessionStoragePlugin',
+      const store = storeFactory.createComponentStore<MyState>({
+        storeName: 'testStore',
+        defaultState: defaultMyState,
+        plugins: {
+          storage: 'sessionStoragePlugin',
+        },
       });
 
       sessionStoragePlugin.setStateToStorage.calls.reset();
-      store.setState({ isLoading: true, item: 'test' });
+      store.setState({ ...defaultMyState, myState: 'test' });
 
       expect(sessionStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
-        'myStore',
-        { isLoading: true, item: 'test' }
+        'testStore',
+        { ...defaultMyState, myState: 'test' }
       );
     });
 
     it('should store changes to localStorage storage', () => {
-      const store = storeFactory.createStore<string, never>('myStore', {
-        storage: 'localStoragePlugin',
+      const store = storeFactory.createComponentStore<MyState>({
+        storeName: 'testStore',
+        defaultState: defaultMyState,
+        plugins: {
+          storage: 'localStoragePlugin',
+        },
       });
 
       localStoragePlugin.setStateToStorage.calls.reset();
-      store.setState({ isLoading: true, item: 'test' });
+      store.setState({ ...defaultMyState, myState: 'test' });
 
       expect(localStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
-        'myStore',
-        { isLoading: true, item: 'test' }
+        'testStore',
+        { ...defaultMyState, myState: 'test' }
       );
     });
   });

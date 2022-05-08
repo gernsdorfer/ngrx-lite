@@ -3,16 +3,16 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { getCustomAction } from './action-creator';
 import { ComponentStore } from './component-store.service';
 import {
-  DefaultLoadingStateToken,
+  StateToken,
   StoreNameToken,
-} from '../injection-tokens/default-loading-state.token';
+} from '../injection-tokens/state.token';
 
 interface MyState {
   myState: string;
   optionalValue?: string;
 }
 
-describe('Store', () => {
+describe('ComponentStore', () => {
   let store: ComponentStore<MyState>;
   const defaultStore: MyState = { myState: '' };
   const mockStore = jasmine.createSpyObj<MockStore>('MockStore', {
@@ -28,7 +28,7 @@ describe('Store', () => {
           useValue: storeName,
         },
         {
-          provide: DefaultLoadingStateToken,
+          provide: StateToken,
           useValue: <MyState>{ myState: '' },
         },
         provideMockStore({

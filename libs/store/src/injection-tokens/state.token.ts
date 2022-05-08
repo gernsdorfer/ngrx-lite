@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-export const DefaultLoadingStateToken = new InjectionToken(
-  'DefaultLoadingState'
+export const StateToken = new InjectionToken(
+  'StateToken'
 );
 export const StoreNameToken = new InjectionToken<string>('StoreNameToken');
