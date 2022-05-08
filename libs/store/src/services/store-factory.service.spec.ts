@@ -181,14 +181,7 @@ describe('StoreFactory', () => {
         expect(reducerManager.addReducer.calls.argsFor(0)[0]).toBe('testStore');
       });
 
-      it('should warn for override store', () => {
-        const spyWarn = spyOn(console, 'warn');
-        storeFactory.createStore<string, number>('oldStore');
 
-        expect(spyWarn).toHaveBeenCalledWith(
-          'store oldStore exists, changes will be override. Please destroy your store or rename it before create a new one'
-        );
-      });
     });
 
     describe('add state to ngrx/store', () => {
@@ -308,14 +301,6 @@ describe('StoreFactory', () => {
       });
     });
 
-    it('should removeReducer after destroy the store', () => {
-      const myStore = storeFactory.createStore<string, number>('myStory');
-      reducerManager.removeReducer.calls.reset();
-
-      myStore.ngOnDestroy();
-
-      expect(reducerManager.removeReducer).toHaveBeenCalledWith('myStory');
-    });
   });
 
   describe('store state changes to ClientStoragePlugins', () => {

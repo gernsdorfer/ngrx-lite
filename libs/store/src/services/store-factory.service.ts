@@ -112,9 +112,7 @@ export class StoreFactory {
     this.addStoreReducerToNgrx<STATE>(storeName, initialState);
     this.syncStoreChangesToClientStorage(storeName, store, storage);
     this.syncNgrxStoreChangesToStore<STATE>(storeName, store);
-    store.destroy$.subscribe(() =>
-      this.reducerManager.removeReducer(storeName)
-    );
+
     return store;
   }
 
@@ -141,14 +139,7 @@ export class StoreFactory {
     storeName: string,
     initialState: STATE
   ): void {
-    if (
-      this.reducerManager.currentReducers &&
-      this.reducerManager.currentReducers[storeName]
-    ) {
-      console.warn(
-        `store ${storeName} exists, changes will be override. Please destroy your store or rename it before create a new one`
-      );
-    }
+
     this.reducerManager.addReducer(
       storeName,
       this.getActionReducer(storeName, initialState)
