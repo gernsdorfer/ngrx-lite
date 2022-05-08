@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { ReducerManager } from '@ngrx/store';
 import { getDefaultComponentLoadingState } from './component-loading-store.service';
 import { getCustomAction } from '../services/action-creator';
@@ -58,7 +58,6 @@ describe('StoreFactory', () => {
     }
   );
   let storeFactory: StoreFactory;
-  let mockStore: MockStore;
 
   describe('minimal Dependencies are available', () => {
     beforeEach(() => {
@@ -269,7 +268,7 @@ describe('StoreFactory', () => {
         );
       });
 
-      it('should set stateChanges to store', () => {
+      it('should set stateChanges to form', () => {
         const store = storeFactory.createFormComponentStore<MyState>({
           storeName: 'myFormStore',
           formGroup: myForm,
@@ -280,14 +279,10 @@ describe('StoreFactory', () => {
           myState: 'newValue',
         });
 
-        expect(store.state$).toBeObservable(
-          cold('a', {
-            a: {
-              ...defaultFormState,
-              myState: 'newValue',
-            },
-          })
-        );
+        expect(myForm.getRawValue()).toEqual({
+          ...defaultFormState,
+          myState: 'newValue',
+        });
       });
     });
 
