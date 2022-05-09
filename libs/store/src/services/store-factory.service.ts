@@ -154,7 +154,10 @@ export class StoreFactory {
         ...additionalProviders,
       ],
     }).get(CreatedStore);
-    this.addStoreReducerToNgrx<STATE>(storeName, initialState);
+    if(this.devToolHelper.canChangeState()){
+      this.addStoreReducerToNgrx<STATE>(storeName, initialState);
+    }
+
     this.syncStoreChangesToClientStorage(storeName, store, storage);
     this.syncNgrxDevtoolStateToStore<STATE>(storeName, store);
 
@@ -226,7 +229,7 @@ export class StoreFactory {
         this.devToolHelper.setCanChangeState(
           currentStateIndex === stagedActionIds.length - 1
         );
-        if (!this.devToolHelper.canChangeState()) {
+        if (JSON.stringify(store.state) !== JSON.stringify(computedStates[currentStateIndex].state[storeName])) {
           store.setState(
             computedStates[currentStateIndex].state[storeName],
             '',
