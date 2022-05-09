@@ -42,11 +42,11 @@ describe('BasicExampleComponent', () => {
   describe('selectProduct', () => {
     it('should set form', () => {
       const component = getComponent();
-      const [firstProduct, ...otherProducts] = mockProducts;
+      const [firstProduct] = mockProducts;
 
       component.selectProduct(firstProduct.id);
 
-      expect(component.productForm.getRawValue()).toEqual(firstProduct)
+      expect(component.productForm.getRawValue()).toEqual(firstProduct);
     });
   });
 
