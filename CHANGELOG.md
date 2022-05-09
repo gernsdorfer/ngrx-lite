@@ -1,3 +1,20 @@
+
+## 2.2.0 (2022-05-09)
+
+#### :rocket: Enhancement
+* [#31](https://github.com/gernsdorfer/ngrx-lite/pull/31) support routing Store ([@gernsdorfer](https://github.com/gernsdorfer))
+* [#29](https://github.com/gernsdorfer/ngrx-lite/pull/29) store form data ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :memo: Documentation
+* [#32](https://github.com/gernsdorfer/ngrx-lite/pull/32) Example entitiy ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :house: Internal
+* [#30](https://github.com/gernsdorfer/ngrx-lite/pull/30) Refactor devtool sync ([@gernsdorfer](https://github.com/gernsdorfer))
+* [#28](https://github.com/gernsdorfer/ngrx-lite/pull/28) don't remove store, because of devtools old state problems ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.1.2 (2022-05-05)
 
 #### :memo: Documentation
