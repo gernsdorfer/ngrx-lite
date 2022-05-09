@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
-import { StoreFactory } from './store-factory.service';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { ReducerManager } from '@ngrx/store';
 import { getDefaultComponentLoadingState } from './component-loading-store.service';
 import { getCustomAction } from '../services/action-creator';
@@ -12,6 +11,8 @@ import { cold } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
 import { defer, EMPTY } from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
+import { StoreFactory } from './store-factory.service';
+import { DevToolHelper } from './component-store.service';
 
 interface MyState {
   myState: string;
@@ -36,6 +37,10 @@ describe('StoreFactory', () => {
       liftedState: defer(() => liftedState$),
     }
   );
+  const devToolHelper = jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
+    canChangeState: true,
+    setCanChangeState: undefined,
+  });
   const localStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
     'LocalStoragePlugin',
     {
@@ -53,10 +58,10 @@ describe('StoreFactory', () => {
     }
   );
   let storeFactory: StoreFactory;
-  let mockStore: MockStore;
 
   describe('minimal Dependencies are available', () => {
     beforeEach(() => {
+      devToolHelper.canChangeState.and.returnValue(true);
       liftedState$ = EMPTY;
       TestBed.configureTestingModule({
         providers: [
@@ -66,6 +71,10 @@ describe('StoreFactory', () => {
             initialState: {},
           }),
           {
+            provide: DevToolHelper,
+            useValue: devToolHelper,
+          },
+          {
             provide: ReducerManager,
             useValue: reducerManager,
           },
@@ -73,7 +82,6 @@ describe('StoreFactory', () => {
         teardown: { destroyAfterEach: false },
       });
       storeFactory = TestBed.inject(StoreFactory);
-      mockStore = TestBed.inject(MockStore);
     });
 
     it('should create a componentStore without errors', () => {
@@ -85,8 +93,10 @@ describe('StoreFactory', () => {
       ).not.toThrowError();
     });
   });
+
   describe('All Dependencies are available', () => {
     beforeEach(() => {
+      devToolHelper.canChangeState.and.returnValue(true);
       liftedState$ = EMPTY;
       TestBed.configureTestingModule({
         providers: [
@@ -94,6 +104,10 @@ describe('StoreFactory', () => {
           {
             provide: SessionStoragePlugin,
             useValue: sessionStoragePlugin,
+          },
+          {
+            provide: DevToolHelper,
+            useValue: devToolHelper,
           },
           {
             provide: StoreDevtools,
@@ -114,7 +128,6 @@ describe('StoreFactory', () => {
         teardown: { destroyAfterEach: false },
       });
       storeFactory = TestBed.inject(StoreFactory);
-      mockStore = TestBed.inject(MockStore);
     });
 
     describe('createComponentStore', () => {
@@ -255,36 +268,21 @@ describe('StoreFactory', () => {
         );
       });
 
-      it('should set stateChanges to store', () => {
-        liftedState$ = cold('a', {
-          a: <Partial<LiftedState>>{
-            computedStates: [
-              {
-                state: {
-                  myStore: <MyState>{
-                    ...defaultFormState,
-                    myState: 'newValue',
-                  },
-                },
-              },
-            ],
-            currentStateIndex: 0,
-            stagedActionIds: [0,1,2],
-          },
-        });
-        const { state$ } = storeFactory.createFormComponentStore<MyState>({
-          storeName: 'myStore',
+      it('should set stateChanges to form', () => {
+        const store = storeFactory.createFormComponentStore<MyState>({
+          storeName: 'myFormStore',
           formGroup: myForm,
         });
 
-        expect(state$).toBeObservable(
-          cold('a', {
-            a: {
-              ...defaultFormState,
-              myState: 'newValue',
-            },
-          })
-        );
+        store.setState(<MyState>{
+          ...defaultFormState,
+          myState: 'newValue',
+        });
+
+        expect(myForm.getRawValue()).toEqual({
+          ...defaultFormState,
+          myState: 'newValue',
+        });
       });
     });
 
@@ -484,6 +482,7 @@ describe('StoreFactory', () => {
 
       describe('set state from storeDevtools', () => {
         it('should set stateChanges to store', () => {
+          devToolHelper.canChangeState.and.returnValue(false);
           liftedState$ = cold('a', {
             a: <Partial<LiftedState>>{
               computedStates: [
@@ -556,8 +555,21 @@ describe('StoreFactory', () => {
       });
     });
   });
+
   describe('ngrx/Store is not imported ', () => {
     it('should show error Message if @ngrx/store is not imported', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          StoreFactory,
+
+          {
+            provide: DevToolHelper,
+            useValue: devToolHelper,
+          },
+        ],
+        teardown: { destroyAfterEach: false },
+      });
+
       expect(() => TestBed.inject(StoreFactory)).toThrow(
         '@ngrx/store is not imported. Please install `@ngrx/store` and import `StoreModule.forRoot({})` in your root module'
       );

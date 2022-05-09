@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import {
   LocalStoragePlugin,
   localStoragePlugin,
+  RouterStoreModule,
   SessionStoragePlugin,
   sessionStoragePlugin,
 } from '@gernsdorfer/ngrx-lite';
@@ -90,6 +91,7 @@ import { PersistFormComponent } from './form-store/basic/persist-form.component'
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    RouterStoreModule,
   ],
   providers: [
     CounterStore,

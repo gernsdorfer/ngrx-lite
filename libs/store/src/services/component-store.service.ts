@@ -4,14 +4,15 @@ import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
 import { Store as NgrxStore } from '@ngrx/store';
 import { getCustomAction } from './action-creator';
 
+@Injectable({providedIn: 'root'})
 export class DevToolHelper {
   private _canChangeState = true;
 
-  set canChangeState(isLastIndex: boolean) {
+  setCanChangeState(isLastIndex: boolean) {
     this._canChangeState = isLastIndex;
   }
 
-  get canChangeState() {
+   canChangeState(): boolean {
     return this._canChangeState;
   }
 }
@@ -27,7 +28,9 @@ export class ComponentStore<
     @Inject(StateToken) state: STATE
   ) {
     super(state);
-    this.dispatchCustomAction('init', state);
+    if (this.devToolHelper.canChangeState()) {
+      this.dispatchCustomAction('init', state);
+    }
   }
 
   get state(): STATE {
@@ -45,7 +48,7 @@ export class ComponentStore<
       forced?: boolean;
     } = {}
   ) {
-    if (!this.devToolHelper.canChangeState && !forced) {
+    if (!this.devToolHelper.canChangeState() && !forced) {
       return;
     }
     const newState =
@@ -62,7 +65,7 @@ export class ComponentStore<
       | ((state: STATE) => Partial<STATE>),
     action: string = 'PATCH_STATE'
   ) {
-    if (!this.devToolHelper.canChangeState) {
+    if (!this.devToolHelper.canChangeState()) {
       return;
     }
 

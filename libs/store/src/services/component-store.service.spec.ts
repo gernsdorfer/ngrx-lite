@@ -19,7 +19,7 @@ describe('ComponentStore', () => {
   const storeName = 'myStore';
 
   beforeEach(() => {
-    devToolHelper.canChangeState = true;
+    devToolHelper.setCanChangeState(true);
     TestBed.configureTestingModule({
       providers: [
         {
@@ -92,7 +92,7 @@ describe('ComponentStore', () => {
 
     describe('can not change state', () => {
       beforeEach(() => {
-        devToolHelper.canChangeState = false;
+        devToolHelper.setCanChangeState(false)
       });
       it('should not set state if can not changed', () => {
         store.setState((state) => ({ ...state, optionalValue: 'test' }));
@@ -171,7 +171,7 @@ describe('ComponentStore', () => {
 
     describe('can not change state', () => {
       beforeEach(() => {
-        devToolHelper.canChangeState = false;
+        devToolHelper.setCanChangeState(false);
       });
       it('should not set state if can not changed', () => {
         store.patchState((state) => ({ ...state, optionalValue: 'test' }));
