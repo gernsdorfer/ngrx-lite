@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # ComponentLoadingStore
 
-The LoadingStore is on [ngrx-lite/component-store](/docs/api/component-store#loadingEffect)
+The LoadingStore is based on [ngrx-lite/component-store](/docs/api/component-store)
 You have the exact same API with `createLoadingEffect`
 
 ## loadingEffect

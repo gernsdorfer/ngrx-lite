@@ -17,13 +17,15 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 - 🤝 same API like [@ngrx/component-store](https://ngrx.io/guide/component-store) with optional parameters
 - ⏱ create fast and easy a dynamic redux store
 - ⏳ optional integrated loading state for effects
+- 🤯 debug your application State across different url's
 - ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools) for
   - patchState
   - setState
-  - created effects
+  - createdLoadingEffects
 - 💽 support session/locale Storage
 - 🏘 You Decide where your Store lives: Root, Module or in the Component Scope
 - 🔛 Shared your State Changes and Actions in the ngrx Store
+- 📑 Store your Form Data to persists and debug
 
 <hr />
 
@@ -110,14 +112,28 @@ After the store is init you can find the store in the @ngrx/devtools
 
 ##### Patch State
 
-After patch State you see this in your redux devtool.
-It's possbile to define an custom Actionname for your patch/set State
+After patch State you see this in your redux devtool. It's possbile to define an custom Actionname for your patch/set
+State
 
 ![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/component-store-devtools-patch.png)
 
+### Router Store
+
+Import the `RouterStoreModule` into your main application to debug your state across all visited URL's. This module
+store's related URL to the current Store.  
+So it's possible to replay your state changes by revisiting the related url.
+
+```ts
+@NgModule({
+  //...
+  imports: [RouterStoreModule]
+//...
+```
+
 ### Loading Store
 
-Create LoaderStore to set a Loader State while an Effect is running. You have the same API as `createComponentStore` with an extra methode `loadingEffect`   
+Create LoaderStore to set a Loader State while an Effect is running. You have the same API as `createComponentStore`
+with an extra methode `loadingEffect`
 
 ```ts
 
@@ -180,6 +196,33 @@ After an Effect run unsuccessfully the `error` key contains the error
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/error.png)
 
+### Form Store
+
+```ts
+
+interface Product {
+  name: string;
+}
+
+@Component({
+  selector: 'my-app-basic-app',
+  templateUrl: 'persist-form.html',
+})
+export class PersistFormComponent implements OnDestroy {
+  productForm = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    lastName: new FormControl('', [Validators.required]),
+  });
+  private store = this.storeFactory.createFormComponentStore<Product>({
+    storeName: 'PRODUCT_FORM',
+    plugins: {
+      storage: 'sessionStoragePlugin',
+    },
+    formGroup: this.productForm
+  });
+}
+```
+
 ### Session/Local Storage
 
 #### Register Session/Locale-Storage Service
@@ -218,7 +261,8 @@ class MyLCass {
 Import `storeTestingFactory` and write your test's. A minimal Example you can
 find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts)
 
-All Demo Unit Test's you can find here:[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
+All Demo Unit Test's you can find
+here:[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
 
 ```ts
 TestBed.configureTestingModule({
