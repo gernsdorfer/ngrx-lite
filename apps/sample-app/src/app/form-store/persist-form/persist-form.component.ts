@@ -21,7 +21,7 @@ export class PersistFormComponent implements OnDestroy {
     plugins: {
       storage: 'sessionStoragePlugin',
     },
-    formGroup: this.productForm,
+    formGroup: this.productForm
   });
 
   constructor(private storeFactory: StoreFactory) {}
