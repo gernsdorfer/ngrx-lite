@@ -32,6 +32,9 @@ MIT
 @angular/core
 MIT
 
+@angular/forms
+MIT
+
 @angular/material
 MIT
 The MIT License
@@ -70,6 +73,9 @@ MIT
 MIT
 
 @ngrx/effects
+MIT
+
+@ngrx/entity
 MIT
 
 @ngrx/store
