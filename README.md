@@ -26,6 +26,7 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 - 🏘 You Decide where your Store lives: Root, Module or in the Component Scope
 - 🔛 Shared your State Changes and Actions in the ngrx Store
 - 📑 Store your Form Data to persists and debug
+- ✍️ write your tests much easier
 
 <hr />
 
@@ -33,10 +34,19 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()
 [![Publish to NPM](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml)
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-ui)
+
+
 
 - 👩‍💻 checkout the [Sample-App](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
 - 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
+
+UI-DEMO
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-ui)
+
+Test-DEMO
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
 
 ## Install
 
