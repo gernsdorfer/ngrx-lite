@@ -1,0 +1,17 @@
+<my-app-ui-card>
+  <div title>Form-Component-Store</div>
+  <div subtitle>Persist Form to Session Storage</div>
+  <div content>
+    <form [formGroup]="productForm" class="form">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>LastName</mat-label>
+        <input matInput formControlName="lastName">
+      </mat-form-field>
+    </form>
+  </div>
+</my-app-ui-card>
+

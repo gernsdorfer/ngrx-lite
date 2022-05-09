@@ -1,0 +1,35 @@
+<my-app-ui-card>
+  <div title>Component-Store</div>
+  <div subtitle>Entity Example</div>
+  <div content>
+    <form [formGroup]="productForm" (submit)="storeProduct(productForm.getRawValue())">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+      <button mat-icon-button type="submit">
+        <mat-icon>save</mat-icon>
+      </button>
+      <button mat-icon-button type="button" (click)="resetProductForm()">
+        <mat-icon>cancel</mat-icon>
+      </button>
+
+    </form>
+    <div *ngFor="let product of products$ | async">
+      {{product.name}}
+      <button (click)="selectProduct(product.id)" mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button (click)="remove(product)" mat-icon-button>
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div actions>
+    <button (click)="resetProductForm()" mat-icon-button>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+</my-app-ui-card>
+
