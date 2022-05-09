@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
 import {
   LocalStoragePlugin,
   localStoragePlugin,
@@ -12,30 +11,22 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
+import { CounterStore } from './component-store/service-counter/counter-service';
+import { EffectsModule } from '@ngrx/effects';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { UiModule } from './shared/ui/ui.module';
+import { AppRoutingModule } from './app-routing.module';
 import { LoadingBasicComponent } from './loading-store/basic/loading-basic.component';
+import { CustomActionComponent } from './component-store/custom-actions/custom-action.component';
 import { StorageExampleComponent } from './component-store/storage/storage.component';
 import { StorageFromServiceComponent } from './component-store/service-counter/storage-from-service.component';
-import { CounterStore } from './component-store/service-counter/counter-service';
 import { StorageFromGlobalComponent } from './component-store/global-counter/storage-from-global.component';
-import { CustomActionComponent } from './component-store/custom-actions/custom-action.component';
 import { MultipleInstancesComponent } from './component-store/muliple-instances/multiple-instances.component';
 import { DemoAComponent } from './component-store/muliple-instances/demo-a.component';
 import { DemoBComponent } from './component-store/muliple-instances/demo-b.component';
-import { EffectsModule } from '@ngrx/effects';
 import { BasicComponent } from './component-store/basic/basic.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { PersistFormComponent } from './form-store/basic/persist-form.component';
-import { CombineWithEntityComponent } from './component-store/combine-with-entity/combine-with-entity.component';
-import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   imports: [
@@ -43,58 +34,14 @@ import {MatIconModule} from "@angular/material/icon";
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     BrowserAnimationsModule,
+    UiModule,
     StoreDevtoolsModule.instrument({
       name: 'ngrx-lite-demo',
       maxAge: 25,
       logOnly: false,
     }),
-    RouterModule.forRoot(
-      [
-        { path: '', component: BasicComponent },
-        { path: 'combine-with-entity', component: CombineWithEntityComponent },
-        { path: 'persist-form', component: PersistFormComponent },
-        { path: 'loading-basic', component: LoadingBasicComponent },
-        {
-          path: 'loading-with-default-values',
-          component: LoadingWithDefaultValuesComponent,
-        },
-        { path: 'custom-action', component: CustomActionComponent },
-        { path: 'storage', component: StorageExampleComponent },
-        {
-          path: 'storage-from-service',
-          component: StorageFromServiceComponent,
-        },
-        {
-          path: 'multiple-storage-instances',
-          component: MultipleInstancesComponent,
-        },
-        {
-          path: 'storage-from-global-service',
-          component: StorageFromGlobalComponent,
-        },
-        {
-          path: 'share-actions',
-          loadChildren: () =>
-            import(
-              './component-store/share-actions/shared-actions.module'
-            ).then((m) => m.SharedActionsModule),
-        },
-        { path: '**', redirectTo: '' },
-      ],
-      {
-        useHash: true,
-      }
-    ),
-    MatMenuModule,
+    AppRoutingModule,
     MatButtonModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatProgressSpinnerModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
     RouterStoreModule,
   ],
   providers: [
@@ -114,8 +61,6 @@ import {MatIconModule} from "@angular/material/icon";
     DemoBComponent,
     BasicComponent,
     LoadingWithDefaultValuesComponent,
-    CombineWithEntityComponent,
-    PersistFormComponent,
   ],
   bootstrap: [AppComponent],
 })
