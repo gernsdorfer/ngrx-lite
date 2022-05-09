@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { CombineWithEntityComponent, MyState } from './combine-with-entity.component';
+import {
+  CombineWithEntityComponent,
+  mockProducts,
+} from './combine-with-entity.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -24,19 +27,82 @@ describe('BasicExampleComponent', () => {
     expect(getComponent()).toBeDefined();
   });
 
-  describe('increment', () => {
-    it('should increment state', () => {
+  describe('ngOnInit', () => {
+    it('should load products', () => {
       const component = getComponent();
 
-      component.increment(2);
-
-      expect(component.counterState$).toBeObservable(
+      expect(component.products$).toBeObservable(
         cold('a', {
-          a: <MyState>{
-            counter: 2,
-          },
+          a: mockProducts,
         })
       );
+    });
+  });
+
+  describe('selectProduct', () => {
+    it('should set form', () => {
+      const component = getComponent();
+      const [firstProduct, ...otherProducts] = mockProducts;
+
+      component.selectProduct(firstProduct.id);
+
+      expect(component.productForm.getRawValue()).toEqual(firstProduct)
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove product from product list', () => {
+      const component = getComponent();
+      const [firstProduct, ...otherProducts] = mockProducts;
+
+      component.remove(firstProduct);
+
+      expect(component.products$).toBeObservable(
+        cold('a', {
+          a: otherProducts,
+        })
+      );
+    });
+  });
+
+  describe('storeProduct', () => {
+    it('update product', () => {
+      const component = getComponent();
+      const [firstProduct, ...otherProducts] = mockProducts;
+
+      component.storeProduct({ ...firstProduct, name: 'newValue' });
+
+      expect(component.products$).toBeObservable(
+        cold('a', {
+          a: [{ ...firstProduct, name: 'newValue' }, ...otherProducts],
+        })
+      );
+    });
+
+    it('create product', () => {
+      const component = getComponent();
+
+      component.storeProduct({ name: 'newValue', id: 0 });
+
+      expect(component.products$).toBeObservable(
+        cold('a', {
+          a: [...mockProducts, { name: 'newValue', id: 4 }],
+        })
+      );
+    });
+  });
+
+  describe('resetProductForm', () => {
+    it('should reset product form', () => {
+      const component = getComponent();
+      component.productForm.patchValue({ name: 'test' });
+
+      component.resetProductForm();
+
+      expect(component.productForm.getRawValue()).toEqual({
+        id: null,
+        name: null,
+      });
     });
   });
 });

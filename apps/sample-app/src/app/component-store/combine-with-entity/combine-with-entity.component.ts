@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { map } from 'rxjs';
-import { tapResponse } from '@ngrx/component-store';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 interface Product {
@@ -20,6 +18,11 @@ const getProduct = (product: Partial<Product>): Product => ({
   name: '',
   ...product,
 });
+export const mockProducts = [
+  getProduct({ id: 1, name: 'product1' }),
+  getProduct({ id: 2, name: 'product2' }),
+  getProduct({ id: 3, name: 'product3' }),
+];
 
 @Component({
   selector: 'my-app-basic-app',
@@ -27,25 +30,10 @@ const getProduct = (product: Partial<Product>): Product => ({
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
   private store = this.storeFactory.createComponentStore<MyState>({
-    storeName: 'ENTIY_EXAMPLE',
+    storeName: 'ENTITY_EXAMPLE',
     defaultState: adapter.getInitialState({}),
   });
   products$ = this.store.select(selectAll);
-
-  loadProducts = this.store.effect((load$) =>
-    load$.pipe(
-      map(() => [
-        getProduct({ id: 1, name: 'product1' }),
-        getProduct({ id: 2, name: 'product2' }),
-        getProduct({ id: 3, name: 'product3' }),
-      ]),
-      tapResponse(
-        (products) =>
-          this.store.setState((state) => adapter.setAll(products, state)),
-        (e) => console.error(e)
-      )
-    )
-  );
 
   productForm = new FormGroup({
     id: new FormControl('', [Validators.required]),
@@ -55,7 +43,7 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
   constructor(private storeFactory: StoreFactory) {}
 
   ngOnInit() {
-    this.loadProducts();
+    this.store.setState((state) => adapter.setAll(mockProducts, state));
   }
 
   selectProduct(productId: number) {
@@ -67,7 +55,7 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
     this.resetProductForm();
   }
 
-  storeProduct(product: Product) {
+  storeProduct(product: Product): void {
     product.id
       ? this.updateProduct(product)
       : this.addProduct({
@@ -77,7 +65,7 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
     this.resetProductForm();
   }
 
-  resetProductForm () {
+  resetProductForm() {
     this.productForm.reset();
   }
 
