@@ -23,6 +23,7 @@
     "@gernsdorfer/ngrx-lite": "^2.2.0",
     "@ngrx/component-store": "^13.1.0",
     "@ngrx/effects": "^13.1.0",
+    "@ngrx/entity": "^13.2.0",
     "@ngrx/store": "^13.1.0",
     "@ngrx/store-devtools": "^13.1.0",
     "rxjs": "^7.5.2",
