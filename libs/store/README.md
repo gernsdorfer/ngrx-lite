@@ -17,7 +17,7 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 - 🤝 same API like [@ngrx/component-store](https://ngrx.io/guide/component-store) with optional parameters
 - ⏱ create fast and easy a dynamic redux store
 - ⏳ optional integrated loading state for effects
-- 🤯 debug your application State across different url's
+- 🤯 debug your application State across different routes
 - ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools) for
   - patchState
   - setState
