@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ComponentLoadingStore } from './component-loading-store.service';
+import { ComponentLoadingStore } from './stores/component-loading-store.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { cold } from 'jasmine-marbles';
 import { StoreFactory } from './store-factory.service';
-import { ComponentStore, DevToolHelper } from './component-store.service';
+import { ComponentStore, DevToolHelper } from './stores/component-store.service';
 import { Store } from './store.service';
 import { Injector } from '@angular/core';
 import { StateToken, StoreNameToken } from '../injection-tokens/state.token';

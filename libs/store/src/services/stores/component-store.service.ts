@@ -1,8 +1,8 @@
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
 import { Inject, Injectable } from '@angular/core';
-import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
+import { StateToken, StoreNameToken } from '../../injection-tokens/state.token';
 import { Store as NgrxStore } from '@ngrx/store';
-import { getCustomAction } from './action-creator';
+import { getCustomAction } from '../action-creator';
 
 @Injectable({providedIn: 'root'})
 export class DevToolHelper {

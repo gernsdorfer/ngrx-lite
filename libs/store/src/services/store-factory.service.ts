@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import {
   ComponentLoadingStore,
   getDefaultComponentLoadingState,
-} from './component-loading-store.service';
+} from './stores/component-loading-store.service';
 import { LoadingStoreState } from '../models';
 import { filter, takeUntil } from 'rxjs';
-import { ComponentStore } from './component-store.service';
+import { ComponentStore } from './stores/component-store.service';
 import { FormGroup } from '@angular/forms';
 import { Store } from './store.service';
 

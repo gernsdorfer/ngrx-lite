@@ -1,13 +1,13 @@
 import { Inject, Injectable, Injector, Optional } from '@angular/core';
 
 import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
-import { ComponentLoadingStore } from './component-loading-store.service';
+import { ComponentLoadingStore } from './stores/component-loading-store.service';
 import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { takeUntil } from 'rxjs';
-import { ComponentStore, DevToolHelper } from './component-store.service';
+import { ComponentStore, DevToolHelper } from './stores/component-store.service';
 import { StoreDevtools } from '@ngrx/store-devtools';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';

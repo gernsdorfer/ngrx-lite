@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { getCustomAction } from './action-creator';
+import { getCustomAction } from '../action-creator';
 import { ComponentStore, DevToolHelper } from './component-store.service';
-import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
+import { StateToken, StoreNameToken } from '../../injection-tokens/state.token';
 
 interface MyState {
   myState: string;

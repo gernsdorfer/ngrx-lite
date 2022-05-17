@@ -1,11 +1,11 @@
 import { tapResponse } from '@ngrx/component-store';
 import { Observable, switchMap, tap } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
-import { LoadingStoreState } from '../models';
-import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
+import { LoadingStoreState } from '../../models';
+import { StateToken, StoreNameToken } from '../../injection-tokens/state.token';
 import { Store as NgrxStore } from '@ngrx/store';
-import { getEffectActionName } from './action-creator';
-import { EffectStates } from '../enums/effect-states.enum';
+import { getEffectActionName } from '../action-creator';
+import { EffectStates } from '../../enums/effect-states.enum';
 import { ComponentStore, DevToolHelper } from './component-store.service';
 
 export const getDefaultComponentLoadingState = <ITEM, ERROR>(

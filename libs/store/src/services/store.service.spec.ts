@@ -3,14 +3,14 @@ import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReducerManager } from '@ngrx/store';
-import { getDefaultComponentLoadingState } from './component-loading-store.service';
+import { getDefaultComponentLoadingState } from './stores/component-loading-store.service';
 import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 import { cold } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
 import { defer, EMPTY } from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
-import { ComponentStore, DevToolHelper } from './component-store.service';
+import { ComponentStore, DevToolHelper } from './stores/component-store.service';
 import { Store } from './store.service';
 
 interface MyState {
