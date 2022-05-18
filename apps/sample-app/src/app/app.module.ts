@@ -39,6 +39,7 @@ import { LoadingWithDefaultValuesComponent } from './loading-store/default-value
       name: 'ngrx-lite-demo',
       maxAge: 25,
       logOnly: false,
+      monitor: (state, action) => action
     }),
     AppRoutingModule,
     MatButtonModule,
