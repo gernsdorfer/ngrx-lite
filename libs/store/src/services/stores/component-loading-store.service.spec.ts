@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { LoadingStoreState } from '../models';
+import { LoadingStoreState } from '../../models';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { EffectStates } from '../enums';
-import { getCustomAction, getEffectAction } from './action-creator';
+import { EffectStates } from '../../enums';
+import { getCustomAction, getEffectAction } from '../action-creator';
 import { cold } from 'jasmine-marbles';
 import {
   ComponentLoadingStore,
@@ -11,7 +11,7 @@ import {
 import {
   StateToken,
   StoreNameToken,
-} from '../injection-tokens/state.token';
+} from '../../injection-tokens/state.token';
 import {DevToolHelper} from "./component-store.service";
 
 describe('LoadingStore', () => {
