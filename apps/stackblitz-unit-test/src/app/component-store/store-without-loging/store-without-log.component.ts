@@ -13,6 +13,9 @@ export class StoreWithoutLogComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'STORE_WITHOUT_LOG',
     defaultState: { counter: 0 },
+    plugins: {
+      storage: 'sessionStoragePlugin',
+    },
     skipLog: true
   });
 
