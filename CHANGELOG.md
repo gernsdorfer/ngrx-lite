@@ -1,6 +1,15 @@
 
 
 
+
+## 2.3.2 (2022-05-19)
+
+#### :bug: Bug Fix
+* [#42](https://github.com/gernsdorfer/ngrx-lite/pull/42) fix skip log option for stores with clientOption ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.3.1 (2022-05-19)
 
 #### :bug: Bug Fix
