@@ -25,6 +25,7 @@ import { Component } from '@angular/core';
         </a>
         <a mat-menu-item routerLink="/storage">Sync with Storage</a>
         <a mat-menu-item routerLink="/combine-with-entity">Entity</a>
+        <a mat-menu-item routerLink="/store-without-log">Without Log</a>
       </mat-menu>
 
       <button [matMenuTriggerFor]="menuLoadingComponentStore" mat-button>

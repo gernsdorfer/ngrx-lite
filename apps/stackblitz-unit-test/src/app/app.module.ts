@@ -27,6 +27,7 @@ import { DemoAComponent } from './component-store/muliple-instances/demo-a.compo
 import { DemoBComponent } from './component-store/muliple-instances/demo-b.component';
 import { BasicComponent } from './component-store/basic/basic.component';
 import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
+import { StoreWithoutLogComponent } from './component-store/store-without-loging/store-without-log.component';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { LoadingWithDefaultValuesComponent } from './loading-store/default-value
       name: 'ngrx-lite-demo',
       maxAge: 25,
       logOnly: false,
+      monitor: (state, action) => action,
     }),
     AppRoutingModule,
     MatButtonModule,
@@ -61,6 +63,7 @@ import { LoadingWithDefaultValuesComponent } from './loading-store/default-value
     DemoBComponent,
     BasicComponent,
     LoadingWithDefaultValuesComponent,
+    StoreWithoutLogComponent,
   ],
   bootstrap: [AppComponent],
 })

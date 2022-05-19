@@ -8,6 +8,7 @@ import { StorageExampleComponent } from './component-store/storage/storage.compo
 import { StorageFromServiceComponent } from './component-store/service-counter/storage-from-service.component';
 import { MultipleInstancesComponent } from './component-store/muliple-instances/multiple-instances.component';
 import { StorageFromGlobalComponent } from './component-store/global-counter/storage-from-global.component';
+import { StoreWithoutLogComponent } from './component-store/store-without-loging/store-without-log.component';
 
 const routes: Routes = [
   { path: '', component: BasicComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
       ),
   },
   { path: 'loading-basic', component: LoadingBasicComponent },
+
   {
     path: 'loading-with-default-values',
     component: LoadingWithDefaultValuesComponent,
@@ -38,6 +40,7 @@ const routes: Routes = [
     path: 'storage-from-service',
     component: StorageFromServiceComponent,
   },
+  { path: 'store-without-log', component: StoreWithoutLogComponent },
   {
     path: 'multiple-storage-instances',
     component: MultipleInstancesComponent,
