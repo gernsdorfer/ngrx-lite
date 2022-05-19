@@ -383,7 +383,7 @@ describe('Store', () => {
       });
 
       describe('set state from storeDevtools', () => {
-        it('should set stateChanges to store', () => {
+        beforeEach(() => {
           devToolHelper.isTimeTravelActive.and.returnValue(true);
           liftedState$ = cold('a', {
             a: <Partial<LiftedState>>{
@@ -401,6 +401,8 @@ describe('Store', () => {
               stagedActionIds: [0, 1, 2],
             },
           });
+        });
+        it('should set stateChanges to store', () => {
           const { state$ } = getStore().createStoreByStoreType({
             storeName: 'myStore',
             defaultState: defaultMyState,
@@ -413,6 +415,21 @@ describe('Store', () => {
                 ...defaultMyState,
                 myState: 'newValue',
               },
+            })
+          );
+        });
+
+        it('should not set stateChanges to store for stores with skipLog option', () => {
+          const { state$ } = getStore().createStoreByStoreType({
+            storeName: 'myStore',
+            defaultState: defaultMyState,
+            CreatedStore: ComponentStore,
+            skipLogForStore: true,
+          });
+
+          expect(state$).toBeObservable(
+            cold('a', {
+              a: defaultMyState,
             })
           );
         });
