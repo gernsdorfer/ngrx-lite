@@ -25,4 +25,4 @@ export const getCustomAction = <P extends object>({
   storeName: string;
   actionName?: string;
 }) =>
-  createAction<string, { payload: P }>(`[${storeName}] ${actionName}`, props());
+  createAction<string, { payload: P }>(`[COMPONENT_STORE][${storeName}] ${actionName}`, props());

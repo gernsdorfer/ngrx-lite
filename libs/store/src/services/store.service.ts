@@ -7,8 +7,12 @@ import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { takeUntil } from 'rxjs';
-import { ComponentStore, DevToolHelper } from './stores/component-store.service';
+import {
+  ComponentStore,
+  DevToolHelper,
+} from './stores/component-store.service';
 import { StoreDevtools } from '@ngrx/store-devtools';
+import { LiftedState } from '@ngrx/store-devtools/src/reducer';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
@@ -28,6 +32,52 @@ export class Store {
     private localStoragePlugin: ClientStoragePlugin
   ) {
     this.checkNgrxStoreIsInstalled();
+  }
+
+  public checkForTimeTravel(): void {
+    this.storeDevtools?.liftedState.subscribe({
+      next: ({ currentStateIndex, stagedActionIds }) => {
+        this.devToolHelper.setCanChangeState(
+          currentStateIndex === stagedActionIds.length - 1
+        );
+      },
+    });
+  }
+
+  public addReducersForImportedState(): void {
+    this.storeDevtools?.liftedState.subscribe({
+      next: ({ monitorState }) => {
+        if (monitorState.type === 'IMPORT_STATE') {
+          const nextLiftedState: LiftedState = monitorState.nextLiftedState;
+          const newStores = [
+            ...new Set(
+              nextLiftedState.stagedActionIds
+                .map((id) => nextLiftedState.actionsById[id].action)
+                .map(({ type }) => {
+                  const [, currentStoreName] =
+                    type.match(/^\[COMPONENT_STORE\]\[(.*?)\]/) || [];
+                  return currentStoreName;
+                })
+                .filter((currentStoreName) => !!currentStoreName)
+                .filter(
+                  (currentStoreName) =>
+                    !this.reducerManager.currentReducers[currentStoreName]
+                )
+            ),
+          ];
+          this.reducerManager.addReducers(
+            newStores.reduce(
+              (start, current) => ({
+                ...start,
+                [current]: this.getActionReducer(current, {}),
+              }),
+              {}
+            )
+          );
+          this.storeDevtools.sweep();
+        }
+      },
+    });
   }
 
   public createStoreByStoreType<
@@ -67,7 +117,6 @@ export class Store {
 
     this.syncStoreChangesToClientStorage(storeName, store, storage);
     this.syncNgrxDevtoolStateToStore<STATE>(storeName, store);
-
     return store;
   }
 
@@ -94,7 +143,7 @@ export class Store {
     storeName: string,
     initialState: STATE
   ): void {
-    if (!this.devToolHelper.canChangeState()) {
+    if (this.reducerManager.currentReducers?.[storeName]) {
       return;
     }
     this.reducerManager.addReducer(
@@ -111,7 +160,7 @@ export class Store {
       state: STATE = initialState,
       action: { payload: STATE; type: string }
     ): STATE =>
-      action.type.startsWith(`[${storeName}]`)
+      action.type.startsWith(`[COMPONENT_STORE][${storeName}]`)
         ? { ...state, ...action.payload }
         : state;
   }
@@ -135,14 +184,8 @@ export class Store {
     store: ComponentStore<STATE>
   ) {
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
-      next: ({ computedStates, currentStateIndex, stagedActionIds }) => {
-        this.devToolHelper.setCanChangeState(
-          currentStateIndex === stagedActionIds.length - 1
-        );
-        if (
-          JSON.stringify(store.state) !==
-          JSON.stringify(computedStates[currentStateIndex].state[storeName])
-        ) {
+      next: ({ computedStates, currentStateIndex }) => {
+        if (!this.devToolHelper.canChangeState()) {
           store.setState(
             computedStates[currentStateIndex].state[storeName],
             '',

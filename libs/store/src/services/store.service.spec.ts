@@ -8,9 +8,12 @@ import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 import { cold } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
-import { defer, EMPTY } from 'rxjs';
+import { defer, EMPTY, of } from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
-import { ComponentStore, DevToolHelper } from './stores/component-store.service';
+import {
+  ComponentStore,
+  DevToolHelper,
+} from './stores/component-store.service';
 import { Store } from './store.service';
 
 interface MyState {
@@ -31,7 +34,9 @@ describe('Store', () => {
   let liftedState$: StoreDevtools['liftedState'] = EMPTY;
   const storeDevtools = jasmine.createSpyObj<StoreDevtools>(
     'storeDevtools',
-    {},
+    {
+      sweep: undefined,
+    },
     {
       liftedState: defer(() => liftedState$),
     }
@@ -49,7 +54,7 @@ describe('Store', () => {
   );
   const reducerManager = jasmine.createSpyObj<ReducerManager>(
     'ReducerManager',
-    { addReducer: undefined, removeReducer: undefined },
+    { addReducer: undefined, addReducers: undefined, removeReducer: undefined },
     {
       currentReducers: {
         oldStore: () => undefined,
@@ -65,7 +70,6 @@ describe('Store', () => {
       TestBed.configureTestingModule({
         providers: [
           Store,
-
           provideMockStore({
             initialState: {},
           }),
@@ -83,7 +87,19 @@ describe('Store', () => {
       store = TestBed.inject(Store);
     });
 
+    it('should not show an Error for checkForTimeTravel', () => {
+      const store = TestBed.inject(Store);
+      expect(() => store.checkForTimeTravel()).not.toThrowError();
+    });
+
+    it('should not show an Error for addReducersForImportedState', () => {
+      const store = TestBed.inject(Store);
+      expect(() => store.addReducersForImportedState()).not.toThrowError();
+    });
+
     it('should create a componentStore without errors', () => {
+      const store = TestBed.inject(Store);
+
       expect(() =>
         store.createStoreByStoreType({
           storeName: 'myStore',
@@ -129,6 +145,73 @@ describe('Store', () => {
         teardown: { destroyAfterEach: false },
       });
       store = TestBed.inject(Store);
+    });
+
+    describe('checkForTimeTravel', () => {
+      it('should set setCanChangeState to false', () => {
+        liftedState$ = of(
+          jasmine.createSpyObj<LiftedState>(
+            'liftedState',
+            {},
+            {
+              currentStateIndex: 1,
+              stagedActionIds: [1, 2, 3],
+            }
+          )
+        );
+
+        devToolHelper.setCanChangeState.calls.reset();
+
+        store.checkForTimeTravel();
+
+        expect(devToolHelper.setCanChangeState).toHaveBeenCalledWith(false);
+      });
+    });
+
+    describe('addReducersForImportedState', () => {
+      it('should set setCanChangeState to false', () => {
+        liftedState$ = of(
+          jasmine.createSpyObj<LiftedState>(
+            'liftedState',
+            {},
+            {
+              monitorState: <Partial<LiftedState>>{
+                type: 'IMPORT_STATE',
+                nextLiftedState: {
+                  stagedActionIds: [1, 2, 3],
+                  actionsById: {
+                    1: {
+                      type: 'PERFORM_ACTION',
+                      action: {
+                        type: 'otherStore',
+                      },
+                    },
+                    2: {
+                      type: 'PERFORM_ACTION',
+                      action: {
+                        type: getCustomAction({ storeName: 'oldStore' }).type,
+                      },
+                    },
+                    3: {
+                      type: 'PERFORM_ACTION',
+                      action: {
+                        type: getCustomAction({ storeName: 'NEW_STORE' }).type,
+                      },
+                    },
+                  },
+                },
+              },
+            }
+          )
+        );
+
+        reducerManager.addReducer.calls.reset();
+
+        store.addReducersForImportedState();
+
+        expect(reducerManager.addReducers).toHaveBeenCalled();
+        expect(storeDevtools.sweep).toHaveBeenCalled();
+      });
     });
 
     describe('createStoreByStoreType', () => {
@@ -203,6 +286,17 @@ describe('Store', () => {
           expect(reducerManager.addReducer.calls.argsFor(0)[0]).toBe(
             'testStore'
           );
+        });
+        it('should not addReducer an existing reducer to store', () => {
+          reducerManager.addReducer.calls.reset();
+
+          store.createStoreByStoreType({
+            storeName: 'oldStore',
+            defaultState: defaultMyState,
+            CreatedStore: ComponentStore,
+          });
+
+          expect(reducerManager.addReducer).not.toHaveBeenCalled();
         });
       });
 
@@ -357,24 +451,22 @@ describe('Store', () => {
     });
   });
 
-  describe('ngrx/Store is not imported ', () => {
-    it('should show error Message if @ngrx/store is not imported', () => {
-      TestBed.configureTestingModule({
-        providers: [
-          Store,
+  it('should show error Message if @ngrx/store is not imported', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        Store,
 
-          {
-            provide: DevToolHelper,
-            useValue: devToolHelper,
-          },
-        ],
-        teardown: { destroyAfterEach: false },
-      });
-
-      expect(() => TestBed.inject(Store)).toThrow(
-        '@ngrx/store is not imported. Please install `@ngrx/store` and import `StoreModule.forRoot({})` in your root module'
-      );
+        {
+          provide: DevToolHelper,
+          useValue: devToolHelper,
+        },
+      ],
+      teardown: { destroyAfterEach: false },
     });
+
+    expect(() => TestBed.inject(Store)).toThrow(
+      '@ngrx/store is not imported. Please install `@ngrx/store` and import `StoreModule.forRoot({})` in your root module'
+    );
   });
 });
 

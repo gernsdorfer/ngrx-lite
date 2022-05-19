@@ -13,7 +13,11 @@ type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 
 @Injectable({ providedIn: 'root' })
 export class StoreFactory {
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+
+    store.checkForTimeTravel();
+    store.addReducersForImportedState();
+  }
 
   public createComponentStore<STATE extends object>({
     storeName,
