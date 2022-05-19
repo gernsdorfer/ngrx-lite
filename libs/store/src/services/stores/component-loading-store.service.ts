@@ -6,7 +6,8 @@ import { StateToken, StoreNameToken } from '../../injection-tokens/state.token';
 import { Store as NgrxStore } from '@ngrx/store';
 import { getEffectActionName } from '../action-creator';
 import { EffectStates } from '../../enums/effect-states.enum';
-import { ComponentStore, DevToolHelper } from './component-store.service';
+import { ComponentStore } from './component-store.service';
+import {DevToolHelper} from "../dev-tool-helper.service";
 
 export const getDefaultComponentLoadingState = <ITEM, ERROR>(
   state: Partial<LoadingStoreState<ITEM, ERROR>> = {}
