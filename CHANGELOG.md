@@ -1,5 +1,14 @@
 
 
+
+## 2.3.1 (2022-05-19)
+
+#### :bug: Bug Fix
+* [#41](https://github.com/gernsdorfer/ngrx-lite/pull/41) fix empty monitor state ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.3.0 (2022-05-19)
 
 #### :rocket: Enhancement
