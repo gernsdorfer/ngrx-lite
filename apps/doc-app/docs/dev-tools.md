@@ -13,11 +13,19 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   imports: [
-    StoreDevtoolsModule.instrument({}),
+    StoreDevtoolsModule.instrument({
+      name: 'ngrx-lite-demo',
+      maxAge: 25,
+      logOnly: false,
+      // define the monitor Property here
+      monitor: (state, action) => action,
+    }),
   ],
 })
 export class AppModule {}
 
 ```
+:::note It's important to set the  `monitor` property in your devToolConfig, otherwise an State Import is not possible.
+:::
 
 

@@ -13,6 +13,7 @@ export class BasicComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
     defaultState: { counter: 0 },
+
   });
 
   public counterState$ = this.store.state$;

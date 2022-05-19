@@ -6,6 +6,13 @@ sidebar_position: 1
 
 Here you can find a list of the `StoreFactory` API and their usages:
 
+OptionName | Description
+--- | --- | 
+`defaultState` | initial state
+`skipLog` | skip all Log Entries for the current created Store
+`storeName` | name of the Store
+`plugins` | define Plugins ( [ClientStorePlugin](/docs/plugins/storage))
+
 ## `createComponentStore`
 Create a new Store based on [ngrx Component Store](https://ngrx.io/guide/component-store).
 

@@ -114,6 +114,23 @@ for your component store
 
 Let's have a look into the the redux devtools whats going on, in the example above.
 
+It's important to set the `monitor` property in your devToolConfig, otherwise an State Import is not possible.
+
+```ts app.module
+@NgModule({
+  imports: [
+    StoreDevtoolsModule.instrument({
+      name: 'ngrx-lite-demo',
+      maxAge: 25,
+      logOnly: false,
+      // define the monitor Property here
+      monitor: (state, action) => action,
+    }),
+
+  ],
+})
+```
+
 ##### Store is init
 
 After the store is init you can find the store in the @ngrx/devtools
