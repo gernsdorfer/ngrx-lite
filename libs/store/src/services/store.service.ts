@@ -44,7 +44,7 @@ export class Store {
     });
   }
 
-  public addReducersForImportedState(): void {
+  public addReducersForImportState(): void {
     this.storeDevtools?.liftedState.subscribe({
       next: ({ monitorState }) => {
         if (monitorState.type === 'IMPORT_STATE') {
@@ -117,6 +117,7 @@ export class Store {
 
     this.syncStoreChangesToClientStorage(storeName, store, storage);
     this.syncNgrxDevtoolStateToStore<STATE>(storeName, store);
+    this.removeReducerAfterDestroy<STATE>(storeName, store);
     return store;
   }
 
@@ -196,6 +197,17 @@ export class Store {
           );
         }
       },
+    });
+  }
+
+  private removeReducerAfterDestroy<STATE extends object>(
+    storeName: string,
+    store: ComponentStore<STATE>
+  ) {
+    store.destroy$.subscribe(() => {
+      if (!this.storeDevtools) {
+        this.reducerManager.removeReducer(storeName);
+      }
     });
   }
 

@@ -24,7 +24,7 @@ describe('StoreFactory', () => {
 
   const store = jasmine.createSpyObj<Store>('Store', {
     createStoreByStoreType: undefined,
-    addReducersForImportedState: undefined,
+    addReducersForImportState: undefined,
     checkForTimeTravel: undefined
   });
 
