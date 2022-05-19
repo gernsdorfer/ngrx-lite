@@ -1,6 +1,10 @@
 import { Inject, Injectable, Injector, Optional } from '@angular/core';
 
-import {SkipLogForStore, StateToken, StoreNameToken} from '../injection-tokens/state.token';
+import {
+  SkipLogForStore,
+  StateToken,
+  StoreNameToken,
+} from '../injection-tokens/state.token';
 import { ComponentLoadingStore } from './stores/component-loading-store.service';
 import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
@@ -117,7 +121,7 @@ export class Store {
     this.addStoreReducerToNgrx<STATE>(storeName, initialState);
 
     this.syncStoreChangesToClientStorage(storeName, store, storage);
-    this.syncNgrxDevtoolStateToStore<STATE>(storeName, store);
+    this.syncNgrxDevtoolStateToStore<STATE>(storeName, store, skipLogForStore);
     this.removeReducerAfterDestroy<STATE>(storeName, store);
     return store;
   }
@@ -183,8 +187,10 @@ export class Store {
 
   private syncNgrxDevtoolStateToStore<STATE extends object>(
     storeName: string,
-    store: ComponentStore<STATE>
+    store: ComponentStore<STATE>,
+    skipLogForStore?: boolean
   ) {
+    if (skipLogForStore) return;
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
       next: ({ computedStates, currentStateIndex }) => {
         if (
