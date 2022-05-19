@@ -175,6 +175,13 @@ describe('Store', () => {
             'liftedState',
             {},
             {
+              monitorState: null,
+            }
+          ),
+          jasmine.createSpyObj<LiftedState>(
+            'liftedState',
+            {},
+            {
               monitorState: <Partial<LiftedState>>{
                 type: 'IMPORT_STATE',
                 nextLiftedState: {
