@@ -1,10 +1,13 @@
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
 import { Inject, Injectable } from '@angular/core';
-import { StateToken, StoreNameToken } from '../../injection-tokens/state.token';
+import {
+  SkipLogForStore,
+  StateToken,
+  StoreNameToken,
+} from '../../injection-tokens/state.token';
 import { Store as NgrxStore } from '@ngrx/store';
 import { getCustomAction } from '../action-creator';
-import {DevToolHelper} from "../dev-tool-helper.service";
-
+import { DevToolHelper } from '../dev-tool-helper.service';
 
 @Injectable({ providedIn: 'root' })
 export class ComponentStore<
@@ -13,6 +16,7 @@ export class ComponentStore<
   constructor(
     protected ngrxStore: NgrxStore,
     protected devToolHelper: DevToolHelper,
+    @Inject(SkipLogForStore) protected skipLogForStore: boolean,
     @Inject(StoreNameToken) protected storeName: string,
     @Inject(StateToken) state: STATE
   ) {
@@ -42,6 +46,7 @@ export class ComponentStore<
     }
     const newState =
       typeof stateOrUpdaterFn === 'function'
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ? (stateOrUpdaterFn as unknown as any)(this.get())
         : stateOrUpdaterFn;
     super.setState(newState);
@@ -57,16 +62,19 @@ export class ComponentStore<
     if (this.devToolHelper.isTimeTravelActive()) {
       return;
     }
-
     const newState =
       typeof partialStateOrUpdaterFn === 'function'
         ? partialStateOrUpdaterFn(this.get())
         : partialStateOrUpdaterFn;
     super.patchState(newState);
+
     this.dispatchCustomAction(action, { ...this.get(), ...newState });
   }
 
   protected dispatchCustomAction(action: string, state: STATE) {
+    if (this.skipLogForStore) {
+      return;
+    }
     this.ngrxStore.dispatch(
       getCustomAction({ actionName: action, storeName: this.storeName })({
         payload: state,

@@ -7,7 +7,7 @@ import { StoreFactory } from './store-factory.service';
 import { ComponentStore } from './stores/component-store.service';
 import { Store } from './store.service';
 import { Injector } from '@angular/core';
-import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
+import {SkipLogForStore, StateToken, StoreNameToken} from '../injection-tokens/state.token';
 import {DevToolHelper} from "./dev-tool-helper.service";
 
 interface MyState {
@@ -61,6 +61,7 @@ describe('StoreFactory', () => {
           },
           { provide: StoreNameToken, useValue: 'Test' },
           { provide: StateToken, useValue: {} },
+          { provide: SkipLogForStore, useValue: false },
         ],
       }).get(CreatedStore)
     );

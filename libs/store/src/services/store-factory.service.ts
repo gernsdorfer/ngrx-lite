@@ -22,16 +22,19 @@ export class StoreFactory {
     storeName,
     plugins,
     defaultState,
+    skipLog,
   }: {
     defaultState: STATE;
-    storeName: string;
     plugins?: { storage?: StoragePluginTypes };
+    skipLog?: boolean;
+    storeName: string;
   }): ComponentStore<STATE> {
     return this.store.createStoreByStoreType({
-      storeName,
-      plugins,
       defaultState,
       CreatedStore: ComponentStore,
+      plugins,
+      skipLogForStore: skipLog,
+      storeName,
     });
   }
 
@@ -49,6 +52,7 @@ export class StoreFactory {
     const store = this.store.createStoreByStoreType({
       storeName,
       plugins,
+      skipLogForStore: skipLog,
       defaultState: formGroup.getRawValue(),
       CreatedStore: ComponentStore,
     });
@@ -83,16 +87,18 @@ export class StoreFactory {
   }
 
   public createComponentLoadingStore<ITEM, ERROR>({
-    storeName,
     defaultState,
     plugins = {},
+    skipLog,
+    storeName,
   }: {
-    storeName: string;
     defaultState?: {
       item?: ITEM;
       error?: ERROR;
     };
     plugins?: { storage?: StoragePluginTypes };
+    skipLog?: boolean;
+    storeName: string;
   }): ComponentLoadingStore<ITEM, ERROR> {
     return this.store.createStoreByStoreType<
       ComponentLoadingStore<ITEM, ERROR>,
@@ -101,6 +107,7 @@ export class StoreFactory {
       storeName,
       plugins,
       defaultState: getDefaultComponentLoadingState(defaultState),
+      skipLogForStore: skipLog,
       CreatedStore: ComponentLoadingStore,
     });
   }

@@ -1,6 +1,6 @@
 import { Inject, Injectable, Injector, Optional } from '@angular/core';
 
-import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
+import {SkipLogForStore, StateToken, StoreNameToken} from '../injection-tokens/state.token';
 import { ComponentLoadingStore } from './stores/component-loading-store.service';
 import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
@@ -82,17 +82,19 @@ export class Store {
     CREATED_STORE extends ComponentStore<STATE>,
     STATE extends object
   >({
+    additionalProviders = [],
     CreatedStore,
-    storeName,
     defaultState,
     plugins = {},
-    additionalProviders = [],
+    skipLogForStore,
+    storeName,
   }: {
     additionalProviders?: never[];
     CreatedStore: Stores;
     defaultState: STATE;
-    storeName: string;
     plugins?: { storage?: StoragePluginTypes };
+    skipLogForStore?: boolean;
+    storeName: string;
   }): CREATED_STORE {
     const { storage } = plugins;
     const initialState = this.getInitialState<STATE>(
@@ -108,6 +110,7 @@ export class Store {
         { provide: NgrxStore, useValue: this.ngrxStore },
         { provide: StoreNameToken, useValue: storeName },
         { provide: StateToken, useValue: initialState },
+        { provide: SkipLogForStore, useValue: skipLogForStore },
         ...additionalProviders,
       ],
     }).get(CreatedStore);
