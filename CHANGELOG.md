@@ -1,4 +1,21 @@
 
+
+## 2.3.0 (2022-05-19)
+
+#### :rocket: Enhancement
+* [#40](https://github.com/gernsdorfer/ngrx-lite/pull/40) add option skip log for create a new store ([@gernsdorfer](https://github.com/gernsdorfer))
+* [#38](https://github.com/gernsdorfer/ngrx-lite/pull/38) Remove reducer after store destroy (only if no Devtools configured ) ([@gernsdorfer](https://github.com/gernsdorfer))
+* [#37](https://github.com/gernsdorfer/ngrx-lite/pull/37) support timeTravel from imported states ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :bug: Bug Fix
+* [#39](https://github.com/gernsdorfer/ngrx-lite/pull/39) Fix compare latest TimeTravelState with store state for Update current State ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :house: Internal
+* [#36](https://github.com/gernsdorfer/ngrx-lite/pull/36) Refactor store factory ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.2.0 (2022-05-09)
 
 #### :rocket: Enhancement
