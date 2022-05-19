@@ -9,6 +9,7 @@ import {
   getDefaultComponentLoadingState,
 } from './component-loading-store.service';
 import {
+  SkipLogForStore,
   StateToken,
   StoreNameToken,
 } from '../../injection-tokens/state.token';
@@ -32,6 +33,10 @@ describe('LoadingStore', () => {
         {
           provide: StateToken,
           useValue: getDefaultComponentLoadingState(),
+        },
+        {
+          provide: SkipLogForStore,
+          useValue: false
         },
         {
           provide: DevToolHelper,
