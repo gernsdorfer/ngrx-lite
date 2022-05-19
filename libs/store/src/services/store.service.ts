@@ -45,7 +45,7 @@ export class Store {
   public addReducersForImportState(): void {
     this.storeDevtools?.liftedState.subscribe({
       next: ({ monitorState }) => {
-        if (monitorState.type === 'IMPORT_STATE') {
+        if (monitorState?.type === 'IMPORT_STATE') {
           const nextLiftedState: LiftedState = monitorState.nextLiftedState;
           const newStores = [
             ...new Set(
