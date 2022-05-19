@@ -4,10 +4,11 @@ import { ComponentLoadingStore } from './stores/component-loading-store.service'
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { cold } from 'jasmine-marbles';
 import { StoreFactory } from './store-factory.service';
-import { ComponentStore, DevToolHelper } from './stores/component-store.service';
+import { ComponentStore } from './stores/component-store.service';
 import { Store } from './store.service';
 import { Injector } from '@angular/core';
 import { StateToken, StoreNameToken } from '../injection-tokens/state.token';
+import {DevToolHelper} from "./dev-tool-helper.service";
 
 interface MyState {
   myState: string;
@@ -18,8 +19,8 @@ const defaultMyState: MyState = { myState: '' };
 
 describe('StoreFactory', () => {
   const devToolHelper = jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
-    canChangeState: true,
-    setCanChangeState: undefined,
+    isTimeTravelActive: false,
+    setTimeTravelActive: undefined,
   });
 
   const store = jasmine.createSpyObj<Store>('Store', {

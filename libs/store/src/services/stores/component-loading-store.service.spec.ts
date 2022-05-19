@@ -12,7 +12,7 @@ import {
   StateToken,
   StoreNameToken,
 } from '../../injection-tokens/state.token';
-import {DevToolHelper} from "./component-store.service";
+import {DevToolHelper} from "../dev-tool-helper.service";
 
 describe('LoadingStore', () => {
   let store: ComponentLoadingStore<string, number>;

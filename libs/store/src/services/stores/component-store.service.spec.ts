@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { getCustomAction } from '../action-creator';
-import { ComponentStore, DevToolHelper } from './component-store.service';
+import { ComponentStore } from './component-store.service';
 import { StateToken, StoreNameToken } from '../../injection-tokens/state.token';
+import {DevToolHelper} from "../dev-tool-helper.service";
 
 interface MyState {
   myState: string;
@@ -19,7 +20,7 @@ describe('ComponentStore', () => {
   const storeName = 'myStore';
 
   beforeEach(() => {
-    devToolHelper.setCanChangeState(true);
+    devToolHelper.setTimeTravelActive(false);
     TestBed.configureTestingModule({
       providers: [
         {
@@ -92,7 +93,7 @@ describe('ComponentStore', () => {
 
     describe('can not change state', () => {
       beforeEach(() => {
-        devToolHelper.setCanChangeState(false)
+        devToolHelper.setTimeTravelActive(true)
       });
       it('should not set state if can not changed', () => {
         store.setState((state) => ({ ...state, optionalValue: 'test' }));
@@ -171,7 +172,7 @@ describe('ComponentStore', () => {
 
     describe('can not change state', () => {
       beforeEach(() => {
-        devToolHelper.setCanChangeState(false);
+        devToolHelper.setTimeTravelActive(true);
       });
       it('should not set state if can not changed', () => {
         store.patchState((state) => ({ ...state, optionalValue: 'test' }));

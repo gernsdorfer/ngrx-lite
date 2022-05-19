@@ -7,12 +7,10 @@ import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
 import { takeUntil } from 'rxjs';
-import {
-  ComponentStore,
-  DevToolHelper,
-} from './stores/component-store.service';
+import { ComponentStore } from './stores/component-store.service';
 import { StoreDevtools } from '@ngrx/store-devtools';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
+import { DevToolHelper } from './dev-tool-helper.service';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
@@ -37,8 +35,8 @@ export class Store {
   public checkForTimeTravel(): void {
     this.storeDevtools?.liftedState.subscribe({
       next: ({ currentStateIndex, stagedActionIds }) => {
-        this.devToolHelper.setCanChangeState(
-          currentStateIndex === stagedActionIds.length - 1
+        this.devToolHelper.setTimeTravelActive(
+          currentStateIndex !== stagedActionIds.length - 1
         );
       },
     });
@@ -186,7 +184,7 @@ export class Store {
   ) {
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
       next: ({ computedStates, currentStateIndex }) => {
-        if (!this.devToolHelper.canChangeState()) {
+        if (this.devToolHelper.isTimeTravelActive()) {
           store.setState(
             computedStates[currentStateIndex].state[storeName],
             '',

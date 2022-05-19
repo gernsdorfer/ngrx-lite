@@ -3,19 +3,8 @@ import { Inject, Injectable } from '@angular/core';
 import { StateToken, StoreNameToken } from '../../injection-tokens/state.token';
 import { Store as NgrxStore } from '@ngrx/store';
 import { getCustomAction } from '../action-creator';
+import {DevToolHelper} from "../dev-tool-helper.service";
 
-@Injectable({providedIn: 'root'})
-export class DevToolHelper {
-  private _canChangeState = true;
-
-  setCanChangeState(isLastIndex: boolean) {
-    this._canChangeState = isLastIndex;
-  }
-
-   canChangeState(): boolean {
-    return this._canChangeState;
-  }
-}
 
 @Injectable({ providedIn: 'root' })
 export class ComponentStore<
@@ -28,7 +17,7 @@ export class ComponentStore<
     @Inject(StateToken) state: STATE
   ) {
     super(state);
-    if (this.devToolHelper.canChangeState()) {
+    if (!this.devToolHelper.isTimeTravelActive()) {
       this.dispatchCustomAction('init', state);
     }
   }
@@ -48,7 +37,7 @@ export class ComponentStore<
       forced?: boolean;
     } = {}
   ) {
-    if (!this.devToolHelper.canChangeState() && !forced) {
+    if (this.devToolHelper.isTimeTravelActive() && !forced) {
       return;
     }
     const newState =
@@ -65,7 +54,7 @@ export class ComponentStore<
       | ((state: STATE) => Partial<STATE>),
     action: string = 'PATCH_STATE'
   ) {
-    if (!this.devToolHelper.canChangeState()) {
+    if (this.devToolHelper.isTimeTravelActive()) {
       return;
     }
 

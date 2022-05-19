@@ -10,11 +10,9 @@ import { cold } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
 import { defer, EMPTY, of } from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
-import {
-  ComponentStore,
-  DevToolHelper,
-} from './stores/component-store.service';
+import { ComponentStore } from './stores/component-store.service';
 import { Store } from './store.service';
+import { DevToolHelper } from './dev-tool-helper.service';
 
 interface MyState {
   myState: string;
@@ -42,8 +40,8 @@ describe('Store', () => {
     }
   );
   const devToolHelper = jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
-    canChangeState: true,
-    setCanChangeState: undefined,
+    isTimeTravelActive: false,
+    setTimeTravelActive: undefined,
   });
   const localStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
     'LocalStoragePlugin',
@@ -69,7 +67,7 @@ describe('Store', () => {
 
   describe('minimal Dependencies are available', () => {
     beforeEach(() => {
-      devToolHelper.canChangeState.and.returnValue(true);
+      devToolHelper.isTimeTravelActive.and.returnValue(false);
       liftedState$ = EMPTY;
       TestBed.configureTestingModule({
         providers: [
@@ -116,7 +114,7 @@ describe('Store', () => {
 
   describe('All Dependencies are available', () => {
     beforeEach(() => {
-      devToolHelper.canChangeState.and.returnValue(true);
+      devToolHelper.isTimeTravelActive.and.returnValue(false);
       liftedState$ = EMPTY;
       TestBed.configureTestingModule({
         providers: [
@@ -150,7 +148,7 @@ describe('Store', () => {
     });
 
     describe('checkForTimeTravel', () => {
-      it('should set setCanChangeState to false', () => {
+      it('should set timeTravelActive to false', () => {
         liftedState$ = of(
           jasmine.createSpyObj<LiftedState>(
             'liftedState',
@@ -162,16 +160,16 @@ describe('Store', () => {
           )
         );
 
-        devToolHelper.setCanChangeState.calls.reset();
+        devToolHelper.setTimeTravelActive.calls.reset();
 
         getStore().checkForTimeTravel();
 
-        expect(devToolHelper.setCanChangeState).toHaveBeenCalledWith(false);
+        expect(devToolHelper.setTimeTravelActive).toHaveBeenCalledWith(true);
       });
     });
 
     describe('addReducersForImportState', () => {
-      it('should set setCanChangeState to false', () => {
+      it('should add new component reducers', () => {
         liftedState$ = of(
           jasmine.createSpyObj<LiftedState>(
             'liftedState',
@@ -379,7 +377,7 @@ describe('Store', () => {
 
       describe('set state from storeDevtools', () => {
         it('should set stateChanges to store', () => {
-          devToolHelper.canChangeState.and.returnValue(false);
+          devToolHelper.isTimeTravelActive.and.returnValue(true);
           liftedState$ = cold('a', {
             a: <Partial<LiftedState>>{
               computedStates: [
