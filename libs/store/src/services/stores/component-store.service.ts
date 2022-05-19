@@ -46,6 +46,7 @@ export class ComponentStore<
     }
     const newState =
       typeof stateOrUpdaterFn === 'function'
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ? (stateOrUpdaterFn as unknown as any)(this.get())
         : stateOrUpdaterFn;
     super.setState(newState);
