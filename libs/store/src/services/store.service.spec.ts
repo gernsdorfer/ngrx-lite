@@ -333,7 +333,7 @@ describe('Store', () => {
         });
 
         describe('action is current store action', () => {
-          it('should merge state with payload', () => {
+          it('should set payload', () => {
             getStore().createStoreByStoreType({
               storeName: 'testStore',
               defaultState: defaultMyState,
@@ -350,7 +350,7 @@ describe('Store', () => {
                   payload: { isLoading: true },
                 })
               )
-            ).toEqual({ isLoading: true, item: 'test' });
+            ).toEqual({ isLoading: true });
           });
 
           it('should return merge default state with payload', () => {

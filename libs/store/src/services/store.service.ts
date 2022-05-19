@@ -35,9 +35,9 @@ export class Store {
   public checkForTimeTravel(): void {
     this.storeDevtools?.liftedState.subscribe({
       next: ({ currentStateIndex, stagedActionIds }) => {
-        this.devToolHelper.setTimeTravelActive(
-          currentStateIndex !== stagedActionIds.length - 1
-        );
+        const isTimeTravelActive =
+          currentStateIndex !== stagedActionIds.length - 1;
+        this.devToolHelper.setTimeTravelActive(isTimeTravelActive);
       },
     });
   }
@@ -160,7 +160,7 @@ export class Store {
       action: { payload: STATE; type: string }
     ): STATE =>
       action.type.startsWith(`[COMPONENT_STORE][${storeName}]`)
-        ? { ...state, ...action.payload }
+        ? action.payload
         : state;
   }
 
@@ -184,7 +184,10 @@ export class Store {
   ) {
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
       next: ({ computedStates, currentStateIndex }) => {
-        if (this.devToolHelper.isTimeTravelActive()) {
+        if (
+          JSON.stringify(computedStates[currentStateIndex].state[storeName]) !==
+          JSON.stringify(store.state)
+        ) {
           store.setState(
             computedStates[currentStateIndex].state[storeName],
             '',
