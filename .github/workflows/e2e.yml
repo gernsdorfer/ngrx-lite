@@ -21,4 +21,7 @@ jobs:
           node-version: '16'
       - run: yarn
       - run: yarn run affected:e2e
+        env:
+          PERCY_TOKEN: ${{secrets.PERCY_TOKEN}}
+
 

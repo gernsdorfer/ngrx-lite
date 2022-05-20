@@ -2,6 +2,12 @@
   "sourceRoot": "apps/sample-app-e2e/src",
   "projectType": "application",
   "targets": {
+    "e2e-percy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["percy exec -- yarn run nx run sample-app-e2e:e2e"]
+      }
+    },
     "e2e": {
       "executor": "@nrwl/cypress:cypress",
       "options": {
