@@ -1,0 +1,817 @@
+{
+  "monitorState": {
+    "type": "@ngrx/store/update-reducers",
+    "features": [
+      "DemoBComponentStore"
+    ]
+  },
+  "nextActionId": 26,
+  "stagedActionIds": [
+    0,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "skippedActionIds": [],
+  "currentStateIndex": 24,
+  "isLocked": false,
+  "isPaused": false,
+  "actionsById": {
+    "0": {
+      "action": {
+        "type": "@ngrx/store/init"
+      },
+      "timestamp": 1653043117916,
+      "type": "PERFORM_ACTION"
+    },
+    "2": {
+      "action": {
+        "payload": {},
+        "type": "[COMPONENT_STORE][ROUTER_STORE] init"
+      },
+      "timestamp": 1653043117918,
+      "type": "PERFORM_ACTION"
+    },
+    "3": {
+      "action": {
+        "type": "@ngrx/store/update-reducers",
+        "features": [
+          "ROUTER_STORE"
+        ]
+      },
+      "timestamp": 1653043117918,
+      "type": "PERFORM_ACTION"
+    },
+    "4": {
+      "action": {
+        "payload": {
+          "counter": 0
+        },
+        "type": "[COMPONENT_STORE][BASIC_COUNTER] init"
+      },
+      "timestamp": 1653043117924,
+      "type": "PERFORM_ACTION"
+    },
+    "5": {
+      "action": {
+        "type": "@ngrx/store/update-reducers",
+        "features": [
+          "BASIC_COUNTER"
+        ]
+      },
+      "timestamp": 1653043117924,
+      "type": "PERFORM_ACTION"
+    },
+    "6": {
+      "action": {
+        "payload": {
+          "url": "/"
+        },
+        "type": "[COMPONENT_STORE][ROUTER_STORE] URL_CHANGED"
+      },
+      "timestamp": 1653043117925,
+      "type": "PERFORM_ACTION"
+    },
+    "7": {
+      "action": {
+        "payload": {
+          "counter": 1
+        },
+        "type": "[COMPONENT_STORE][BASIC_COUNTER] PATCH_STATE"
+      },
+      "timestamp": 1653043118770,
+      "type": "PERFORM_ACTION"
+    },
+    "8": {
+      "action": {
+        "payload": {
+          "counter": 2
+        },
+        "type": "[COMPONENT_STORE][BASIC_COUNTER] PATCH_STATE"
+      },
+      "timestamp": 1653043119288,
+      "type": "PERFORM_ACTION"
+    },
+    "9": {
+      "action": {
+        "payload": {
+          "isLoading": false
+        },
+        "type": "[COMPONENT_STORE][LOADING_BASIC] init"
+      },
+      "timestamp": 1653043121202,
+      "type": "PERFORM_ACTION"
+    },
+    "10": {
+      "action": {
+        "type": "@ngrx/store/update-reducers",
+        "features": [
+          "LOADING_BASIC"
+        ]
+      },
+      "timestamp": 1653043121203,
+      "type": "PERFORM_ACTION"
+    },
+    "11": {
+      "action": {
+        "payload": {
+          "url": "/loading-basic"
+        },
+        "type": "[COMPONENT_STORE][ROUTER_STORE] URL_CHANGED"
+      },
+      "timestamp": 1653043121203,
+      "type": "PERFORM_ACTION"
+    },
+    "12": {
+      "action": {
+        "payload": {
+          "isLoading": true
+        },
+        "type": "[COMPONENT_STORE][LOADING_BASIC] INCREMENT:LOAD"
+      },
+      "timestamp": 1653043122339,
+      "type": "PERFORM_ACTION"
+    },
+    "13": {
+      "action": {
+        "payload": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "type": "[COMPONENT_STORE][LOADING_BASIC] INCREMENT:SUCCESS"
+      },
+      "timestamp": 1653043122741,
+      "type": "PERFORM_ACTION"
+    },
+    "14": {
+      "action": {
+        "payload": {
+          "isLoading": true,
+          "item": {
+            "counter": 1
+          }
+        },
+        "type": "[COMPONENT_STORE][LOADING_BASIC] INCREMENT:LOAD"
+      },
+      "timestamp": 1653043123341,
+      "type": "PERFORM_ACTION"
+    },
+    "15": {
+      "action": {
+        "payload": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "type": "[COMPONENT_STORE][LOADING_BASIC] INCREMENT:SUCCESS"
+      },
+      "timestamp": 1653043123743,
+      "type": "PERFORM_ACTION"
+    },
+    "16": {
+      "action": {
+        "payload": {
+          "counter": 0
+        },
+        "type": "[COMPONENT_STORE][DemoAComponentStore] init"
+      },
+      "timestamp": 1653043128713,
+      "type": "PERFORM_ACTION"
+    },
+    "17": {
+      "action": {
+        "type": "@ngrx/store/update-reducers",
+        "features": [
+          "DemoAComponentStore"
+        ]
+      },
+      "timestamp": 1653043128714,
+      "type": "PERFORM_ACTION"
+    },
+    "18": {
+      "action": {
+        "payload": {
+          "counter": 0
+        },
+        "type": "[COMPONENT_STORE][DemoBComponentStore] init"
+      },
+      "timestamp": 1653043128714,
+      "type": "PERFORM_ACTION"
+    },
+    "19": {
+      "action": {
+        "type": "@ngrx/store/update-reducers",
+        "features": [
+          "DemoBComponentStore"
+        ]
+      },
+      "timestamp": 1653043128714,
+      "type": "PERFORM_ACTION"
+    },
+    "20": {
+      "action": {
+        "payload": {
+          "url": "/multiple-storage-instances"
+        },
+        "type": "[COMPONENT_STORE][ROUTER_STORE] URL_CHANGED"
+      },
+      "timestamp": 1653043128715,
+      "type": "PERFORM_ACTION"
+    },
+    "21": {
+      "action": {
+        "payload": {
+          "counter": 1
+        },
+        "type": "[COMPONENT_STORE][DemoAComponentStore] INCREMENT"
+      },
+      "timestamp": 1653043129730,
+      "type": "PERFORM_ACTION"
+    },
+    "22": {
+      "action": {
+        "payload": {
+          "counter": 2
+        },
+        "type": "[COMPONENT_STORE][DemoAComponentStore] INCREMENT"
+      },
+      "timestamp": 1653043130432,
+      "type": "PERFORM_ACTION"
+    },
+    "23": {
+      "action": {
+        "payload": {
+          "counter": 1
+        },
+        "type": "[COMPONENT_STORE][DemoBComponentStore] INCREMENT"
+      },
+      "timestamp": 1653043131447,
+      "type": "PERFORM_ACTION"
+    },
+    "24": {
+      "action": {
+        "payload": {
+          "counter": 2
+        },
+        "type": "[COMPONENT_STORE][DemoBComponentStore] INCREMENT"
+      },
+      "timestamp": 1653043132079,
+      "type": "PERFORM_ACTION"
+    },
+    "25": {
+      "action": {
+        "payload": {
+          "counter": 3
+        },
+        "type": "[COMPONENT_STORE][DemoBComponentStore] INCREMENT"
+      },
+      "timestamp": 1653043132648,
+      "type": "PERFORM_ACTION"
+    }
+  },
+  "computedStates": [
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "BASIC_COUNTER": {
+          "counter": 0
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "BASIC_COUNTER": {
+          "counter": 0
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "BASIC_COUNTER": {
+          "counter": 0
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "BASIC_COUNTER": {
+          "counter": 0
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "BASIC_COUNTER": {
+          "counter": 0
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/"
+        },
+        "BASIC_COUNTER": {
+          "counter": 0
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/"
+        },
+        "BASIC_COUNTER": {
+          "counter": 1
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": true
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": true,
+          "item": {
+            "counter": 1
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/multiple-storage-instances"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 0
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/multiple-storage-instances"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 1
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/multiple-storage-instances"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 2
+        },
+        "DemoBComponentStore": {
+          "counter": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/multiple-storage-instances"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 2
+        },
+        "DemoBComponentStore": {
+          "counter": 1
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/multiple-storage-instances"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 2
+        },
+        "DemoBComponentStore": {
+          "counter": 2
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/multiple-storage-instances"
+        },
+        "BASIC_COUNTER": {
+          "counter": 2
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 2
+          }
+        },
+        "DemoAComponentStore": {
+          "counter": 2
+        },
+        "DemoBComponentStore": {
+          "counter": 3
+        }
+      }
+    }
+  ],
+  "committedState": {
+    "ROUTER_STORE": {},
+    "BASIC_COUNTER": {
+      "counter": 0
+    },
+    "LOADING_BASIC": {
+      "isLoading": false
+    },
+    "DemoAComponentStore": {
+      "counter": 0
+    },
+    "DemoBComponentStore": {
+      "counter": 0
+    }
+  }
+}

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
   LocalStoragePlugin,
-  localStoragePlugin,
+  localStoragePlugin, ReduxForWindowModule,
   RouterStoreModule,
   SessionStoragePlugin,
   sessionStoragePlugin,
@@ -45,6 +45,7 @@ import { StoreWithoutLogComponent } from './component-store/store-without-loging
     AppRoutingModule,
     MatButtonModule,
     RouterStoreModule,
+    ReduxForWindowModule
   ],
   providers: [
     CounterStore,

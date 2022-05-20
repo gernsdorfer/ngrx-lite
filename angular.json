@@ -3,6 +3,7 @@
   "projects": {
     "doc-app": "apps/doc-app",
     "sample-app": "apps/sample-app",
+    "sample-app-e2e": "apps/sample-app-e2e",
     "store": "libs/store"
   }
 }
