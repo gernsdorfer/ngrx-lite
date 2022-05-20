@@ -1,0 +1,24 @@
+name: Test, Lint, Build
+on:
+  push:
+    branches:
+      - add-cypress-tests
+
+jobs:
+  add-cypress-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v2
+        with:
+          main-branch-name: 'master'
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      - run: yarn
+      - run: yarn run e2e
+
