@@ -1,4 +1,4 @@
-name: Test, Lint, Build
+name: e2e
 on:
   push:
     branches:
