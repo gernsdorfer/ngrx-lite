@@ -1,19 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { ReduxForWindowModule } from '@gernsdorfer/ngrx-lite';
-import {DevToolHelper} from "./dev-tool-helper.service";
-import {StoreDevtools} from "@ngrx/store-devtools";
-import {defer} from "rxjs";
+import { StoreDevtools } from '@ngrx/store-devtools';
 
 describe('ReduxForWindowModule', () => {
   const storeDevtools = jasmine.createSpyObj<StoreDevtools>(
     'storeDevtools',
     {
       jumpToAction: undefined,
-      importState: undefined
+      importState: undefined,
     },
-    {
-
-    }
+    {}
   );
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,22 +27,21 @@ describe('ReduxForWindowModule', () => {
     const module = TestBed.inject(ReduxForWindowModule);
 
     expect(module).toBeDefined();
-
   });
 
-  it('should importState via window' , () => {
-    const module = TestBed.inject(ReduxForWindowModule);
+  it('should importState via window', () => {
+    TestBed.inject(ReduxForWindowModule);
 
-    window.importState('liftedState')
+    window.importState('liftedState');
 
-    expect(storeDevtools.importState).toHaveBeenCalledWith('liftedState')
+    expect(storeDevtools.importState).toHaveBeenCalledWith('liftedState');
   });
 
-  it('should jumpToAction via window' , () => {
-    const module = TestBed.inject(ReduxForWindowModule);
+  it('should jumpToAction via window', () => {
+    TestBed.inject(ReduxForWindowModule);
 
-    window.jumpToAction(1)
+    window.jumpToAction(1);
 
     expect(storeDevtools.jumpToAction).toHaveBeenCalledWith(1);
-  })
+  });
 });
