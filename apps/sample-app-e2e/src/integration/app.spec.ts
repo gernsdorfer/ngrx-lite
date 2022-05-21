@@ -1,6 +1,5 @@
 import '../fixtures/component-loading.json';
 import { StoreDevtools } from '@ngrx/store-devtools/src/devtools';
-import { describe } from 'mocha';
 
 declare global {
   interface Window {
