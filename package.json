@@ -5,7 +5,7 @@
   "scripts": {
     "affected:lint": "nx affected:lint",
     "affected:test": "nx affected:test",
-    "affected:e2e": "nx affected --target=e2e-percy",
+    "affected:e2e-ui": "nx affected --target=e2e-ui",
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "nx serve",

@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn
-      - run: yarn run affected:e2e
+      - run: yarn run affected:e2e-ui
         env:
           PERCY_TOKEN: ${{secrets.PERCY_TOKEN}}
 
