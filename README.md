@@ -1,78 +1,82 @@
-# NgrxLite
+[![Test, Lint, Build](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/ci.yml/badge.svg)]()
+[![Publish to NPM](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml)
+[![styled with](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
+[![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)]()
 
-> A small angular State Mangement based on [ngrx](https://github.com/ngrx/platform) component-store, with some benefits 😎
+# NgRxLite
 
-## Why we need this ?
+> A small Angular state mangement based on [NgRx](https://github.com/ngrx/platform) ComponentStore, with some benefits 😎
+
+## Synopsis
 
 The current [@ngrx/component-store](https://ngrx.io/guide/component-store) implementation works with its own isolated
-Store. Unfortunately, there is no connection to the global [@ngrx/Store](https://ngrx.io/guide/store) or
+store. Unfortunately, there is no connection to the global [@ngrx/store](https://ngrx.io/guide/store) or
 the [@ngrx/store-devtools](https://ngrx.io/guide/store-devtools).
 
 This Library connects your [@ngrx/component-store](https://ngrx.io/guide/component-store) with
-the [@ngrx/Store](https://ngrx.io/guide/store) to share and debug
+the [@ngrx/store](https://ngrx.io/guide/store) to share and debug
 the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 
 ## Benefits
 
-- 🤝 same API like [@ngrx/component-store](https://ngrx.io/guide/component-store) with optional parameters
-- ⏱ create fast and easy a dynamic redux store
+- 🤝 same API as [@ngrx/component-store](https://ngrx.io/guide/component-store) with optional parameters
+- ⏱ fast and easy creation of a dynamic Redux store
 - ⏳ optional integrated loading state for effects
-- 🤯 debug your application State across different routes
-- ⚒️ Support Redux Devtools for your light components-store (only if you use redux-devtools) for
-  - patchState
-  - setState
-  - createdLoadingEffects
-- 💽 support session/locale Storage
-- 🏘 You Decide where your Store lives: Root, Module or in the Component Scope
-- 🔛 Shared your State Changes and Actions in the ngrx Store
-- 📑 Store your Form Data to persists and debug
-- ✍️ write your tests much easier
+- 🤯 debuging of application state across different routes
+- ⚒️ Redux DevTools support for NgRxLite ComponentsStore for
+  - `patchState`
+  - `setState`
+  - `createdLoadingEffects`
+- 💽 supports session storage and local storage
+- 🏘 freedom to decide where the store is located: root, module or in the component scope
+- 🔛 share the state changes and actions in the NgRx store
+- 📑 store the form data for persistance and debugging
+- ✍️ write the tests is much easier
 
 <hr />
 
-[![Build Status](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/ci.yml/badge.svg)]()
-[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()
-[![Publish to NPM](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/npm-publish.yml)
-![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg?style=flat)
-
-
-- 👩‍💻 checkout the [Sample-App](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
+- 👩‍💻 checkout the [sample app](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
 - 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
 
-UI-DEMO
+## UI Demo
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-ui)
 
-Test-DEMO
+## Test Demo
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
 
 ## Install
 
-yarn: `yarn add @ngrx/store @gernsdorfer/ngrx-lite`
+### Yarn
 
-npm: `npm install @ngrx/store @gernsdorfer/ngrx-lite`
+```bash
+yarn add @ngrx/store @gernsdorfer/ngrx-lite
+```
+
+### NPM
+
+```bash
+npm install @ngrx/store @gernsdorfer/ngrx-lite
+```
 
 ## Usage
 
-1. Import `StoreModule`from [ngrx](https://github.com/ngrx/platform) to your root Module
+1. import the `StoreModule` from [NgRx](https://github.com/ngrx/platform) to the root module
 
 ```ts
 @NgModule({
-  //...
+  // ...
   imports: [StoreModule.forRoot({})]
-//...
+  // ...
 ```
 
-2. Create Your Store
-
-You have the same API as [@ngrx/component-store](https://ngrx.io/guide/component-store)
+2. create the store with the same API as [@ngrx/component-store](https://ngrx.io/guide/component-store)
 
 ```ts
-
 export interface MyState {
-  counter: number
+  counter: number;
 }
 
 @Component({
@@ -83,17 +87,16 @@ class MyComponent implements OnDestroy {
   // create a componentStore
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
   // read the state
   public counterState$: Observable<MyState> = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   increment(counter: number) {
     // patch your state
-    this.store.patchState({counter});
+    this.store.patchState({ counter });
   }
 
   ngOnDestroy() {
@@ -107,14 +110,11 @@ That's it 🥳
 
 ## Features
 
-### Devtool support
+### DevTools support
 
-Install and import [ngrx/store-devtools](https://ngrx.io/guide/store-devtools) und have all Features from the devtools
-for your component store
+Install and import [ngrx/store-devtools](https://ngrx.io/guide/store-devtools) und have all the features from the DevTools for your component store.
 
-Let's have a look into the the redux devtools whats going on, in the example above.
-
-It's important to set the `monitor` property in your devToolConfig, otherwise an State Import is not possible.
+It's important to set the `monitor` property in your `StoreDevtoolsOptions`, otherwise a state import is not possible.
 
 ```ts app.module
 @NgModule({
@@ -123,7 +123,7 @@ It's important to set the `monitor` property in your devToolConfig, otherwise an
             name: 'ngrx-lite-demo',
             maxAge: 25,
             logOnly: false,
-          // define the monitor Property here
+            // set the monitor property here
             monitor: (state, action) => action,
         }),
 
@@ -131,23 +131,25 @@ It's important to set the `monitor` property in your devToolConfig, otherwise an
 })
 ```
 
-##### Store is init
+Let's take a look at Redux DevTools and what happens in the example above.
 
-After the store is init you can find the store in the @ngrx/devtools
+#### Store is initialized
+
+After the store is initialized you can find the store in the `@ngrx/devtools`.
 
 ![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/component-store-devtools-init.png)
 
-##### Patch State
+#### Patch state
 
-After patch State you see this in your redux devtool. It's possbile to define an custom Actionname for your patch/set
-State
+After patch state you see this in your Redux DevTools. It's possbile to define an custom action name for your patch/set state.
 
 ![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/component-store-devtools-patch.png)
 
-### Router Store
+### Router store
 
-Import the `RouterStoreModule` into your main application to debug your state across all visited URL's. This module
-store's related URL to the current Store.  
+Import the `RouterStoreModule` into your main application to debug your state across all visited URLs. This module
+stores related URLs to the current store.
+
 So it's possible to replay your state changes by revisiting the related url.
 
 ```ts
@@ -157,13 +159,11 @@ So it's possible to replay your state changes by revisiting the related url.
 //...
 ```
 
-### Loading Store
+### Loading store
 
-Create LoaderStore to set a Loader State while an Effect is running. You have the same API as `createComponentStore`
-with an extra methode `loadingEffect`
+Create ComponentLoadingStore to set a Loader State while an Effect is running. You have the same API as `createComponentStore` with an extra method `loadingEffect`.
 
 ```ts
-
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
 @Component({
@@ -171,9 +171,11 @@ type State = LoadingStoreState<{ counter: number }, { message: string }>;
   templateUrl: 'loading-effect.html',
 })
 export class LoadingEffectComponent implements OnDestroy {
-  // create your loading store 
-  private store = this.storeFactory.createComponentLoadingStore<State['item'],
-    State['error']>({
+  // create your loading store
+  private store = this.storeFactory.createComponentLoadingStore<
+    State['item'],
+    State['error']
+  >({
     storeName: 'LOADING_STORE',
   });
 
@@ -186,47 +188,44 @@ export class LoadingEffectComponent implements OnDestroy {
     (counter: number = 0) => of(counter + 1)
   );
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   ngOnDestroy() {
     // destory the store
     this.counterStore.ngOnDestroy();
   }
 }
-
 ```
 
-#### What's going on ? Let's have a look into the the redux devtools
+Let's take a look at Redux DevTools and what happens in the example above.
 
-##### Store is init
+#### Store is initialized
 
-After the store is init you can find the store in the @ngrx/devtools
+After the store is initialized you can find the store in the `@ngrx/devtools`.
 
 ![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/init.png)
 
-##### Loader State `isloading` changed
+#### Loader state `isLoading` changed
 
 For a running Effect `isLoading` is true and you can show a spinner in your UI.
 
 ![State-Loading](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/load.png)
 
-##### Effect run successfully
+#### Effect successfully executed
 
-After an Effect run Successfully the `item` key is updated
+After an effect was successfully executed the `item` key is updated.
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/success.png)
 
-##### Effect run unsuccessfully
+#### Effect unsuccessfully executed
 
-After an Effect run unsuccessfully the `error` key contains the error
+After an effect was unsuccessfully executed the `error` key contains the error.
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/error.png)
 
 ### Form Store
 
 ```ts
-
 interface Product {
   name: string;
 }
@@ -245,16 +244,16 @@ export class PersistFormComponent implements OnDestroy {
     plugins: {
       storage: 'sessionStoragePlugin',
     },
-    formGroup: this.productForm
+    formGroup: this.productForm,
   });
 }
 ```
 
 ### Session/Local Storage
 
-#### Register Session/Locale-Storage Service
+#### Register Session/Locale storage service
 
-1. Register Session/Locale-Storage in your Root-Module
+1. Register Session/Locale storage in your root module
 
 ```ts
 @NgModule({
@@ -267,7 +266,7 @@ export class PersistFormComponent implements OnDestroy {
 })
 ```
 
-1. Create your new Store with a session Storage Sync Option
+1. Create new store with a session storage sync option
 
 ```ts
 class MyLCass {
@@ -285,11 +284,10 @@ class MyLCass {
 
 ### Testing
 
-Import `storeTestingFactory` and write your test's. A minimal Example you can
-find [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts)
+Import `storeTestingFactory` and write your tests. A minimal example can be
+found [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts).
 
-All Demo Unit Test's you can find
-here:[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
+All demo unit tests can be found here: [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
 
 ```ts
 TestBed.configureTestingModule({
