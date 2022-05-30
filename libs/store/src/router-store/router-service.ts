@@ -7,7 +7,9 @@ import { filter, from, map, switchMap, takeUntil } from 'rxjs';
 export class RouterStore {
   private store = this.storeFactory.createComponentStore<{ url?: string }>({
     storeName: 'ROUTER_STORE',
-    defaultState: {},
+    defaultState: {
+      url: this.router.url
+    },
   });
 
   public state$ = this.store.state$;
