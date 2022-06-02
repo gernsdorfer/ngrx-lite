@@ -1,4 +1,4 @@
-describe('component Forms', () => {
+describe('component store', () => {
   beforeEach(() => {
     cy.visit('/');
   });

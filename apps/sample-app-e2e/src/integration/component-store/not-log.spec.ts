@@ -5,7 +5,7 @@ declare global {
     getLiftedState: (callback: (state: LiftedState) => void) => void;
   }
 }
-describe('component Forms', () => {
+describe('component store', () => {
   beforeEach(() => {
     cy.visit('/', {});
     cy.window().then((win) => {
@@ -33,14 +33,7 @@ describe('component Forms', () => {
       cy.openLinkFromToolbar('Component-Store', 'Custom-Action');
 
       cy.openLinkFromToolbar('Component-Store', 'Without Log');
-      cy.window().then((window) => {
-        console.log('window');
-        window.getLiftedState((state) => {
-          console.log('state', state);
-        });
-      });
-
-      //cy.get(window.getLiftedState).should('have.text', '1');
+      cy.get('mat-card-content').should('have.text', '1');
     });
   });
 });
