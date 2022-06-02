@@ -11,7 +11,7 @@ declare global {
       jumpToAction: (actionType: string) => Chainable<Subject>;
     }
 
-    interface Chainable<Subject> {
+    interface Chainable {
       openLinkFromToolbar(menuName: string, menuItem: string): void;
     }
   }
@@ -30,8 +30,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'importState',
-  <T>(
+  'importState', (
     stateFixture: string
   ) => {
     cy.window().then((window) => {

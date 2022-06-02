@@ -29,7 +29,6 @@ describe('DemoEffectX', () => {
 
   it('should log payload', () => {
     const effects = TestBed.inject(DemoEffect);
-    const logSpy = spyOn(console, 'log');
     actions$ = cold('a', { a: MyIncrementAction({ payload: { counter: 1 } }) });
     expect(effects.logActions$).toBeObservable(
       cold('a', { a: MyIncrementAction({ payload: { counter: 1 } }) })
