@@ -1,4 +1,4 @@
-name: Test, Lint, Build
+name: Test, Lint, Build, e2e
 on:
   push:
     branches:
@@ -20,8 +20,10 @@ jobs:
         with:
           node-version: '16'
       - run: yarn
-      - run: yarn run affected:lint --target=build --all --parallel=3
-      - run: yarn run affected:test --target=test --all --parallel=2
+      - run: yarn run affected:build --all --parallel=3
+      - run: yarn run affected:lint --all --parallel=2
+      - run: yarn run affected:test --all --parallel=2
+      - run: yarn run affected:e2e --all --parallel=2
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -39,6 +41,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn
-      - run: npx nx affected --target=build --parallel=3
-      - run: npx nx affected --target=test --parallel=2
-      - run: npx nx affected --target=lint --parallel=2
+      - run: yarn run affected:build --parallel=3
+      - run: yarn run affected:lint --parallel=2
+      - run: yarn run affected:test --parallel=2
+      - run: yarn run affected:e2e   --target=lint --parallel=2

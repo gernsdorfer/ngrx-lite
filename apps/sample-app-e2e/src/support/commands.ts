@@ -1,50 +1,52 @@
 // eslint-disable-next-line @typescript-eslint/no-namespace
-import { LiftedState } from '@ngrx/store-devtools';
-import Chainable = Cypress.Chainable;
+import {LiftedState} from '@ngrx/store-devtools';
+import {lastValueFrom, take} from 'rxjs';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
-      runStorageFile(
-        stateFixture: string,
-        callback: (stateName: string) => Chainable<Subject>
-      ): void;
+      importState: (stateFixture: string) => Chainable<Subject>;
+      jumpToAction: (actionType: string) => Chainable<Subject>;
     }
 
     interface Chainable<Subject> {
-      openLinkFromToolbar(menuName: string , menuItem: string): void;
+      openLinkFromToolbar(menuName: string, menuItem: string): void;
     }
   }
 }
-Cypress.Commands.add('openLinkFromToolbar', (menuName: string , menuItem: string) => {
-  cy.get('mat-toolbar')
-    .contains(menuName)
-    .click()
-    .get('mat-toolbar')
-    .get('a')
-    .contains(menuItem)
-    .click();
-});
+Cypress.Commands.add(
+  'openLinkFromToolbar',
+  (menuName: string, menuItem: string) => {
+    cy.get('mat-toolbar')
+      .contains(menuName)
+      .click()
+      .get('mat-toolbar')
+      .get('a')
+      .contains(menuItem)
+      .click();
+  }
+);
 
 Cypress.Commands.add(
-  'runStorageFile',
-  <T>(stateFixture: string, callback: (stateName: string) => Chainable<T>) => {
+  'importState',
+  <T>(
+    stateFixture: string
+  ) => {
     cy.window().then((window) => {
       cy.fixture(stateFixture).then((state: LiftedState) => {
-        window.importState(state);
-        state.stagedActionIds
-          .filter((id) =>
-            state.actionsById[id]?.action?.type.startsWith('[COMPONENT_STORE]')
-          )
-          .forEach((id) => {
-            const stateName = `${id} - ${state.actionsById[id]?.action?.type} `;
-            cy.wrap(stateName)
-              .then(() => window.jumpToAction(id))
-              .then(() => callback(stateName));
-          });
+        window.storeDevtools.importState(state);
+        return Promise.resolve();
       });
     });
   }
 );
+Cypress.Commands.add('jumpToAction', (actionType: string) => cy.window().then(async (window) => {
+    const liftetState = await lastValueFrom(window.storeDevtools.liftedState.pipe(take(1)));
+    const [actionId] = liftetState.stagedActionIds
+      .filter((id) => liftetState.actionsById[id]?.action?.type === actionType);
+    cy.wrap(window.zone.run(() => window.storeDevtools.jumpToAction(actionId)));
+  })
+)
+;
