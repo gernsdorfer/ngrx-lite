@@ -44,4 +44,4 @@ jobs:
       - run: yarn run affected:build --parallel=3
       - run: yarn run affected:lint --parallel=2
       - run: yarn run affected:test --parallel=2
-      - run: yarn run affected:e2e   --target=lint --parallel=2
+      - run: yarn run affected:e2e --parallel=2
