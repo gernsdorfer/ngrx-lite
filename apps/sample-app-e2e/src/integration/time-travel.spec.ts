@@ -7,11 +7,11 @@ declare global {
     importState: StoreDevtools['importState'];
   }
 }
-describe('sample-app', () => {
+describe('TimeTravel with different routes', () => {
   beforeEach(() => {
     cy.visit('/');
   });
-  describe('loadingComponentStore', () => {
+  describe('load State from ', () => {
     it('should show increment with loading indicator', () => {
       cy.runStorageFile('component-loading.json', (stateName) =>
         cy.percySnapshot(stateName)

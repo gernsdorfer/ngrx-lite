@@ -22,7 +22,6 @@ const routes: Routes = [
   },
   {
     path: 'persist-form',
-
     loadChildren: () =>
       import('./form-store/persist-form/persist-form.module').then(
         (m) => m.PersistFormModule
@@ -38,7 +37,11 @@ const routes: Routes = [
   { path: 'storage', component: StorageExampleComponent },
   {
     path: 'storage-from-service',
-    component: StorageFromServiceComponent,
+   // component: StorageFromServiceComponent,
+    loadChildren: () =>
+      import('./component-store/service-counter/service-counter.module').then(
+        (m) => m.ServiceCounterModule
+      ),
   },
   { path: 'store-without-log', component: StoreWithoutLogComponent },
   {

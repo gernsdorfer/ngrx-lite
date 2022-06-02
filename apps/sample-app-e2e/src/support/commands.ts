@@ -12,9 +12,22 @@ declare global {
         callback: (stateName: string) => Chainable<Subject>
       ): void;
     }
-  }
 
+    interface Chainable<Subject> {
+      openLinkFromToolbar(menuName: string , menuItem: string): void;
+    }
+  }
 }
+Cypress.Commands.add('openLinkFromToolbar', (menuName: string , menuItem: string) => {
+  cy.get('mat-toolbar')
+    .contains(menuName)
+    .click()
+    .get('mat-toolbar')
+    .get('a')
+    .contains(menuItem)
+    .click();
+});
+
 Cypress.Commands.add(
   'runStorageFile',
   <T>(stateFixture: string, callback: (stateName: string) => Chainable<T>) => {

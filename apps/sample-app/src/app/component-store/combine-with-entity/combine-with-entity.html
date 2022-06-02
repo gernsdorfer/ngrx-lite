@@ -15,7 +15,7 @@
       </button>
 
     </form>
-    <div *ngFor="let product of products$ | async">
+    <div *ngFor="let product of products$ | async" class="product-list">
       {{product.name}}
       <button (click)="selectProduct(product.id)" mat-icon-button>
         <mat-icon>edit</mat-icon>

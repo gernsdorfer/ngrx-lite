@@ -2,6 +2,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs';
 import { MyIncrementAction } from './shared-action.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class DemoEffect {
@@ -9,10 +10,16 @@ export class DemoEffect {
     () =>
       this.actions$.pipe(
         ofType(MyIncrementAction),
-        tap(({payload}) => console.log('receive Data', payload))
+        tap(({ payload }) =>
+          this.snackbar.open(`counter increment: ${payload.counter}`, undefined, {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 2000
+          })
+        )
       ),
     { dispatch: false }
   );
 
-  constructor(private actions$: Actions) {}
+  constructor(private actions$: Actions, private snackbar: MatSnackBar) {}
 }

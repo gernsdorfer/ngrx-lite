@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { ReduxForWindowModule } from '@gernsdorfer/ngrx-lite';
 import { StoreDevtools } from '@ngrx/store-devtools';
+import {ReduxForWindowModule} from "./redux-for-window.service";
 
 describe('ReduxForWindowModule', () => {
   const storeDevtools = jasmine.createSpyObj<StoreDevtools>(
