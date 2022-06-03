@@ -3,7 +3,7 @@ describe('component store', () => {
     cy.visit('/');
   });
 
-  describe('not-log', () => {
+  describe('entity', () => {
     beforeEach(() => {
       cy.openLinkFromToolbar('Component-Store', 'Entity');
     });
