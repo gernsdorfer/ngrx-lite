@@ -25,7 +25,7 @@ jobs:
       - run: yarn run affected:test --all --parallel=2
       - run: yarn run affected:e2e --all --record
         env:
-          NODE_AUTH_TOKEN: ${{secrets.CYPRESS_RECORD_KEY}}
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -48,4 +48,4 @@ jobs:
       - run: yarn run affected:test --parallel=2
       - run: yarn run affected:e2e --record
         env:
-          NODE_AUTH_TOKEN: ${{secrets.CYPRESS_RECORD_KEY}}
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
