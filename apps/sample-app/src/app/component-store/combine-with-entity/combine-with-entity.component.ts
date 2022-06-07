@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 interface Product {
   id: number;
@@ -35,9 +35,15 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
   });
   products$ = this.store.select(selectAll);
 
-  productForm = new UntypedFormGroup({
-    id: new UntypedFormControl('', [Validators.required]),
-    name: new UntypedFormControl('', [Validators.required]),
+  productForm = new FormGroup({
+    id: new FormControl(0, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   constructor(private storeFactory: StoreFactory) {}

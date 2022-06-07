@@ -100,8 +100,8 @@ describe('BasicExampleComponent', () => {
       component.resetProductForm();
 
       expect(component.productForm.getRawValue()).toEqual({
-        id: null,
-        name: null,
+        id: 0,
+        name: '',
       });
     });
   });

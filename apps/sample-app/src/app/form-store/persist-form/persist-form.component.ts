@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 interface Product {
   name: string;
@@ -11,9 +11,15 @@ interface Product {
   templateUrl: 'persist-form.html',
 })
 export class PersistFormComponent implements OnDestroy {
-  productForm = new UntypedFormGroup({
-    name: new UntypedFormControl('', [Validators.required]),
-    lastName: new UntypedFormControl('', [Validators.required]),
+  productForm = new FormGroup({
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    lastName: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   private store = this.storeFactory.createFormComponentStore<Product>({
@@ -22,7 +28,7 @@ export class PersistFormComponent implements OnDestroy {
       storage: 'sessionStoragePlugin',
     },
     formGroup: this.productForm,
-    skipLog: true
+    skipLog: true,
   });
 
   constructor(private storeFactory: StoreFactory) {}
