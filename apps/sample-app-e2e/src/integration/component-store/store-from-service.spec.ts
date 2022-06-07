@@ -12,17 +12,17 @@ describe('component store', () => {
     });
 
     it('should show initial state', () => {
-      cy.get('mat-card-content').should('have.text', '0');
+      cy.get('.counter').should('have.text', '0');
     });
 
     it('should show incremented state', () => {
-      cy.get('mat-card-actions button').click();
+      cy.get('.increment').click();
 
-      cy.get('mat-card-content').should('have.text', '1');
+      cy.get('.counter').should('have.text', '1');
     });
 
     it('should restore state after revisit', () => {
-      cy.get('mat-card-actions button').click();
+      cy.get('.increment').click();
 
       cy.openLinkFromToolbar('Component-Store', 'Basic');
 
@@ -31,7 +31,7 @@ describe('component store', () => {
         'Store from Service (Provided in Module)'
       );
 
-      cy.get('mat-card-content').should('have.text', '1');
+      cy.get('.counter').should('have.text', '1');
     });
   });
 });

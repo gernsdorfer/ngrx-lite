@@ -6,9 +6,9 @@
       Loading-Store
     </div>
     <div subtitle>Loading with default value</div>
-    <div content><h2>{{ counterState.item?.counter }}</h2></div>
+    <div content><h2 class="counter">{{ counterState.item?.counter }}</h2></div>
     <div actions>
-      <button (click)="increment()" mat-fab> +</button>
+      <button class="increment" (click)="increment()" mat-fab> +</button>
     </div>
   </my-app-ui-card>
 </ng-container>

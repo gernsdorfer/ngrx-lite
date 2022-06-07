@@ -19,7 +19,7 @@ describe('TimeTravel with different routes', () => {
         cy.jumpToAction('[COMPONENT_STORE][LOADING_BASIC] INCREMENT:SUCCESS');
 
         cy.location('hash').should('eq', '#/loading-basic');
-        cy.get('mat-card-content').should('have.text', '1');
+        cy.get('.counter').should('have.text', '1');
       });
     });
 
@@ -29,7 +29,7 @@ describe('TimeTravel with different routes', () => {
         cy.jumpToAction('[COMPONENT_STORE][LOADING_WITH_DEFAULT_VALUES] INCREMENT:SUCCESS');
 
         cy.location('hash').should('eq', '#/loading-with-default-values')
-        cy.get('mat-card-content').should('have.text', '1');
+        cy.get('.counter').should('have.text', '1');
       });
     });
   });

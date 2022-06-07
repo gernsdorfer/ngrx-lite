@@ -5,9 +5,9 @@
     <form [formGroup]="productForm" (submit)="storeProduct(productForm.getRawValue())">
       <mat-form-field appearance="fill">
         <mat-label>Name</mat-label>
-        <input matInput formControlName="name">
+        <input matInput formControlName="name" class="form-input">
       </mat-form-field>
-      <button mat-icon-button type="submit">
+      <button class="save" mat-icon-button type="submit">
         <mat-icon>save</mat-icon>
       </button>
       <button mat-icon-button type="button" (click)="resetProductForm()">
@@ -17,16 +17,16 @@
     </form>
     <div *ngFor="let product of products$ | async" class="product-list">
       {{product.name}}
-      <button (click)="selectProduct(product.id)" mat-icon-button>
+      <button class="edit" (click)="selectProduct(product.id)" mat-icon-button>
         <mat-icon>edit</mat-icon>
       </button>
-      <button (click)="remove(product)" mat-icon-button>
+      <button class="delete" (click)="remove(product)" mat-icon-button>
         <mat-icon>delete</mat-icon>
       </button>
     </div>
   </div>
   <div actions>
-    <button (click)="resetProductForm()" mat-icon-button>
+    <button class="add" (click)="resetProductForm()" mat-icon-button>
       <mat-icon>add</mat-icon>
     </button>
   </div>
