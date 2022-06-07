@@ -3,6 +3,7 @@
 [![styled with](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 [![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)]()
+[![ngrx-lite](https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/hjc4hp/master&style=flat&logo=cypress)](https://dashboard.cypress.io/projects/hjc4hp/runs)
 
 # NgRxLite
 
