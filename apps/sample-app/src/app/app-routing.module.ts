@@ -5,7 +5,6 @@ import { LoadingBasicComponent } from './loading-store/basic/loading-basic.compo
 import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
 import { CustomActionComponent } from './component-store/custom-actions/custom-action.component';
 import { StorageExampleComponent } from './component-store/storage/storage.component';
-import { StorageFromServiceComponent } from './component-store/service-counter/storage-from-service.component';
 import { MultipleInstancesComponent } from './component-store/muliple-instances/multiple-instances.component';
 import { StorageFromGlobalComponent } from './component-store/global-counter/storage-from-global.component';
 import { StoreWithoutLogComponent } from './component-store/store-without-loging/store-without-log.component';
@@ -14,7 +13,6 @@ const routes: Routes = [
   { path: '', component: BasicComponent },
   {
     path: 'combine-with-entity',
-    //  component: CombineWithEntityComponent
     loadChildren: () =>
       import('./component-store/combine-with-entity/entity-module').then(
         (m) => m.EntityModule
@@ -22,7 +20,6 @@ const routes: Routes = [
   },
   {
     path: 'persist-form',
-
     loadChildren: () =>
       import('./form-store/persist-form/persist-form.module').then(
         (m) => m.PersistFormModule
@@ -38,7 +35,10 @@ const routes: Routes = [
   { path: 'storage', component: StorageExampleComponent },
   {
     path: 'storage-from-service',
-    component: StorageFromServiceComponent,
+    loadChildren: () =>
+      import('./component-store/service-counter/service-counter.module').then(
+        (m) => m.ServiceCounterModule
+      ),
   },
   { path: 'store-without-log', component: StoreWithoutLogComponent },
   {
@@ -69,6 +69,4 @@ const routes: Routes = [
   exports: [RouterModule],
   declarations: [],
 })
-export class AppRoutingModule {
-  // empty.
-}
+export class AppRoutingModule {}

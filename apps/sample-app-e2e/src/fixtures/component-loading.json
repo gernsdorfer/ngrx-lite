@@ -1,0 +1,407 @@
+{
+  "monitorState": {
+    "type": "@ngrx/store/update-reducers",
+    "features": [
+      "LOADING_WITH_DEFAULT_VALUES"
+    ]
+  },
+  "nextActionId": 14,
+  "stagedActionIds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "skippedActionIds": [],
+  "currentStateIndex": 13,
+  "isLocked": false,
+  "isPaused": false,
+  "actionsById": {
+    "0": {
+      "action": {
+        "type": "@ngrx/store/init"
+      },
+      "timestamp": 1653165449878,
+      "type": "PERFORM_ACTION"
+    },
+    "1": {
+      "action": {
+        "type": "@ngrx/effects/init"
+      },
+      "timestamp": 1653165449879,
+      "type": "PERFORM_ACTION"
+    },
+    "2": {
+      "action": {
+        "payload": {},
+        "type": "[COMPONENT_STORE][ROUTER_STORE] init"
+      },
+      "timestamp": 1653165449881,
+      "type": "PERFORM_ACTION"
+    },
+    "3": {
+      "action": {
+        "type": "@ngrx/store/update-reducers",
+        "features": [
+          "ROUTER_STORE"
+        ]
+      },
+      "timestamp": 1653165449881,
+      "type": "PERFORM_ACTION"
+    },
+    "4": {
+      "action": {
+        "payload": {
+          "isLoading": false
+        },
+        "type": "[COMPONENT_STORE][LOADING_BASIC] init"
+      },
+      "timestamp": 1653165449886,
+      "type": "PERFORM_ACTION"
+    },
+    "5": {
+      "action": {
+        "type": "@ngrx/store/update-reducers",
+        "features": [
+          "LOADING_BASIC"
+        ]
+      },
+      "timestamp": 1653165449886,
+      "type": "PERFORM_ACTION"
+    },
+    "6": {
+      "action": {
+        "payload": {
+          "url": "/loading-basic"
+        },
+        "type": "[COMPONENT_STORE][ROUTER_STORE] URL_CHANGED"
+      },
+      "timestamp": 1653165449887,
+      "type": "PERFORM_ACTION"
+    },
+    "7": {
+      "action": {
+        "payload": {
+          "isLoading": true
+        },
+        "type": "[COMPONENT_STORE][LOADING_BASIC] INCREMENT:LOAD"
+      },
+      "timestamp": 1653165451853,
+      "type": "PERFORM_ACTION"
+    },
+    "8": {
+      "action": {
+        "payload": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "type": "[COMPONENT_STORE][LOADING_BASIC] INCREMENT:SUCCESS"
+      },
+      "timestamp": 1653165452256,
+      "type": "PERFORM_ACTION"
+    },
+    "9": {
+      "action": {
+        "payload": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        },
+        "type": "[COMPONENT_STORE][LOADING_WITH_DEFAULT_VALUES] init"
+      },
+      "timestamp": 1653165500999,
+      "type": "PERFORM_ACTION"
+    },
+    "10": {
+      "action": {
+        "type": "@ngrx/store/update-reducers",
+        "features": [
+          "LOADING_WITH_DEFAULT_VALUES"
+        ]
+      },
+      "timestamp": 1653165501001,
+      "type": "PERFORM_ACTION"
+    },
+    "11": {
+      "action": {
+        "payload": {
+          "url": "/loading-with-default-values"
+        },
+        "type": "[COMPONENT_STORE][ROUTER_STORE] URL_CHANGED"
+      },
+      "timestamp": 1653165501003,
+      "type": "PERFORM_ACTION"
+    },
+    "12": {
+      "action": {
+        "payload": {
+          "isLoading": true,
+          "item": {
+            "counter": 0
+          }
+        },
+        "type": "[COMPONENT_STORE][LOADING_WITH_DEFAULT_VALUES] INCREMENT:LOAD"
+      },
+      "timestamp": 1653165502313,
+      "type": "PERFORM_ACTION"
+    },
+    "13": {
+      "action": {
+        "payload": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "type": "[COMPONENT_STORE][LOADING_WITH_DEFAULT_VALUES] INCREMENT:SUCCESS"
+      },
+      "timestamp": 1653165502716,
+      "type": "PERFORM_ACTION"
+    }
+  },
+  "computedStates": [
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {},
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "LOADING_BASIC": {
+          "isLoading": false
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "LOADING_BASIC": {
+          "isLoading": true
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-basic"
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-with-default-values"
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-with-default-values"
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": true,
+          "item": {
+            "counter": 0
+          }
+        }
+      }
+    },
+    {
+      "state": {
+        "ROUTER_STORE": {
+          "url": "/loading-with-default-values"
+        },
+        "LOADING_BASIC": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        },
+        "LOADING_WITH_DEFAULT_VALUES": {
+          "isLoading": false,
+          "item": {
+            "counter": 1
+          }
+        }
+      }
+    }
+  ]
+}

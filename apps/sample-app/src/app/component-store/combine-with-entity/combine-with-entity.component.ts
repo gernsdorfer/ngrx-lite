@@ -19,9 +19,9 @@ const getProduct = (product: Partial<Product>): Product => ({
   ...product,
 });
 export const mockProducts = [
-  getProduct({ id: 1, name: 'product1' }),
-  getProduct({ id: 2, name: 'product2' }),
-  getProduct({ id: 3, name: 'product3' }),
+  getProduct({ id: 1, name: 'Product 1' }),
+  getProduct({ id: 2, name: 'Product 2' }),
+  getProduct({ id: 3, name: 'Product 3' }),
 ];
 
 @Component({
