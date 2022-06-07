@@ -39,6 +39,7 @@ describe('DemoEffectX', () => {
       {
         horizontalPosition: 'center',
         verticalPosition: 'top',
+        panelClass: 'snackbar',
         duration: 2000,
       }
     );
