@@ -26,7 +26,7 @@ import { DemoBComponent } from './component-store/muliple-instances/demo-b.compo
 import { BasicComponent } from './component-store/basic/basic.component';
 import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
 import { StoreWithoutLogComponent } from './component-store/store-without-loging/store-without-log.component';
-import {ReduxForWindowModule} from "./shared/util/redux-for-window.service";
+import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
 
 @NgModule({
   imports: [

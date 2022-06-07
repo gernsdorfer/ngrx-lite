@@ -6,7 +6,7 @@ import {
 import { LoadingStoreState } from '../models';
 import { filter, takeUntil } from 'rxjs';
 import { ComponentStore } from './stores/component-store.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Store } from './store.service';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
@@ -44,7 +44,7 @@ export class StoreFactory {
     formGroup,
     skipLog,
   }: {
-    formGroup: FormGroup;
+    formGroup: UntypedFormGroup;
     storeName: string;
     plugins?: { storage?: StoragePluginTypes };
     skipLog?: boolean;

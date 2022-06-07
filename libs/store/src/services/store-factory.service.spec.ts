@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ComponentLoadingStore } from './stores/component-loading-store.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { cold } from 'jasmine-marbles';
 import { StoreFactory } from './store-factory.service';
 import { ComponentStore } from './stores/component-store.service';
@@ -96,9 +96,9 @@ describe('StoreFactory', () => {
   })
 
   describe('createFormComponentStore', () => {
-    const myForm = new FormGroup(<{ [index in keyof MyState]: FormControl }>{
-      myState: new FormControl('', [Validators.required]),
-      optionalValue: new FormControl(''),
+    const myForm = new UntypedFormGroup(<{ [index in keyof MyState]: UntypedFormControl }>{
+      myState: new UntypedFormControl('', [Validators.required]),
+      optionalValue: new UntypedFormControl(''),
     });
     const defaultFormState = {
       ...defaultMyState,
