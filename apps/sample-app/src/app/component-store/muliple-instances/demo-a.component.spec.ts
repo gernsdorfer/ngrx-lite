@@ -11,6 +11,7 @@ describe('DemoAComponent', () => {
     'GlobalCounterStore',
     {
       increment: undefined,
+      ngOnDestroy: undefined,
     },
     {
       counterState$: EMPTY,
