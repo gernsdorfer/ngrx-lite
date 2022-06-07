@@ -8,7 +8,7 @@ import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 describe('LoadingBasicComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LoadingBasicComponent],
+      declarations: [],
       providers: [storeTestingFactory()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

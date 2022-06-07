@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'my-app-ui-toolbar',
-
   template: `
     <mat-toolbar class="toolbar" >
       <button [matMenuTriggerFor]="menuComponentStore" mat-button>
@@ -19,7 +18,7 @@ import { Component } from '@angular/core';
           Multiple-Store instances
         </a>
         <a mat-menu-item class="menu-link" routerLink="/storage-from-service">
-          Store from Service (Provided in Module)
+          Share Store to ChildComponents
         </a>
         <a mat-menu-item class="menu-link" routerLink="/share-actions">
           Share with @ngrx/Effects
@@ -46,5 +45,6 @@ import { Component } from '@angular/core';
       </mat-menu>
     </mat-toolbar>
   `,
+
 })
 export class UiToolbarComponent {}

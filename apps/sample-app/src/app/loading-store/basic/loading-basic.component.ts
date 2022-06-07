@@ -1,6 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
+import {UiModule} from "../../shared/ui/ui.module";
+import {MatButtonModule} from "@angular/material/button";
+import {CommonModule} from "@angular/common";
 
 export type MyState = LoadingStoreState<
   { counter: number },
@@ -10,6 +13,12 @@ export type MyState = LoadingStoreState<
 @Component({
   selector: 'my-app-loading-store-basic',
   templateUrl: 'loading-effect.html',
+  standalone: true,
+  imports: [
+    UiModule,
+    MatButtonModule,
+    CommonModule
+  ]
 })
 export class LoadingBasicComponent implements OnDestroy {
   private store = this.storeFactory.createComponentLoadingStore<

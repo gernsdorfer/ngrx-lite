@@ -7,7 +7,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 describe('StoreWithoutLogComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [StoreWithoutLogComponent],
+      declarations: [],
       providers: [storeTestingFactory()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

@@ -1,7 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { UiModule } from '../../shared/ui/ui.module';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 interface Product {
   id: number;
@@ -25,8 +37,19 @@ export const mockProducts = [
 ];
 
 @Component({
-  selector: 'my-app-basic-app',
+  selector: 'my-app-entity-app',
   templateUrl: 'combine-with-entity.html',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatIconModule,
+    UiModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
   private store = this.storeFactory.createComponentStore<MyState>({

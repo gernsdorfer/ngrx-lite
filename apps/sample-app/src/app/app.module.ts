@@ -16,15 +16,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { UiModule } from './shared/ui/ui.module';
 import { AppRoutingModule } from './app-routing.module';
-import { LoadingBasicComponent } from './loading-store/basic/loading-basic.component';
-import { CustomActionComponent } from './component-store/custom-actions/custom-action.component';
-import { StorageExampleComponent } from './component-store/storage/storage.component';
-import { StorageFromGlobalComponent } from './component-store/global-counter/storage-from-global.component';
-import { MultipleInstancesComponent } from './component-store/muliple-instances/multiple-instances.component';
-import { DemoAComponent } from './component-store/muliple-instances/demo-a.component';
-import { DemoBComponent } from './component-store/muliple-instances/demo-b.component';
-import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
-import { StoreWithoutLogComponent } from './component-store/store-without-loging/store-without-log.component';
 import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
 
 @NgModule({
@@ -49,18 +40,7 @@ import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
     { provide: SessionStoragePlugin, useValue: sessionStoragePlugin },
     { provide: LocalStoragePlugin, useValue: localStoragePlugin },
   ],
-  declarations: [
-    AppComponent,
-    CustomActionComponent,
-    StorageExampleComponent,
-    StorageFromGlobalComponent,
-    MultipleInstancesComponent,
-    DemoAComponent,
-    DemoBComponent,
-    LoadingBasicComponent,
-    LoadingWithDefaultValuesComponent,
-    StoreWithoutLogComponent,
-  ],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

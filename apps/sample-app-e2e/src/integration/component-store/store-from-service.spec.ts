@@ -7,7 +7,7 @@ describe('component store', () => {
     beforeEach(() => {
       cy.openLinkFromToolbar(
         'Component-Store',
-        'Store from Service (Provided in Module)'
+        'Share Store to ChildComponents'
       );
     });
 
@@ -28,7 +28,7 @@ describe('component store', () => {
 
       cy.openLinkFromToolbar(
         'Component-Store',
-        'Store from Service (Provided in Module)'
+        'Share Store to ChildComponents'
       );
 
       cy.get('.counter').should('have.text', '1');

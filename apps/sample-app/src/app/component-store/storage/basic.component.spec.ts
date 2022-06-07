@@ -1,23 +1,25 @@
 import { TestBed } from '@angular/core/testing';
-import { CustomActionComponent, MyState } from './custom-action.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import {MyState, StorageExampleComponent} from './storage.component';
 
-describe('CustomActionComponent', () => {
+describe('StorageExampleComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      declarations: [],
       providers: [storeTestingFactory()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
-  const getComponent = (): CustomActionComponent => {
-    const fixture = TestBed.createComponent(CustomActionComponent);
+  const getComponent = (): StorageExampleComponent => {
+    const fixture = TestBed.createComponent(StorageExampleComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return component;
   };
+
   it('should be defined', () => {
     expect(getComponent()).toBeDefined();
   });
