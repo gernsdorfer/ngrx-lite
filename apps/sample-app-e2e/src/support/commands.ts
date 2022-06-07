@@ -11,22 +11,21 @@ declare global {
       jumpToAction: (actionType: string) => Chainable<Subject>;
     }
 
-    interface Chainable {
-      openLinkFromToolbar(menuName: string, menuItem: string): void;
+    interface Chainable<Subject> {
+      openLinkFromToolbar(menuName: string, menuItem: string): Chainable<Subject>;
     }
   }
 }
 Cypress.Commands.add(
   'openLinkFromToolbar',
-  (menuName: string, menuItem: string) => {
-    cy.get('mat-toolbar')
+  (menuName: string, menuItem: string) =>
+    cy.get('.toolbar')
       .contains(menuName)
       .click()
-      .get('mat-toolbar')
-      .get('a')
+      .get('.toolbar')
+      .get('.menu-link')
       .contains(menuItem)
-      .click();
-  }
+      .click()
 );
 
 Cypress.Commands.add(
