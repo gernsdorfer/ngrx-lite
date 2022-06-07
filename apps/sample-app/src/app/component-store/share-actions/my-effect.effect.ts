@@ -14,6 +14,7 @@ export class DemoEffect {
           this.snackbar.open(`counter increment: ${payload.counter}`, undefined, {
             horizontalPosition: 'center',
             verticalPosition: 'top',
+            panelClass: 'snackbar',
             duration: 2000
           })
         )

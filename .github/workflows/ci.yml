@@ -23,7 +23,7 @@ jobs:
       - run: yarn run affected:build --all --parallel=3
       - run: yarn run affected:lint --all --parallel=2
       - run: yarn run affected:test --all --parallel=2
-      - run: yarn run affected:e2e --all
+      - run: yarn run affected:e2e --all --record
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -44,4 +44,4 @@ jobs:
       - run: yarn run affected:build --parallel=3
       - run: yarn run affected:lint --parallel=2
       - run: yarn run affected:test --parallel=2
-      - run: yarn run affected:e2e
+      - run: yarn run affected:e2e --record
