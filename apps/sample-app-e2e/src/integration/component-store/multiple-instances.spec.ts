@@ -13,8 +13,7 @@ describe('component store', () => {
       cy.get('.counter').last().should('have.text', '0');
     });
 
-    it('should show incremented card 1', () => {
-      console.log(cy.get('mat-card-actions button'));
+    it('should show incremented state', () => {
       cy.get('.increment').first().click();
       cy.get('.increment').first().click();
       cy.get('.increment').last().click();

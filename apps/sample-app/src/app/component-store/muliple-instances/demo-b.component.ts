@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {
   MultipleCounterStore,
   MultipleCounterStoreName,
@@ -20,7 +20,7 @@ import { UiCardComponent } from '../../shared/ui/card-component';
   standalone: true,
   imports: [UiCardComponent, MatButtonModule, CommonModule],
 })
-export class DemoBComponent {
+export class DemoBComponent implements OnDestroy {
   title = 'Demo B Component';
   public counterState$ = this.counterStore.counterState$;
 
@@ -28,5 +28,9 @@ export class DemoBComponent {
 
   increment() {
     this.counterStore.increment();
+  }
+
+  ngOnDestroy() {
+    this.counterStore.ngOnDestroy();
   }
 }
