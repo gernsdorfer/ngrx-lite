@@ -19,6 +19,7 @@ declare global {
 Cypress.Commands.add(
   'openLinkFromToolbar',
   (menuName: string, menuItem: string) =>
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.get('.toolbar')
       .contains(menuName)
       .click()
@@ -26,6 +27,7 @@ Cypress.Commands.add(
       .get('.menu-link')
       .contains(menuItem)
       .click()
+      .wait(1000)
 );
 
 Cypress.Commands.add(

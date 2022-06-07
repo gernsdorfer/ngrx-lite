@@ -9,5 +9,6 @@
   "videosFolder": "../../dist/cypress/apps/sample-app-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/sample-app-e2e/screenshots",
   "chromeWebSecurity": false,
-  "projectId": "hjc4hp"
+  "projectId": "hjc4hp",
+  "defaultCommandTimeout": 30000
 }
