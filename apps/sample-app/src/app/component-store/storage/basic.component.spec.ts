@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {MyState, StorageExampleComponent} from './storage.component';
+import { MyState, StorageExampleComponent } from './storage.component';
 
 describe('StorageExampleComponent', () => {
   beforeEach(() => {

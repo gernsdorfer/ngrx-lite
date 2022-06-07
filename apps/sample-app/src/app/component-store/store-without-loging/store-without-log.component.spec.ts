@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { StoreWithoutLogComponent, MyState } from './store-without-log.component';
+import {
+  MyState,
+  StoreWithoutLogComponent,
+} from './store-without-log.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
 import { NO_ERRORS_SCHEMA } from '@angular/core';

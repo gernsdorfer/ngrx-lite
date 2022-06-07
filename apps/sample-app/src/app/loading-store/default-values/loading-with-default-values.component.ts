@@ -1,9 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
-import {UiModule} from "../../shared/ui/ui.module";
-import {MatButtonModule} from "@angular/material/button";
-import {CommonModule} from "@angular/common";
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { UiSpinnerComponent } from '../../shared/ui/spinner';
+import { UiCardComponent } from '../../shared/ui/card-component';
 
 interface ItemState {
   counter: number;
@@ -16,11 +17,7 @@ const defaultState: ItemState = { counter: 0 };
   selector: 'my-app-loading-store-with-default-values',
   templateUrl: 'loading-effect.html',
   standalone: true,
-  imports: [
-    UiModule,
-    MatButtonModule,
-    CommonModule
-  ]
+  imports: [UiCardComponent, MatButtonModule, CommonModule, UiSpinnerComponent],
 })
 export class LoadingWithDefaultValuesComponent implements OnDestroy {
   private store = this.storeFactory.createComponentLoadingStore<

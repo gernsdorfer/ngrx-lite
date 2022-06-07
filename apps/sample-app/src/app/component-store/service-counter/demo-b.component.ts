@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { CounterStore } from './counter-service';
-import { UiModule } from '../../shared/ui/ui.module';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
   selector: 'my-app-same-instance-demo-b',
   templateUrl: 'demo.html',
   standalone: true,
-  imports: [UiModule, MatButtonModule, CommonModule],
+  imports: [UiCardComponent, MatButtonModule, CommonModule],
 })
 export class DemoBComponent {
   title = 'Demo B Component';

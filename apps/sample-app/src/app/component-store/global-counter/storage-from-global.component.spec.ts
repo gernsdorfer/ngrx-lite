@@ -3,7 +3,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { StorageFromGlobalComponent } from './storage-from-global.component';
 import { GlobalCounterStore } from './global-counter.service';
 import { EMPTY } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('StorageFromGlobalComponent', () => {

@@ -11,12 +11,16 @@ export class DemoEffect {
       this.actions$.pipe(
         ofType(MyIncrementAction),
         tap(({ payload }) =>
-          this.snackbar.open(`counter increment: ${payload.counter}`, undefined, {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: 'snackbar',
-            duration: 2000
-          })
+          this.snackbar.open(
+            `counter increment: ${payload.counter}`,
+            undefined,
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: 'snackbar',
+              duration: 2000,
+            }
+          )
         )
       ),
     { dispatch: false }

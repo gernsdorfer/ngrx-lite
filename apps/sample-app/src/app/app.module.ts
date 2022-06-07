@@ -13,10 +13,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
-import { UiModule } from './shared/ui/ui.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
+import { UiToolbarComponent } from './shared/ui/toolbar';
 
 @NgModule({
   imports: [
@@ -24,7 +23,7 @@ import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     BrowserAnimationsModule,
-    UiModule,
+    UiToolbarComponent,
     StoreDevtoolsModule.instrument({
       name: 'ngrx-lite-demo',
       maxAge: 25,
@@ -32,7 +31,6 @@ import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
       monitor: (state, action) => action,
     }),
     AppRoutingModule,
-    MatButtonModule,
     RouterStoreModule,
     ReduxForWindowModule,
   ],

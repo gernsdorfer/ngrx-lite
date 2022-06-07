@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { UiModule } from '../../shared/ui/ui.module';
-import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
 import { DemoAComponent } from './demo-a.component';
 import { DemoBComponent } from './demo-b.component';
 
@@ -14,9 +11,6 @@ import { DemoBComponent } from './demo-b.component';
     <my-app-multi-instance-demo-b></my-app-multi-instance-demo-b>
   `,
   standalone: true,
-  imports: [
-    DemoAComponent,
-    DemoBComponent,
-  ],
+  imports: [DemoAComponent, DemoBComponent],
 })
 export class MultipleInstancesComponent {}

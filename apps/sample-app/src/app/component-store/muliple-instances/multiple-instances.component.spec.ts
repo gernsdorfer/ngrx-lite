@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MultipleInstancesComponent } from './multiple-instances.component';
-import { StorageFromGlobalComponent } from '../global-counter/storage-from-global.component';
 import { CommonModule } from '@angular/common';
 
 describe('MultipleInstancesComponent', () => {

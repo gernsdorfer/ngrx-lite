@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
 
 const routes: Routes = [
   {
@@ -35,9 +34,9 @@ const routes: Routes = [
   {
     path: 'loading-with-default-values',
     loadComponent: () =>
-      import('./loading-store/default-values/loading-with-default-values.component').then(
-        (m) => m.LoadingWithDefaultValuesComponent
-      ),
+      import(
+        './loading-store/default-values/loading-with-default-values.component'
+      ).then((m) => m.LoadingWithDefaultValuesComponent),
   },
   {
     path: 'custom-action',

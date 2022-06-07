@@ -1,9 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
-import {UiModule} from "../../shared/ui/ui.module";
-import {MatButtonModule} from "@angular/material/button";
-import {CommonModule} from "@angular/common";
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { UiSpinnerComponent } from '../../shared/ui/spinner';
+import { UiCardComponent } from '../../shared/ui/card-component';
 
 export type MyState = LoadingStoreState<
   { counter: number },
@@ -15,9 +16,10 @@ export type MyState = LoadingStoreState<
   templateUrl: 'loading-effect.html',
   standalone: true,
   imports: [
-    UiModule,
+    UiCardComponent,
     MatButtonModule,
-    CommonModule
+    CommonModule,
+    UiSpinnerComponent
   ]
 })
 export class LoadingBasicComponent implements OnDestroy {

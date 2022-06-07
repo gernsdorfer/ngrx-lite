@@ -3,9 +3,9 @@ import {
   MultipleCounterStore,
   MultipleCounterStoreName,
 } from './counter-service';
-import {UiModule} from "../../shared/ui/ui.module";
-import {MatButtonModule} from "@angular/material/button";
-import {CommonModule} from "@angular/common";
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
   selector: 'my-app-multi-instance-demo-a',
@@ -18,12 +18,7 @@ import {CommonModule} from "@angular/common";
     },
   ],
   standalone: true,
-  imports: [
-    UiModule,
-    MatButtonModule,
-    CommonModule,
-
-  ]
+  imports: [UiCardComponent, MatButtonModule, CommonModule],
 })
 export class DemoAComponent {
   title = 'Demo A Component';

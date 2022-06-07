@@ -8,12 +8,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { UiModule } from '../../shared/ui/ui.module';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { UiCardComponent } from '../../shared/ui/card-component';
 
 interface Product {
   id: number;
@@ -46,7 +46,7 @@ export const mockProducts = [
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    UiModule,
+    UiCardComponent,
     MatFormFieldModule,
     MatInputModule,
   ],

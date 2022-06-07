@@ -2,15 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { PersistFormComponent } from './persist-form.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {CombineWithEntityComponent} from "../../component-store/combine-with-entity/combine-with-entity.component";
-import {CommonModule} from "@angular/common";
+import { CommonModule } from '@angular/common';
 
 describe('BasicExampleComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [storeTestingFactory()],
       schemas: [NO_ERRORS_SCHEMA],
-    })
+    });
   });
 
   const getComponent = (): PersistFormComponent => {
