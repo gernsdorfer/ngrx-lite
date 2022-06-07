@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BasicComponent } from './component-store/basic/basic.component';
 import { LoadingBasicComponent } from './loading-store/basic/loading-basic.component';
 import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
 import { CustomActionComponent } from './component-store/custom-actions/custom-action.component';
@@ -10,7 +9,13 @@ import { StorageFromGlobalComponent } from './component-store/global-counter/sto
 import { StoreWithoutLogComponent } from './component-store/store-without-loging/store-without-log.component';
 
 const routes: Routes = [
-  { path: '', component: BasicComponent },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./component-store/basic/basic.component').then(
+        (m) => m.BasicComponent
+      ),
+  },
   {
     path: 'combine-with-entity',
     loadChildren: () =>

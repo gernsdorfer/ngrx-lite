@@ -23,7 +23,6 @@ import { StorageFromGlobalComponent } from './component-store/global-counter/sto
 import { MultipleInstancesComponent } from './component-store/muliple-instances/multiple-instances.component';
 import { DemoAComponent } from './component-store/muliple-instances/demo-a.component';
 import { DemoBComponent } from './component-store/muliple-instances/demo-b.component';
-import { BasicComponent } from './component-store/basic/basic.component';
 import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
 import { StoreWithoutLogComponent } from './component-store/store-without-loging/store-without-log.component';
 import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
@@ -52,14 +51,13 @@ import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
   ],
   declarations: [
     AppComponent,
-    LoadingBasicComponent,
     CustomActionComponent,
     StorageExampleComponent,
     StorageFromGlobalComponent,
     MultipleInstancesComponent,
     DemoAComponent,
     DemoBComponent,
-    BasicComponent,
+    LoadingBasicComponent,
     LoadingWithDefaultValuesComponent,
     StoreWithoutLogComponent,
   ],
