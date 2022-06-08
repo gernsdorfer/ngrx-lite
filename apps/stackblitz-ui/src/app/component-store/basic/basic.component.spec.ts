@@ -7,7 +7,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 describe('BasicExampleComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [BasicComponent],
+      declarations: [],
       providers: [storeTestingFactory()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

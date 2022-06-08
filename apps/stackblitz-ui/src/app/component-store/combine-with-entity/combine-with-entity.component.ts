@@ -1,7 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { UiCardComponent } from '../../shared/ui/card-component';
 
 interface Product {
   id: number;
@@ -19,14 +31,25 @@ const getProduct = (product: Partial<Product>): Product => ({
   ...product,
 });
 export const mockProducts = [
-  getProduct({ id: 1, name: 'product1' }),
-  getProduct({ id: 2, name: 'product2' }),
-  getProduct({ id: 3, name: 'product3' }),
+  getProduct({ id: 1, name: 'Product 1' }),
+  getProduct({ id: 2, name: 'Product 2' }),
+  getProduct({ id: 3, name: 'Product 3' }),
 ];
 
 @Component({
-  selector: 'my-app-basic-app',
+  selector: 'my-app-entity-app',
   templateUrl: 'combine-with-entity.html',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatIconModule,
+    UiCardComponent,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
   private store = this.storeFactory.createComponentStore<MyState>({
@@ -36,8 +59,14 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
   products$ = this.store.select(selectAll);
 
   productForm = new FormGroup({
-    id: new FormControl('', [Validators.required]),
-    name: new FormControl('', [Validators.required]),
+    id: new FormControl(0, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   constructor(private storeFactory: StoreFactory) {}

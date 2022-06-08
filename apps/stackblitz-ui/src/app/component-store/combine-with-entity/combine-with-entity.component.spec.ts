@@ -6,18 +6,20 @@ import {
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-describe('BasicExampleComponent', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [CombineWithEntityComponent],
-      providers: [storeTestingFactory()],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  });
-
+describe('CombineWithEntityComponent', () => {
   const getComponent = (): CombineWithEntityComponent => {
-    const fixture = TestBed.createComponent(CombineWithEntityComponent);
+    const fixture = TestBed.configureTestingModule({
+      providers: [storeTestingFactory()],
+    })
+      .overrideComponent(CombineWithEntityComponent, {
+        set: {
+          imports: [CommonModule],
+          schemas: [NO_ERRORS_SCHEMA],
+        },
+      })
+      .createComponent(CombineWithEntityComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return component;
@@ -100,8 +102,8 @@ describe('BasicExampleComponent', () => {
       component.resetProductForm();
 
       expect(component.productForm.getRawValue()).toEqual({
-        id: null,
-        name: null,
+        id: 0,
+        name: '',
       });
     });
   });

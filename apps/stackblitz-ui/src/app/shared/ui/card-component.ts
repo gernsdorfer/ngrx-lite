@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'my-app-ui-card',
@@ -7,7 +10,6 @@ import { Component } from '@angular/core';
       .demo-card {
         max-width: 400px;
       }
-
     `,
   ],
   template: `
@@ -28,5 +30,7 @@ import { Component } from '@angular/core';
       </mat-card-actions>
     </mat-card>
   `,
+  standalone: true,
+  imports: [MatCardModule, MatMenuModule, MatButtonModule],
 })
 export class UiCardComponent {}

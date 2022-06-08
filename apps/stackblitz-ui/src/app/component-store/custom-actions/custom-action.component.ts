@@ -1,5 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { UiCardComponent } from '../../shared/ui/card-component';
 
 export interface MyState {
   counter: number;
@@ -8,6 +11,12 @@ export interface MyState {
 @Component({
   selector: 'my-app-basic-custom-action',
   templateUrl: 'custom-action.html',
+  standalone: true,
+  imports: [
+    UiCardComponent,
+    MatButtonModule,
+    CommonModule
+  ]
 })
 export class CustomActionComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({

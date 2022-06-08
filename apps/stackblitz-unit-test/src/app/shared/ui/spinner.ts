@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'my-app-ui-spinner',
@@ -15,5 +16,7 @@ import { Component } from '@angular/core';
       <mat-spinner color="warn"></mat-spinner>
     </div>
   `,
+  standalone: true,
+  imports: [MatProgressSpinnerModule],
 })
 export class UiSpinnerComponent {}

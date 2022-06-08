@@ -2,9 +2,9 @@
   <my-app-ui-card>
     <div title>Component-Store</div>
     <div subtitle>Custom Actions</div>
-    <div content><h2> {{ counterState.counter }}</h2></div>
+    <div content><h2 class="counter">{{ counterState.counter }}</h2></div>
     <div actions>
-      <button (click)="increment()" mat-fab>+</button>
+      <button class="increment" (click)="increment()" mat-fab>+</button>
     </div>
   </my-app-ui-card>
 </ng-container>

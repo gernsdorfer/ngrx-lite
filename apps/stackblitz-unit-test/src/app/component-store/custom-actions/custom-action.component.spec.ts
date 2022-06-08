@@ -7,7 +7,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 describe('CustomActionComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CustomActionComponent],
       providers: [storeTestingFactory()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
