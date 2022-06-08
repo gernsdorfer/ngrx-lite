@@ -1,13 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  MyState,
-  StoreWithoutLogComponent,
-} from './store-without-log.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MyState, StorageExampleComponent } from './storage.component';
 
-describe('StoreWithoutLogComponent', () => {
+describe('StorageExampleComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [],
@@ -16,8 +13,8 @@ describe('StoreWithoutLogComponent', () => {
     }).compileComponents();
   });
 
-  const getComponent = (): StoreWithoutLogComponent => {
-    const fixture = TestBed.createComponent(StoreWithoutLogComponent);
+  const getComponent = (): StorageExampleComponent => {
+    const fixture = TestBed.createComponent(StorageExampleComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return component;
@@ -31,12 +28,12 @@ describe('StoreWithoutLogComponent', () => {
     it('should increment state', () => {
       const component = getComponent();
 
-      component.increment(2);
+      component.increment();
 
       expect(component.counterState$).toBeObservable(
         cold('a', {
           a: <MyState>{
-            counter: 2,
+            counter: 1,
           },
         })
       );

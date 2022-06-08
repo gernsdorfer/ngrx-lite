@@ -6,7 +6,7 @@ import { SharedActionComponent } from './shared-action.component';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     RouterModule.forChild([{ path: '', component: SharedActionComponent }]),
     MatCardModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   declarations: [SharedActionComponent],
   providers: [],

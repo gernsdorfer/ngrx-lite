@@ -1,17 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EMPTY } from 'rxjs';
-import { MultipleCounterStore } from './counter-service';
+import { CounterStore } from './counter-service';
 import { DemoAComponent } from './demo-a.component';
 import { CommonModule } from '@angular/common';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('DemoAComponent', () => {
-  const multipleCounterStore = createSpyObj<MultipleCounterStore>(
-    'GlobalCounterStore',
+  const counterStore = createSpyObj<CounterStore>(
+    'CounterStore',
     {
       increment: undefined,
-      ngOnDestroy: undefined,
     },
     {
       counterState$: EMPTY,
@@ -24,8 +23,8 @@ describe('DemoAComponent', () => {
         imports: [CommonModule],
         providers: [
           {
-            provide: MultipleCounterStore,
-            useValue: multipleCounterStore,
+            provide: CounterStore,
+            useValue: counterStore,
           },
         ],
         schemas: [NO_ERRORS_SCHEMA],
@@ -42,11 +41,11 @@ describe('DemoAComponent', () => {
   describe('increment', () => {
     it('should call increment', () => {
       const component = getComponent();
-      multipleCounterStore.increment.calls.reset();
+      counterStore.increment.calls.reset();
 
       component.increment();
 
-      expect(multipleCounterStore.increment).toHaveBeenCalled();
+      expect(counterStore.increment).toHaveBeenCalled();
     });
   });
 });

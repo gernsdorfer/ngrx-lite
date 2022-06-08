@@ -17,12 +17,11 @@ describe('StorageFromGlobalComponent', () => {
   );
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [StorageFromGlobalComponent],
       providers: [
         { provide: GlobalCounterStore, useValue: globalCounterStore },
       ],
       schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+    });
   });
 
   const getComponent = (): StorageFromGlobalComponent => {

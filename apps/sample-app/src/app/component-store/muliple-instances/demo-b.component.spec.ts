@@ -3,6 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EMPTY } from 'rxjs';
 import { MultipleCounterStore } from './counter-service';
 import { DemoBComponent } from './demo-b.component';
+import { CommonModule } from '@angular/common';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('DemoBComponent', () => {
@@ -10,23 +11,26 @@ describe('DemoBComponent', () => {
     'GlobalCounterStore',
     {
       increment: undefined,
+      ngOnDestroy: undefined,
     },
     {
       counterState$: EMPTY,
     }
   );
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [DemoBComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-    TestBed.overrideProvider(MultipleCounterStore, {
-      useValue: multipleCounterStore,
-    });
-  });
 
   const getComponent = (): DemoBComponent => {
-    const fixture = TestBed.createComponent(DemoBComponent);
+    const fixture = TestBed.overrideComponent(DemoBComponent, {
+      set: {
+        imports: [CommonModule],
+        providers: [
+          {
+            provide: MultipleCounterStore,
+            useValue: multipleCounterStore,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      },
+    }).createComponent(DemoBComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return component;

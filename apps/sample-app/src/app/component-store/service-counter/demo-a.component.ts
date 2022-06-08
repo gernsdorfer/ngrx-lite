@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
-import { GlobalCounterStore } from './global-counter.service';
+import { CounterStore } from './counter-service';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
-  selector: 'my-app-global-counter',
-  templateUrl: 'service-counter.html',
+  selector: 'my-app-same-instance-demo-a',
+  templateUrl: 'demo.html',
   standalone: true,
   imports: [UiCardComponent, MatButtonModule, CommonModule],
 })
-export class StorageFromGlobalComponent {
+export class DemoAComponent {
+  title = 'Demo A Component';
   public counterState$ = this.counterStore.counterState$;
 
-  constructor(private counterStore: GlobalCounterStore) {}
+  constructor(private counterStore: CounterStore) {}
 
   increment() {
     this.counterStore.increment();

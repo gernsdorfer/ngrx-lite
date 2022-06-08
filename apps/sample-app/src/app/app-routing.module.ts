@@ -1,53 +1,84 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BasicComponent } from './component-store/basic/basic.component';
-import { LoadingBasicComponent } from './loading-store/basic/loading-basic.component';
-import { LoadingWithDefaultValuesComponent } from './loading-store/default-values/loading-with-default-values.component';
-import { CustomActionComponent } from './component-store/custom-actions/custom-action.component';
-import { StorageExampleComponent } from './component-store/storage/storage.component';
-import { MultipleInstancesComponent } from './component-store/muliple-instances/multiple-instances.component';
-import { StorageFromGlobalComponent } from './component-store/global-counter/storage-from-global.component';
-import { StoreWithoutLogComponent } from './component-store/store-without-loging/store-without-log.component';
 
 const routes: Routes = [
-  { path: '', component: BasicComponent },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./component-store/basic/basic.component').then(
+        (m) => m.BasicComponent
+      ),
+  },
   {
     path: 'combine-with-entity',
-    loadChildren: () =>
-      import('./component-store/combine-with-entity/entity-module').then(
-        (m) => m.EntityModule
-      ),
+    loadComponent: () =>
+      import(
+        './component-store/combine-with-entity/combine-with-entity.component'
+      ).then((m) => m.CombineWithEntityComponent),
   },
   {
     path: 'persist-form',
-    loadChildren: () =>
-      import('./form-store/persist-form/persist-form.module').then(
-        (m) => m.PersistFormModule
+    loadComponent: () =>
+      import('./form-store/persist-form/persist-form.component').then(
+        (m) => m.PersistFormComponent
       ),
   },
-  { path: 'loading-basic', component: LoadingBasicComponent },
+  {
+    path: 'loading-basic',
+    loadComponent: () =>
+      import('./loading-store/basic/loading-basic.component').then(
+        (m) => m.LoadingBasicComponent
+      ),
+  },
 
   {
     path: 'loading-with-default-values',
-    component: LoadingWithDefaultValuesComponent,
+    loadComponent: () =>
+      import(
+        './loading-store/default-values/loading-with-default-values.component'
+      ).then((m) => m.LoadingWithDefaultValuesComponent),
   },
-  { path: 'custom-action', component: CustomActionComponent },
-  { path: 'storage', component: StorageExampleComponent },
   {
-    path: 'storage-from-service',
-    loadChildren: () =>
-      import('./component-store/service-counter/service-counter.module').then(
-        (m) => m.ServiceCounterModule
+    path: 'custom-action',
+    loadComponent: () =>
+      import('./component-store/custom-actions/custom-action.component').then(
+        (m) => m.CustomActionComponent
       ),
   },
-  { path: 'store-without-log', component: StoreWithoutLogComponent },
+  {
+    path: 'storage',
+    loadComponent: () =>
+      import('./component-store/storage/storage.component').then(
+        (m) => m.StorageExampleComponent
+      ),
+  },
+  {
+    path: 'storage-from-service',
+    loadComponent: () =>
+      import(
+        './component-store/service-counter/storage-from-service.component'
+      ).then((m) => m.StorageFromServiceComponent),
+  },
+  {
+    path: 'store-without-log',
+    loadComponent: () =>
+      import(
+        './component-store/store-without-loging/store-without-log.component'
+      ).then((m) => m.StoreWithoutLogComponent),
+  },
   {
     path: 'multiple-storage-instances',
-    component: MultipleInstancesComponent,
+    loadComponent: () =>
+      import(
+        './component-store/muliple-instances/multiple-instances.component'
+      ).then((m) => m.MultipleInstancesComponent),
   },
   {
     path: 'storage-from-global-service',
-    component: StorageFromGlobalComponent,
+    loadComponent: () =>
+      import(
+        './component-store/global-counter/storage-from-global.component'
+      ).then((m) => m.StorageFromGlobalComponent),
   },
   {
     path: 'share-actions',
