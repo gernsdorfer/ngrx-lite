@@ -15,7 +15,7 @@ import { ComponentStore } from './stores/component-store.service';
 import { StoreDevtools } from '@ngrx/store-devtools';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { DevToolHelper } from './dev-tool-helper.service';
-import {Actions} from "@ngrx/effects";
+import { Actions } from '@ngrx/effects';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;

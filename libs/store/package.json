@@ -2,14 +2,10 @@
   "name": "@gernsdorfer/ngrx-lite",
   "version": "2.4.4",
   "peerDependencies": {
-    "@angular/common": "13.3.3",
-    "@angular/core": "13.3.3",
+    "@angular/common": "^14.0.0",
+    "@angular/core": "^14.0.0",
     "@ngrx/component-store": "^13.1.0",
-    "@ngrx/store": "^13.2.0",
-    "@angular/router": "13.3.11",
-    "@angular/platform-browser": "13.3.11",
-    "@angular/forms": "13.3.11",
-    "@angular/platform-browser-dynamic": "13.3.11"
+    "@ngrx/store": "^13.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

@@ -54,13 +54,13 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 ### Yarn
 
 ```bash
-yarn add @ngrx/store @gernsdorfer/ngrx-lite
+yarn add @ngrx/store @ngrx/effects @ngrx/effects @gernsdorfer/ngrx-lite
 ```
 
 ### NPM
 
 ```bash
-npm install @ngrx/store @gernsdorfer/ngrx-lite
+npm install @ngrx/store @ngrx/effects @ngrx/effects @gernsdorfer/ngrx-lite
 ```
 
 ## Usage
