@@ -21,3 +21,19 @@ TestBed.configureTestingModule({
 :::note Many Test Example you can
 find [here](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
 :::
+
+## test createEffects
+
+```ts title="component.spec.ts"
+import {TestBed} from '@angular/core/testing';
+import {storeTestingFactory, actions$} from '@gernsdorfer/ngrx-lite/testing';
+import {MyComponent} from "./my.component";
+
+export const resetAction = createAction('reset');
+
+it('should trigger an eaction' , () => {
+  actions$.next(resetAction());
+  
+  //check your state
+})
+```

@@ -33,6 +33,7 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 - 🏘 freedom to decide where the store is located: root, module or in the component scope
 - 🔛 share the state changes and actions in the NgRx store
 - 📑 store the form data for persistance and debugging
+- 👂 create effects for global storage
 - ✍️ write the tests is much easier
 
 <hr />
@@ -70,7 +71,7 @@ npm install @ngrx/store @gernsdorfer/ngrx-lite
 @NgModule({
   // ...
   imports: [StoreModule.forRoot({})]
-  // ...
+// ...
 ```
 
 2. create the store with the same API as [@ngrx/component-store](https://ngrx.io/guide/component-store)
@@ -88,16 +89,17 @@ class MyComponent implements OnDestroy {
   // create a componentStore
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: { counter: 0 },
+    defaultState: {counter: 0},
   });
   // read the state
   public counterState$: Observable<MyState> = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {}
+  constructor(private storeFactory: StoreFactory) {
+  }
 
   increment(counter: number) {
     // patch your state
-    this.store.patchState({ counter });
+    this.store.patchState({counter});
   }
 
   ngOnDestroy() {
@@ -113,22 +115,23 @@ That's it 🥳
 
 ### DevTools support
 
-Install and import [ngrx/store-devtools](https://ngrx.io/guide/store-devtools) und have all the features from the DevTools for your component store.
+Install and import [ngrx/store-devtools](https://ngrx.io/guide/store-devtools) und have all the features from the
+DevTools for your component store.
 
 It's important to set the `monitor` property in your `StoreDevtoolsOptions`, otherwise a state import is not possible.
 
 ```ts app.module
 @NgModule({
-    imports: [
-        StoreDevtoolsModule.instrument({
-            name: 'ngrx-lite-demo',
-            maxAge: 25,
-            logOnly: false,
-            // set the monitor property here
-            monitor: (state, action) => action,
-        }),
+  imports: [
+    StoreDevtoolsModule.instrument({
+      name: 'ngrx-lite-demo',
+      maxAge: 25,
+      logOnly: false,
+      // set the monitor property here
+      monitor: (state, action) => action,
+    }),
 
-    ],
+  ],
 })
 ```
 
@@ -142,7 +145,8 @@ After the store is initialized you can find the store in the `@ngrx/devtools`.
 
 #### Patch state
 
-After patch state you see this in your Redux DevTools. It's possbile to define an custom action name for your patch/set state.
+After patch state you see this in your Redux DevTools. It's possbile to define an custom action name for your patch/set
+state.
 
 ![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/component-store-devtools-patch.png)
 
@@ -162,7 +166,8 @@ So it's possible to replay your state changes by revisiting the related url.
 
 ### Loading store
 
-Create ComponentLoadingStore to set a Loader State while an Effect is running. You have the same API as `createComponentStore` with an extra method `loadingEffect`.
+Create ComponentLoadingStore to set a Loader State while an Effect is running. You have the same API
+as `createComponentStore` with an extra method `loadingEffect`.
 
 ```ts
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
@@ -173,10 +178,8 @@ type State = LoadingStoreState<{ counter: number }, { message: string }>;
 })
 export class LoadingEffectComponent implements OnDestroy {
   // create your loading store
-  private store = this.storeFactory.createComponentLoadingStore<
-    State['item'],
-    State['error']
-  >({
+  private store = this.storeFactory.createComponentLoadingStore<State['item'],
+    State['error']>({
     storeName: 'LOADING_STORE',
   });
 
@@ -189,7 +192,8 @@ export class LoadingEffectComponent implements OnDestroy {
     (counter: number = 0) => of(counter + 1)
   );
 
-  constructor(private storeFactory: StoreFactory) {}
+  constructor(private storeFactory: StoreFactory) {
+  }
 
   ngOnDestroy() {
     // destory the store
@@ -270,7 +274,7 @@ export class PersistFormComponent implements OnDestroy {
 1. Create new store with a session storage sync option
 
 ```ts
-class MyLCass {
+class MyClass {
   private store = this.storeFactory.createComponentStore<{ counter: number }>({
     storeName: 'SESSION_COUNTER',
     defaultState: {
@@ -283,12 +287,36 @@ class MyLCass {
 }
 ```
 
+### Create Effects
+
+```ts
+export const resetAction = createAction('reset');
+
+class MyClass {
+  private store = this.storeFactory.createComponentStore<{ counter: number }>({
+    storeName: 'SESSION_COUNTER',
+    defaultState: {
+      counter: 0,
+    },
+  });
+
+  myEffect = this.store.createEffect((action) =>
+    action.pipe(
+      ofType(resetAction),
+      tap(() => console.log('do sth.'))
+    )
+  );
+}
+```
+
 ### Testing
 
 Import `storeTestingFactory` and write your tests. A minimal example can be
-found [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts).
+found [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts)
+.
 
-All demo unit tests can be found here: [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
+All demo unit tests can be found
+here: [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
 
 ```ts
 TestBed.configureTestingModule({
