@@ -2,6 +2,26 @@
 
 
 
+
+## 2.4.0 (2022-06-08)
+
+#### :rocket: Enhancement
+* [#48](https://github.com/gernsdorfer/ngrx-lite/pull/48) Add create effects ([@gernsdorfer](https://github.com/gernsdorfer))
+* [#45](https://github.com/gernsdorfer/ngrx-lite/pull/45) init router store with current url ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :memo: Documentation
+* [#49](https://github.com/gernsdorfer/ngrx-lite/pull/49) Update doku for new release ([@gernsdorfer](https://github.com/gernsdorfer))
+* [#44](https://github.com/gernsdorfer/ngrx-lite/pull/44) Spelling corrections and tiny fixes ([@schroedan](https://github.com/schroedan))
+
+#### :house: Internal
+* [#47](https://github.com/gernsdorfer/ngrx-lite/pull/47) Bump async from 2.6.3 to 2.6.4 ([@dependabot[bot]](https://github.com/apps/dependabot))
+* [#46](https://github.com/gernsdorfer/ngrx-lite/pull/46) Upgrade to Angular 14 and Standalone Components ([@gernsdorfer](https://github.com/gernsdorfer))
+* [#43](https://github.com/gernsdorfer/ngrx-lite/pull/43) Add cypress tests based on state ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 2
+- Daniel Schröder ([@schroedan](https://github.com/schroedan))
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.3.2 (2022-05-19)
 
 #### :bug: Bug Fix
