@@ -274,7 +274,7 @@ export class PersistFormComponent implements OnDestroy {
 1. Create new store with a session storage sync option
 
 ```ts
-class MyLCass {
+class MyClass {
   private store = this.storeFactory.createComponentStore<{ counter: number }>({
     storeName: 'SESSION_COUNTER',
     defaultState: {
@@ -287,12 +287,12 @@ class MyLCass {
 }
 ```
 
-### createEffects
+### Create Effects
 
 ```ts
 export const resetAction = createAction('reset');
 
-class MyLCass {
+class MyClass {
   private store = this.storeFactory.createComponentStore<{ counter: number }>({
     storeName: 'SESSION_COUNTER',
     defaultState: {
