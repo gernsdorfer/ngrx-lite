@@ -13,7 +13,7 @@
     "build": "nx build",
     "test": "nx test",
     "build:release": "nx run store:build:production",
-    "build:docs": "nx run doc-app:build && nx run sample-app:build --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
+    "build:docs": "nx run doc-app:build && nx run sample-app:build:production --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
     "release": "release-it"
   },
   "private": true,
