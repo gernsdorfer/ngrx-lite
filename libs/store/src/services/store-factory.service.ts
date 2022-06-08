@@ -6,7 +6,7 @@ import {
 import { LoadingStoreState } from '../models';
 import { filter, takeUntil } from 'rxjs';
 import { ComponentStore } from './stores/component-store.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Store } from './store.service';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
@@ -44,7 +44,7 @@ export class StoreFactory {
     formGroup,
     skipLog,
   }: {
-    formGroup: UntypedFormGroup;
+    formGroup: FormGroup;
     storeName: string;
     plugins?: { storage?: StoragePluginTypes };
     skipLog?: boolean;
@@ -58,7 +58,7 @@ export class StoreFactory {
     });
     formGroup.patchValue(store.state);
     formGroup.valueChanges.pipe(takeUntil(store.destroy$)).subscribe({
-      next: (value) => {
+      next: (value: FORM_STATE) => {
         store.setState(value, 'Form_CHANGED', { skipLog });
       },
     });
