@@ -108,3 +108,45 @@ export class AppComponent {
   }
 }
 ```
+
+## `createEffect`
+
+
+
+```ts title="my-component-store.service.ts"
+export interface MyState {
+  counter: number
+}
+export const resetAction = createAction('reset');
+
+
+@Injectable()
+export class MyStore implements OnDestroy {
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: {counter: 0},
+  });
+
+  reset = this.store
+    //create an Effect
+    .createEffect((action) =>
+    action.pipe(
+      //filter for Actions
+      ofType(resetAction),
+      //change your state
+      tap(() => this.store.setState({ counter: 0 }, 'RESET'))
+    )
+  );
+  constructor(private storeFactory: StoreFactory) {}
+
+  ngOnDestroy() {
+    this.store.ngOnDestroy();
+  }
+} 
+```
+
+:::note
+It's necessary to destroy your store after your component destroyed, to stop the created effect.
+Here you muss call the `ngOnDestroy`.
+:::
+
