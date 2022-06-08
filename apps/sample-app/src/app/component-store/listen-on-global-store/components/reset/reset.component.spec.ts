@@ -4,7 +4,7 @@ import { ResetComponent } from './reset.component';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import createSpyObj = jasmine.createSpyObj;
-import {resetAction} from "./reset.action";
+import {resetAction} from "../../actions/reset.action";
 
 describe('MultipleInstancesComponent', () => {
   beforeEach(() => {

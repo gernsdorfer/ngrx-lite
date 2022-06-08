@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { DemoAComponent } from './demo-a.component';
-import { DemoBComponent } from './demo-b.component';
-import { ResetComponent } from './reset.component';
+import { DemoAComponent } from './components/component-a/demo-a.component';
+import { DemoBComponent } from './components/component-b/demo-b.component';
+import { ResetComponent } from './components/reset/reset.component';
 
 @Component({
   selector: 'my-app-listen-on-global-store',

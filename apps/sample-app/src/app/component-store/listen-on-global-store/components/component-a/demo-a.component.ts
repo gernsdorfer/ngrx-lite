@@ -2,14 +2,25 @@ import { Component, OnDestroy } from '@angular/core';
 import {
   MultipleCounterStore,
   MultipleCounterStoreName,
-} from './counter-service';
+} from '../../services/counter-service';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { UiCardComponent } from '../../shared/ui/card-component';
+import { UiCardComponent } from '../../../../shared/ui/card-component';
 
 @Component({
   selector: 'my-app-listen-on-global-store-demo-a',
-  templateUrl: 'demo.html',
+  template: `
+    <ng-container *ngIf="counterState$ | async as counterState">
+      <my-app-ui-card>
+        <div title>Component-Store A</div>
+        <div subtitle>Listen on Global</div>
+        <div content><h2 class="counter">{{ counterState.counter }}</h2></div>
+        <div actions>
+          <button class="increment" (click)="increment()" mat-fab>+</button>
+        </div>
+      </my-app-ui-card>
+    </ng-container>
+  `,
   providers: [
     MultipleCounterStore,
     {

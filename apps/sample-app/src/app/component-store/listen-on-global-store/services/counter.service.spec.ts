@@ -4,7 +4,7 @@ import { cold } from 'jasmine-marbles';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MultipleCounterStore, MyState } from './counter-service';
 import {EMPTY} from "rxjs";
-import {resetAction} from "./reset.action";
+import {resetAction} from "../actions/reset.action";
 
 describe('MultipleCounterStore', () => {
   beforeEach(() => {

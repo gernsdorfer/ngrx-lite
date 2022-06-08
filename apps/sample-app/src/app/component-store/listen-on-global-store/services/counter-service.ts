@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { ofType } from '@ngrx/effects';
-import { resetAction } from './reset.action';
+import { resetAction } from '../actions/reset.action';
 import { tap } from 'rxjs';
 
 export const MultipleCounterStoreName = new InjectionToken('MULTIPLE_COUNTER');

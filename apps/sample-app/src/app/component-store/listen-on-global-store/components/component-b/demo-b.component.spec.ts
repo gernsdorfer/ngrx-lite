@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EMPTY } from 'rxjs';
-import { MultipleCounterStore } from './counter-service';
+import { MultipleCounterStore } from '../../services/counter-service';
 import { DemoBComponent } from './demo-b.component';
 import { CommonModule } from '@angular/common';
 import createSpyObj = jasmine.createSpyObj;
