@@ -78,14 +78,6 @@ export class StoreFactory {
     return store;
   }
 
-  /** @deprecated use createComponentLoadingStore instead, this methode will be removed in the next major version */
-  public createStore<ITEM, ERROR>(
-    storeName: string,
-    plugins?: { storage?: StoragePluginTypes }
-  ): ComponentLoadingStore<ITEM, ERROR> {
-    return this.createComponentLoadingStore({ storeName, plugins });
-  }
-
   public createComponentLoadingStore<ITEM, ERROR>({
     defaultState,
     plugins = {},
