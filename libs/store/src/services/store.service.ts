@@ -15,6 +15,7 @@ import { ComponentStore } from './stores/component-store.service';
 import { StoreDevtools } from '@ngrx/store-devtools';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { DevToolHelper } from './dev-tool-helper.service';
+import {Actions} from "@ngrx/effects";
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
@@ -25,6 +26,7 @@ export class Store {
     private devToolHelper: DevToolHelper,
     @Optional() private reducerManager: ReducerManager,
     @Optional() private ngrxStore: NgrxStore,
+    @Optional() private actions: Actions,
     @Optional() private storeDevtools: StoreDevtools,
     @Optional()
     @Inject(SessionStoragePlugin)
@@ -111,6 +113,7 @@ export class Store {
       providers: [
         { provide: CreatedStore },
         { provide: DevToolHelper, useValue: this.devToolHelper },
+        { provide: Actions, useValue: this.actions },
         { provide: NgrxStore, useValue: this.ngrxStore },
         { provide: StoreNameToken, useValue: storeName },
         { provide: StateToken, useValue: initialState },

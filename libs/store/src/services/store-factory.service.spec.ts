@@ -1,14 +1,24 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ComponentLoadingStore } from './stores/component-loading-store.service';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { cold } from 'jasmine-marbles';
 import { StoreFactory } from './store-factory.service';
 import { ComponentStore } from './stores/component-store.service';
 import { Store } from './store.service';
 import { Injector } from '@angular/core';
-import {SkipLogForStore, StateToken, StoreNameToken} from '../injection-tokens/state.token';
-import {DevToolHelper} from "./dev-tool-helper.service";
+import {
+  SkipLogForStore,
+  StateToken,
+  StoreNameToken,
+} from '../injection-tokens/state.token';
+import { DevToolHelper } from './dev-tool-helper.service';
+import { Actions } from '@ngrx/effects';
+import { EMPTY } from 'rxjs';
 
 interface MyState {
   myState: string;
@@ -26,9 +36,9 @@ describe('StoreFactory', () => {
   const store = jasmine.createSpyObj<Store>('Store', {
     createStoreByStoreType: undefined,
     addReducersForImportState: undefined,
-    checkForTimeTravel: undefined
+    checkForTimeTravel: undefined,
   });
-
+  const actions = jasmine.createSpyObj<Actions>('Actions', { lift: EMPTY }, {});
   let storeFactory: StoreFactory;
 
   beforeEach(() => {
@@ -39,7 +49,10 @@ describe('StoreFactory', () => {
           provide: Store,
           useValue: store,
         },
-
+        {
+          provide: Actions,
+          useValue: actions,
+        },
         provideMockStore({
           initialState: {},
         }),
@@ -51,6 +64,7 @@ describe('StoreFactory', () => {
     store.createStoreByStoreType.and.callFake(({ CreatedStore }) =>
       Injector.create({
         providers: [
+          { provide: Actions, useValue: actions },
           { provide: CreatedStore },
           provideMockStore({
             initialState: {},
@@ -84,7 +98,7 @@ describe('StoreFactory', () => {
       );
     });
   });
-  describe('createComponentLoadingStore' , () => {
+  describe('createComponentLoadingStore', () => {
     it('should return a createComponentLoadingStore ', () => {
       expect(
         storeFactory.createComponentLoadingStore({
@@ -92,11 +106,12 @@ describe('StoreFactory', () => {
         })
       ).toBeInstanceOf(ComponentLoadingStore);
     });
-
-  })
+  });
 
   describe('createFormComponentStore', () => {
-    const myForm = new UntypedFormGroup(<{ [index in keyof MyState]: UntypedFormControl }>{
+    const myForm = new UntypedFormGroup(<
+      { [index in keyof MyState]: UntypedFormControl }
+    >{
       myState: new UntypedFormControl('', [Validators.required]),
       optionalValue: new UntypedFormControl(''),
     });

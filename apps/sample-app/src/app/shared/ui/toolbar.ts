@@ -33,6 +33,10 @@ import { RouterModule } from '@angular/router';
         <a mat-menu-item class="menu-link" routerLink="/storage-from-service">
           Share Store to ChildComponents
         </a>
+        <a mat-menu-item class="menu-link" routerLink="/listen-on-global-store">
+          Listen on global store
+        </a>
+
         <a mat-menu-item class="menu-link" routerLink="/share-actions">
           Share with @ngrx/Effects
         </a>

@@ -81,6 +81,14 @@ const routes: Routes = [
       ).then((m) => m.StorageFromGlobalComponent),
   },
   {
+    path: 'listen-on-global-store',
+    loadComponent: () =>
+      import(
+        './component-store/listen-on-global-store/listen-on-global-store.component'
+        ).then((m) => m.ListenOnGlobalStoreComponent),
+  },
+
+  {
     path: 'share-actions',
     loadChildren: () =>
       import('./component-store/share-actions/shared-actions.module').then(
