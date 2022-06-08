@@ -4,6 +4,15 @@
 
 
 
+
+## 2.4.3 (2022-06-08)
+
+#### :bug: Bug Fix
+* [#50](https://github.com/gernsdorfer/ngrx-lite/pull/50) remove angular 14 dependencies for store lib ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.4.2 (2022-06-08)
 
 #### :bug: Bug Fix
