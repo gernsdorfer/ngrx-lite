@@ -14,6 +14,8 @@ import {
   StoreNameToken,
 } from '../../injection-tokens/state.token';
 import {DevToolHelper} from "../dev-tool-helper.service";
+import {Actions} from "@ngrx/effects";
+import {EMPTY} from "rxjs";
 
 describe('LoadingStore', () => {
   let store: ComponentLoadingStore<string, number>;
@@ -22,10 +24,14 @@ describe('LoadingStore', () => {
   });
   const storeName = 'myStore';
   const devToolHelper = new DevToolHelper()
-
+  const actions = jasmine.createSpyObj<Actions>('Actions', { lift: EMPTY }, {});
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        {
+          provide: Actions,
+          useValue: actions,
+        },
         {
           provide: StoreNameToken,
           useValue: storeName,

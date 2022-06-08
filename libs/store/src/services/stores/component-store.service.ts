@@ -1,19 +1,23 @@
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import {
   SkipLogForStore,
   StateToken,
   StoreNameToken,
 } from '../../injection-tokens/state.token';
-import { Store as NgrxStore } from '@ngrx/store';
+import {Action, Store as NgrxStore} from '@ngrx/store';
 import { getCustomAction } from '../action-creator';
 import { DevToolHelper } from '../dev-tool-helper.service';
+import { Actions } from '@ngrx/effects';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class ComponentStore<
-  STATE extends object
-> extends NgrxComponentStore<STATE> {
+export class ComponentStore<STATE extends object>
+  extends NgrxComponentStore<STATE>
+  implements OnDestroy
+{
   constructor(
+    protected actions: Actions,
     protected ngrxStore: NgrxStore,
     protected devToolHelper: DevToolHelper,
     @Inject(SkipLogForStore) protected skipLogForStore: boolean,
@@ -24,6 +28,20 @@ export class ComponentStore<
     if (!this.devToolHelper.isTimeTravelActive()) {
       this.dispatchCustomAction('init', state);
     }
+  }
+
+  subject = new Subject<void>();
+
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    this.subject.next();
+    this.subject.complete();
+  }
+
+  createEffect<V = Action>(effect: (action: Actions) => Observable<V>) {
+    effect(this.actions)
+      .pipe(takeUntil(this.subject.asObservable()))
+      .subscribe();
   }
 
   get state(): STATE {
@@ -46,8 +64,8 @@ export class ComponentStore<
     }
     const newState =
       typeof stateOrUpdaterFn === 'function'
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ? (stateOrUpdaterFn as unknown as any)(this.get())
+        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (stateOrUpdaterFn as unknown as any)(this.get())
         : stateOrUpdaterFn;
     super.setState(newState);
     if (!skipLog) this.dispatchCustomAction(action, newState);

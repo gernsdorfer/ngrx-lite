@@ -8,6 +8,8 @@ import {
   StoreNameToken,
 } from '../../injection-tokens/state.token';
 import { DevToolHelper } from '../dev-tool-helper.service';
+import {Actions} from "@ngrx/effects";
+import {EMPTY} from "rxjs";
 
 interface MyState {
   myState: string;
@@ -21,6 +23,7 @@ describe('ComponentStore', () => {
   });
   const devToolHelper = new DevToolHelper();
   const storeName = 'myStore';
+  const actions = EMPTY;
   const getStore = (): ComponentStore<MyState> =>
     TestBed.inject<ComponentStore<MyState>>(ComponentStore);
 
@@ -28,6 +31,10 @@ describe('ComponentStore', () => {
     devToolHelper.setTimeTravelActive(false);
     TestBed.configureTestingModule({
       providers: [
+        {
+          provide: Actions,
+          useValue: actions,
+        },
         {
           provide: StoreNameToken,
           useValue: storeName,
@@ -93,6 +100,18 @@ describe('ComponentStore', () => {
     it('should return state from store', () => {
       const { state } = getStore();
       expect(state).toEqual(defaultStore);
+    });
+  });
+
+  describe('createEffect', () => {
+    it('should Effect', () => {
+      const store = getStore();
+      store.createEffect((action) => {
+        expect(action).toEqual(actions);
+
+        return action;
+      })
+
     });
   });
 

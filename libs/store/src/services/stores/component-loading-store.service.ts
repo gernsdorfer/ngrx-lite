@@ -12,6 +12,7 @@ import { getEffectActionName } from '../action-creator';
 import { EffectStates } from '../../enums/effect-states.enum';
 import { ComponentStore } from './component-store.service';
 import { DevToolHelper } from '../dev-tool-helper.service';
+import { Actions } from '@ngrx/effects';
 
 export const getDefaultComponentLoadingState = <ITEM, ERROR>(
   state: Partial<LoadingStoreState<ITEM, ERROR>> = {}
@@ -30,13 +31,14 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   LoadingStoreState<ITEM, ERROR>
 > {
   constructor(
+    actions: Actions,
     ngrxStore: NgrxStore,
     devToolHelper: DevToolHelper,
     @Inject(StoreNameToken) storeName: string,
     @Inject(StateToken) state: LoadingStoreState<ITEM, ERROR>,
     @Inject(SkipLogForStore) skipLogForStore: boolean
   ) {
-    super(ngrxStore, devToolHelper, skipLogForStore, storeName, state);
+    super(actions, ngrxStore, devToolHelper, skipLogForStore, storeName, state);
   }
 
   loadingEffect = <EFFECT_PARAMS = void>(
