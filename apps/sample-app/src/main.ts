@@ -6,10 +6,16 @@ import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
-import {RouterStoreModule} from "@gernsdorfer/ngrx-lite";
-import {ReduxForWindowModule} from "./app/shared/util/redux-for-window.service";
+import {
+  localStoragePlugin,
+  LocalStoragePlugin,
+  RouterStoreModule,
+  sessionStoragePlugin,
+  SessionStoragePlugin
+} from "@gernsdorfer/ngrx-lite";
 import {RouterModule} from "@angular/router";
 import {routes} from "./app/app-routing.module";
+import {ReduxForWindowModule} from "./app/shared/util/redux-for-window.service";
 
 if (environment.production) {
   enableProdMode();
@@ -27,11 +33,13 @@ bootstrapApplication(AppComponent, {
       logOnly: false,
       monitor: (state, action) => action,
     })),
-    RouterStoreModule,
-    ReduxForWindowModule,
+    importProvidersFrom(RouterStoreModule),
+    importProvidersFrom(ReduxForWindowModule),
     importProvidersFrom(RouterModule.forRoot(routes, {
       useHash: true,
-    }))
+    })),
+    { provide: SessionStoragePlugin, useValue: sessionStoragePlugin },
+    { provide: LocalStoragePlugin, useValue: localStoragePlugin },
   ]
 })
 

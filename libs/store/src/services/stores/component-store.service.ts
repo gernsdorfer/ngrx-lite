@@ -38,10 +38,11 @@ export class ComponentStore<STATE extends object>
     this.subject.complete();
   }
 
-  createEffect<V = Action>(effect: (action: Actions) => Observable<V>) {
-    effect(this.actions)
-      .pipe(takeUntil(this.subject.asObservable()))
-      .subscribe();
+  createEffect<V = Action>(effect: (action: Actions) => Observable<V>):Observable<V> {
+    const effect$ = effect(this.actions)
+      .pipe(takeUntil(this.subject.asObservable()));
+    effect$.subscribe();
+    return effect$;
   }
 
   get state(): STATE {
