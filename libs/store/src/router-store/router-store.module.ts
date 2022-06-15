@@ -1,13 +1,19 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouterStore } from './router-service';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {RouterStore} from './router-service';
+
+const init = (routerStore: RouterStore) => () => routerStore.init()
 
 @NgModule({
-  imports: [BrowserModule],
-  providers: [RouterStore],
+  imports: [],
+  providers: [
+    RouterStore,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: init,
+      deps: [RouterStore],
+      multi: true
+    },
+  ],
 })
 export class RouterStoreModule {
-  constructor(routerStore: RouterStore) {
-    routerStore.init();
-  }
 }

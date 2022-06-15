@@ -54,13 +54,13 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 ### Yarn
 
 ```bash
-yarn add @ngrx/store @ngrx/effects @ngrx/effects @gernsdorfer/ngrx-lite
+yarn add @ngrx/store @ngrx/effects @gernsdorfer/ngrx-lite
 ```
 
 ### NPM
 
 ```bash
-npm install @ngrx/store @ngrx/effects @ngrx/effects @gernsdorfer/ngrx-lite
+npm install @ngrx/store @ngrx/effects @gernsdorfer/ngrx-lite
 ```
 
 ## Usage
@@ -288,6 +288,8 @@ class MyClass {
 ```
 
 ### Create Effects
+
+For Using `createEffect`, please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module
 
 ```ts
 export const resetAction = createAction('reset');

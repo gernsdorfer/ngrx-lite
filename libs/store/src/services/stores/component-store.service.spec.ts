@@ -1,13 +1,9 @@
-import { TestBed } from '@angular/core/testing';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { getCustomAction } from '../action-creator';
-import { ComponentStore } from './component-store.service';
-import {
-  SkipLogForStore,
-  StateToken,
-  StoreNameToken,
-} from '../../injection-tokens/state.token';
-import { DevToolHelper } from '../dev-tool-helper.service';
+import {TestBed} from '@angular/core/testing';
+import {MockStore, provideMockStore} from '@ngrx/store/testing';
+import {getCustomAction} from '../action-creator';
+import {ComponentStore} from './component-store.service';
+import {SkipLogForStore, StateToken, StoreNameToken,} from '../../injection-tokens/state.token';
+import {DevToolHelper} from '../dev-tool-helper.service';
 import {Actions} from "@ngrx/effects";
 import {EMPTY} from "rxjs";
 
@@ -17,7 +13,7 @@ interface MyState {
 }
 
 describe('ComponentStore', () => {
-  const defaultStore: MyState = { myState: '' };
+  const defaultStore: MyState = {myState: ''};
   const mockStore = jasmine.createSpyObj<MockStore>('MockStore', {
     dispatch: undefined,
   });
@@ -49,7 +45,7 @@ describe('ComponentStore', () => {
         },
         {
           provide: StateToken,
-          useValue: <MyState>{ myState: '' },
+          useValue: <MyState>{myState: ''},
         },
         provideMockStore({
           initialState: {},
@@ -59,18 +55,18 @@ describe('ComponentStore', () => {
           useValue: mockStore,
         },
       ],
-      teardown: { destroyAfterEach: false },
+      teardown: {destroyAfterEach: false},
     });
   });
 
   const getDispatchAction = ({
-    actionName,
-    storeState,
-  }: {
+                               actionName,
+                               storeState,
+                             }: {
     actionName: string;
     storeState: MyState;
   }) =>
-    getCustomAction({ storeName, actionName })({
+    getCustomAction({storeName, actionName})({
       payload: storeState,
     });
 
@@ -87,7 +83,7 @@ describe('ComponentStore', () => {
     });
 
     it('should not send init action for SkipLogForStore', () => {
-      TestBed.overrideProvider(SkipLogForStore, { useValue: true });
+      TestBed.overrideProvider(SkipLogForStore, {useValue: true});
       mockStore.dispatch.calls.reset();
 
       getStore();
@@ -98,7 +94,7 @@ describe('ComponentStore', () => {
 
   describe('state', () => {
     it('should return state from store', () => {
-      const { state } = getStore();
+      const {state} = getStore();
       expect(state).toEqual(defaultStore);
     });
   });
@@ -113,20 +109,27 @@ describe('ComponentStore', () => {
       })
 
     });
+
+    it('should throw error for missing effects module', () => {
+      TestBed.overrideProvider(Actions, {useValue: null});
+
+      expect(() => getStore().createEffect(() => EMPTY)).toThrowError('@ngrx/effects is not imported. Please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module')
+    });
   });
+
 
   describe('setState', () => {
     beforeEach(() => {
       mockStore.dispatch.calls.reset();
     });
     it('should set state to store with object', () => {
-      getStore().setState({ myState: 'testValue' });
+      getStore().setState({myState: 'testValue'});
 
-      expect(getStore().state).toEqual({ myState: 'testValue' });
+      expect(getStore().state).toEqual({myState: 'testValue'});
     });
 
     it('should set state to store with function', () => {
-      getStore().setState((state) => ({ ...state, optionalValue: 'test' }));
+      getStore().setState((state) => ({...state, optionalValue: 'test'}));
 
       expect(getStore().state).toEqual({
         ...defaultStore,
@@ -139,14 +142,14 @@ describe('ComponentStore', () => {
         devToolHelper.setTimeTravelActive(true);
       });
       it('should not set state if can not changed', () => {
-        getStore().setState((state) => ({ ...state, optionalValue: 'test' }));
+        getStore().setState((state) => ({...state, optionalValue: 'test'}));
 
-        expect(getStore().state).toEqual({ ...defaultStore });
+        expect(getStore().state).toEqual({...defaultStore});
       });
 
       it('should not set state setState is forced', () => {
         getStore().setState(
-          (state) => ({ ...state, optionalValue: 'test' }),
+          (state) => ({...state, optionalValue: 'test'}),
           '',
           {
             skipLog: true,
@@ -191,7 +194,7 @@ describe('ComponentStore', () => {
       const store = getStore();
       mockStore.dispatch.calls.reset();
 
-      store.setState(defaultStore, 'myCustomAction', { skipLog: true });
+      store.setState(defaultStore, 'myCustomAction', {skipLog: true});
 
       expect(mockStore.dispatch).not.toHaveBeenCalled();
     });
@@ -202,7 +205,7 @@ describe('ComponentStore', () => {
       mockStore.dispatch.calls.reset();
     });
     it('should set state to store with object', () => {
-      getStore().patchState({ optionalValue: 'newValue' });
+      getStore().patchState({optionalValue: 'newValue'});
 
       expect(getStore().state).toEqual({
         ...defaultStore,
@@ -227,20 +230,20 @@ describe('ComponentStore', () => {
         devToolHelper.setTimeTravelActive(true);
       });
       it('should not set state if can not changed', () => {
-        getStore().patchState((state) => ({ ...state, optionalValue: 'test' }));
+        getStore().patchState((state) => ({...state, optionalValue: 'test'}));
 
-        expect(getStore().state).toEqual({ ...defaultStore });
+        expect(getStore().state).toEqual({...defaultStore});
       });
     });
 
     it('should dispatch action with default actionName `PATCH_STATE`', () => {
       mockStore.dispatch.calls.reset();
-      getStore().patchState({ optionalValue: 'newValue' });
+      getStore().patchState({optionalValue: 'newValue'});
 
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'PATCH_STATE',
-          storeState: { ...defaultStore, optionalValue: 'newValue' },
+          storeState: {...defaultStore, optionalValue: 'newValue'},
         })
       );
     });
@@ -248,12 +251,12 @@ describe('ComponentStore', () => {
     it('should dispatch action with custom actionName', () => {
       mockStore.dispatch.calls.reset();
 
-      getStore().patchState({ optionalValue: 'newValue' }, 'myCustomAction');
+      getStore().patchState({optionalValue: 'newValue'}, 'myCustomAction');
 
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'myCustomAction',
-          storeState: { ...defaultStore, optionalValue: 'newValue' },
+          storeState: {...defaultStore, optionalValue: 'newValue'},
         })
       );
     });

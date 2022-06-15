@@ -111,7 +111,7 @@ export class AppComponent {
 
 ## `createEffect`
 
-
+For Using `createEffect`, please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module
 
 ```ts title="my-component-store.service.ts"
 export interface MyState {

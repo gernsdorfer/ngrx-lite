@@ -23,9 +23,6 @@ export const getDefaultComponentLoadingState = <ITEM, ERROR>(
   ...state,
 });
 
-/** @deprecated use getDefaultLoadingState instead, this methode will be removed in the next major version */
-export const getDefaultState = getDefaultComponentLoadingState;
-
 @Injectable({ providedIn: 'root' })
 export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   LoadingStoreState<ITEM, ERROR>
@@ -73,8 +70,4 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
         )
       )
     );
-
-  /** @deprecated use loadingEffect instead, this methode will be removed in the next major version */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  createLoadingEffect = this.loadingEffect;
 }

@@ -91,13 +91,6 @@ describe('StoreFactory', () => {
       ).toBeInstanceOf(ComponentStore);
     });
   });
-  describe('createStore', () => {
-    it('should return a createComponentLoadingStore', () => {
-      expect(storeFactory.createStore('myStore')).toBeInstanceOf(
-        ComponentLoadingStore
-      );
-    });
-  });
   describe('createComponentLoadingStore', () => {
     it('should return a createComponentLoadingStore ', () => {
       expect(
