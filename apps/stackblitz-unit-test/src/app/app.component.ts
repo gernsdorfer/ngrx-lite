@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {UiToolbarComponent} from "./shared/ui/toolbar";
+import {RouterModule} from "@angular/router";
 
 @Component({
   selector: 'my-app',
@@ -13,6 +15,12 @@ import { Component } from '@angular/core';
       }
     `,
   ],
+  standalone: true,
+  imports: [
+    UiToolbarComponent,
+    RouterModule
+  ],
   templateUrl: 'app.component.html',
 })
-export class AppComponent {}
+export class AppComponent {
+}
