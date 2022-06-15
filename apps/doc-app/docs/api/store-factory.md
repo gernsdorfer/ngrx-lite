@@ -33,21 +33,6 @@ export class AppComponent {
 }
 ```
 
-## `createStore` (deprecated)
-
-Create a new Store based on [ngrx Component Store](https://ngrx.io/guide/component-store).
-Please use `createComponentStore` or `createComponentLoadingStore`
-```ts title="app.component.ts"
-export class AppComponent {
-  myStore = this.storeFactory.createStore<number, never>('myStore');
-
-  constructor(private storeFactory: StoreFactory) {
-  }
-}
-```
-
-
-
 ## `createComponentLoadingStore`
 Create a LoadingStore based on [ngrx Component Store](https://ngrx.io/guide/component-store).
 
