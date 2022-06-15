@@ -4,6 +4,15 @@
 
 
 
+
+## 14.0.0 (2022-06-15)
+
+#### :boom: Breaking Change
+* [#51](https://github.com/gernsdorfer/ngrx-lite/pull/51) Support Angular 14 ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 2.4.4 (2022-06-08)
 
 ## 2.4.2 (2022-06-08)

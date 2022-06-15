@@ -1,6 +1,6 @@
 {
   "name": "@gernsdorfer/ngrx-lite",
-  "version": "2.4.4",
+  "version": "14.0.0",
   "peerDependencies": {
     "@angular/common": ">= 14.0.0",
     "@angular/core": ">= 14.0.0",

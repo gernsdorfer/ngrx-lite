@@ -1,6 +1,6 @@
 {
   "name": "ngrx-lite",
-  "version": "2.4.4",
+  "version": "14.0.0",
   "license": "MIT",
   "scripts": {
     "affected:build": "nx affected --target=build",
