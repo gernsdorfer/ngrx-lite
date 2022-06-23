@@ -10,10 +10,14 @@ import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
-import { takeUntil } from 'rxjs';
+import {filter, map, of, switchMap, take, takeUntil, tap} from 'rxjs';
 import { ComponentStore } from './stores/component-store.service';
-import { StoreDevtools } from '@ngrx/store-devtools';
-import { LiftedState } from '@ngrx/store-devtools/src/reducer';
+import {
+  INITIAL_OPTIONS,
+  StoreDevtools,
+  StoreDevtoolsConfig,
+} from '@ngrx/store-devtools';
+import { LiftedActions, LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { DevToolHelper } from './dev-tool-helper.service';
 import { Actions } from '@ngrx/effects';
 
@@ -33,7 +37,8 @@ export class Store {
     private sessionStoragePlugin: ClientStoragePlugin,
     @Optional()
     @Inject(LocalStoragePlugin)
-    private localStoragePlugin: ClientStoragePlugin
+    private localStoragePlugin: ClientStoragePlugin,
+    @Optional() @Inject(INITIAL_OPTIONS) private config: StoreDevtoolsConfig
   ) {
     this.checkNgrxStoreIsInstalled();
   }
@@ -169,7 +174,7 @@ export class Store {
       state: STATE = initialState,
       action: { payload: STATE; type: string }
     ): STATE =>
-      action.type.startsWith(`[COMPONENT_STORE][${storeName}]`)
+      this.isActionTypeForCurrentStore(action.type, storeName)
         ? action.payload
         : state;
   }
@@ -217,11 +222,44 @@ export class Store {
     storeName: string,
     store: ComponentStore<STATE>
   ) {
-    store.destroy$.subscribe(() => {
-      if (!this.storeDevtools) {
+    store.destroy$
+      .pipe(
+        filter(() => !this.devToolHelper.isTimeTravelActive()),
+        switchMap(() => this.storeDevtools?.liftedState || of({})),
+        filter(() => !this.devToolHelper.isTimeTravelActive()),
+        map(({ actionsById = [] }) => actionsById),
+        filter(
+          (actionsById) =>
+            !this.hasLiftedStateCurrentStoreActions(actionsById, storeName)
+        ),
+
+        take(1)
+      )
+      .subscribe(() => {
         this.reducerManager.removeReducer(storeName);
-      }
-    });
+        this.storeDevtools?.sweep();
+      });
+  }
+
+  private hasLiftedStateCurrentStoreActions(
+    liftedActions: LiftedActions,
+    storeName: string
+  ): boolean {
+    return Object.keys(liftedActions)
+      .map((actionId) =>
+        this.isActionTypeForCurrentStore(
+          liftedActions[parseInt(actionId)].action.type,
+          storeName
+        )
+      )
+      .includes(true);
+  }
+
+  private isActionTypeForCurrentStore<STATE>(
+    actionType: string,
+    storeName: string
+  ): boolean {
+    return actionType.startsWith(`[COMPONENT_STORE][${storeName}]`);
   }
 
   private checkNgrxStoreIsInstalled() {

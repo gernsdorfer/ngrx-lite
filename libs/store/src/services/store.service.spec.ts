@@ -6,7 +6,7 @@ import { ReducerManager } from '@ngrx/store';
 import { getDefaultComponentLoadingState } from './stores/component-loading-store.service';
 import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
-import { cold } from 'jasmine-marbles';
+import { cold, getTestScheduler } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
 import { defer, EMPTY, of } from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
@@ -477,20 +477,62 @@ describe('Store', () => {
       });
 
       describe('remove reducer, after destroy', () => {
-        it('should not remove the reducer, when devtools are availible', () => {
-          reducerManager.removeReducer.calls.reset();
+        describe('devtools are available', () => {
+          let myStore: ComponentStore<MyState>;
+          beforeEach(() => {
+            reducerManager.removeReducer.calls.reset();
 
-          const myStore = getStore().createStoreByStoreType({
-            storeName: 'testStore',
-            defaultState: defaultMyState,
-            CreatedStore: ComponentStore,
+            myStore = getStore().createStoreByStoreType({
+              storeName: 'testStore',
+              defaultState: defaultMyState,
+              CreatedStore: ComponentStore,
+            });
           });
-          myStore.ngOnDestroy();
+          it('should not remove the reducer, when store actions included in the liftedState', () => {
+            liftedState$ = cold('a', {
+              a: <Partial<LiftedState>>{
+                actionsById: {
+                  [1]: {
+                    type: 'PERFORM_ACTION',
+                    action: {
+                      type: getCustomAction({ storeName: 'testStore' }).type,
+                    },
+                  },
+                },
+              },
+            });
+            myStore.ngOnDestroy();
+            getTestScheduler().run(({ flush }) => {
+              flush();
+              expect(reducerManager.removeReducer).not.toHaveBeenCalled();
+            });
+          });
 
-          expect(reducerManager.removeReducer).not.toHaveBeenCalled();
+          it('should remove the reducer, when no store actions included in the liftedState', () => {
+            liftedState$ = cold('a', {
+              a: <Partial<LiftedState>>{
+                actionsById: {
+                  [1]: {
+                    type: 'PERFORM_ACTION',
+                    action: {
+                      type: getCustomAction({ storeName: 'otherStore' }).type,
+                    },
+                  },
+                },
+              },
+            });
+            myStore.ngOnDestroy();
+            getTestScheduler().run(({ flush }) => {
+              flush();
+              expect(reducerManager.removeReducer).toHaveBeenCalledWith(
+                'testStore'
+              );
+              expect(storeDevtools.sweep).toHaveBeenCalled();
+            });
+          });
         });
 
-        it('should not remove the reducer, when devtools are availible', () => {
+        it('should immediately remove the reducer, when devtools are not available', () => {
           TestBed.overrideProvider(StoreDevtools, { useValue: null });
 
           const myStore = getStore().createStoreByStoreType({
@@ -500,7 +542,9 @@ describe('Store', () => {
           });
           myStore.ngOnDestroy();
 
-          expect(reducerManager.removeReducer).toHaveBeenCalled();
+          expect(reducerManager.removeReducer).toHaveBeenCalledWith(
+            'testStore'
+          );
         });
       });
     });
