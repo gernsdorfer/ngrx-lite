@@ -5,6 +5,15 @@
 
 
 
+
+## 14.1.0 (2022-06-23)
+
+#### :rocket: Enhancement
+* [#52](https://github.com/gernsdorfer/ngrx-lite/pull/52) remove store after destroy, if no storeActions are in the devtools ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 14.0.0 (2022-06-15)
 
 #### :boom: Breaking Change
