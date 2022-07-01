@@ -6,6 +6,15 @@
 
 
 
+
+## 14.1.1 (2022-07-01)
+
+#### :bug: Bug Fix
+* [#53](https://github.com/gernsdorfer/ngrx-lite/pull/53) skip read uninitialized store state ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 14.1.0 (2022-06-23)
 
 #### :rocket: Enhancement
