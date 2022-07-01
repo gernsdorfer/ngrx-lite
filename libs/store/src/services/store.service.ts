@@ -24,6 +24,14 @@ import { Actions } from '@ngrx/effects';
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
 
+export const getStoreState  = <STATE extends object>(store : ComponentStore<STATE>): STATE | undefined  => {
+  try {
+    return store.state;
+  }catch (e) {
+    return undefined
+  }
+}
+
 @Injectable({ providedIn: 'root' })
 export class Store {
   constructor(
@@ -201,9 +209,10 @@ export class Store {
     if (skipLogForStore) return;
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
       next: ({ computedStates, currentStateIndex }) => {
-        if (
+        const currentStoreState = getStoreState(store);
+        if (currentStoreState &&
           JSON.stringify(computedStates[currentStateIndex].state[storeName]) !==
-          JSON.stringify(store.state)
+          JSON.stringify(currentStoreState)
         ) {
           store.setState(
             computedStates[currentStateIndex].state[storeName],
@@ -217,6 +226,8 @@ export class Store {
       },
     });
   }
+
+
 
   private removeReducerAfterDestroy<STATE extends object>(
     storeName: string,
@@ -255,7 +266,7 @@ export class Store {
       .includes(true);
   }
 
-  private isActionTypeForCurrentStore<STATE>(
+  private isActionTypeForCurrentStore(
     actionType: string,
     storeName: string
   ): boolean {

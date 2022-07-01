@@ -8,10 +8,10 @@ import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
-import { defer, EMPTY, of } from 'rxjs';
+import {defer, EMPTY, of, throwError} from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { ComponentStore } from './stores/component-store.service';
-import { Store } from './store.service';
+import {getStoreState, Store} from './store.service';
 import { DevToolHelper } from './dev-tool-helper.service';
 
 interface MyState {
@@ -402,6 +402,7 @@ describe('Store', () => {
             },
           });
         });
+
         it('should set stateChanges to store', () => {
           const { state$ } = getStore().createStoreByStoreType({
             storeName: 'myStore',
@@ -568,4 +569,23 @@ describe('Store', () => {
     );
   });
 });
+
+describe('getStoreState' , () => {
+  it('should return state' , () => {
+    const store= jasmine.createSpyObj<ComponentStore<{myState: string}>>('Store', {} , {
+      state: {myState : ''}
+    } )
+    expect(getStoreState(store)).toEqual({myState : ''})
+  })
+
+  it('should return state' , () => {
+    class Store {
+      get state () {
+        throw 'error';
+      }
+    }
+
+    expect(getStoreState(new Store() as unknown as ComponentStore<{myState : ''}>)).toBeUndefined()
+  })
+})
 
