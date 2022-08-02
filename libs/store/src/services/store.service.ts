@@ -1,4 +1,10 @@
-import { Inject, Injectable, Injector, Optional } from '@angular/core';
+import {
+  Inject,
+  Injectable,
+  Injector,
+  isDevMode,
+  Optional,
+} from '@angular/core';
 
 import {
   SkipLogForStore,
@@ -10,7 +16,7 @@ import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
-import {filter, map, of, switchMap, take, takeUntil, tap} from 'rxjs';
+import { filter, map, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { ComponentStore } from './stores/component-store.service';
 import {
   INITIAL_OPTIONS,
@@ -24,16 +30,20 @@ import { Actions } from '@ngrx/effects';
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
 
-export const getStoreState  = <STATE extends object>(store : ComponentStore<STATE>): STATE | undefined  => {
+export const getStoreState = <STATE extends object>(
+  store: ComponentStore<STATE>
+): STATE | undefined => {
   try {
     return store.state;
-  }catch (e) {
-    return undefined
+  } catch (e) {
+    return undefined;
   }
-}
+};
 
 @Injectable({ providedIn: 'root' })
 export class Store {
+  private currentRunningStores: string[] = [];
+
   constructor(
     private devToolHelper: DevToolHelper,
     @Optional() private reducerManager: ReducerManager,
@@ -121,7 +131,6 @@ export class Store {
       defaultState,
       storage
     );
-
     const store = Injector.create({
       providers: [
         { provide: CreatedStore },
@@ -134,12 +143,23 @@ export class Store {
         ...additionalProviders,
       ],
     }).get(CreatedStore);
-    this.addStoreReducerToNgrx<STATE>(storeName, initialState);
 
+    this.addStoreNameToInternalCache(storeName);
+    this.addStoreReducerToNgrx<STATE>(storeName, initialState);
     this.syncStoreChangesToClientStorage(storeName, store, storage);
     this.syncNgrxDevtoolStateToStore<STATE>(storeName, store, skipLogForStore);
     this.removeReducerAfterDestroy<STATE>(storeName, store);
     return store;
+  }
+
+  addStoreNameToInternalCache(storeName: string): void {
+    if (isDevMode() && this.isStoreRunning(storeName)) {
+      // eslint-disable-next-line no-restricted-syntax
+      console.info(
+        `A Store with name '${storeName}' is currently running, check if you missed to implement ngOnDestroy for this store`
+      );
+    }
+    this.currentRunningStores.push(storeName);
   }
 
   private getInitialState<STATE>(
@@ -210,9 +230,10 @@ export class Store {
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
       next: ({ computedStates, currentStateIndex }) => {
         const currentStoreState = getStoreState(store);
-        if (currentStoreState &&
+        if (
+          currentStoreState &&
           JSON.stringify(computedStates[currentStateIndex].state[storeName]) !==
-          JSON.stringify(currentStoreState)
+            JSON.stringify(currentStoreState)
         ) {
           store.setState(
             computedStates[currentStateIndex].state[storeName],
@@ -227,29 +248,37 @@ export class Store {
     });
   }
 
-
-
   private removeReducerAfterDestroy<STATE extends object>(
     storeName: string,
     store: ComponentStore<STATE>
   ) {
     store.destroy$
       .pipe(
+        tap(
+          () =>
+            (this.currentRunningStores = this.currentRunningStores.filter(
+              (name) => storeName !== name
+            ))
+        ),
         filter(() => !this.devToolHelper.isTimeTravelActive()),
         switchMap(() => this.storeDevtools?.liftedState || of({})),
         filter(() => !this.devToolHelper.isTimeTravelActive()),
         map(({ actionsById = [] }) => actionsById),
         filter(
           (actionsById) =>
-            !this.hasLiftedStateCurrentStoreActions(actionsById, storeName)
+            !this.hasLiftedStateCurrentStoreActions(actionsById, storeName) &&
+            !this.isStoreRunning(storeName)
         ),
-
         take(1)
       )
       .subscribe(() => {
         this.reducerManager.removeReducer(storeName);
         this.storeDevtools?.sweep();
       });
+  }
+
+  private isStoreRunning(storeName: string): boolean {
+    return this.currentRunningStores.includes(storeName);
   }
 
   private hasLiftedStateCurrentStoreActions(

@@ -8,10 +8,10 @@ import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
-import {defer, EMPTY, of, throwError} from 'rxjs';
+import { defer, EMPTY, of } from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { ComponentStore } from './stores/component-store.service';
-import {getStoreState, Store} from './store.service';
+import { getStoreState, Store } from './store.service';
 import { DevToolHelper } from './dev-tool-helper.service';
 
 interface MyState {
@@ -235,6 +235,26 @@ describe('Store', () => {
             ...defaultMyState,
             optionalValue: 'testDataFromSessionStorage',
           });
+        });
+
+        it('should show hint for multiple store initialisations', () => {
+          const store = getStore();
+          const info = spyOn(console, 'info');
+
+          store.createStoreByStoreType({
+            storeName: 'my-store',
+            defaultState: {},
+            CreatedStore: ComponentStore,
+          });
+          store.createStoreByStoreType({
+            storeName: 'my-store',
+            defaultState: {},
+            CreatedStore: ComponentStore,
+          });
+
+          expect(info).toHaveBeenCalledWith(
+            "A Store with name 'my-store' is currently running, check if you missed to implement ngOnDestroy for this store"
+          );
         });
 
         it('should return default initial state', () => {
@@ -570,22 +590,27 @@ describe('Store', () => {
   });
 });
 
-describe('getStoreState' , () => {
-  it('should return state' , () => {
-    const store= jasmine.createSpyObj<ComponentStore<{myState: string}>>('Store', {} , {
-      state: {myState : ''}
-    } )
-    expect(getStoreState(store)).toEqual({myState : ''})
-  })
+describe('getStoreState', () => {
+  it('should return state', () => {
+    const store = jasmine.createSpyObj<ComponentStore<{ myState: string }>>(
+      'Store',
+      {},
+      {
+        state: { myState: '' },
+      }
+    );
+    expect(getStoreState(store)).toEqual({ myState: '' });
+  });
 
-  it('should return state' , () => {
+  it('should return state', () => {
     class Store {
-      get state () {
+      get state() {
         throw 'error';
       }
     }
 
-    expect(getStoreState(new Store() as unknown as ComponentStore<{myState : ''}>)).toBeUndefined()
-  })
-})
-
+    expect(
+      getStoreState(new Store() as unknown as ComponentStore<{ myState: '' }>)
+    ).toBeUndefined();
+  });
+});
