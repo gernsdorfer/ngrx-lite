@@ -7,6 +7,15 @@
 
 
 
+
+## 14.1.2 (2022-08-02)
+
+#### :bug: Bug Fix
+* [#55](https://github.com/gernsdorfer/ngrx-lite/pull/55) check if a store is currently running, before remove store reducer ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 14.1.1 (2022-07-01)
 
 #### :bug: Bug Fix
