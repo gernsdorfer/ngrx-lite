@@ -6,14 +6,14 @@ import {RouterModule} from "@angular/router";
   selector: 'my-app',
   styles: [
     `
-      .content {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-      }
-    `,
+          .content {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+          }
+        `,
   ],
   standalone: true,
   imports: [
