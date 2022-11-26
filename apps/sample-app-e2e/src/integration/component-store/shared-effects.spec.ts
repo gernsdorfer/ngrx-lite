@@ -15,7 +15,7 @@ describe('component store', () => {
       cy.get('.increment').click();
 
       cy.get('.counter').should('have.text', '1');
-      cy.get('.snackbar').should('have.text', 'counter increment: 1');
+      cy.get('.snackbar').should('include.text', 'counter increment: 1');
     });
   });
 });
