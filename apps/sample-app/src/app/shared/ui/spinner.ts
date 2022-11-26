@@ -5,11 +5,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   selector: 'my-app-ui-spinner',
   styles: [
     `
-      .spinner {
-        position: absolute;
-        opacity: 0.5;
-      }
-    `,
+          .spinner {
+            position: absolute;
+            opacity: 0.5;
+          }
+        `,
   ],
   template: `
     <div class="spinner">

@@ -10,6 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
       .demo-card {
         max-width: 400px;
       }
+      .actions {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+      }
     `,
   ],
   template: `
@@ -25,7 +30,7 @@ import { MatButtonModule } from '@angular/material/button';
       <mat-card-content>
         <ng-content select="[content]"></ng-content>
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions class="actions">
         <ng-content select="[actions]"></ng-content>
       </mat-card-actions>
     </mat-card>

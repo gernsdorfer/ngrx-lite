@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ClientStoragePlugin } from '../models';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ReducerManager } from '@ngrx/store';
+import { ReducerManager, ScannedActionsSubject } from '@ngrx/store';
 import { getDefaultComponentLoadingState } from './stores/component-loading-store.service';
 import { getCustomAction } from '../services/action-creator';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
@@ -72,12 +72,17 @@ describe('Store', () => {
       TestBed.configureTestingModule({
         providers: [
           Store,
+
           provideMockStore({
             initialState: {},
           }),
           {
             provide: DevToolHelper,
             useValue: devToolHelper,
+          },
+          {
+            provide: ScannedActionsSubject,
+            useValue: {},
           },
           {
             provide: ReducerManager,
@@ -122,6 +127,10 @@ describe('Store', () => {
           {
             provide: SessionStoragePlugin,
             useValue: sessionStoragePlugin,
+          },
+          {
+            provide: ScannedActionsSubject,
+            useValue: {},
           },
           {
             provide: DevToolHelper,
@@ -575,7 +584,10 @@ describe('Store', () => {
     TestBed.configureTestingModule({
       providers: [
         Store,
-
+        {
+          provide: ScannedActionsSubject,
+          useValue: {},
+        },
         {
           provide: DevToolHelper,
           useValue: devToolHelper,
