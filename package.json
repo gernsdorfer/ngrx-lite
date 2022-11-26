@@ -1,6 +1,6 @@
 {
   "name": "ngrx-lite",
-  "version": "14.2.0",
+  "version": "15.0.0-rc.0",
   "license": "MIT",
   "scripts": {
     "affected:build": "nx affected --target=build",
@@ -24,7 +24,9 @@
   "release-it": {
     "plugins": {
       "@release-it-plugins/workspaces": {
-        "workspaces": ["libs/store"]
+        "workspaces": [
+          "libs/store"
+        ]
       }
     },
     "npm": false
