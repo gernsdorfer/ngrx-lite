@@ -9,7 +9,6 @@ describe('component store', () => {
     });
 
     it('should have 3 Product after load', () => {
-
       cy.get('.product-list').should('contain.text', 'Product 1');
       cy.get('.product-list').should('contain.text', 'Product 2');
       cy.get('.product-list').should('contain.text', 'Product 3');

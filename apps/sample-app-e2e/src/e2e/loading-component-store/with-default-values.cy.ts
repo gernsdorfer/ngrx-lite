@@ -5,7 +5,10 @@ describe('loading component Store', () => {
 
   describe('BasicCounter', () => {
     beforeEach(() => {
-      cy.openLinkFromToolbar(' Loading-Component-Store', 'Loading with default values');
+      cy.openLinkFromToolbar(
+        ' Loading-Component-Store',
+        'Loading with default values'
+      );
     });
     it('should show initial state', () => {
       cy.get('.counter').should('have.text', '0');
@@ -23,7 +26,10 @@ describe('loading component Store', () => {
 
       cy.openLinkFromToolbar('Component-Store', 'Custom-Action');
 
-      cy.openLinkFromToolbar('Loading-Component-Store', 'Loading with default values');
+      cy.openLinkFromToolbar(
+        'Loading-Component-Store',
+        'Loading with default values'
+      );
 
       cy.get('.counter').should('have.text', '0');
     });

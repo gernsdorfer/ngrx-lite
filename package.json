@@ -69,7 +69,7 @@
     "@typescript-eslint/eslint-plugin": "5.44.0",
     "@typescript-eslint/parser": "5.44.0",
     "clsx": "^1.1.1",
-    "cypress": "^9.6.0",
+    "cypress": "^11.0.0",
     "eslint": "8.15.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-cypress": "^2.10.3",
