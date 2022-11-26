@@ -15,7 +15,15 @@
     "build:release": "nx run store:build:production",
     "build:docs": "nx run doc-app:build && nx run sample-app:build:production --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
     "release": "release-it",
-    "release:dry": "release-it --release-version"
+    "release:dry": "release-it --preRelease=rc --release-version"
+  },
+  "release-it": {
+    "plugins": {
+      "@release-it-plugins/workspaces": {
+        "workspaces": ["libs/store"]
+      }
+    },
+    "npm": false
   },
   "private": true,
   "repository": {
@@ -62,6 +70,7 @@
     "@nrwl/nx-cloud": "15.0.2",
     "@nrwl/workspace": "15.2.1",
     "@nx-plus/docusaurus": "14.1.0",
+    "@release-it-plugins/workspaces": "^3.2.0",
     "@types/jasmine": "4.3.0",
     "@types/node": "17.0.41",
     "@typescript-eslint/eslint-plugin": "5.44.0",
