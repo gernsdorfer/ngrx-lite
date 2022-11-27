@@ -15,9 +15,10 @@
     "build:release": "nx run store:build:production",
     "build:docs": "nx run doc-app:build && nx run sample-app:build:production --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
     "release": "release-it",
-    "release:patch": "release-it --preRelease=rc --increment patch",
-    "release:minor": "release-it --preRelease=rc --increment minor",
-    "release:major-pre": "release-it --preRelease=rc --increment major",
+    "release:pre": "release-it --preRelease",
+    "release:patch": "release-it --increment patch",
+    "release:minor": "release-it --increment minor",
+    "release:major-pre": "release-it --preRelease --increment major",
     "release:major": "release-it --increment major",
     "release:dry": "release-it --release-version"
   },
