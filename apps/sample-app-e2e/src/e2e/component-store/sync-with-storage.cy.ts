@@ -24,7 +24,7 @@ describe('component store', () => {
 
       cy.openLinkFromToolbar('Component-Store', 'Sync with Storage');
 
-      cy.get('.counter').should('have.text', '1');
+      cy.get('.counter').should('have.text', '2');
     });
   });
 });
