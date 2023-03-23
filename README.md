@@ -39,6 +39,7 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 <hr />
 
 - 👩‍💻 checkout the [sample app](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
+- ▶️ Play with a [Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/)
 - 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
 
 ## Install
