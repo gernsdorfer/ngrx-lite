@@ -56,18 +56,6 @@ const config = {
             className: 'header-playground-link',
           },
           {
-            href: 'https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-ui',
-            label: 'Playground-UI',
-            position: 'left',
-            className: 'header-playground-link',
-          },
-          {
-            href: 'https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test',
-            label: 'Playground-Unit-Tests',
-            position: 'left',
-            className: 'header-playground-link',
-          },
-          {
             href: 'https://github.com/gernsdorfer/ngrx-lite',
             label: 'GitHub',
             position: 'right',
