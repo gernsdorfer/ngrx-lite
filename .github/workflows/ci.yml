@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn
+      - run: yarn run format:check
       - run: yarn run affected:build --all --parallel=3
       - run: yarn run affected:lint --all --parallel=2
       - run: yarn run affected:test --all --parallel=2
@@ -43,6 +44,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn
+      - run: yarn run format:check
       - run: yarn run affected:build --parallel=3
       - run: yarn run affected:lint --parallel=2
       - run: yarn run affected:test --parallel=2
