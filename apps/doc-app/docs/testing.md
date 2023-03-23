@@ -19,7 +19,7 @@ TestBed.configureTestingModule({
 ```
 
 :::note Many Test Example you can
-find [here](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
+find [here](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app)
 :::
 
 ## test createEffects

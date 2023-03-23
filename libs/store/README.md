@@ -41,14 +41,6 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 - 👩‍💻 checkout the [sample app](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/)
 - 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
 
-## UI Demo
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-ui)
-
-## Test Demo
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
-
 ## Install
 
 ### Yarn
@@ -317,8 +309,6 @@ Import `storeTestingFactory` and write your tests. A minimal example can be
 found [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts)
 .
 
-All demo unit tests can be found
-here: [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/gernsdorfer/ngrx-lite/tree/master/apps/stackblitz-unit-test)
 
 ```ts
 TestBed.configureTestingModule({
