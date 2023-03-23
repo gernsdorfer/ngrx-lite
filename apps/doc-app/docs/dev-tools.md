@@ -23,9 +23,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
   ],
 })
 export class AppModule {}
-
 ```
-:::note It's important to set the  `monitor` property in your devToolConfig, otherwise an State Import is not possible.
+
+:::note It's important to set the `monitor` property in your devToolConfig, otherwise an State Import is not possible.
 :::
-
-

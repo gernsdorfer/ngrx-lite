@@ -1,5 +1,5 @@
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
 import styles from './HomepageFeatures.module.css';
 
 type FeatureItem = {
@@ -12,38 +12,27 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Fast & Easy Setup',
     image: '⏱ ',
-    description: (
-      <>
-        Create your own Store and Effects in a Single file.
-      </>
-    ),
+    description: <>Create your own Store and Effects in a Single file.</>,
   },
   {
     title: 'Integrated loading state',
     image: '⏳',
-    description: (
-      <>
-        Every created Effects set and reset an Loading state
-      </>
-    ),
+    description: <>Every created Effects set and reset an Loading state</>,
   },
   {
     title: 'Support Redux Devtools',
     image: '⚒️',
     description: (
       <>
-        Effects and State Changes will be shown in the Redux Devtools (if ReduxDevTool is enabled )
+        Effects and State Changes will be shown in the Redux Devtools (if
+        ReduxDevTool is enabled )
       </>
     ),
   },
   {
     title: 'Support session/locale Storage',
     image: '💽 ',
-    description: (
-      <>
-        Configure your store as session or local Store
-      </>
-    ),
+    description: <>Configure your store as session or local Store</>,
   },
 ];
 
@@ -51,7 +40,7 @@ function Feature({ title, image, description }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <span style={{fontSize:'100px'}}>{image}</span>
+        <span style={{ fontSize: '100px' }}>{image}</span>
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>

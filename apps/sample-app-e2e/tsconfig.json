@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "sourceMap": false,
     "outDir": "../../dist/out-tsc",
@@ -7,5 +6,6 @@
     "types": ["cypress", "node"],
     "target": "es2020"
   },
+  "extends": "../../tsconfig.base.json",
   "include": ["src/**/*.ts", "src/**/*.js", "cypress.config.ts"]
 }

@@ -1,5 +1,4 @@
 {
-  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../dist/out-tsc/tools",
     "rootDir": ".",
@@ -8,5 +7,6 @@
     "types": ["node"],
     "importHelpers": false
   },
+  "extends": "../tsconfig.base.json",
   "include": ["**/*.ts"]
 }

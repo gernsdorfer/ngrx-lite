@@ -1,6 +1,5 @@
 ---
 sidebar_position: 2
-
 ---
 
 # Quick Setup
@@ -8,19 +7,17 @@ sidebar_position: 2
 ## Create new Store 👉 `createStore`
 
 ```ts title="app.component.ts"
-
 export interface MyState {
-  counter: number
+  counter: number;
 }
 
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 }
 ```
 
@@ -30,27 +27,25 @@ export class AppComponent {
 ## Read State 👉 `state$`
 
 ```ts title="app.component.ts"
-
 export interface MyState {
-  counter: number
+  counter: number;
 }
 
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
   public state$: Observable<MyState> = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 }
 ```
 
 :::note More Information for `state$` you can find [here](/docs/api/component-store#state$)
 :::
 
-## Modify state 👉 `effect`  👉 `setState` 👉 `patchState` 👉 `createLoadingEffect`
+## Modify state 👉 `effect` 👉 `setState` 👉 `patchState` 👉 `createLoadingEffect`
 
 Choose between [synchronous](#synchronous-state-change) and [asynchronous](#asynchronous-state-change) State Changes.
 
@@ -60,20 +55,19 @@ Choose between [synchronous](#synchronous-state-change) and [asynchronous](#asyn
 
 ```ts title="app.component.ts"
 export interface MyState {
-  counter: number
+  counter: number;
 }
 
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   update(counter: number) {
-    this.store.setState({counter: 2});
+    this.store.setState({ counter: 2 });
   }
 }
 ```
@@ -85,20 +79,19 @@ export class AppComponent {
 
 ```ts title="app.component.ts"
 export interface MyState {
-  counter: number
+  counter: number;
 }
 
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   patch(counter: number) {
-    this.store.patchState({counter: counter});
+    this.store.patchState({ counter: counter });
   }
 }
 ```
@@ -112,23 +105,24 @@ export class AppComponent {
 
 ```ts title="app.component.ts"
 export interface MyState {
-  counter: number
+  counter: number;
 }
 
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
-  increment = this.myStore.effect((counter$: Observable<number>) => counter$.pipe(
-    tapResponse(
-      (counter) => this.store.patchState({counter: counter + 1}),
-      (error) => console.error('error', error)
+  increment = this.myStore.effect((counter$: Observable<number>) =>
+    counter$.pipe(
+      tapResponse(
+        (counter) => this.store.patchState({ counter: counter + 1 }),
+        (error) => console.error('error', error)
+      )
     )
-  ));
+  );
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 }
 ```
 
@@ -137,7 +131,6 @@ export class AppComponent {
 create your store with [`loadingEffect`](/docs/api/component-loading-store#loadingEffect)
 
 ```ts title="app.component.ts"
-
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
 export class AppComponent {
@@ -146,8 +139,7 @@ export class AppComponent {
   });
   private increment = this.store.createLoadingEffect('LOAD_NAME', (counter: number) => of(counter + 1));
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 }
 ```
 

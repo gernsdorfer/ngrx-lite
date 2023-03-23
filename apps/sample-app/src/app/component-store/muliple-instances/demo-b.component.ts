@@ -1,11 +1,11 @@
-import {Component, OnDestroy} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { UiCardComponent } from '../../shared/ui/card-component';
 import {
   MultipleCounterStore,
   MultipleCounterStoreName,
 } from './counter-service';
-import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
-import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
   selector: 'my-app-multi-instance-demo-b',

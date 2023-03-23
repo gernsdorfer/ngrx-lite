@@ -1,9 +1,10 @@
 {
-  "name": "store",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "store",
+  "prefix": "ngrx-lite",
   "projectType": "library",
   "sourceRoot": "libs/store/src",
-  "prefix": "ngrx-lite",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
@@ -39,6 +40,5 @@
         ]
       }
     }
-  },
-  "tags": []
+  }
 }

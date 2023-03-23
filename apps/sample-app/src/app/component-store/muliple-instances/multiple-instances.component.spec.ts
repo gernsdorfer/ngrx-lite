@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MultipleInstancesComponent } from './multiple-instances.component';
 import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MultipleInstancesComponent } from './multiple-instances.component';
 
 describe('MultipleInstancesComponent', () => {
   beforeEach(() => {

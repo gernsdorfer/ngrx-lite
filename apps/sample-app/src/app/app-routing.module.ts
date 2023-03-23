@@ -1,4 +1,4 @@
-import {Routes} from '@angular/router';
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
@@ -13,7 +13,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import(
         './component-store/combine-with-entity/combine-with-entity.component'
-        ).then((m) => m.CombineWithEntityComponent),
+      ).then((m) => m.CombineWithEntityComponent),
   },
   {
     path: 'persist-form',
@@ -35,7 +35,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import(
         './loading-store/default-values/loading-with-default-values.component'
-        ).then((m) => m.LoadingWithDefaultValuesComponent),
+      ).then((m) => m.LoadingWithDefaultValuesComponent),
   },
   {
     path: 'custom-action',
@@ -56,35 +56,35 @@ export const routes: Routes = [
     loadComponent: () =>
       import(
         './component-store/service-counter/storage-from-service.component'
-        ).then((m) => m.StorageFromServiceComponent),
+      ).then((m) => m.StorageFromServiceComponent),
   },
   {
     path: 'store-without-log',
     loadComponent: () =>
       import(
         './component-store/store-without-loging/store-without-log.component'
-        ).then((m) => m.StoreWithoutLogComponent),
+      ).then((m) => m.StoreWithoutLogComponent),
   },
   {
     path: 'multiple-storage-instances',
     loadComponent: () =>
       import(
         './component-store/muliple-instances/multiple-instances.component'
-        ).then((m) => m.MultipleInstancesComponent),
+      ).then((m) => m.MultipleInstancesComponent),
   },
   {
     path: 'storage-from-global-service',
     loadComponent: () =>
       import(
         './component-store/global-counter/storage-from-global.component'
-        ).then((m) => m.StorageFromGlobalComponent),
+      ).then((m) => m.StorageFromGlobalComponent),
   },
   {
     path: 'listen-on-global-store',
     loadComponent: () =>
       import(
         './component-store/listen-on-global-store/listen-on-global-store.component'
-        ).then((m) => m.ListenOnGlobalStoreComponent),
+      ).then((m) => m.ListenOnGlobalStoreComponent),
   },
 
   {
@@ -94,6 +94,5 @@ export const routes: Routes = [
         (m) => m.SharedActionsModule
       ),
   },
-  {path: '**', redirectTo: ''},
+  { path: '**', redirectTo: '' },
 ];
-

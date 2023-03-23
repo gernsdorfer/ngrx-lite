@@ -1,10 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
-import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
-import { UiSpinnerComponent } from '../../shared/ui/spinner';
 import { UiCardComponent } from '../../shared/ui/card-component';
+import { UiSpinnerComponent } from '../../shared/ui/spinner';
 
 interface ItemState {
   counter: number;

@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ListenOnGlobalStoreComponent } from './listen-on-global-store.component';
 import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { ListenOnGlobalStoreComponent } from './listen-on-global-store.component';
 
 describe('MultipleInstancesComponent', () => {
   beforeEach(() => {

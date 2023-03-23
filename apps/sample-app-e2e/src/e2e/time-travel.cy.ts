@@ -1,6 +1,6 @@
-import '../fixtures/component-loading.json';
-import { StoreDevtools } from '@ngrx/store-devtools/src/devtools';
 import { NgZone } from '@angular/core';
+import { StoreDevtools } from '@ngrx/store-devtools/src/devtools';
+import '../fixtures/component-loading.json';
 
 declare global {
   interface Window {

@@ -82,17 +82,16 @@ class MyComponent implements OnDestroy {
   // create a componentStore
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
   // read the state
   public counterState$: Observable<MyState> = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   increment(counter: number) {
     // patch your state
-    this.store.patchState({counter});
+    this.store.patchState({ counter });
   }
 
   ngOnDestroy() {
@@ -171,8 +170,7 @@ type State = LoadingStoreState<{ counter: number }, { message: string }>;
 })
 export class LoadingEffectComponent implements OnDestroy {
   // create your loading store
-  private store = this.storeFactory.createComponentLoadingStore<State['item'],
-    State['error']>({
+  private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
     storeName: 'LOADING_STORE',
   });
 
@@ -180,13 +178,9 @@ export class LoadingEffectComponent implements OnDestroy {
   public counterState$: Observable<State> = this.store.state$;
 
   // define your loadingEffect to change the state
-  public increment = this.store.loadingEffect(
-    'increment',
-    (counter: number = 0) => of(counter + 1)
-  );
+  public increment = this.store.loadingEffect('increment', (counter: number = 0) => of(counter + 1));
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   ngOnDestroy() {
     // destory the store
@@ -309,7 +303,6 @@ class MyClass {
 Import `storeTestingFactory` and write your tests. A minimal example can be
 found [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts)
 .
-
 
 ```ts
 TestBed.configureTestingModule({

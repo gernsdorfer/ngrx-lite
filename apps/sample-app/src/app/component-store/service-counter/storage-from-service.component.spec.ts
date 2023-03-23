@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { EMPTY } from 'rxjs';
-import { StorageFromServiceComponent } from './storage-from-service.component';
-import { CounterStore } from './counter-service';
 import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { EMPTY } from 'rxjs';
+import { CounterStore } from './counter-service';
+import { StorageFromServiceComponent } from './storage-from-service.component';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('StorageFromServiceComponent', () => {

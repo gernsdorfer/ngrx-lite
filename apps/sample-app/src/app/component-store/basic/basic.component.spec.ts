@@ -1,8 +1,8 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { BasicComponent, MyState } from './basic.component';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { BasicComponent, MyState } from './basic.component';
 
 describe('BasicExampleComponent', () => {
   beforeEach(() => {

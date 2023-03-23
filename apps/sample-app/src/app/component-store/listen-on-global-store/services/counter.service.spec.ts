@@ -1,9 +1,9 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { actions$, storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold } from 'jasmine-marbles';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MultipleCounterStore, MyState } from './counter-service';
 import { resetAction } from '../actions/reset.action';
+import { MultipleCounterStore, MyState } from './counter-service';
 
 describe('MultipleCounterStore', () => {
   beforeEach(() => {

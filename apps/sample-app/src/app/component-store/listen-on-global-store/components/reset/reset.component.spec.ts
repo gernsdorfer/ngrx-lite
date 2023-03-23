@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ResetComponent } from './reset.component';
 import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
+import { resetAction } from '../../actions/reset.action';
+import { ResetComponent } from './reset.component';
 import createSpyObj = jasmine.createSpyObj;
-import {resetAction} from "../../actions/reset.action";
 
 describe('MultipleInstancesComponent', () => {
   beforeEach(() => {

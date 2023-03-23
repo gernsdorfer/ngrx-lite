@@ -1,6 +1,5 @@
 ---
 sidebar_position: 6
-
 ---
 
 # RouterStore
@@ -14,9 +13,7 @@ import { NgModule } from '@angular/core';
 import { RouterStoreModule } from '@gernsdorfer/ngrx-lite';
 
 @NgModule({
-  imports: [RouterStoreModule]
+  imports: [RouterStoreModule],
 })
 export class AppModule {}
-
 ```
-

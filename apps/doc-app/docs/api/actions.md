@@ -4,9 +4,9 @@ sidebar_position: 4
 
 # Actions
 
-Share your State Changes with Actions. 
+Share your State Changes with Actions.
 
-You can create Action's for State changes in the [ngrx-lite/component-store](/docs/api/component-store) or State changes in the `loadingEffect` in the [ngrx-lite/loading-store](/docs/api/component-loading-store#loadingeffect) 
+You can create Action's for State changes in the [ngrx-lite/component-store](/docs/api/component-store) or State changes in the `loadingEffect` in the [ngrx-lite/loading-store](/docs/api/component-loading-store#loadingeffect)
 
 ## `getCustomAction`
 
@@ -15,8 +15,8 @@ Get an Action for the [ngrx-lite/component-store](/docs/api/component-store) or 
 ```ts title="effect.action.ts"
 const myEffectAction = getCustomAction({
   storeName: 'storeName',
-  actionName: 'myAction'
-})
+  actionName: 'myAction',
+});
 ```
 
 ## `getEffectAction`
@@ -28,5 +28,5 @@ const myEffectAction = getEffectAction({
   storeName: 'storeName',
   effectName: 'incrementEffectName',
   type: EffectStates.SUCCESS,
-})
+});
 ```

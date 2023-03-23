@@ -13,18 +13,17 @@ The `state$` property is a wrapper of the [ngrx Component Store](https://ngrx.io
 
 ```ts title="app.component.ts"
 interface MyState {
-  counter: number
+  counter: number;
 }
 
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
   public state$: Observable<MyState> = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 }
 ```
 
@@ -34,16 +33,15 @@ Read your State synchronously, but be carefully ⚠️
 
 ```ts title="app.component.ts"
 interface MyState {
-  counter: number
+  counter: number;
 }
 
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
   public state: MyState = this.counterStore.state;
-
 }
 ```
 
@@ -53,7 +51,6 @@ Update the complete state with the Action name `UPDATE_NAME` or a custom action 
 devtools or to share your action
 
 ```ts title="app.component.ts"
-
 interface MyState {
   counter: number;
 }
@@ -61,20 +58,19 @@ interface MyState {
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   change(counter: number) {
-    // Patch State with unkown Action   
-    this.store.setState({counter: 2});
+    // Patch State with unkown Action
+    this.store.setState({ counter: 2 });
   }
 
   changeWithCustomAction(counter: number) {
     // Use custom Action for
-    this.store.setState({counter: 2}, 'CUSTOM_SET_STATE_NAME');
+    this.store.setState({ counter: 2 }, 'CUSTOM_SET_STATE_NAME');
   }
 }
 ```
@@ -86,25 +82,24 @@ share your action
 
 ```ts title="app.component.ts"
 interface MyState {
-  counter: number
+  counter: number;
 }
 
 export class AppComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   change() {
-    this.store.patchState({counter: 1});
+    this.store.patchState({ counter: 1 });
   }
 
   change(counter: number) {
     // Use custom Action
-    this.store.setState({counter: 2}, 'CUSTOM_PATCH_STATE_NAME');
+    this.store.setState({ counter: 2 }, 'CUSTOM_PATCH_STATE_NAME');
   }
 }
 ```
@@ -115,38 +110,36 @@ For Using `createEffect`, please install `@ngrx/effects` and import `EffectsModu
 
 ```ts title="my-component-store.service.ts"
 export interface MyState {
-  counter: number
+  counter: number;
 }
 export const resetAction = createAction('reset');
-
 
 @Injectable()
 export class MyStore implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
 
   reset = this.store
     //create an Effect
     .createEffect((action) =>
-    action.pipe(
-      //filter for Actions
-      ofType(resetAction),
-      //change your state
-      tap(() => this.store.setState({ counter: 0 }, 'RESET'))
-    )
-  );
+      action.pipe(
+        //filter for Actions
+        ofType(resetAction),
+        //change your state
+        tap(() => this.store.setState({ counter: 0 }, 'RESET'))
+      )
+    );
   constructor(private storeFactory: StoreFactory) {}
 
   ngOnDestroy() {
     this.store.ngOnDestroy();
   }
-} 
+}
 ```
 
 :::note
 It's necessary to destroy your store after your component destroyed, to stop the created effect.
 Here you muss call the `ngOnDestroy`.
 :::
-

@@ -1,5 +1,5 @@
-import {APP_INITIALIZER, NgModule, NgZone} from '@angular/core';
-import {StoreDevtools} from '@ngrx/store-devtools';
+import { APP_INITIALIZER, NgModule, NgZone } from '@angular/core';
+import { StoreDevtools } from '@ngrx/store-devtools';
 
 declare global {
   interface Window {
@@ -12,8 +12,7 @@ const init = (storeDevtools: StoreDevtools, zone: NgZone) => () => {
   window.storeDevtools = storeDevtools;
   window.zone = zone;
   return true;
-}
-
+};
 
 @NgModule({
   imports: [],
@@ -22,9 +21,8 @@ const init = (storeDevtools: StoreDevtools, zone: NgZone) => () => {
       provide: APP_INITIALIZER,
       useFactory: init,
       deps: [StoreDevtools, NgZone],
-      multi: true
+      multi: true,
     },
-  ]
+  ],
 })
-export class ReduxForWindowModule {
-}
+export class ReduxForWindowModule {}
