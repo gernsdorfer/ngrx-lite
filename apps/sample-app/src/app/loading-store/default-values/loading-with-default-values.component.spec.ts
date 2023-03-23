@@ -1,12 +1,12 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   LoadingWithDefaultValuesComponent,
   MyState,
 } from './loading-with-default-values.component';
-import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 
 describe('LoadingWithDefaultValuesComponent', () => {
   beforeEach(() => {

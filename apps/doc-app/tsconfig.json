@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
@@ -16,5 +15,6 @@
     "paths": {
       "@site/*": ["./*"]
     }
-  }
+  },
+  "extends": "../../tsconfig.base.json"
 }

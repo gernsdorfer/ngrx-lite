@@ -1,11 +1,11 @@
-import { provideMockActions } from '@ngrx/effects/testing';
 import { TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
-import { MyIncrementAction } from './shared-action.component';
+import { Observable } from 'rxjs';
 import { DemoEffect } from './my-effect.effect';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MyIncrementAction } from './shared-action.component';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('DemoEffectX', () => {

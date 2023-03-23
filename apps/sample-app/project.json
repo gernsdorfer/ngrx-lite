@@ -1,9 +1,10 @@
 {
-  "name": "sample-app",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "sample-app",
+  "prefix": "sample-app",
   "projectType": "application",
   "sourceRoot": "apps/sample-app/src",
-  "prefix": "sample-app",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -93,6 +94,5 @@
         "karmaConfig": "apps/sample-app/karma.conf.js"
       }
     }
-  },
-  "tags": []
+  }
 }

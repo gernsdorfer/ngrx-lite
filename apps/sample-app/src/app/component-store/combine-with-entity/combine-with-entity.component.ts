@@ -1,6 +1,5 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import {
   FormControl,
   FormGroup,
@@ -9,10 +8,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 interface Product {

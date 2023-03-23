@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { ClientStoragePlugin } from '../models';
-import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
-import { provideMockStore } from '@ngrx/store/testing';
 import { ReducerManager, ScannedActionsSubject } from '@ngrx/store';
-import { getDefaultComponentLoadingState } from './stores/component-loading-store.service';
-import { getCustomAction } from '../services/action-creator';
-import { Action, ActionReducer } from '@ngrx/store/src/models';
-import { cold, getTestScheduler } from 'jasmine-marbles';
 import { StoreDevtools } from '@ngrx/store-devtools';
-import { defer, EMPTY, of } from 'rxjs';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
-import { ComponentStore } from './stores/component-store.service';
-import { getStoreState, Store } from './store.service';
+import { Action, ActionReducer } from '@ngrx/store/src/models';
+import { provideMockStore } from '@ngrx/store/testing';
+import { cold, getTestScheduler } from 'jasmine-marbles';
+import { defer, EMPTY, of } from 'rxjs';
+import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
+import { ClientStoragePlugin } from '../models';
+import { getCustomAction } from '../services/action-creator';
 import { DevToolHelper } from './dev-tool-helper.service';
+import { getStoreState, Store } from './store.service';
+import { getDefaultComponentLoadingState } from './stores/component-loading-store.service';
+import { ComponentStore } from './stores/component-store.service';
 
 interface MyState {
   myState: string;

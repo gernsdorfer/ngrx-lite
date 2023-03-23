@@ -13,14 +13,14 @@ Create a [ngrx Action](https://ngrx.io/guide/store/actions) to share your State 
 ## Share PATCH/SET Action's
 
 ```ts title="my-counter.component.ts"
-import {Component} from '@angular/core';
-import {EffectStates, getCustomAction, LoadingStoreState,} from '@gernsdorfer/ngrx-lite';
+import { Component } from '@angular/core';
+import { EffectStates, getCustomAction, LoadingStoreState } from '@gernsdorfer/ngrx-lite';
 
 const storeName = 'COUNTER';
 const actionName = 'INCREMENT';
 
 interface MyState {
-    myValue: string;
+  myValue: string;
 }
 // Get Success Action for increment Effect
 export const MyIncrementAction = getCustomAction<{ counter: number }>({
@@ -28,20 +28,15 @@ export const MyIncrementAction = getCustomAction<{ counter: number }>({
   actionName: actionName,
 });
 
-@Component({
-  
-})
+@Component({})
 export class CounterComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
 
   increment() {
-    this.store.patchState(
-      ({ counter }) => ({ counter: counter + 1 }),
-      actionName
-    );
+    this.store.patchState(({ counter }) => ({ counter: counter + 1 }), actionName);
   }
 }
 ```
@@ -51,13 +46,12 @@ export class CounterComponent {
 Listen in [@ngrx/Effects](https://ngrx.io/guide/store/actions) for Counter Success Action
 
 ```ts title="my-effect.effect.ts"
-import {Actions, createLoadingEffect, ofType,} from "@ngrx/effects";
-import {MyIncrementAction} from "./my-counter.component.ts";
+import { Actions, createLoadingEffect, ofType } from '@ngrx/effects';
+import { MyIncrementAction } from './my-counter.component.ts';
 
 @Injectable()
 export class DemoEffect {
-  constructor(private actions$: Actions) {
-  }
+  constructor(private actions$: Actions) {}
 
   logActions$ = createLoadingEffect(
     () =>
@@ -65,7 +59,7 @@ export class DemoEffect {
         ofType(MyIncrementAction),
         tap((data) => console.log(data))
       ),
-    {dispatch: false}
+    { dispatch: false }
   );
 }
 ```
@@ -73,11 +67,11 @@ export class DemoEffect {
 ## Share Loader Effect Action's
 
 ```ts title="my-counter.component.ts"
-import {Component} from '@angular/core';
-import {EffectStates, getEffectAction, LoadingStoreState,} from '@gernsdorfer/ngrx-lite';
+import { Component } from '@angular/core';
+import { EffectStates, getEffectAction, LoadingStoreState } from '@gernsdorfer/ngrx-lite';
 
 const storeName = 'counter';
-const incrementEffectName = 'increment'
+const incrementEffectName = 'increment';
 
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
@@ -88,17 +82,13 @@ export const MyIncrementSuccessAction = getCustomAction<LoadingStoreState<number
   type: EffectStates.SUCCESS,
 });
 
-@Component({
-})
+@Component({})
 export class CounterComponent {
-  private store = this.storeFactory.createComponentLoadingStore<State['item'],
-    State['error']>({
+  private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
     storeName: 'LOADING_STORE',
   });
 
-  incrementEffect = this.counterStore.createLoadingEffect(incrementEffectName,
-    (counter: number) => of(counter + 1)
-  );
+  incrementEffect = this.counterStore.createLoadingEffect(incrementEffectName, (counter: number) => of(counter + 1));
 }
 ```
 
@@ -107,13 +97,12 @@ export class CounterComponent {
 Listen in [@ngrx/Effects](https://ngrx.io/guide/store/actions) for Store Success Action
 
 ```ts title="my-effect.effect.ts"
-import {Actions, createLoadingEffect, ofType,} from "@ngrx/effects";
-import {MyIncrementSuccessAction} from "./my-counter.component.ts";
+import { Actions, createLoadingEffect, ofType } from '@ngrx/effects';
+import { MyIncrementSuccessAction } from './my-counter.component.ts';
 
 @Injectable()
 export class DemoEffect {
-  constructor(private actions$: Actions) {
-  }
+  constructor(private actions$: Actions) {}
 
   logActions$ = createLoadingEffect(
     () =>
@@ -121,8 +110,7 @@ export class DemoEffect {
         ofType(MyIncrementSuccessAction),
         tap((data) => console.log(data))
       ),
-    {dispatch: false}
+    { dispatch: false }
   );
 }
 ```
-

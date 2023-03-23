@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { storeTestingFactory } from '../../testing';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { defer, EMPTY } from 'rxjs';
-import { RouterStore } from './router-service';
 import { cold, getTestScheduler } from 'jasmine-marbles';
+import { defer, EMPTY } from 'rxjs';
+import { storeTestingFactory } from '../../testing';
+import { RouterStore } from './router-service';
 
 describe('RouterStore', () => {
   let events$: Router['events'] = EMPTY;

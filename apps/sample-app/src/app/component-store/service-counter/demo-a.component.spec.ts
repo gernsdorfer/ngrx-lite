@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { EMPTY } from 'rxjs';
 import { CounterStore } from './counter-service';
 import { DemoAComponent } from './demo-a.component';
-import { CommonModule } from '@angular/common';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('DemoAComponent', () => {

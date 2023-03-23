@@ -1,24 +1,24 @@
+import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { ComponentLoadingStore } from './stores/component-loading-store.service';
 import {
   UntypedFormControl,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
+import { Actions } from '@ngrx/effects';
+import { provideMockStore } from '@ngrx/store/testing';
 import { cold } from 'jasmine-marbles';
-import { StoreFactory } from './store-factory.service';
-import { ComponentStore } from './stores/component-store.service';
-import { Store } from './store.service';
-import { Injector } from '@angular/core';
+import { EMPTY } from 'rxjs';
 import {
   SkipLogForStore,
   StateToken,
   StoreNameToken,
 } from '../injection-tokens/state.token';
 import { DevToolHelper } from './dev-tool-helper.service';
-import { Actions } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
+import { StoreFactory } from './store-factory.service';
+import { Store } from './store.service';
+import { ComponentLoadingStore } from './stores/component-loading-store.service';
+import { ComponentStore } from './stores/component-store.service';
 
 interface MyState {
   myState: string;
@@ -167,4 +167,3 @@ describe('StoreFactory', () => {
     });
   });
 });
-

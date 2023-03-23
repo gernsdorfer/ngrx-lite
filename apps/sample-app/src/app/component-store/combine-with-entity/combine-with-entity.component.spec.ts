@@ -1,12 +1,12 @@
+import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
+import { cold } from 'jasmine-marbles';
 import {
   CombineWithEntityComponent,
   mockProducts,
 } from './combine-with-entity.component';
-import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import { cold } from 'jasmine-marbles';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 describe('CombineWithEntityComponent', () => {
   const getComponent = (): CombineWithEntityComponent => {

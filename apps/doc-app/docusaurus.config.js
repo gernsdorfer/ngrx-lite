@@ -23,7 +23,8 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/gernsdorfer/ngrx-lite/edit/master/apps/doc-app/',
+          editUrl:
+            'https://github.com/gernsdorfer/ngrx-lite/edit/master/apps/doc-app/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

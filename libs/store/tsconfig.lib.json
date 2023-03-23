@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "declaration": true,
@@ -10,5 +9,6 @@
     "useDefineForClassFields": false
   },
   "exclude": ["src/test.ts", "**/*.spec.ts", "**/*.test.ts"],
+  "extends": "./tsconfig.json",
   "include": ["**/*.ts"]
 }

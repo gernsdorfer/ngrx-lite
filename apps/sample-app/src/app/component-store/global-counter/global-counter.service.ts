@@ -3,7 +3,7 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 export interface MyState {
   counter: number;
-};
+}
 @Injectable({ providedIn: 'root' })
 export class GlobalCounterStore implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({

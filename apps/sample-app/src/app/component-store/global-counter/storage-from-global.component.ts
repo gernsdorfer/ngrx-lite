@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { GlobalCounterStore } from './global-counter.service';
-import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../shared/ui/card-component';
+import { GlobalCounterStore } from './global-counter.service';
 
 @Component({
   selector: 'my-app-global-counter',

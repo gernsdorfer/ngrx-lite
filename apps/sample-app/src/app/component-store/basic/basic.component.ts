@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 export interface MyState {
@@ -12,11 +12,7 @@ export interface MyState {
   selector: 'my-app-basic-app',
   templateUrl: 'basic.html',
   standalone: true,
-  imports: [
-    UiCardComponent,
-    MatButtonModule,
-    CommonModule
-  ]
+  imports: [UiCardComponent, MatButtonModule, CommonModule],
 })
 export class BasicComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({

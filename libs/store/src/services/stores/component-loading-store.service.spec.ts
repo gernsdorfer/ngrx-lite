@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
-import { LoadingStoreState } from '../../models';
+import { Actions } from '@ngrx/effects';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { EffectStates } from '../../enums';
-import { getCustomAction, getEffectAction } from '../action-creator';
 import { cold } from 'jasmine-marbles';
-import {
-  ComponentLoadingStore,
-  getDefaultComponentLoadingState,
-} from './component-loading-store.service';
+import { EMPTY } from 'rxjs';
+import { EffectStates } from '../../enums';
 import {
   SkipLogForStore,
   StateToken,
   StoreNameToken,
 } from '../../injection-tokens/state.token';
-import {DevToolHelper} from "../dev-tool-helper.service";
-import {Actions} from "@ngrx/effects";
-import {EMPTY} from "rxjs";
+import { LoadingStoreState } from '../../models';
+import { getCustomAction, getEffectAction } from '../action-creator';
+import { DevToolHelper } from '../dev-tool-helper.service';
+import {
+  ComponentLoadingStore,
+  getDefaultComponentLoadingState,
+} from './component-loading-store.service';
 
 describe('LoadingStore', () => {
   let store: ComponentLoadingStore<string, number>;
@@ -23,7 +23,7 @@ describe('LoadingStore', () => {
     dispatch: undefined,
   });
   const storeName = 'myStore';
-  const devToolHelper = new DevToolHelper()
+  const devToolHelper = new DevToolHelper();
   const actions = jasmine.createSpyObj<Actions>('Actions', { lift: EMPTY }, {});
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -42,7 +42,7 @@ describe('LoadingStore', () => {
         },
         {
           provide: SkipLogForStore,
-          useValue: false
+          useValue: false,
         },
         {
           provide: DevToolHelper,

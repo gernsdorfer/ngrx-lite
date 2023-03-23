@@ -14,24 +14,23 @@ A Module Store live in Your Module Scope.
 
 ```ts title="my-component-store.service.ts"
 export interface MyState {
-  counter: number
+  counter: number;
 }
 
-@Injectable({providedIn: 'any'})
+@Injectable({ providedIn: 'any' })
 export class MyStore implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
+    defaultState: { counter: 0 },
   });
   public counterState$ = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   ngOnDestroy() {
     this.myStore.ngOnDestroy();
   }
-} 
+}
 ```
 
 :::note It's necessary to destroy your store after your component destroyed, to avoid side effects. Here you muss call
@@ -50,7 +49,7 @@ import {MyComponent} from './my-component.component';
     BrowserModule,
   ],
   providers: [
-    // Provide your Store  
+    // Provide your Store
     MyStore
   ],
   declarations: [
@@ -62,16 +61,14 @@ import {MyComponent} from './my-component.component';
 ## Consume your Store in your Component
 
 ```ts title="my-component.component.ts"
-import {Component, OnDestroy} from '@angular/core';
-import {MyStore} from './my-store.service';
+import { Component, OnDestroy } from '@angular/core';
+import { MyStore } from './my-store.service';
 
 @Component()
 export class CounterComponent implements OnDestroy {
-
   public myStoreState$ = this.myStore.counterState$;
 
-  constructor(private myStore: MyStore) {
-  }
+  constructor(private myStore: MyStore) {}
 }
 ```
 

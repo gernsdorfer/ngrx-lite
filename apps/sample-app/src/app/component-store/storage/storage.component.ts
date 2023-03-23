@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
-import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 export interface MyState {

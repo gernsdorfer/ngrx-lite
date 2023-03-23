@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
-import { PersistFormComponent } from './persist-form.component';
-import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
+import { PersistFormComponent } from './persist-form.component';
 
 describe('BasicExampleComponent', () => {
   beforeEach(() => {

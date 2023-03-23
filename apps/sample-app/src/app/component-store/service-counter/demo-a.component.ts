@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { CounterStore } from './counter-service';
-import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../shared/ui/card-component';
+import { CounterStore } from './counter-service';
 
 @Component({
   selector: 'my-app-same-instance-demo-a',

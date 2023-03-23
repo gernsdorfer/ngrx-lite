@@ -1,31 +1,4 @@
 {
-  "monitorState": {
-    "type": "@ngrx/store/update-reducers",
-    "features": [
-      "LOADING_WITH_DEFAULT_VALUES"
-    ]
-  },
-  "nextActionId": 14,
-  "stagedActionIds": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13
-  ],
-  "skippedActionIds": [],
-  "currentStateIndex": 13,
-  "isLocked": false,
-  "isPaused": false,
   "actionsById": {
     "0": {
       "action": {
@@ -52,9 +25,7 @@
     "3": {
       "action": {
         "type": "@ngrx/store/update-reducers",
-        "features": [
-          "ROUTER_STORE"
-        ]
+        "features": ["ROUTER_STORE"]
       },
       "timestamp": 1653165449881,
       "type": "PERFORM_ACTION"
@@ -72,9 +43,7 @@
     "5": {
       "action": {
         "type": "@ngrx/store/update-reducers",
-        "features": [
-          "LOADING_BASIC"
-        ]
+        "features": ["LOADING_BASIC"]
       },
       "timestamp": 1653165449886,
       "type": "PERFORM_ACTION"
@@ -128,9 +97,7 @@
     "10": {
       "action": {
         "type": "@ngrx/store/update-reducers",
-        "features": [
-          "LOADING_WITH_DEFAULT_VALUES"
-        ]
+        "features": ["LOADING_WITH_DEFAULT_VALUES"]
       },
       "timestamp": 1653165501001,
       "type": "PERFORM_ACTION"
@@ -403,5 +370,15 @@
         }
       }
     }
-  ]
+  ],
+  "currentStateIndex": 13,
+  "isLocked": false,
+  "isPaused": false,
+  "monitorState": {
+    "type": "@ngrx/store/update-reducers",
+    "features": ["LOADING_WITH_DEFAULT_VALUES"]
+  },
+  "nextActionId": 14,
+  "skippedActionIds": [],
+  "stagedActionIds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 }

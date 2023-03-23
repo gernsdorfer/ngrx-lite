@@ -1,6 +1,5 @@
 <ng-container *ngIf="counterState$ | async as counterState">
   <my-app-ui-card>
-
     <div title>
       <my-app-ui-spinner *ngIf="counterState.isLoading"></my-app-ui-spinner>
       Loading-Store
@@ -8,8 +7,7 @@
     <div subtitle>Loading with default value</div>
     <div content><h2 class="counter">{{ counterState.item?.counter }}</h2></div>
     <div actions>
-      <button class="increment" (click)="increment()" mat-fab> +</button>
+      <button class="increment" (click)="increment()" mat-fab>+</button>
     </div>
   </my-app-ui-card>
 </ng-container>
-

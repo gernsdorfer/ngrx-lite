@@ -12,19 +12,18 @@ Create a Store that lives in Your Component Lifecycle
 
 ```ts title="app.component.ts"
 export interface MyState {
-  counter: number
+  counter: number;
 }
 
 @Component()
 export class CounterComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
-    defaultState: {counter: 0},
-  });  
+    defaultState: { counter: 0 },
+  });
   public myStoreState$ = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {
-  }
+  constructor(private storeFactory: StoreFactory) {}
 
   ngOnDestroy() {
     this.store.ngOnDestroy();
@@ -34,7 +33,5 @@ export class CounterComponent implements OnDestroy {
 
 :::note
 It's necessary to destroy your store after your component destroyed, to avoid side effects.
-Here you muss call the `ngOnDestroy`. 
+Here you muss call the `ngOnDestroy`.
 :::
-
- 

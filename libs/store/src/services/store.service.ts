@@ -6,26 +6,26 @@ import {
   Optional,
 } from '@angular/core';
 
+import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import {
   SkipLogForStore,
   StateToken,
   StoreNameToken,
 } from '../injection-tokens/state.token';
-import { ComponentLoadingStore } from './stores/component-loading-store.service';
 import { ClientStoragePlugin } from '../models';
-import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
+import { ComponentLoadingStore } from './stores/component-loading-store.service';
 
+import { Actions } from '@ngrx/effects';
 import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
-import { filter, map, of, switchMap, take, takeUntil, tap } from 'rxjs';
-import { ComponentStore } from './stores/component-store.service';
 import {
   INITIAL_OPTIONS,
   StoreDevtools,
   StoreDevtoolsConfig,
 } from '@ngrx/store-devtools';
 import { LiftedActions, LiftedState } from '@ngrx/store-devtools/src/reducer';
+import { filter, map, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { DevToolHelper } from './dev-tool-helper.service';
-import { Actions } from '@ngrx/effects';
+import { ComponentStore } from './stores/component-store.service';
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;

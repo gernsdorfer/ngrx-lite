@@ -1,10 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
-import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { delay, Observable, of, tap } from 'rxjs';
-import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { UiSpinnerComponent } from '../../shared/ui/spinner';
+import { Component, OnDestroy } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { delay, Observable, of } from 'rxjs';
 import { UiCardComponent } from '../../shared/ui/card-component';
+import { UiSpinnerComponent } from '../../shared/ui/spinner';
 
 export type MyState = LoadingStoreState<
   { counter: number },

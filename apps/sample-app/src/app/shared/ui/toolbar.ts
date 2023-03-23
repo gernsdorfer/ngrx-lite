@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -12,41 +12,41 @@ import { RouterModule } from '@angular/router';
         Component-Store
       </button>
       <mat-menu #menuComponentStore="matMenu">
-        <a mat-menu-item class="menu-link" routerLink="/">Basic</a>
-        <a mat-menu-item class="menu-link" routerLink="/custom-action"
+        <a class="menu-link" mat-menu-item routerLink="/">Basic</a>
+        <a class="menu-link" mat-menu-item routerLink="/custom-action"
           >Custom-Action</a
         >
         <a
-          mat-menu-item
           class="menu-link"
+          mat-menu-item
           routerLink="/storage-from-global-service"
         >
           Root-Store
         </a>
         <a
-          mat-menu-item
           class="menu-link"
+          mat-menu-item
           routerLink="/multiple-storage-instances"
         >
           Multiple-Store instances
         </a>
-        <a mat-menu-item class="menu-link" routerLink="/storage-from-service">
+        <a class="menu-link" mat-menu-item routerLink="/storage-from-service">
           Share Store to ChildComponents
         </a>
-        <a mat-menu-item class="menu-link" routerLink="/listen-on-global-store">
+        <a class="menu-link" mat-menu-item routerLink="/listen-on-global-store">
           Listen on global store
         </a>
 
-        <a mat-menu-item class="menu-link" routerLink="/share-actions">
+        <a class="menu-link" mat-menu-item routerLink="/share-actions">
           Share with @ngrx/Effects
         </a>
-        <a mat-menu-item class="menu-link" routerLink="/storage"
+        <a class="menu-link" mat-menu-item routerLink="/storage"
           >Sync with Storage</a
         >
-        <a mat-menu-item class="menu-link" routerLink="/combine-with-entity"
+        <a class="menu-link" mat-menu-item routerLink="/combine-with-entity"
           >Entity</a
         >
-        <a mat-menu-item class="menu-link" routerLink="/store-without-log"
+        <a class="menu-link" mat-menu-item routerLink="/store-without-log"
           >Without Log</a
         >
       </mat-menu>
@@ -55,10 +55,10 @@ import { RouterModule } from '@angular/router';
         Loading-Component-Store
       </button>
       <mat-menu #menuLoadingComponentStore="matMenu">
-        <a mat-menu-item class="menu-link" routerLink="/loading-basic">Basic</a>
+        <a class="menu-link" mat-menu-item routerLink="/loading-basic">Basic</a>
         <a
-          mat-menu-item
           class="menu-link"
+          mat-menu-item
           routerLink="/loading-with-default-values"
         >
           Loading with default values
@@ -68,7 +68,7 @@ import { RouterModule } from '@angular/router';
         Forms-Component-Store
       </button>
       <mat-menu #menuFormsComponentStore="matMenu">
-        <a mat-menu-item class="menu-link" routerLink="/persist-form">Basic</a>
+        <a class="menu-link" mat-menu-item routerLink="/persist-form">Basic</a>
       </mat-menu>
     </mat-toolbar>
   `,

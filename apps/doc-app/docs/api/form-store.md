@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # FormStore
 
-Store your Form data to your state to persist and debug your Form. 
+Store your Form data to your state to persist and debug your Form.
 The LoadingStore is based on [ngrx-lite/component-store](/docs/api/component-store) 👉 you have Features
 
 ## `createFormComponentStore`
@@ -35,8 +35,8 @@ export class PersistFormComponent implements OnDestroy {
     },
     // inject your From
     formGroup: this.productForm,
-    // you can skip Form Changes to the DevTool Log 
-    skipLog: false
+    // you can skip Form Changes to the DevTool Log
+    skipLog: false,
   });
 }
 ```
