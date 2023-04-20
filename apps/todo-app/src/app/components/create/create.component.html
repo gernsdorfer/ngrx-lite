@@ -1,0 +1,17 @@
+<form
+  class="form"
+  [formGroup]="formGroup"
+  (submit)="create.emit(formGroup.getRawValue())"
+>
+  <mat-form-field appearance="outline">
+    <mat-label>TODO </mat-label>
+    <input
+      [formControl]="formGroup.controls.title"
+      matInput
+      placeholder="create new Todo"
+    />
+    <button mat-mini-fab matSuffix color="primary" type="submit">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-form-field>
+</form>

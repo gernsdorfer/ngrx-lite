@@ -1,0 +1,16 @@
+.list {
+  display: flex;
+  .card {
+    margin: 10px;
+  }
+}
+h1 {
+  width: 100%;
+  text-align: center;
+}
+.content {
+  height: 100%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
