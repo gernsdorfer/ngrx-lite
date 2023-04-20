@@ -3,13 +3,17 @@ describe('forms component Store', () => {
     cy.visit('/');
   });
 
+  const FormNameInput = () => cy.get('.form-input[formcontrolname=name]');
+  const FormLastNameInput = () =>
+    cy.get('.form-input[formcontrolname=lastName]');
+
   describe('Basic', () => {
     beforeEach(() => {
       cy.openLinkFromToolbar(' Forms-Component-Store', 'Basic');
     });
     it('should show initial state', () => {
-      cy.get('.form-input[formcontrolname=name]').clear().type('test');
-      cy.get('.form-input[formcontrolname=lastName]').clear().type('lastName');
+      FormNameInput().clear().type('test');
+      FormLastNameInput().clear().type('lastName');
 
       cy.openLinkFromToolbar('Component-Store', 'Custom-Action');
       cy.openLinkFromToolbar('Forms-Component-Store', 'Basic');
