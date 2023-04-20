@@ -21,17 +21,17 @@ declare global {
 }
 Cypress.Commands.add(
   'openLinkFromToolbar',
-  (menuName: string, menuItem: string) =>
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy
-      .get('.toolbar')
+  (menuName: string, menuItem: string) => {
+    const toolbar = () => cy.get('.toolbar');
+    return toolbar()
       .contains(menuName)
       .click()
       .get('.toolbar')
       .get('.menu-link')
       .contains(menuItem)
       .click()
-      .wait(1000)
+      .wait(1000);
+  }
 );
 
 Cypress.Commands.add('importState', (stateFixture: string) => {
