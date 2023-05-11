@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Store } from '@ngrx/store';
@@ -10,7 +9,7 @@ import { resetAction } from '../../actions/reset.action';
   template: ` Dispatch Global Actions
     <button class="reset" (click)="reset()" mat-fab>reset</button>`,
   standalone: true,
-  imports: [UiCardComponent, MatButtonModule, CommonModule],
+  imports: [UiCardComponent, MatButtonModule],
 })
 export class ResetComponent {
   constructor(private store: Store) {}

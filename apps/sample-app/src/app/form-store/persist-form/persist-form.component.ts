@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import {
   FormControl,
@@ -19,7 +18,6 @@ import { UiCardComponent } from '../../shared/ui/card-component';
   templateUrl: 'persist-form.html',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
