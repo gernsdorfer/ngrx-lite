@@ -4,10 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
-export interface MyState {
-  counter: number;
-}
-
 @Component({
   selector: 'my-app-store-without-loging',
   templateUrl: 'store-without-log.html',
@@ -15,7 +11,9 @@ export interface MyState {
   imports: [UiCardComponent, MatButtonModule, CommonModule],
 })
 export class StoreWithoutLogComponent implements OnDestroy {
-  private store = this.storeFactory.createComponentStore<MyState>({
+  private store = this.storeFactory.createComponentStore<{
+    counter: number;
+  }>({
     storeName: 'STORE_WITHOUT_LOG',
     defaultState: { counter: 0 },
     plugins: {
@@ -24,7 +22,7 @@ export class StoreWithoutLogComponent implements OnDestroy {
     skipLog: true,
   });
 
-  public counterState$ = this.store.state$;
+  public counterState = this.store.state;
 
   constructor(private storeFactory: StoreFactory) {}
 

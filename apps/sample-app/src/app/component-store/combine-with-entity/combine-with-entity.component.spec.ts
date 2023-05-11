@@ -1,8 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import { cold } from 'jasmine-marbles';
 import {
   CombineWithEntityComponent,
   mockProducts,
@@ -12,14 +10,8 @@ describe('CombineWithEntityComponent', () => {
   const getComponent = (): CombineWithEntityComponent => {
     const fixture = TestBed.configureTestingModule({
       providers: [storeTestingFactory()],
-    })
-      .overrideComponent(CombineWithEntityComponent, {
-        set: {
-          imports: [CommonModule],
-          schemas: [NO_ERRORS_SCHEMA],
-        },
-      })
-      .createComponent(CombineWithEntityComponent);
+      imports: [BrowserAnimationsModule],
+    }).createComponent(CombineWithEntityComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return component;
@@ -33,11 +25,7 @@ describe('CombineWithEntityComponent', () => {
     it('should load products', () => {
       const component = getComponent();
 
-      expect(component.products$).toBeObservable(
-        cold('a', {
-          a: mockProducts,
-        })
-      );
+      expect(component.products()).toEqual(mockProducts);
     });
   });
 
@@ -59,11 +47,7 @@ describe('CombineWithEntityComponent', () => {
 
       component.remove(firstProduct);
 
-      expect(component.products$).toBeObservable(
-        cold('a', {
-          a: otherProducts,
-        })
-      );
+      expect(component.products()).toEqual(otherProducts);
     });
   });
 
@@ -74,11 +58,10 @@ describe('CombineWithEntityComponent', () => {
 
       component.storeProduct({ ...firstProduct, name: 'newValue' });
 
-      expect(component.products$).toBeObservable(
-        cold('a', {
-          a: [{ ...firstProduct, name: 'newValue' }, ...otherProducts],
-        })
-      );
+      expect(component.products()).toEqual([
+        { ...firstProduct, name: 'newValue' },
+        ...otherProducts,
+      ]);
     });
 
     it('create product', () => {
@@ -86,11 +69,10 @@ describe('CombineWithEntityComponent', () => {
 
       component.storeProduct({ name: 'newValue', id: 0 });
 
-      expect(component.products$).toBeObservable(
-        cold('a', {
-          a: [...mockProducts, { name: 'newValue', id: 4 }],
-        })
-      );
+      expect(component.products()).toEqual([
+        ...mockProducts,
+        { name: 'newValue', id: 4 },
+      ]);
     });
   });
 

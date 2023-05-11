@@ -1,6 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { EMPTY } from 'rxjs';
 import { GlobalCounterStore } from './global-counter.service';
 import { StorageFromGlobalComponent } from './storage-from-global.component';
 import createSpyObj = jasmine.createSpyObj;
@@ -10,10 +9,9 @@ describe('StorageFromGlobalComponent', () => {
     'GlobalCounterStore',
     {
       increment: undefined,
+      state: { counter: 0 },
     },
-    {
-      counterState$: EMPTY,
-    }
+    {}
   );
   beforeEach(() => {
     TestBed.configureTestingModule({

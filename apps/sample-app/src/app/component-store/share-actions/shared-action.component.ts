@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { getCustomAction, StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { UiCardComponent } from '../../shared/ui/card-component';
 
 const storeName = 'SHARED_ACTIONS';
 const actionName = 'increment';
 
-export interface MyState {
+interface MyState {
   counter: number;
 }
 
@@ -16,15 +18,17 @@ export const MyIncrementAction = getCustomAction<MyState>({
 @Component({
   selector: 'my-app-ngrx-lite-counter',
   templateUrl: 'example.html',
+  standalone: true,
+  imports: [UiCardComponent, MatButtonModule],
 })
-export class SharedActionComponent {
+export default class SharedActionComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName,
     defaultState: {
       counter: 0,
     },
   });
-  counterState$ = this.store.state$;
+  counterState = this.store.state;
 
   constructor(private storeFactory: StoreFactory) {}
 

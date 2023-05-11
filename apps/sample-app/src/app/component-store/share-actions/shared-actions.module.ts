@@ -1,23 +1,18 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { importProvidersFrom } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { DemoEffect } from './my-effect.effect';
-import { SharedActionComponent } from './shared-action.component';
 
-@NgModule({
-  imports: [
-    CommonModule,
-    EffectsModule.forFeature([DemoEffect]),
-    RouterModule.forChild([{ path: '', component: SharedActionComponent }]),
-    MatCardModule,
-    MatButtonModule,
-    MatSnackBarModule,
-  ],
-  declarations: [SharedActionComponent],
-  providers: [],
-})
-export class SharedActionsModule {}
+export default <Routes>[
+  {
+    path: '',
+    loadComponent: () => import('./shared-action.component'),
+    providers: [
+      importProvidersFrom(
+        MatSnackBarModule,
+        EffectsModule.forFeature([DemoEffect])
+      ),
+    ],
+  },
+];

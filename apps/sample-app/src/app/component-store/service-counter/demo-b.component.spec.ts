@@ -1,21 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { EMPTY } from 'rxjs';
 import { CounterStore } from './counter-service';
 import { DemoBComponent } from './demo-b.component';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('DemoBComponent', () => {
-  const counterStore = createSpyObj<CounterStore>(
-    'CounterStore',
-    {
-      increment: undefined,
-    },
-    {
-      counterState$: EMPTY,
-    }
-  );
+  const counterStore = createSpyObj<CounterStore>('CounterStore', {
+    increment: undefined,
+    state: { counter: 0 },
+  });
 
   const getComponent = (): DemoBComponent => {
     const fixture = TestBed.overrideComponent(DemoBComponent, {

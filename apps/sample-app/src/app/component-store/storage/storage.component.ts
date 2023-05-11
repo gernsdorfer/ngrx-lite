@@ -4,10 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
-export interface MyState {
-  counter: number;
-}
-
 @Component({
   selector: 'my-app-session',
   templateUrl: 'storage.html',
@@ -25,7 +21,7 @@ export class StorageExampleComponent implements OnDestroy {
     },
   });
 
-  public counterState$ = this.store.state$;
+  public counterState = this.store.state;
 
   constructor(private storeFactory: StoreFactory) {}
 

@@ -1,8 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import { cold } from 'jasmine-marbles';
-import { MyState, StorageExampleComponent } from './storage.component';
+import { StorageExampleComponent } from './storage.component';
 
 describe('StorageExampleComponent', () => {
   beforeEach(() => {
@@ -30,13 +29,9 @@ describe('StorageExampleComponent', () => {
 
       component.increment();
 
-      expect(component.counterState$).toBeObservable(
-        cold('a', {
-          a: <MyState>{
-            counter: 1,
-          },
-        })
-      );
+      expect(component.counterState()).toEqual({
+        counter: 1,
+      });
     });
   });
 });

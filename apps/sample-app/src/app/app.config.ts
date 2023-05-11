@@ -12,7 +12,7 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { routes } from './app-routing.module';
+import { routes } from './routes';
 import { ReduxForWindowModule } from './shared/util/redux-for-window.service';
 export const appConfig: ApplicationConfig = {
   providers: [

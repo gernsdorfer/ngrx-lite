@@ -12,7 +12,7 @@ import { CounterStore } from './counter-service';
 })
 export class DemoBComponent {
   title = 'Demo B Component';
-  public counterState$ = this.counterStore.counterState$;
+  public counterState = this.counterStore.state;
 
   constructor(private counterStore: CounterStore) {}
 
