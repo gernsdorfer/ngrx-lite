@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -41,7 +41,6 @@ export const mockProducts = [
   templateUrl: 'combine-with-entity.html',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
@@ -49,6 +48,7 @@ export const mockProducts = [
     UiCardComponent,
     MatFormFieldModule,
     MatInputModule,
+    NgFor,
   ],
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
@@ -56,7 +56,7 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
     storeName: 'ENTITY_EXAMPLE',
     defaultState: adapter.getInitialState({}),
   });
-  products$ = this.store.select(selectAll);
+  products = this.store.selectSignal(selectAll);
 
   productForm = new FormGroup({
     id: new FormControl(0, {

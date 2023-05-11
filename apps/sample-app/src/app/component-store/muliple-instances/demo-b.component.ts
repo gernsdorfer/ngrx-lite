@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../shared/ui/card-component';
@@ -18,11 +17,11 @@ import {
     },
   ],
   standalone: true,
-  imports: [UiCardComponent, MatButtonModule, CommonModule],
+  imports: [UiCardComponent, MatButtonModule],
 })
 export class DemoBComponent implements OnDestroy {
   title = 'Demo B Component';
-  public counterState$ = this.counterStore.counterState$;
+  public counterState = this.counterStore.state;
 
   constructor(private counterStore: MultipleCounterStore) {}
 

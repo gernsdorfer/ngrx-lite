@@ -1,17 +1,16 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-export interface MyState {
-  counter: number;
-}
 @Injectable({ providedIn: 'root' })
 export class GlobalCounterStore implements OnDestroy {
-  private store = this.storeFactory.createComponentStore<MyState>({
+  private store = this.storeFactory.createComponentStore<{
+    counter: number;
+  }>({
     storeName: 'GLOBAL_COUNTER',
     defaultState: { counter: 0 },
   });
 
-  public counterState$ = this.store.state$;
+  public state = this.store.state;
 
   constructor(private storeFactory: StoreFactory) {}
 

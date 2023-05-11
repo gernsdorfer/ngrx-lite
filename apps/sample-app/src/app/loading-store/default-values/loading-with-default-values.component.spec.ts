@@ -1,8 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import { cold, getTestScheduler } from 'jasmine-marbles';
 import {
   LoadingWithDefaultValuesComponent,
   MyState,
@@ -29,36 +28,28 @@ describe('LoadingWithDefaultValuesComponent', () => {
   });
 
   describe('increment', () => {
-    it('should increment state', () => {
+    it('should increment state', fakeAsync(() => {
       const component = getComponent();
 
-      getTestScheduler().run((helpers) => {
-        component.increment();
-        helpers.flush();
+      expect(component.counterState()).toEqual(
+        getDefaultComponentLoadingState<MyState['item'], MyState['error']>({
+          item: {
+            counter: 0,
+          },
+        })
+      );
 
-        component.increment();
-        expect(component.counterState$).toBeObservable(
-          cold('400ms a 399ms b', {
-            a: getDefaultComponentLoadingState<
-              MyState['item'],
-              MyState['error']
-            >({
-              isLoading: true,
-              item: {
-                counter: 1,
-              },
-            }),
-            b: getDefaultComponentLoadingState<
-              MyState['item'],
-              MyState['error']
-            >({
-              item: {
-                counter: 2,
-              },
-            }),
-          })
-        );
-      });
-    });
+      component.increment();
+      tick(400);
+      component.increment();
+      tick(400);
+      expect(component.counterState()).toEqual(
+        getDefaultComponentLoadingState<MyState['item'], MyState['error']>({
+          item: {
+            counter: 2,
+          },
+        })
+      );
+    }));
   });
 });

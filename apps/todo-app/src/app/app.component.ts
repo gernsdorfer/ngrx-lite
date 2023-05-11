@@ -1,5 +1,5 @@
-import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { CreateComponent } from './components/create/create.component';
@@ -16,7 +16,6 @@ import { TodoListStore } from './services/todo-list.service';
     RouterModule,
     ListComponent,
     MatCardModule,
-    AsyncPipe,
     NgIf,
     CompletedPipe,
     CreateComponent,
@@ -26,7 +25,7 @@ import { TodoListStore } from './services/todo-list.service';
 export class AppComponent implements OnInit {
   todoListStore = inject(TodoListStore);
   todoUpdateStore = inject(TodoAdminStore);
-  todosState$ = this.todoListStore.listState$;
+  todosState = this.todoListStore.state;
 
   ngOnInit() {
     this.todoListStore.load();

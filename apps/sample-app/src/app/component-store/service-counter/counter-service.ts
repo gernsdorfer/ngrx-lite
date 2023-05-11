@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-export interface MyState {
+interface MyState {
   counter: number;
 }
 
@@ -12,7 +12,7 @@ export class CounterStore implements OnDestroy {
     defaultState: { counter: 0 },
   });
 
-  public counterState$ = this.store.state$;
+  public state = this.store.state;
 
   constructor(private storeFactory: StoreFactory) {}
 

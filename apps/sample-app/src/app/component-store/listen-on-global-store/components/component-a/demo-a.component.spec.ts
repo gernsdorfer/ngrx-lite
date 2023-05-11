@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { EMPTY } from 'rxjs';
 import { MultipleCounterStore } from '../../services/counter-service';
 import { DemoAComponent } from './demo-a.component';
 import createSpyObj = jasmine.createSpyObj;
@@ -12,9 +11,7 @@ describe('DemoAComponent', () => {
     {
       increment: undefined,
       ngOnDestroy: undefined,
-    },
-    {
-      counterState$: EMPTY,
+      state: { counter: 0 },
     }
   );
 

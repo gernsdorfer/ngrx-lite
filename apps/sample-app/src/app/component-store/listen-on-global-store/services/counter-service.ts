@@ -12,18 +12,16 @@ import { resetAction } from '../actions/reset.action';
 
 export const MultipleCounterStoreName = new InjectionToken('MULTIPLE_COUNTER');
 
-export interface MyState {
-  counter: number;
-}
-
 @Injectable({ providedIn: 'any' })
 export class MultipleCounterStore implements OnDestroy {
-  private store = this.storeFactory.createComponentStore<MyState>({
+  private store = this.storeFactory.createComponentStore<{
+    counter: number;
+  }>({
     storeName: this.storeName || 'MULTIPLE_COUNTER_STORE',
     defaultState: { counter: 0 },
   });
 
-  public counterState$ = this.store.state$;
+  public state = this.store.state;
 
   constructor(
     private storeFactory: StoreFactory,

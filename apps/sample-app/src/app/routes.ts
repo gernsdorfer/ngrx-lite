@@ -90,9 +90,7 @@ export const routes: Routes = [
   {
     path: 'share-actions',
     loadChildren: () =>
-      import('./component-store/share-actions/shared-actions.module').then(
-        (m) => m.SharedActionsModule
-      ),
+      import('./component-store/share-actions/shared-actions.module'),
   },
   { path: '**', redirectTo: '' },
 ];

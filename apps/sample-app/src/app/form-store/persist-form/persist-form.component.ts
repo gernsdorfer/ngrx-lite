@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import {
   FormControl,
@@ -14,16 +13,11 @@ import { MatInputModule } from '@angular/material/input';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
-interface Product {
-  name: string;
-}
-
 @Component({
   selector: 'my-app-basic-app',
   templateUrl: 'persist-form.html',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
@@ -45,7 +39,9 @@ export class PersistFormComponent implements OnDestroy {
     }),
   });
 
-  private store = this.storeFactory.createFormComponentStore<Product>({
+  private store = this.storeFactory.createFormComponentStore<{
+    name: string;
+  }>({
     storeName: 'PRODUCT_FORM',
     plugins: {
       storage: 'sessionStoragePlugin',

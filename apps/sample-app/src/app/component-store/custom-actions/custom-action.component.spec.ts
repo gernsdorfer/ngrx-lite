@@ -1,8 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import { cold } from 'jasmine-marbles';
-import { CustomActionComponent, MyState } from './custom-action.component';
+import { CustomActionComponent } from './custom-action.component';
 
 describe('CustomActionComponent', () => {
   beforeEach(() => {
@@ -28,13 +27,9 @@ describe('CustomActionComponent', () => {
 
       component.increment();
 
-      expect(component.counterState$).toBeObservable(
-        cold('a', {
-          a: <MyState>{
-            counter: 1,
-          },
-        })
-      );
+      expect(component.counterState()).toEqual({
+        counter: 1,
+      });
     });
   });
 });
