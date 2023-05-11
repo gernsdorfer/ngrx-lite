@@ -18,7 +18,7 @@ export class TodoListStore {
   >({
     storeName: 'TODO_LIST',
   });
-  public listState$ = this.store.state$;
+  public state = this.store.state;
 
   reload$ = this.store.createEffect((action) =>
     action.pipe(ofType(updateAction, createAction))

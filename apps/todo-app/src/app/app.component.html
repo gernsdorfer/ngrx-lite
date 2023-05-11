@@ -4,17 +4,12 @@
     <section>
       <todo-create (create)="create($event)" />
     </section>
-    <section
-      class="list"
-      *ngIf="todosState$ | async as todosState"
-      fxLayout="column"
-      fxLayoutAlign="start stretch"
-    >
+    <section class="list" fxLayout="column" fxLayoutAlign="start stretch">
       <mat-card class="card">
         <mat-card-header>Todos</mat-card-header>
         <mat-card-content>
           <todo-list
-            [todos]="todosState?.item | completed : false"
+            [todos]="todosState().item | completed : false"
             (updateCompleted)="changeCompleted($event)"
           />
         </mat-card-content>
@@ -23,7 +18,7 @@
         <mat-card-header>Todos Done</mat-card-header>
         <mat-card-content>
           <todo-list
-            [todos]="todosState?.item | completed : true"
+            [todos]="todosState().item | completed : true"
             (updateCompleted)="changeCompleted($event)"
           />
         </mat-card-content>

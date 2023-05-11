@@ -1,7 +1,7 @@
 {
   "todos": [
     {
-      "completed": false,
+      "completed": true,
       "title": "do something",
       "id": 1
     },
@@ -12,8 +12,18 @@
     },
     {
       "title": "test",
-      "completed": false,
+      "completed": true,
       "id": 3
+    },
+    {
+      "title": "",
+      "completed": true,
+      "id": 4
+    },
+    {
+      "title": "asd",
+      "completed": false,
+      "id": 5
     }
   ]
 }
