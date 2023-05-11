@@ -59,7 +59,7 @@ export class ComponentStore<STATE extends object>
 
   override setState(
     stateOrUpdaterFn: ((state: STATE) => STATE) | STATE,
-    action: string = 'SET_STATE',
+    action = 'SET_STATE',
     {
       skipLog,
       forced,
@@ -84,7 +84,7 @@ export class ComponentStore<STATE extends object>
     partialStateOrUpdaterFn:
       | Partial<STATE>
       | ((state: STATE) => Partial<STATE>),
-    action: string = 'PATCH_STATE'
+    action = 'PATCH_STATE'
   ) {
     if (this.devToolHelper.isTimeTravelActive()) {
       return;
