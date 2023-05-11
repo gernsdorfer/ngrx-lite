@@ -1,4 +1,4 @@
-import {Inject, Injectable, OnDestroy, Optional, Signal} from '@angular/core';
+import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
 import { Actions } from '@ngrx/effects';
 import { Action, Store as NgrxStore } from '@ngrx/store';
@@ -53,8 +53,6 @@ export class ComponentStore<STATE extends object>
     return effect$;
   }
 
-
-
   override setState(
     stateOrUpdaterFn: ((state: STATE) => STATE) | STATE,
     action = 'SET_STATE',
@@ -74,6 +72,7 @@ export class ComponentStore<STATE extends object>
         ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (stateOrUpdaterFn as unknown as any)(this.get())
         : stateOrUpdaterFn;
+
     super.setState(newState);
     if (!skipLog) this.dispatchCustomAction(action, newState);
   }
