@@ -29,7 +29,7 @@ export class AppComponent {
 
 ## `state`
 
-Read your State synchronously, but be carefully ⚠️
+Read your State with signal assignment
 
 ```ts title="app.component.ts"
 interface MyState {
