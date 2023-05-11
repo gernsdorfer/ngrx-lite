@@ -48,7 +48,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       params$.pipe(
         tap(() =>
           super.patchState(
-            () => ({ ...this.state, isLoading: true }),
+            () => ({ ...this.state(), isLoading: true }),
             getEffectActionName(name, EffectStates.LOAD)
           )
         ),

@@ -56,7 +56,7 @@ export class StoreFactory {
       defaultState: formGroup.getRawValue(),
       CreatedStore: ComponentStore,
     });
-    formGroup.patchValue(store.state);
+    formGroup.patchValue(store.state());
     formGroup.valueChanges.pipe(takeUntil(store.destroy$)).subscribe({
       next: (value: FORM_STATE) => {
         store.setState(value, 'Form_CHANGED', { skipLog });

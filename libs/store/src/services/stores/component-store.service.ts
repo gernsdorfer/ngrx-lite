@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
+import {Inject, Injectable, OnDestroy, Optional, Signal} from '@angular/core';
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
 import { Actions } from '@ngrx/effects';
 import { Action, Store as NgrxStore } from '@ngrx/store';
@@ -53,9 +53,7 @@ export class ComponentStore<STATE extends object>
     return effect$;
   }
 
-  get state(): STATE {
-    return super.get();
-  }
+
 
   override setState(
     stateOrUpdaterFn: ((state: STATE) => STATE) | STATE,

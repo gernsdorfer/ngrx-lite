@@ -34,7 +34,7 @@ export class LoadingWithDefaultValuesComponent implements OnDestroy {
 
   increment = this.store.loadingEffect('INCREMENT', () =>
     of({
-      counter: { ...defaultState, ...this.store.state.item }.counter + 1,
+      counter: { ...defaultState, ...this.store.state().item }.counter + 1,
     }).pipe(delay(400))
   );
 
