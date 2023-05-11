@@ -99,7 +99,7 @@ describe('ComponentStore', () => {
   describe('state', () => {
     it('should return state from store', () => {
       const { state } = getStore();
-      expect(state).toEqual(defaultStore);
+      expect(state()).toEqual(defaultStore);
     });
   });
 
@@ -129,13 +129,13 @@ describe('ComponentStore', () => {
     it('should set state to store with object', () => {
       getStore().setState({ myState: 'testValue' });
 
-      expect(getStore().state).toEqual({ myState: 'testValue' });
+      expect(getStore().state()).toEqual({ myState: 'testValue' });
     });
 
     it('should set state to store with function', () => {
       getStore().setState((state) => ({ ...state, optionalValue: 'test' }));
 
-      expect(getStore().state).toEqual({
+      expect(getStore().state()).toEqual({
         ...defaultStore,
         optionalValue: 'test',
       });
@@ -148,7 +148,7 @@ describe('ComponentStore', () => {
       it('should not set state if can not changed', () => {
         getStore().setState((state) => ({ ...state, optionalValue: 'test' }));
 
-        expect(getStore().state).toEqual({ ...defaultStore });
+        expect(getStore().state()).toEqual({ ...defaultStore });
       });
 
       it('should not set state setState is forced', () => {
@@ -161,7 +161,7 @@ describe('ComponentStore', () => {
           }
         );
 
-        expect(getStore().state).toEqual({
+        expect(getStore().state()).toEqual({
           ...defaultStore,
           optionalValue: 'test',
         });
@@ -211,7 +211,7 @@ describe('ComponentStore', () => {
     it('should set state to store with object', () => {
       getStore().patchState({ optionalValue: 'newValue' });
 
-      expect(getStore().state).toEqual({
+      expect(getStore().state()).toEqual({
         ...defaultStore,
         optionalValue: 'newValue',
       });
@@ -223,7 +223,7 @@ describe('ComponentStore', () => {
         optionalValue: 'newValue',
       }));
 
-      expect(getStore().state).toEqual({
+      expect(getStore().state()).toEqual({
         ...defaultStore,
         optionalValue: 'newValue',
       });
@@ -236,7 +236,7 @@ describe('ComponentStore', () => {
       it('should not set state if can not changed', () => {
         getStore().patchState((state) => ({ ...state, optionalValue: 'test' }));
 
-        expect(getStore().state).toEqual({ ...defaultStore });
+        expect(getStore().state()).toEqual({ ...defaultStore });
       });
     });
 

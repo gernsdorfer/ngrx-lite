@@ -5,12 +5,12 @@ import { LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 import { provideMockStore } from '@ngrx/store/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
-import { defer, EMPTY, of } from 'rxjs';
+import { EMPTY, defer, of } from 'rxjs';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { ClientStoragePlugin } from '../models';
 import { getCustomAction } from '../services/action-creator';
 import { DevToolHelper } from './dev-tool-helper.service';
-import { getStoreState, Store } from './store.service';
+import { Store, getStoreState } from './store.service';
 import { getDefaultComponentLoadingState } from './stores/component-loading-store.service';
 import { ComponentStore } from './stores/component-store.service';
 
@@ -274,7 +274,7 @@ describe('Store', () => {
             CreatedStore: ComponentStore,
           });
 
-          expect(state).toEqual(defaultMyState);
+          expect(state()).toEqual(defaultMyState);
         });
 
         it('should return state from sessionStorage plugin', () => {
@@ -287,7 +287,7 @@ describe('Store', () => {
             CreatedStore: ComponentStore,
           });
 
-          expect(state).toEqual({
+          expect(state()).toEqual({
             ...defaultMyState,
             optionalValue: 'testDataFromSessionStorage',
           });
@@ -303,7 +303,7 @@ describe('Store', () => {
             CreatedStore: ComponentStore,
           });
 
-          expect(state).toEqual({
+          expect(state()).toEqual({
             ...defaultMyState,
             optionalValue: 'testDataFromLocalStorage',
           });
@@ -606,10 +606,8 @@ describe('getStoreState', () => {
   it('should return state', () => {
     const store = jasmine.createSpyObj<ComponentStore<{ myState: string }>>(
       'Store',
-      {},
-      {
-        state: { myState: '' },
-      }
+      { state: { myState: '' } },
+      {}
     );
     expect(getStoreState(store)).toEqual({ myState: '' });
   });

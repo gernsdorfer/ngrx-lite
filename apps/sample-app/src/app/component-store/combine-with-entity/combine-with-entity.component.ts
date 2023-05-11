@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { createEntityAdapter, EntityState } from '@ngrx/entity';
+import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 interface Product {
@@ -76,11 +76,11 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
   }
 
   selectProduct(productId: number) {
-    this.productForm.reset(selectEntities(this.store.state)[productId]);
+    this.productForm.reset(selectEntities(this.store.state())[productId]);
   }
 
   remove(product: Product) {
-    this.store.setState(adapter.removeOne(product.id, this.store.state));
+    this.store.setState(adapter.removeOne(product.id, this.store.state()));
     this.resetProductForm();
   }
 
@@ -89,7 +89,7 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
       ? this.updateProduct(product)
       : this.addProduct({
           ...product,
-          id: selectTotal(this.store.state) + 1,
+          id: selectTotal(this.store.state()) + 1,
         });
     this.resetProductForm();
   }
@@ -99,12 +99,15 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
   }
 
   private addProduct(product: Product) {
-    this.store.setState(adapter.addOne(product, this.store.state));
+    this.store.setState(adapter.addOne(product, this.store.state()));
   }
 
   private updateProduct(product: Product) {
     this.store.setState(
-      adapter.updateOne({ id: product.id, changes: product }, this.store.state)
+      adapter.updateOne(
+        { id: product.id, changes: product },
+        this.store.state()
+      )
     );
   }
 

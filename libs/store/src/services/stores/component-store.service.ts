@@ -53,10 +53,6 @@ export class ComponentStore<STATE extends object>
     return effect$;
   }
 
-  get state(): STATE {
-    return super.get();
-  }
-
   override setState(
     stateOrUpdaterFn: ((state: STATE) => STATE) | STATE,
     action = 'SET_STATE',
@@ -76,6 +72,7 @@ export class ComponentStore<STATE extends object>
         ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (stateOrUpdaterFn as unknown as any)(this.get())
         : stateOrUpdaterFn;
+
     super.setState(newState);
     if (!skipLog) this.dispatchCustomAction(action, newState);
   }

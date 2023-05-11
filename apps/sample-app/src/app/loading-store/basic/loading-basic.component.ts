@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { delay, Observable, of } from 'rxjs';
+import { Observable, delay, of } from 'rxjs';
 import { UiCardComponent } from '../../shared/ui/card-component';
 import { UiSpinnerComponent } from '../../shared/ui/spinner';
 
@@ -28,7 +28,9 @@ export class LoadingBasicComponent implements OnDestroy {
   public counterState$: Observable<MyState> = this.store.state$;
 
   increment = this.store.loadingEffect('INCREMENT', () =>
-    of({ counter: (this.store.state.item?.counter || 0) + 1 }).pipe(delay(400))
+    of({ counter: (this.store.state().item?.counter || 0) + 1 }).pipe(
+      delay(400)
+    )
   );
 
   constructor(private storeFactory: StoreFactory) {}

@@ -24,7 +24,7 @@ export class RouterStore {
         map((routerEvent) => routerEvent as NavigationEnd)
       )
       .subscribe(({ urlAfterRedirects }) => {
-        if (this.store.state.url !== urlAfterRedirects) {
+        if (this.store.state().url !== urlAfterRedirects) {
           this.store.setState({ url: urlAfterRedirects }, 'URL_CHANGED');
         }
       });

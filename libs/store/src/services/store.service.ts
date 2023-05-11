@@ -16,7 +16,7 @@ import { ClientStoragePlugin } from '../models';
 import { ComponentLoadingStore } from './stores/component-loading-store.service';
 
 import { Actions } from '@ngrx/effects';
-import { ActionReducer, ReducerManager, Store as NgrxStore } from '@ngrx/store';
+import { ActionReducer, Store as NgrxStore, ReducerManager } from '@ngrx/store';
 import {
   INITIAL_OPTIONS,
   StoreDevtools,
@@ -34,7 +34,7 @@ export const getStoreState = <STATE extends object>(
   store: ComponentStore<STATE>
 ): STATE | undefined => {
   try {
-    return store.state;
+    return store.state();
   } catch (e) {
     return undefined;
   }

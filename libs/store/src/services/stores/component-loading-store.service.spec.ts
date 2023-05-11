@@ -88,7 +88,7 @@ describe('LoadingStore', () => {
   describe('state', () => {
     it('should return state from store', () => {
       const { state } = store;
-      expect(state).toEqual(getDefaultComponentLoadingState());
+      expect(state()).toEqual(getDefaultComponentLoadingState());
     });
   });
 
