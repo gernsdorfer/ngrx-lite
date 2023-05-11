@@ -8,17 +8,15 @@
   },
   "defaultProject": "ngrx-lite",
   "generators": {
-    "@nrwl/angular:application": {
+    "@nx/angular:application": {
       "style": "css",
       "linter": "eslint",
-      "unitTestRunner": "karma",
       "e2eTestRunner": "cypress"
     },
-    "@nrwl/angular:library": {
-      "linter": "eslint",
-      "unitTestRunner": "karma"
+    "@nx/angular:library": {
+      "linter": "eslint"
     },
-    "@nrwl/angular:component": {
+    "@nx/angular:component": {
       "style": "css"
     }
   },
@@ -51,7 +49,7 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
+      "runner": "nx-cloud",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "YTFmYTdmMmYtN2Q1My00MWUxLThmN2QtMzgyYjJkN2JhMDE4fHJlYWQtd3JpdGU="
