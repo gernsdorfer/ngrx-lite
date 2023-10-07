@@ -100,7 +100,7 @@
     "ng-packagr": "16.0.1",
     "nx": "16.1.4",
     "nx-cloud": "16.0.5",
-    "postcss": "^8.4.23",
+    "postcss": "^8.4.31",
     "postcss-import": "15.1.0",
     "postcss-preset-env": "~8.3.2",
     "postcss-url": "10.1.3",
