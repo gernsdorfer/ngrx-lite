@@ -62,10 +62,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "sample-app:build:production"
+          "buildTarget": "sample-app:build:production"
         },
         "development": {
-          "browserTarget": "sample-app:build:development"
+          "buildTarget": "sample-app:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -73,11 +73,11 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "sample-app:build"
+        "buildTarget": "sample-app:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "apps/sample-app/src/**/*.ts",

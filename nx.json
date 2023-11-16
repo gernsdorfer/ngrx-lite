@@ -31,29 +31,24 @@
       "!{projectRoot}/.eslintrc.json"
     ]
   },
-  "npmScope": "ngrx-lite",
+  "nxCloudAccessToken": "YTFmYTdmMmYtN2Q1My00MWUxLThmN2QtMzgyYjJkN2JhMDE4fHJlYWQtd3JpdGU=",
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": ["production", "^production"],
+      "cache": true
     },
     "test": {
-      "inputs": ["default", "^production", "{workspaceRoot}/karma.conf.js"]
+      "inputs": ["default", "^production", "{workspaceRoot}/karma.conf.js"],
+      "cache": true
     },
     "e2e": {
-      "inputs": ["default", "^production"]
+      "inputs": ["default", "^production"],
+      "cache": true
     },
     "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
-    }
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "YTFmYTdmMmYtN2Q1My00MWUxLThmN2QtMzgyYjJkN2JhMDE4fHJlYWQtd3JpdGU="
-      }
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "cache": true
     }
   }
 }
