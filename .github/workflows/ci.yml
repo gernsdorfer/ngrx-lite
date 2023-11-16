@@ -21,10 +21,10 @@ jobs:
           node-version: '18'
       - run: yarn
       - run: yarn run format:check
-      - run: yarn run affected:build --all --parallel=3
-      - run: yarn run affected:lint --all --parallel=2
-      - run: yarn run affected:test --all --parallel=2
-      - run: yarn run affected:e2e --all --record
+      - run: yarn run affected:build --parallel=3 --base=master~1
+      - run: yarn run affected:lint --parallel=2 --base=master~1
+      - run: yarn run affected:test --parallel=2 --base=master~1
+      - run: yarn run affected:e2e --record --base=master~1
         env:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
   pr:
