@@ -38,7 +38,7 @@ import { RouterModule } from '@angular/router';
         </a>
 
         <a class="menu-link" mat-menu-item routerLink="/share-actions">
-          Share with @ngrx/Effects
+          Share with &#64;ngrx/Effects
         </a>
         <a class="menu-link" mat-menu-item routerLink="/storage"
           >Sync with Storage</a

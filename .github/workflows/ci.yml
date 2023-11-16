@@ -18,7 +18,7 @@ jobs:
         uses: nrwl/nx-set-shas@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '16'
+          node-version: '18'
       - run: yarn
       - run: yarn run format:check
       - run: yarn run affected:build --all --parallel=3
@@ -42,7 +42,7 @@ jobs:
           main-branch-name: 'master'
       - uses: actions/setup-node@v1
         with:
-          node-version: '16'
+          node-version: '18'
       - run: yarn
       - run: yarn run format:check
       - run: yarn run affected:build --parallel=3
