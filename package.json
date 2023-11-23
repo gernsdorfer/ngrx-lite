@@ -23,7 +23,7 @@
     "release:minor": "release-it --increment minor",
     "release:major-pre": "release-it --preRelease --increment major",
     "release:major": "release-it --increment major",
-    "release:dry": "release-it --release-version"
+    "release:dry": "release-it --dry-run"
   },
   "release-it": {
     "plugins": {
