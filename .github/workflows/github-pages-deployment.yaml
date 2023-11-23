@@ -14,6 +14,7 @@ jobs:
         with:
           node-version: 20
       - run: yarn
+      - run: yarn run doc-app:build
       - run: yarn run build:docs
 
       - name: Deploy 🚀
