@@ -11,7 +11,7 @@
     "affected:test": "nx affected:test",
     "affected:e2e": "nx affected --target=e2e",
     "build": "nx build",
-    "build:docs": "nx run sample-app:build:production --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
+    "build:docs": "nx run doc-app:build && nx run sample-app:build:production --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
     "build:release": "nx run store:build:production",
     "format:check": "nx format:check",
     "ng": "nx",
