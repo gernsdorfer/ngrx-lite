@@ -2,6 +2,9 @@
   "name": "ngrx-lite",
   "version": "16.0.0",
   "license": "MIT",
+  "workspaces": [
+    "apps/doc-app"
+  ],
   "scripts": {
     "affected:build": "nx affected --target=build",
     "affected:lint": "nx affected:lint",
@@ -9,7 +12,6 @@
     "affected:e2e": "nx affected --target=e2e",
     "format:check": "nx format:check",
     "ng": "nx",
-    "postinstall": "node ./decorate-angular-cli.js",
     "start": "nx run sample-app:serve",
     "build": "nx build",
     "test": "nx test",

@@ -76,7 +76,7 @@
         ]
       }
     },
-    "start-toto-server": {
+    "serve:todo-db-server": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["npx json-server ./apps/todo-app/db-todo.json"]
