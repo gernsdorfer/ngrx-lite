@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
         maxAge: 25,
         logOnly: false,
         monitor: (state, action) => action,
-      })
+      }),
     ),
     importProvidersFrom(RouterStoreModule),
   ],

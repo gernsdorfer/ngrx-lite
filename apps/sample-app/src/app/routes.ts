@@ -5,7 +5,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./component-store/basic/basic.component').then(
-        (m) => m.BasicComponent
+        (m) => m.BasicComponent,
       ),
   },
   {
@@ -19,17 +19,16 @@ export const routes: Routes = [
     path: 'persist-form',
     loadComponent: () =>
       import('./form-store/persist-form/persist-form.component').then(
-        (m) => m.PersistFormComponent
+        (m) => m.PersistFormComponent,
       ),
   },
   {
     path: 'loading-basic',
     loadComponent: () =>
       import('./loading-store/basic/loading-basic.component').then(
-        (m) => m.LoadingBasicComponent
+        (m) => m.LoadingBasicComponent,
       ),
   },
-
   {
     path: 'loading-with-default-values',
     loadComponent: () =>
@@ -38,17 +37,24 @@ export const routes: Routes = [
       ).then((m) => m.LoadingWithDefaultValuesComponent),
   },
   {
+    path: 'loading-with-signal-effects',
+    loadComponent: () =>
+      import(
+        './loading-store/with-signal-effects/loading-with-signal-effects.component'
+      ).then((m) => m.LoadingWithSignalEffectsComponent),
+  },
+  {
     path: 'custom-action',
     loadComponent: () =>
       import('./component-store/custom-actions/custom-action.component').then(
-        (m) => m.CustomActionComponent
+        (m) => m.CustomActionComponent,
       ),
   },
   {
     path: 'storage',
     loadComponent: () =>
       import('./component-store/storage/storage.component').then(
-        (m) => m.StorageExampleComponent
+        (m) => m.StorageExampleComponent,
       ),
   },
   {

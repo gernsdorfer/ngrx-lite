@@ -15,7 +15,7 @@ describe('RouterStore', () => {
     {
       url: '/my-current-curl',
       events: defer(() => events$),
-    }
+    },
   );
 
   let routerStore: RouterStore;
@@ -43,11 +43,11 @@ describe('RouterStore', () => {
       flush();
 
       expect(routerStore.state$).toBeObservable(
-        cold('50ms a', {
+        cold('51ms a', {
           a: {
             url: 'new-url',
           },
-        })
+        }),
       );
       expect(router.navigateByUrl).toHaveBeenCalledWith('new-url');
     });

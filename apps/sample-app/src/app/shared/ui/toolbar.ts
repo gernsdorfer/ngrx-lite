@@ -63,6 +63,12 @@ import { RouterModule } from '@angular/router';
         >
           Loading with default values
         </a>
+        <a
+          class="menu-link"
+          mat-menu-item
+          routerLink="/loading-with-signal-effects"
+          >with Signal Effects</a
+        >
       </mat-menu>
       <button [matMenuTriggerFor]="menuFormsComponentStore" mat-button>
         Forms-Component-Store
