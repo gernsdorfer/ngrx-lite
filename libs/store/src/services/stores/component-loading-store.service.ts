@@ -15,7 +15,7 @@ import { DevToolHelper } from '../dev-tool-helper.service';
 import { ComponentStore } from './component-store.service';
 
 export const getDefaultComponentLoadingState = <ITEM, ERROR>(
-  state: Partial<LoadingStoreState<ITEM, ERROR>> = {}
+  state: Partial<LoadingStoreState<ITEM, ERROR>> = {},
 ): LoadingStoreState<ITEM, ERROR> => ({
   isLoading: false,
   error: undefined,
@@ -33,7 +33,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
     devToolHelper: DevToolHelper,
     @Inject(StoreNameToken) storeName: string,
     @Inject(StateToken) state: LoadingStoreState<ITEM, ERROR>,
-    @Inject(SkipLogForStore) skipLogForStore: boolean
+    @Inject(SkipLogForStore) skipLogForStore: boolean,
   ) {
     super(actions, ngrxStore, devToolHelper, skipLogForStore, storeName, state);
   }
@@ -41,16 +41,16 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   loadingEffect = <EFFECT_PARAMS = void>(
     name: string,
     effect: (
-      params: EFFECT_PARAMS
-    ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>
+      params: EFFECT_PARAMS,
+    ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>,
   ) =>
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
         tap(() =>
           super.patchState(
-            () => ({ ...this.state(), isLoading: true }),
-            getEffectActionName(name, EffectStates.LOAD)
-          )
+            (state) => ({ ...state, isLoading: true }),
+            getEffectActionName(name, EffectStates.LOAD),
+          ),
         ),
         switchMap((params) =>
           effect(params).pipe(
@@ -58,16 +58,16 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
               (item) =>
                 super.setState(
                   getDefaultComponentLoadingState({ item }),
-                  getEffectActionName(name, EffectStates.SUCCESS)
+                  getEffectActionName(name, EffectStates.SUCCESS),
                 ),
               (error: ERROR) =>
                 super.setState(
                   getDefaultComponentLoadingState({ error }),
-                  getEffectActionName(name, EffectStates.ERROR)
-                )
-            )
-          )
-        )
-      )
+                  getEffectActionName(name, EffectStates.ERROR),
+                ),
+            ),
+          ),
+        ),
+      ),
     );
 }
