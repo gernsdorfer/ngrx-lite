@@ -2,7 +2,7 @@ import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
 import { Actions } from '@ngrx/effects';
 import { Action, Store as NgrxStore } from '@ngrx/store';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { asapScheduler, Observable, Subject, takeUntil } from 'rxjs';
 import {
   SkipLogForStore,
   StateToken,
@@ -22,7 +22,7 @@ export class ComponentStore<STATE extends object>
     protected devToolHelper: DevToolHelper,
     @Inject(SkipLogForStore) protected skipLogForStore: boolean,
     @Inject(StoreNameToken) protected storeName: string,
-    @Inject(StateToken) state: STATE
+    @Inject(StateToken) state: STATE,
   ) {
     super(state);
     if (!this.devToolHelper.isTimeTravelActive()) {
@@ -39,15 +39,15 @@ export class ComponentStore<STATE extends object>
   }
 
   createEffect<V = Action>(
-    effect: (action: Actions) => Observable<V>
+    effect: (action: Actions) => Observable<V>,
   ): Observable<V> {
     if (!this.actions) {
       throw Error(
-        '@ngrx/effects is not imported. Please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module'
+        '@ngrx/effects is not imported. Please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module',
       );
     }
     const effect$ = effect(this.actions).pipe(
-      takeUntil(this.subject.asObservable())
+      takeUntil(this.subject.asObservable()),
     );
     effect$.subscribe();
     return effect$;
@@ -62,7 +62,7 @@ export class ComponentStore<STATE extends object>
     }: {
       skipLog?: boolean;
       forced?: boolean;
-    } = {}
+    } = {},
   ) {
     if (this.devToolHelper.isTimeTravelActive() && !forced) {
       return;
@@ -80,7 +80,7 @@ export class ComponentStore<STATE extends object>
     partialStateOrUpdaterFn:
       | Partial<STATE>
       | ((state: STATE) => Partial<STATE>),
-    action = 'PATCH_STATE'
+    action = 'PATCH_STATE',
   ) {
     if (this.devToolHelper.isTimeTravelActive()) {
       return;
@@ -98,10 +98,13 @@ export class ComponentStore<STATE extends object>
     if (this.skipLogForStore) {
       return;
     }
-    this.ngrxStore.dispatch(
-      getCustomAction({ actionName: action, storeName: this.storeName })({
-        payload: state,
-      })
-    );
+
+    asapScheduler.schedule(() => {
+      this.ngrxStore.dispatch(
+        getCustomAction({ actionName: action, storeName: this.storeName })({
+          payload: state,
+        }),
+      );
+    });
   }
 }

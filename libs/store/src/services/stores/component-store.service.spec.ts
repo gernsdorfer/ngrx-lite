@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { EMPTY } from 'rxjs';
+import { asapScheduler, EMPTY } from 'rxjs';
 import {
   SkipLogForStore,
   StateToken,
@@ -26,7 +26,6 @@ describe('ComponentStore', () => {
   const actions = EMPTY;
   const getStore = (): ComponentStore<MyState> =>
     TestBed.inject<ComponentStore<MyState>>(ComponentStore);
-
   beforeEach(() => {
     devToolHelper.setTimeTravelActive(false);
     TestBed.configureTestingModule({
@@ -77,12 +76,13 @@ describe('ComponentStore', () => {
   describe('create ComponentStore', () => {
     it('should send init action after create', () => {
       getStore();
+      asapScheduler.flush();
 
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'init',
           storeState: defaultStore,
-        })
+        }),
       );
     });
 
@@ -117,7 +117,7 @@ describe('ComponentStore', () => {
       TestBed.overrideProvider(Actions, { useValue: null });
 
       expect(() => getStore().createEffect(() => EMPTY)).toThrowError(
-        '@ngrx/effects is not imported. Please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module'
+        '@ngrx/effects is not imported. Please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module',
       );
     });
   });
@@ -158,7 +158,7 @@ describe('ComponentStore', () => {
           {
             skipLog: true,
             forced: true,
-          }
+          },
         );
 
         expect(getStore().state()).toEqual({
@@ -172,12 +172,13 @@ describe('ComponentStore', () => {
       mockStore.dispatch.calls.reset();
 
       getStore().setState(defaultStore);
+      asapScheduler.flush();
 
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'SET_STATE',
           storeState: defaultStore,
-        })
+        }),
       );
     });
 
@@ -185,12 +186,13 @@ describe('ComponentStore', () => {
       mockStore.dispatch.calls.reset();
 
       getStore().setState(defaultStore, 'myCustomAction');
+      asapScheduler.flush();
 
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'myCustomAction',
           storeState: defaultStore,
-        })
+        }),
       );
     });
 
@@ -243,12 +245,13 @@ describe('ComponentStore', () => {
     it('should dispatch action with default actionName `PATCH_STATE`', () => {
       mockStore.dispatch.calls.reset();
       getStore().patchState({ optionalValue: 'newValue' });
+      asapScheduler.flush();
 
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'PATCH_STATE',
           storeState: { ...defaultStore, optionalValue: 'newValue' },
-        })
+        }),
       );
     });
 
@@ -256,12 +259,13 @@ describe('ComponentStore', () => {
       mockStore.dispatch.calls.reset();
 
       getStore().patchState({ optionalValue: 'newValue' }, 'myCustomAction');
+      asapScheduler.flush();
 
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         getDispatchAction({
           actionName: 'myCustomAction',
           storeState: { ...defaultStore, optionalValue: 'newValue' },
-        })
+        }),
       );
     });
   });

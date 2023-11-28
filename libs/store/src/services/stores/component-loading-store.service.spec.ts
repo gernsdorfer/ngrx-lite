@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold } from 'jasmine-marbles';
-import { EMPTY } from 'rxjs';
+import { asapScheduler, EMPTY } from 'rxjs';
 import { EffectStates } from '../../enums';
 import {
   SkipLogForStore,
@@ -77,11 +77,13 @@ describe('LoadingStore', () => {
     });
 
   it('should send init action after create', () => {
+    asapScheduler.flush();
+
     expect(mockStore.dispatch).toHaveBeenCalledWith(
       getDispatchAction({
         actionName: 'init',
         storeState: getDefaultComponentLoadingState(),
-      })
+      }),
     );
   });
 
@@ -98,10 +100,10 @@ describe('LoadingStore', () => {
     });
     it('should change state while effect is running', () => {
       const testEffect = store.loadingEffect('testEffect', () =>
-        cold('-a-#', { a: 'newValue' }, 500)
+        cold('-a-#', { a: 'newValue' }, 500),
       );
       store.patchState({ item: 'oldValue', error: 404 });
-
+      asapScheduler.flush();
       mockStore.dispatch.calls.reset();
 
       testEffect();
@@ -117,8 +119,9 @@ describe('LoadingStore', () => {
             item: 'newValue',
           }),
           c: getDefaultComponentLoadingState({ error: 500 }),
-        })
+        }),
       );
+      asapScheduler.flush();
 
       expect(mockStore.dispatch.calls.allArgs()).toEqual([
         [

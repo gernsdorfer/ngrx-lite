@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, from, map, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, filter, from, map, switchMap, takeUntil } from 'rxjs';
 import { StoreFactory } from '../services';
 
 @Injectable({ providedIn: 'root' })
@@ -14,14 +14,17 @@ export class RouterStore {
 
   public state$ = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory, private router: Router) {}
+  constructor(
+    private storeFactory: StoreFactory,
+    private router: Router,
+  ) {}
 
   init() {
     this.router.events
       .pipe(
         takeUntil(this.store.destroy$),
         filter((routerEvent) => routerEvent instanceof NavigationEnd),
-        map((routerEvent) => routerEvent as NavigationEnd)
+        map((routerEvent) => routerEvent as NavigationEnd),
       )
       .subscribe(({ urlAfterRedirects }) => {
         if (this.store.state().url !== urlAfterRedirects) {
@@ -34,8 +37,9 @@ export class RouterStore {
         takeUntil(this.store.destroy$),
         filter(({ url }) => !!url),
         map(({ url }) => url),
+        debounceTime(1),
         filter((url) => this.router.url !== url),
-        switchMap((url) => from(this.router.navigateByUrl(url as string)))
+        switchMap((url) => from(this.router.navigateByUrl(url as string))),
       )
       .subscribe();
   }
