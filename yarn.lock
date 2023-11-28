@@ -3950,26 +3950,26 @@
     react-lifecycles-compat "~3.0.4"
     react-textarea-autosize "~8.3.2"
 
-"@ngrx/component-store@17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-17.0.0.tgz#bd85dc10b0f7292e67336ef003fea6257079db50"
-  integrity sha512-2TBRmidAFeSkC+A8izG5DmNRH6PuJp6zPgtXHiwcSbLxUnRzGDeh0u0FNLaYBuIeHIqVREL0ccC0iISUwo8K/w==
+"@ngrx/component-store@17.0.1":
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-17.0.1.tgz#de84dab7c3595329378ca46b2b82595d6406e87e"
+  integrity sha512-6A7IXzZHAdFadcCILbljNQzrVMwOlx1opdCV/91h3S3ttY7HrPuatyZJyjau8dSf1ANjnAm1kcoof8lZfwhaHg==
   dependencies:
     "@ngrx/operators" "17.0.0-beta.0"
     tslib "^2.0.0"
 
-"@ngrx/effects@17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-17.0.0.tgz#17ae77d9a1fd774ca6f6ee19c12ad0183e56bc83"
-  integrity sha512-1IK/N4ifyqZFlbstgH+mCBxwNW0FEWTINO2kWEGGb0IZ4lcZaN1GKAqDws69t0011H3bLQePdYLvXH9HJG1qTw==
+"@ngrx/effects@17.0.1":
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-17.0.1.tgz#daee09529cd93c916de7bb331017f15369df45b5"
+  integrity sha512-U7ewZpUoJlLrWyZVyzAMU6Qfxmte7Noi9n/pJb5BR3pWmdHnU+VPs08xnSIQUa0US7K6dJJRTGtcEpEvv/IT4A==
   dependencies:
     "@ngrx/operators" "17.0.0-beta.0"
     tslib "^2.0.0"
 
-"@ngrx/entity@17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@ngrx/entity/-/entity-17.0.0.tgz#3563feb8d7ee1523cd49f87cc50819e16ba4477e"
-  integrity sha512-lACuymHOoQU+1HcpmzKeBnvA+r8NevTuqGuo0GhK0rosjU2kmvIHyoaCqyMx6Yrc9ZroA7izPsXjAEmw3aZ7dQ==
+"@ngrx/entity@17.0.1":
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/entity/-/entity-17.0.1.tgz#75bd13e9c53c6953cd40fa39ebaa7d12b91df113"
+  integrity sha512-7/N/r5GKJgp6sUJKPJmFeCdNU33INViVvg1oootuAEPyzLKEzeu0fuTwVOodm5VVuy89rMi15WGdZel+HDy3zg==
   dependencies:
     tslib "^2.0.0"
 
@@ -3980,17 +3980,17 @@
   dependencies:
     tslib "^2.3.0"
 
-"@ngrx/store-devtools@17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-17.0.0.tgz#81d4d9e615b8a71c87078fed256e85ad1a317415"
-  integrity sha512-DAi0ABROSUks+T3vhbuzHKmACG5NbbcepfibOsgw6R6btbITW4fT3fXepXOmsymXJRO5dmYv6sSM3PDjV8WF0A==
+"@ngrx/store-devtools@17.0.1":
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-17.0.1.tgz#42824879bcdccba5db83345318a5262a4a2789b7"
+  integrity sha512-1/BrHmd1KnjEvZtUkmMeOAhftzTLCBxpk0KoVSnl7BFr0LGQZrYUTXHI3b6tzJ2igGuj0d9hk/JRMOXmYn/5WA==
   dependencies:
     tslib "^2.0.0"
 
-"@ngrx/store@17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-17.0.0.tgz#1b36380dcc0f933ea0889428243a903ff4599669"
-  integrity sha512-jIK4r3IUKPjHmhfgnUYrN7eie+NdFfPNArUQiL+NeiEeuomsYWaUF6PwiRSnRCqbZhRMvqPWiIWcd0/ql5YJlg==
+"@ngrx/store@17.0.1":
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-17.0.1.tgz#e8ebad6ff28e53cd7c945939d84f26be965a406c"
+  integrity sha512-BmVzN+fqyz0ZrVEmJ+jrNwePMKcpNL49vb8sbQ3yDDftxgZz2HqRKFMexqlXpz5ixwK5LqTOblHNQOgi9irsTw==
   dependencies:
     tslib "^2.0.0"
 
