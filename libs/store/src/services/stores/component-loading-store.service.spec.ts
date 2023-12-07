@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold } from 'jasmine-marbles';
-import { asapScheduler, EMPTY } from 'rxjs';
+import { EMPTY, asapScheduler } from 'rxjs';
 import { EffectStates } from '../../enums';
 import {
   SkipLogForStore,
@@ -156,6 +156,61 @@ describe('LoadingStore', () => {
           })({
             payload: getDefaultComponentLoadingState({
               error: 500,
+            }),
+          }),
+        ],
+      ]);
+    });
+    it('should change state while effect is running in cache mode', () => {
+      const testEffect = store.loadingEffect(
+        'testEffect',
+        () => cold('-a-|', { a: 'newValue' }),
+        { canCache: true },
+      );
+      store.patchState({ item: 'oldValue', error: 404 });
+      asapScheduler.flush();
+      mockStore.dispatch.calls.reset();
+
+      testEffect();
+      testEffect();
+
+      expect(store.state$).toBeObservable(
+        cold('ab', {
+          a: getDefaultComponentLoadingState({
+            isLoading: true,
+            item: 'oldValue',
+            error: 404,
+          }),
+          b: getDefaultComponentLoadingState({
+            item: 'newValue',
+          }),
+          c: getDefaultComponentLoadingState({ error: 500 }),
+        }),
+      );
+      asapScheduler.flush();
+
+      expect(mockStore.dispatch.calls.allArgs()).toEqual([
+        [
+          getEffectAction({
+            storeName,
+            effectName: 'testEffect',
+            type: EffectStates.LOAD,
+          })({
+            payload: getDefaultComponentLoadingState({
+              isLoading: true,
+              item: 'oldValue',
+              error: 404,
+            }),
+          }),
+        ],
+        [
+          getEffectAction({
+            storeName,
+            effectName: 'testEffect',
+            type: EffectStates.SUCCESS,
+          })({
+            payload: getDefaultComponentLoadingState({
+              item: 'newValue',
             }),
           }),
         ],

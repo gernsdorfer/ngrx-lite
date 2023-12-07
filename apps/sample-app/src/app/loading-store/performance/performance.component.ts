@@ -41,7 +41,7 @@ export class PerformanceComponent implements OnDestroy {
     (count: number) =>
       of({ counter: count }).pipe(
         tap(() => this.executeEffect++),
-        delay(2000),
+        delay(3000),
       ),
     { canCache: true },
   );
