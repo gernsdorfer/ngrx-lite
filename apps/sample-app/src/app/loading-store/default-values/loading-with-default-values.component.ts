@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
@@ -17,7 +16,7 @@ const defaultState: ItemState = { counter: 0 };
   selector: 'my-app-loading-store-with-default-values',
   templateUrl: 'loading-effect.html',
   standalone: true,
-  imports: [UiCardComponent, MatButtonModule, NgIf, UiSpinnerComponent],
+  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class LoadingWithDefaultValuesComponent implements OnDestroy {
   private store = this.storeFactory.createComponentLoadingStore<
@@ -35,7 +34,7 @@ export class LoadingWithDefaultValuesComponent implements OnDestroy {
   increment = this.store.loadingEffect('INCREMENT', () =>
     of({
       counter: { ...defaultState, ...this.store.state().item }.counter + 1,
-    }).pipe(delay(400))
+    }).pipe(delay(400)),
   );
 
   constructor(private storeFactory: StoreFactory) {}

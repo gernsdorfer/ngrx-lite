@@ -17,7 +17,8 @@
         <mat-icon>cancel</mat-icon>
       </button>
     </form>
-    <div class="product-list" *ngFor="let product of products()">
+    @for (product of products(); track product.id) {
+    <div class="product-list">
       {{product.name}}
       <button class="edit" (click)="selectProduct(product.id)" mat-icon-button>
         <mat-icon>edit</mat-icon>
@@ -26,6 +27,7 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
+    }
   </div>
   <div actions>
     <button class="add" (click)="resetProductForm()" mat-icon-button>

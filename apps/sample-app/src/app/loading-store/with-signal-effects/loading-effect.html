@@ -1,7 +1,8 @@
 <my-app-ui-card>
   <div title>
-    <my-app-ui-spinner *ngIf="counterState().isLoading"></my-app-ui-spinner>
-    Loading-Store
+    @if (counterState().isLoading) {
+    <my-app-ui-spinner></my-app-ui-spinner>
+    } Loading-Store
   </div>
   <div subtitle>Loading Store with Signal effects</div>
   <div content><h2 class="counter">{{ counterState().item?.counter }}</h2></div>

@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -48,7 +47,6 @@ export const mockProducts = [
     UiCardComponent,
     MatFormFieldModule,
     MatInputModule,
-    NgFor,
   ],
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
@@ -106,8 +104,8 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
     this.store.setState(
       adapter.updateOne(
         { id: product.id, changes: product },
-        this.store.state()
-      )
+        this.store.state(),
+      ),
     );
   }
 
