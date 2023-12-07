@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { tapResponse } from '@ngrx/component-store';
 import { Actions } from '@ngrx/effects';
 import { Store as NgrxStore } from '@ngrx/store';
-import { Observable, switchMap, tap } from 'rxjs';
+import { Observable, filter, pairwise, startWith, switchMap } from 'rxjs';
 import { EffectStates } from '../../enums/effect-states.enum';
 import {
   SkipLogForStore,
@@ -37,37 +37,60 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   ) {
     super(actions, ngrxStore, devToolHelper, skipLogForStore, storeName, state);
   }
+  private hasPendingEffect = false;
 
   loadingEffect = <EFFECT_PARAMS = void>(
     name: string,
     effect: (
       params: EFFECT_PARAMS,
     ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>,
+    { canCache = false }: { canCache?: boolean } = {},
   ) =>
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
-        tap(() =>
-          super.patchState(
-            (state) => ({ ...state, isLoading: true }),
-            getEffectActionName(name, EffectStates.LOAD),
-          ),
+        startWith(undefined as unknown as EFFECT_PARAMS),
+        pairwise(),
+        filter(([prev, next]) =>
+          !canCache || !this.hasPendingEffect
+            ? true
+            : JSON.stringify(prev) !== JSON.stringify(next),
         ),
-        switchMap((params) =>
-          effect(params).pipe(
-            tapResponse(
-              (item) =>
-                super.setState(
-                  getDefaultComponentLoadingState({ item }),
-                  getEffectActionName(name, EffectStates.SUCCESS),
-                ),
-              (error: ERROR) =>
-                super.setState(
-                  getDefaultComponentLoadingState({ error }),
-                  getEffectActionName(name, EffectStates.ERROR),
-                ),
-            ),
-          ),
+        switchMap(([, params]) =>
+          this.runEffect<EFFECT_PARAMS>(name, params, effect),
         ),
       ),
     );
+
+  private runEffect<EFFECT_PARAMS = void>(
+    name: string,
+    params: EFFECT_PARAMS,
+    effect: (
+      params: EFFECT_PARAMS,
+    ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>,
+  ) {
+    this.hasPendingEffect = true;
+    super.patchState(
+      (state) => ({ ...state, isLoading: true }),
+      getEffectActionName(name, EffectStates.LOAD),
+    );
+    return effect(params).pipe(
+      tapResponse(
+        (item) =>
+          super.setState(
+            getDefaultComponentLoadingState({
+              item,
+            }),
+            getEffectActionName(name, EffectStates.SUCCESS),
+          ),
+        (error: ERROR) =>
+          super.setState(
+            getDefaultComponentLoadingState({
+              error,
+            }),
+            getEffectActionName(name, EffectStates.ERROR),
+          ),
+        () => (this.hasPendingEffect = false),
+      ),
+    );
+  }
 }

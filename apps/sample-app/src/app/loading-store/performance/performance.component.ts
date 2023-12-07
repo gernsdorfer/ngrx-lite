@@ -1,7 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { delay, of } from 'rxjs';
+import { delay, of, tap } from 'rxjs';
 import { UiCardComponent } from '../../shared/ui/card-component';
 import { UiSpinnerComponent } from '../../shared/ui/spinner';
 
@@ -11,12 +14,19 @@ export type MyState = LoadingStoreState<
 >;
 
 @Component({
-  selector: 'my-app-loading-store-basic',
-  templateUrl: 'loading-basic.html',
+  selector: 'my-app-loading-store-performance',
+  templateUrl: 'performance.html',
   standalone: true,
-  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
+  imports: [
+    UiCardComponent,
+    MatButtonModule,
+    UiSpinnerComponent,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
 })
-export class LoadingBasicComponent implements OnDestroy {
+export class PerformanceComponent implements OnDestroy {
   private store = this.storeFactory.createComponentLoadingStore<
     MyState['item'],
     MyState['error']
@@ -25,11 +35,15 @@ export class LoadingBasicComponent implements OnDestroy {
   });
 
   public counterState = this.store.state;
-
-  increment = this.store.loadingEffect('INCREMENT', () =>
-    of({ counter: (this.store.state().item?.counter || 0) + 1 }).pipe(
-      delay(400),
-    ),
+  executeEffect = 0;
+  increment = this.store.loadingEffect(
+    'INCREMENT',
+    (count: number) =>
+      of({ counter: count }).pipe(
+        tap(() => this.executeEffect++),
+        delay(3000),
+      ),
+    { canCache: true },
   );
 
   constructor(private storeFactory: StoreFactory) {}
