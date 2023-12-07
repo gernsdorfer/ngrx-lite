@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, OnInit, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
@@ -16,10 +16,9 @@ import { TodoListStore } from './services/todo-list.service';
     RouterModule,
     ListComponent,
     MatCardModule,
-    NgIf,
     CompletedPipe,
-    CreateComponent,
-  ],
+    CreateComponent
+],
   templateUrl: 'app.component.html',
 })
 export class AppComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
@@ -15,7 +15,7 @@ export type MyState = LoadingStoreState<
   selector: 'my-app-loading-store-basic',
   templateUrl: 'loading-effect.html',
   standalone: true,
-  imports: [UiCardComponent, MatButtonModule, NgIf, UiSpinnerComponent],
+  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class LoadingBasicComponent implements OnDestroy {
   private store = this.storeFactory.createComponentLoadingStore<

@@ -1,11 +1,13 @@
 <mat-list role="list">
-  <mat-list-item *ngFor="let todo of todos">
-    <mat-checkbox
-      [checked]="todo.completed"
-      (change)="
-        updateCompleted.emit({ completed: $event.checked, todoId: todo.id })
-      "
-      >{{ todo?.title }}</mat-checkbox
-    >
-  </mat-list-item>
+  @for (todo of todos; track todo.id) {
+    <mat-list-item>
+      <mat-checkbox
+        [checked]="todo.completed"
+        (change)="
+          updateCompleted.emit({ completed: $event.checked, todoId: todo.id })
+        "
+        >{{ todo?.title }}</mat-checkbox
+      >
+    </mat-list-item>
+  }
 </mat-list>

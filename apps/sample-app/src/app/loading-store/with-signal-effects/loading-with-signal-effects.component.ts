@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, effect, inject, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
@@ -17,7 +17,7 @@ export type MyState = LoadingStoreState<
   selector: 'my-app-loading-store-with-signal-effects',
   templateUrl: 'loading-effect.html',
   standalone: true,
-  imports: [UiCardComponent, MatButtonModule, NgIf, UiSpinnerComponent],
+  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class LoadingWithSignalEffectsComponent implements OnDestroy {
   private storeFactory = inject(StoreFactory);

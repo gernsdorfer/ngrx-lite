@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -47,9 +47,8 @@ export const mockProducts = [
     MatIconModule,
     UiCardComponent,
     MatFormFieldModule,
-    MatInputModule,
-    NgFor,
-  ],
+    MatInputModule
+],
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
   private store = this.storeFactory.createComponentStore<MyState>({
