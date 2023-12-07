@@ -2,22 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { tapResponse } from '@ngrx/component-store';
 import { Actions } from '@ngrx/effects';
 import { Store as NgrxStore } from '@ngrx/store';
-import {
-  count,
-  defer,
-  EMPTY,
-  exhaustMap,
-  filter,
-  iif,
-  map,
-  mergeMap,
-  Observable,
-  of,
-  pairwise,
-  startWith,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { Observable, filter, pairwise, startWith, switchMap } from 'rxjs';
 import { EffectStates } from '../../enums/effect-states.enum';
 import {
   SkipLogForStore,
@@ -53,6 +38,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
     super(actions, ngrxStore, devToolHelper, skipLogForStore, storeName, state);
   }
   private hasPendingEffect = false;
+
   loadingEffect = <EFFECT_PARAMS = void>(
     name: string,
     effect: (

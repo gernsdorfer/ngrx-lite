@@ -1,12 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of, tap } from 'rxjs';
 import { UiCardComponent } from '../../shared/ui/card-component';
 import { UiSpinnerComponent } from '../../shared/ui/spinner';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 export type MyState = LoadingStoreState<
   { counter: number },

@@ -1,3 +1,4 @@
 {
+  "plugins": ["prettier-plugin-organize-imports","prettier-plugin-organize-attributes","prettier-plugin-sort-json"],
   "singleQuote": true
 }
