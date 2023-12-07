@@ -44,6 +44,13 @@ export const routes: Routes = [
       ).then((m) => m.LoadingWithSignalEffectsComponent),
   },
   {
+    path: 'performance-loader',
+    loadComponent: () =>
+      import('./loading-store/performance/performance.component').then(
+        (m) => m.PerformanceComponent,
+      ),
+  },
+  {
     path: 'custom-action',
     loadComponent: () =>
       import('./component-store/custom-actions/custom-action.component').then(
