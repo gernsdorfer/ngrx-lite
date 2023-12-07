@@ -65,7 +65,9 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
         startWith(undefined as unknown as EFFECT_PARAMS),
         pairwise(),
         filter(([prev, next]) =>
-          !canCache || !this.hasPendingEffect ? true : prev !== next,
+          !canCache || !this.hasPendingEffect
+            ? true
+            : JSON.stringify(prev) !== JSON.stringify(next),
         ),
         switchMap(([, params]) =>
           this.runEffect<EFFECT_PARAMS>(name, params, effect),
