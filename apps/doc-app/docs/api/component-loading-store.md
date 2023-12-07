@@ -31,6 +31,25 @@ export class AppComponent {
 indicator in your ui.
 :::
 
+### Cacheable loadingEffect
+
+Create your custom loadEffect and run an action only once while the effect is running.
+
+
+```ts title="app.component.ts"
+type State = LoadingStoreState<{ counter: number }, { message: string }>;
+
+export class AppComponent {
+  private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
+    storeName: 'LOADING_STORE',
+  });
+
+  nameEffect = this.store.loadingEffect('LOAD_NAME', (name: string) => of({ name: name }),{ canCache: true });
+
+  constructor(private storeFactory: StoreFactory) {}
+}
+```
+
 ### Example for a successfully callback Observable
 
 ```ts
