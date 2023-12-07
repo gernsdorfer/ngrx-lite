@@ -24,8 +24,8 @@ import { UiCardComponent } from '../../shared/ui/card-component';
     MatIconModule,
     UiCardComponent,
     MatFormFieldModule,
-    MatInputModule
-],
+    MatInputModule,
+  ],
 })
 export class PersistFormComponent implements OnDestroy {
   productForm = new FormGroup({

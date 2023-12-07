@@ -8,12 +8,7 @@ import { TodoModel } from '../../models/todo.model';
   selector: 'todo-list',
   templateUrl: 'list.component.html',
   standalone: true,
-  imports: [
-    AsyncPipe,
-    JsonPipe,
-    MatListModule,
-    MatCheckboxModule
-],
+  imports: [AsyncPipe, JsonPipe, MatListModule, MatCheckboxModule],
 })
 export class ListComponent {
   @Input() todos?: TodoModel[] = [];

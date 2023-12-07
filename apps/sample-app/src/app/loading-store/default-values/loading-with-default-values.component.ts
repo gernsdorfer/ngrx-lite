@@ -1,4 +1,3 @@
-
 import { Component, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
@@ -35,7 +34,7 @@ export class LoadingWithDefaultValuesComponent implements OnDestroy {
   increment = this.store.loadingEffect('INCREMENT', () =>
     of({
       counter: { ...defaultState, ...this.store.state().item }.counter + 1,
-    }).pipe(delay(400))
+    }).pipe(delay(400)),
   );
 
   constructor(private storeFactory: StoreFactory) {}

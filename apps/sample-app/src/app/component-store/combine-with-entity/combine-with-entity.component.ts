@@ -1,4 +1,3 @@
-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -47,8 +46,8 @@ export const mockProducts = [
     MatIconModule,
     UiCardComponent,
     MatFormFieldModule,
-    MatInputModule
-],
+    MatInputModule,
+  ],
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
   private store = this.storeFactory.createComponentStore<MyState>({
@@ -105,8 +104,8 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
     this.store.setState(
       adapter.updateOne(
         { id: product.id, changes: product },
-        this.store.state()
-      )
+        this.store.state(),
+      ),
     );
   }
 

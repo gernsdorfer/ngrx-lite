@@ -1,4 +1,3 @@
-
 import { Component, OnInit, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
@@ -17,8 +16,8 @@ import { TodoListStore } from './services/todo-list.service';
     ListComponent,
     MatCardModule,
     CompletedPipe,
-    CreateComponent
-],
+    CreateComponent,
+  ],
   templateUrl: 'app.component.html',
 })
 export class AppComponent implements OnInit {
