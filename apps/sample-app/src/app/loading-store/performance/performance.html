@@ -1,23 +1,24 @@
 <my-app-ui-card>
-  <div title>
+  <h1 title>
     @if (counterState().isLoading) {
     <my-app-ui-spinner></my-app-ui-spinner>
     } Performance Loader (Skip same action)
-  </div>
-  <div subtitle>Loading Store</div>
+  </h1>
+  <h2 subtitle>Loading Store</h2>
 
   <div content>
-    <h2>Executed Effect:{{executeEffect}}</h2>
-
+    Executed Effect: <b id="run-effect">{{executeEffect}}</b>
     <hr />
-    <h2>Counter</h2>
-    <h2 class="counter">{{ counterState().item?.counter }}</h2>
+    Counter
+    <b id="counter">{{ counterState().item?.counter }}</b>
     <hr />
   </div>
 
   <div actions style="width: 100%">
-    <h2>Set Counter</h2>
-    <div style="display: flex; justify-content: space-between; width: 100%">
+    <div
+      id="actions"
+      style="display: flex; justify-content: space-between; width: 100%"
+    >
       <button class="increment" mat-fab (click)="increment(1)">1</button>
       <button class="increment" mat-fab (click)="increment(2)">2</button>
       <button class="increment" mat-fab (click)="increment(3)">3</button>
