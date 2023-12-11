@@ -2,7 +2,7 @@ import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
 import { Actions } from '@ngrx/effects';
 import { Action, Store as NgrxStore } from '@ngrx/store';
-import { asapScheduler, Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, asapScheduler, takeUntil } from 'rxjs';
 import {
   SkipLogForStore,
   StateToken,
@@ -73,7 +73,8 @@ export class ComponentStore<STATE extends object>
         : stateOrUpdaterFn;
 
     super.setState(newState);
-    if (!skipLog) this.dispatchCustomAction(action, newState);
+    if (!skipLog)
+      asapScheduler.schedule(() => this.dispatchCustomAction(action, newState));
   }
 
   override patchState(
@@ -90,8 +91,9 @@ export class ComponentStore<STATE extends object>
         ? partialStateOrUpdaterFn(this.get())
         : partialStateOrUpdaterFn;
     super.patchState(newState);
-
-    this.dispatchCustomAction(action, { ...this.get(), ...newState });
+    asapScheduler.schedule(() =>
+      this.dispatchCustomAction(action, { ...this.get(), ...newState }),
+    );
   }
 
   protected dispatchCustomAction(action: string, state: STATE) {
@@ -99,12 +101,10 @@ export class ComponentStore<STATE extends object>
       return;
     }
 
-    asapScheduler.schedule(() => {
-      this.ngrxStore.dispatch(
-        getCustomAction({ actionName: action, storeName: this.storeName })({
-          payload: state,
-        }),
-      );
-    });
+    this.ngrxStore.dispatch(
+      getCustomAction({ actionName: action, storeName: this.storeName })({
+        payload: state,
+      }),
+    );
   }
 }
