@@ -1,6 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { ReducerManager, ScannedActionsSubject } from '@ngrx/store';
-import { StoreDevtools } from '@ngrx/store-devtools';
+import {
+  INITIAL_OPTIONS,
+  StoreDevtools,
+  StoreDevtoolsConfig,
+} from '@ngrx/store-devtools';
 import { LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -27,8 +31,9 @@ describe('Store', () => {
     {
       getDefaultState: <MyState>{ myState: '' },
       setStateToStorage: undefined,
-    }
+    },
   );
+
   let liftedState$: StoreDevtools['liftedState'] = EMPTY;
   const storeDevtools = jasmine.createSpyObj<StoreDevtools>(
     'storeDevtools',
@@ -37,7 +42,7 @@ describe('Store', () => {
     },
     {
       liftedState: defer(() => liftedState$),
-    }
+    },
   );
   const devToolHelper = jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
     isTimeTravelActive: false,
@@ -48,7 +53,7 @@ describe('Store', () => {
     {
       getDefaultState: <MyState>{ myState: '' },
       setStateToStorage: undefined,
-    }
+    },
   );
   const reducerManager = jasmine.createSpyObj<ReducerManager>(
     'ReducerManager',
@@ -61,14 +66,12 @@ describe('Store', () => {
       currentReducers: {
         oldStore: () => undefined,
       },
-    }
+    },
   );
   const getStore = (): Store => TestBed.inject(Store);
 
   describe('minimal Dependencies are available', () => {
-    beforeEach(() => {
-      devToolHelper.isTimeTravelActive.and.returnValue(false);
-      liftedState$ = EMPTY;
+    const getStore = (providers: TestModuleMetadata['providers'] = []): Store =>
       TestBed.configureTestingModule({
         providers: [
           Store,
@@ -80,6 +83,7 @@ describe('Store', () => {
             provide: DevToolHelper,
             useValue: devToolHelper,
           },
+
           {
             provide: ScannedActionsSubject,
             useValue: {},
@@ -88,23 +92,30 @@ describe('Store', () => {
             provide: ReducerManager,
             useValue: reducerManager,
           },
+          ...providers,
         ],
         teardown: { destroyAfterEach: false },
-      });
+      }).inject(Store);
+
+    beforeEach(() => {
+      devToolHelper.isTimeTravelActive.and.returnValue(false);
+      liftedState$ = EMPTY;
     });
 
     it('should not show an Error for checkForTimeTravel', () => {
-      const store = TestBed.inject(Store);
+      const store = getStore();
+
       expect(() => store.checkForTimeTravel()).not.toThrowError();
     });
 
     it('should not show an Error for addReducersForImportedState', () => {
-      const store = TestBed.inject(Store);
+      const store = getStore();
+
       expect(() => store.addReducersForImportState()).not.toThrowError();
     });
 
     it('should create a componentStore without errors', () => {
-      const store = TestBed.inject(Store);
+      const store = getStore();
 
       expect(() =>
         store.createStoreByStoreType({
@@ -112,8 +123,25 @@ describe('Store', () => {
           plugins: {},
           defaultState: defaultMyState,
           CreatedStore: ComponentStore,
-        })
+        }),
       ).not.toThrowError();
+    });
+
+    it('should show warning Message if devtool maxAge is too low', () => {
+      const spyWarn = spyOn(console, 'warn');
+      getStore([
+        {
+          provide: INITIAL_OPTIONS,
+          useValue: jasmine.createSpyObj<StoreDevtoolsConfig>(
+            {},
+            { maxAge: 4 },
+          ),
+        },
+      ]);
+
+      expect(spyWarn).toHaveBeenCalledWith(
+        'DevTool maxAge is set to a low value, please increase it to 5 or higher. This could lead to problems with the store.',
+      );
     });
   });
 
@@ -165,8 +193,8 @@ describe('Store', () => {
             {
               currentStateIndex: 1,
               stagedActionIds: [1, 2, 3],
-            }
-          )
+            },
+          ),
         );
 
         devToolHelper.setTimeTravelActive.calls.reset();
@@ -185,7 +213,7 @@ describe('Store', () => {
             {},
             {
               monitorState: null,
-            }
+            },
           ),
           jasmine.createSpyObj<LiftedState>(
             'liftedState',
@@ -217,8 +245,8 @@ describe('Store', () => {
                   },
                 },
               },
-            }
-          )
+            },
+          ),
         );
 
         reducerManager.addReducer.calls.reset();
@@ -262,7 +290,7 @@ describe('Store', () => {
           });
 
           expect(info).toHaveBeenCalledWith(
-            "A Store with name 'my-store' is currently running, check if you missed to implement ngOnDestroy for this store"
+            "A Store with name 'my-store' is currently running, check if you missed to implement ngOnDestroy for this store",
           );
         });
 
@@ -323,7 +351,7 @@ describe('Store', () => {
           });
 
           expect(reducerManager.addReducer.calls.argsFor(0)[0]).toBe(
-            'testStore'
+            'testStore',
           );
         });
         it('should not add an existing reducer to store', () => {
@@ -363,8 +391,8 @@ describe('Store', () => {
                 payload: {
                   ...getDefaultComponentLoadingState(),
                 },
-              })
-            )
+              }),
+            ),
           ).toEqual({});
         });
 
@@ -384,8 +412,8 @@ describe('Store', () => {
                   storeName: 'testStore',
                 })({
                   payload: { isLoading: true },
-                })
-              )
+                }),
+              ),
             ).toEqual({ isLoading: true });
           });
 
@@ -404,8 +432,8 @@ describe('Store', () => {
                   storeName: 'testStore',
                 })({
                   payload: defaultMyState,
-                })
-              )
+                }),
+              ),
             ).toEqual(defaultMyState);
           });
         });
@@ -445,7 +473,7 @@ describe('Store', () => {
                 ...defaultMyState,
                 myState: 'newValue',
               },
-            })
+            }),
           );
         });
 
@@ -460,7 +488,7 @@ describe('Store', () => {
           expect(state$).toBeObservable(
             cold('a', {
               a: defaultMyState,
-            })
+            }),
           );
         });
       });
@@ -481,7 +509,7 @@ describe('Store', () => {
 
           expect(sessionStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
             'testStore',
-            { ...defaultMyState, myState: 'test' }
+            { ...defaultMyState, myState: 'test' },
           );
         });
 
@@ -501,7 +529,7 @@ describe('Store', () => {
 
           expect(localStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
             'testStore',
-            { ...defaultMyState, myState: 'test' }
+            { ...defaultMyState, myState: 'test' },
           );
         });
       });
@@ -555,7 +583,7 @@ describe('Store', () => {
             getTestScheduler().run(({ flush }) => {
               flush();
               expect(reducerManager.removeReducer).toHaveBeenCalledWith(
-                'testStore'
+                'testStore',
               );
               expect(storeDevtools.sweep).toHaveBeenCalled();
             });
@@ -573,7 +601,7 @@ describe('Store', () => {
           myStore.ngOnDestroy();
 
           expect(reducerManager.removeReducer).toHaveBeenCalledWith(
-            'testStore'
+            'testStore',
           );
         });
       });
@@ -597,7 +625,7 @@ describe('Store', () => {
     });
 
     expect(() => getStore()).toThrow(
-      '@ngrx/store is not imported. Please install `@ngrx/store` and import `StoreModule.forRoot({})` in your root module'
+      '@ngrx/store is not imported. Please install `@ngrx/store` and import `StoreModule.forRoot({})` in your root module',
     );
   });
 });
@@ -607,7 +635,7 @@ describe('getStoreState', () => {
     const store = jasmine.createSpyObj<ComponentStore<{ myState: string }>>(
       'Store',
       { state: { myState: '' } },
-      {}
+      {},
     );
     expect(getStoreState(store)).toEqual({ myState: '' });
   });
@@ -620,7 +648,7 @@ describe('getStoreState', () => {
     }
 
     expect(
-      getStoreState(new Store() as unknown as ComponentStore<{ myState: '' }>)
+      getStoreState(new Store() as unknown as ComponentStore<{ myState: '' }>),
     ).toBeUndefined();
   });
 });

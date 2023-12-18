@@ -31,7 +31,7 @@ type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
 
 export const getStoreState = <STATE extends object>(
-  store: ComponentStore<STATE>
+  store: ComponentStore<STATE>,
 ): STATE | undefined => {
   try {
     return store.state();
@@ -56,9 +56,19 @@ export class Store {
     @Optional()
     @Inject(LocalStoragePlugin)
     private localStoragePlugin: ClientStoragePlugin,
-    @Optional() @Inject(INITIAL_OPTIONS) private config: StoreDevtoolsConfig
+    @Optional() @Inject(INITIAL_OPTIONS) private config: StoreDevtoolsConfig,
   ) {
     this.checkNgrxStoreIsInstalled();
+    this.showHintForLowDevTool();
+  }
+
+  private showHintForLowDevTool() {
+    const minDevToolLimit = 5;
+    if (this.config?.maxAge && this.config.maxAge < minDevToolLimit) {
+      console.warn(
+        `DevTool maxAge is set to a low value, please increase it to ${minDevToolLimit} or higher. This could lead to problems with the store.`,
+      );
+    }
   }
 
   public checkForTimeTravel(): void {
@@ -88,8 +98,8 @@ export class Store {
                 .filter((currentStoreName) => !!currentStoreName)
                 .filter(
                   (currentStoreName) =>
-                    !this.reducerManager.currentReducers[currentStoreName]
-                )
+                    !this.reducerManager.currentReducers[currentStoreName],
+                ),
             ),
           ];
           this.reducerManager.addReducers(
@@ -98,8 +108,8 @@ export class Store {
                 ...start,
                 [current]: this.getActionReducer(current, {}),
               }),
-              {}
-            )
+              {},
+            ),
           );
           this.storeDevtools.sweep();
         }
@@ -109,7 +119,7 @@ export class Store {
 
   public createStoreByStoreType<
     CREATED_STORE extends ComponentStore<STATE>,
-    STATE extends object
+    STATE extends object,
   >({
     additionalProviders = [],
     CreatedStore,
@@ -129,7 +139,7 @@ export class Store {
     const initialState = this.getInitialState<STATE>(
       storeName,
       defaultState,
-      storage
+      storage,
     );
     const store = Injector.create({
       providers: [
@@ -156,7 +166,7 @@ export class Store {
     if (isDevMode() && this.isStoreRunning(storeName)) {
       // eslint-disable-next-line no-restricted-syntax
       console.info(
-        `A Store with name '${storeName}' is currently running, check if you missed to implement ngOnDestroy for this store`
+        `A Store with name '${storeName}' is currently running, check if you missed to implement ngOnDestroy for this store`,
       );
     }
     this.currentRunningStores.push(storeName);
@@ -165,7 +175,7 @@ export class Store {
   private getInitialState<STATE>(
     storeName: string,
     defaultState: STATE,
-    storage?: StoragePluginTypes
+    storage?: StoragePluginTypes,
   ): STATE {
     return (
       this.getStoragePluginByKey(storage)?.getDefaultState(storeName) ||
@@ -174,7 +184,7 @@ export class Store {
   }
 
   private getStoragePluginByKey(
-    storage?: StoragePluginTypes
+    storage?: StoragePluginTypes,
   ): ClientStoragePlugin | undefined {
     if (storage === 'sessionStoragePlugin') return this.sessionStoragePlugin;
     if (storage === 'localStoragePlugin') return this.localStoragePlugin;
@@ -183,24 +193,24 @@ export class Store {
 
   private addStoreReducerToNgrx<STATE>(
     storeName: string,
-    initialState: STATE
+    initialState: STATE,
   ): void {
     if (this.reducerManager.currentReducers?.[storeName]) {
       return;
     }
     this.reducerManager.addReducer(
       storeName,
-      this.getActionReducer(storeName, initialState)
+      this.getActionReducer(storeName, initialState),
     );
   }
 
   private getActionReducer<STATE>(
     storeName: string,
-    initialState: STATE
+    initialState: STATE,
   ): ActionReducer<STATE, { payload: STATE; type: string }> {
     return (
       state: STATE = initialState,
-      action: { payload: STATE; type: string }
+      action: { payload: STATE; type: string },
     ): STATE =>
       this.isActionTypeForCurrentStore(action.type, storeName)
         ? action.payload
@@ -210,13 +220,13 @@ export class Store {
   private syncStoreChangesToClientStorage<STATE extends object>(
     storeName: string,
     store: ComponentStore<STATE>,
-    storage?: StoragePluginTypes
+    storage?: StoragePluginTypes,
   ) {
     store.state$.pipe(takeUntil(store.destroy$)).subscribe({
       next: (state) =>
         this.getStoragePluginByKey(storage)?.setStateToStorage(
           storeName,
-          state
+          state,
         ),
     });
   }
@@ -224,7 +234,7 @@ export class Store {
   private syncNgrxDevtoolStateToStore<STATE extends object>(
     storeName: string,
     store: ComponentStore<STATE>,
-    skipLogForStore?: boolean
+    skipLogForStore?: boolean,
   ) {
     if (skipLogForStore) return;
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
@@ -241,7 +251,7 @@ export class Store {
             {
               skipLog: true,
               forced: true,
-            }
+            },
           );
         }
       },
@@ -250,15 +260,15 @@ export class Store {
 
   private removeReducerAfterDestroy<STATE extends object>(
     storeName: string,
-    store: ComponentStore<STATE>
+    store: ComponentStore<STATE>,
   ) {
     store.destroy$
       .pipe(
         tap(
           () =>
             (this.currentRunningStores = this.currentRunningStores.filter(
-              (name) => storeName !== name
-            ))
+              (name) => storeName !== name,
+            )),
         ),
         filter(() => !this.devToolHelper.isTimeTravelActive()),
         switchMap(() => this.storeDevtools?.liftedState || of({})),
@@ -267,9 +277,9 @@ export class Store {
         filter(
           (actionsById) =>
             !this.hasLiftedStateCurrentStoreActions(actionsById, storeName) &&
-            !this.isStoreRunning(storeName)
+            !this.isStoreRunning(storeName),
         ),
-        take(1)
+        take(1),
       )
       .subscribe(() => {
         this.reducerManager.removeReducer(storeName);
@@ -283,21 +293,21 @@ export class Store {
 
   private hasLiftedStateCurrentStoreActions(
     liftedActions: LiftedActions,
-    storeName: string
+    storeName: string,
   ): boolean {
     return Object.keys(liftedActions)
       .map((actionId) =>
         this.isActionTypeForCurrentStore(
           liftedActions[parseInt(actionId)].action.type,
-          storeName
-        )
+          storeName,
+        ),
       )
       .includes(true);
   }
 
   private isActionTypeForCurrentStore(
     actionType: string,
-    storeName: string
+    storeName: string,
   ): boolean {
     return actionType.startsWith(`[COMPONENT_STORE][${storeName}]`);
   }
