@@ -1,17 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { tapResponse } from '@ngrx/component-store';
-import { Actions } from '@ngrx/effects';
-import { Store as NgrxStore } from '@ngrx/store';
 import { Observable, filter, pairwise, startWith, switchMap } from 'rxjs';
 import { EffectStates } from '../../enums/effect-states.enum';
-import {
-  SkipLogForStore,
-  StateToken,
-  StoreNameToken,
-} from '../../injection-tokens/state.token';
+import { StateToken } from '../../injection-tokens/state.token';
 import { LoadingStoreState } from '../../models';
 import { getEffectActionName } from '../action-creator';
-import { DevToolHelper } from '../dev-tool-helper.service';
 import { ComponentStore } from './component-store.service';
 
 export const getDefaultComponentLoadingState = <ITEM, ERROR>(
@@ -27,15 +20,8 @@ export const getDefaultComponentLoadingState = <ITEM, ERROR>(
 export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   LoadingStoreState<ITEM, ERROR>
 > {
-  constructor(
-    actions: Actions,
-    ngrxStore: NgrxStore,
-    devToolHelper: DevToolHelper,
-    @Inject(StoreNameToken) storeName: string,
-    @Inject(StateToken) state: LoadingStoreState<ITEM, ERROR>,
-    @Inject(SkipLogForStore) skipLogForStore: boolean,
-  ) {
-    super(actions, ngrxStore, devToolHelper, skipLogForStore, storeName, state);
+  constructor(@Inject(StateToken) state: LoadingStoreState<ITEM, ERROR>) {
+    super(state);
   }
   private hasPendingEffect = false;
 

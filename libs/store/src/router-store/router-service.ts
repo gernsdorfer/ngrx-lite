@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, filter, from, map, switchMap, takeUntil } from 'rxjs';
 import { StoreFactory } from '../services';
 
 @Injectable({ providedIn: 'root' })
 export class RouterStore {
+  private storeFactory = inject(StoreFactory);
+  private router = inject(Router);
+
   private store = this.storeFactory.createComponentStore<{ url?: string }>({
     storeName: 'ROUTER_STORE',
     defaultState: {
@@ -13,11 +16,6 @@ export class RouterStore {
   });
 
   public state$ = this.store.state$;
-
-  constructor(
-    private storeFactory: StoreFactory,
-    private router: Router,
-  ) {}
 
   init() {
     this.router.events

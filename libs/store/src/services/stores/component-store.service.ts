@@ -1,8 +1,8 @@
-import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
+import { Inject, inject, Injectable, OnDestroy } from '@angular/core';
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
 import { Actions } from '@ngrx/effects';
 import { Action, Store as NgrxStore } from '@ngrx/store';
-import { Observable, Subject, asapScheduler, takeUntil } from 'rxjs';
+import { asapScheduler, Observable, Subject, takeUntil } from 'rxjs';
 import {
   SkipLogForStore,
   StateToken,
@@ -16,14 +16,13 @@ export class ComponentStore<STATE extends object>
   extends NgrxComponentStore<STATE>
   implements OnDestroy
 {
-  constructor(
-    @Optional() protected actions: Actions,
-    protected ngrxStore: NgrxStore,
-    protected devToolHelper: DevToolHelper,
-    @Inject(SkipLogForStore) protected skipLogForStore: boolean,
-    @Inject(StoreNameToken) protected storeName: string,
-    @Inject(StateToken) state: STATE,
-  ) {
+  protected actions = inject(Actions);
+  protected ngrxStore = inject(NgrxStore);
+  protected devToolHelper = inject(DevToolHelper);
+  protected skipLogForStore = inject(SkipLogForStore);
+  protected storeName = inject(StoreNameToken);
+
+  constructor(@Inject(StateToken) state: STATE) {
     super(state);
     if (!this.devToolHelper.isTimeTravelActive()) {
       this.dispatchCustomAction('init', state);
