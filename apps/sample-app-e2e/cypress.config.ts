@@ -17,6 +17,7 @@ export default defineConfig({
   e2e: {
     ...nxE2EPreset(__dirname),
     ...cypressJsonConfig,
+
     /**
      * TODO(@nx/cypress): In Cypress v12,the testIsolation option is turned on by default.
      * This can cause tests to start breaking where not indended.
