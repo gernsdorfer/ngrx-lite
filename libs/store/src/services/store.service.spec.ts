@@ -9,7 +9,7 @@ import { LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 import { provideMockStore } from '@ngrx/store/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
-import { EMPTY, defer, of } from 'rxjs';
+import { of } from 'rxjs';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import { ClientStoragePlugin } from '../models';
 import { getCustomAction } from '../services/action-creator';
@@ -17,6 +17,8 @@ import { DevToolHelper } from './dev-tool-helper.service';
 import { Store, getStoreState } from './store.service';
 import { getDefaultComponentLoadingState } from './stores/component-loading-store.service';
 import { ComponentStore } from './stores/component-store.service';
+import SpyObj = jasmine.SpyObj;
+import createSpyObj = jasmine.createSpyObj;
 
 interface MyState {
   myState: string;
@@ -26,35 +28,20 @@ interface MyState {
 const defaultMyState: MyState = { myState: '' };
 
 describe('Store', () => {
-  const sessionStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
-    'SessionStoragePlugin',
-    {
-      getDefaultState: <MyState>{ myState: '' },
-      setStateToStorage: undefined,
-    },
-  );
+  const getStoreDevtoolsSpy = ({
+    liftedState,
+  }: {
+    liftedState?: StoreDevtools['liftedState'];
+  } = {}): SpyObj<StoreDevtools> =>
+    jasmine.createSpyObj<StoreDevtools>(
+      {
+        sweep: undefined,
+      },
+      {
+        liftedState: liftedState,
+      },
+    );
 
-  let liftedState$: StoreDevtools['liftedState'] = EMPTY;
-  const storeDevtools = jasmine.createSpyObj<StoreDevtools>(
-    'storeDevtools',
-    {
-      sweep: undefined,
-    },
-    {
-      liftedState: defer(() => liftedState$),
-    },
-  );
-  const devToolHelper = jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
-    isTimeTravelActive: false,
-    setTimeTravelActive: undefined,
-  });
-  const localStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>(
-    'LocalStoragePlugin',
-    {
-      getDefaultState: <MyState>{ myState: '' },
-      setStateToStorage: undefined,
-    },
-  );
   const reducerManager = jasmine.createSpyObj<ReducerManager>(
     'ReducerManager',
     {
@@ -68,313 +55,286 @@ describe('Store', () => {
       },
     },
   );
-  const getStore = (): Store => TestBed.inject(Store);
+  const getStore = (providers: TestModuleMetadata['providers'] = []): Store =>
+    TestBed.configureTestingModule({
+      providers: [
+        Store,
 
-  describe('minimal Dependencies are available', () => {
-    const getStore = (providers: TestModuleMetadata['providers'] = []): Store =>
-      TestBed.configureTestingModule({
-        providers: [
-          Store,
-
-          provideMockStore({
-            initialState: {},
-          }),
-          {
-            provide: DevToolHelper,
-            useValue: devToolHelper,
-          },
-
-          {
-            provide: ScannedActionsSubject,
-            useValue: {},
-          },
-          {
-            provide: ReducerManager,
-            useValue: reducerManager,
-          },
-          ...providers,
-        ],
-        teardown: { destroyAfterEach: false },
-      }).inject(Store);
-
-    beforeEach(() => {
-      devToolHelper.isTimeTravelActive.and.returnValue(false);
-      liftedState$ = EMPTY;
-    });
-
-    it('should not show an Error for checkForTimeTravel', () => {
-      const store = getStore();
-
-      expect(() => store.checkForTimeTravel()).not.toThrowError();
-    });
-
-    it('should not show an Error for addReducersForImportedState', () => {
-      const store = getStore();
-
-      expect(() => store.addReducersForImportState()).not.toThrowError();
-    });
-
-    it('should create a componentStore without errors', () => {
-      const store = getStore();
-
-      expect(() =>
-        store.createStoreByStoreType({
-          storeName: 'myStore',
-          plugins: {},
-          defaultState: defaultMyState,
-          CreatedStore: ComponentStore,
+        provideMockStore({
+          initialState: {},
         }),
-      ).not.toThrowError();
-    });
 
-    it('should show warning Message if devtool maxAge is too low', () => {
-      const spyWarn = spyOn(console, 'warn');
-      getStore([
         {
-          provide: INITIAL_OPTIONS,
-          useValue: jasmine.createSpyObj<StoreDevtoolsConfig>(
-            {},
-            { maxAge: 4 },
-          ),
+          provide: ScannedActionsSubject,
+          useValue: {},
         },
-      ]);
+        {
+          provide: ReducerManager,
+          useValue: reducerManager,
+        },
 
-      expect(spyWarn).toHaveBeenCalledWith(
-        'DevTool maxAge is set to a low value, please increase it to 5 or higher. This could lead to problems with the store.',
-      );
-    });
+        ...providers,
+      ],
+      teardown: { destroyAfterEach: false },
+    }).inject(Store);
+
+  it('should not show an Error for checkForTimeTravel', () => {
+    expect(() => getStore().checkForTimeTravel()).not.toThrowError();
   });
 
-  describe('All Dependencies are available', () => {
-    beforeEach(() => {
-      devToolHelper.isTimeTravelActive.and.returnValue(false);
-      liftedState$ = EMPTY;
-      TestBed.configureTestingModule({
-        providers: [
-          Store,
-          {
-            provide: SessionStoragePlugin,
-            useValue: sessionStoragePlugin,
-          },
-          {
-            provide: ScannedActionsSubject,
-            useValue: {},
-          },
-          {
-            provide: DevToolHelper,
-            useValue: devToolHelper,
-          },
-          {
-            provide: StoreDevtools,
-            useValue: storeDevtools,
-          },
-          {
-            provide: LocalStoragePlugin,
-            useValue: localStoragePlugin,
-          },
-          provideMockStore({
-            initialState: {},
-          }),
-          {
-            provide: ReducerManager,
-            useValue: reducerManager,
-          },
-        ],
-        teardown: { destroyAfterEach: false },
-      });
+  it('should not show an Error for addReducersForImportedState', () => {
+    expect(() => getStore().addReducersForImportState()).not.toThrowError();
+  });
+
+  it('should create a componentStore without errors', () => {
+    expect(() =>
+      getStore().createStoreByStoreType({
+        storeName: 'myStore',
+        plugins: {},
+        defaultState: defaultMyState,
+        CreatedStore: ComponentStore,
+      }),
+    ).not.toThrowError();
+  });
+
+  it('should show warning Message if devtool maxAge is too low', () => {
+    const spyWarn = spyOn(console, 'warn');
+    getStore([
+      {
+        provide: INITIAL_OPTIONS,
+        useValue: jasmine.createSpyObj<StoreDevtoolsConfig>({}, { maxAge: 4 }),
+      },
+    ]);
+
+    expect(spyWarn).toHaveBeenCalledWith(
+      'DevTool maxAge is set to a low value, please increase it to 5 or higher. This could lead to problems with the store.',
+    );
+  });
+
+  it('should show error Message if @ngrx/store is not imported', () => {
+    expect(() =>
+      getStore([
+        {
+          provide: ReducerManager,
+          useValue: undefined,
+        },
+      ]),
+    ).toThrow(
+      '@ngrx/store is not imported. Please install `@ngrx/store` and import `StoreModule.forRoot({})` in your root module',
+    );
+  });
+
+  it('should set timeTravelActive to false', () => {
+    const devToolHelper = jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
+      isTimeTravelActive: false,
+      setTimeTravelActive: undefined,
     });
 
-    describe('checkForTimeTravel', () => {
-      it('should set timeTravelActive to false', () => {
-        liftedState$ = of(
-          jasmine.createSpyObj<LiftedState>(
-            'liftedState',
-            {},
-            {
-              currentStateIndex: 1,
+    const store = getStore([
+      {
+        provide: StoreDevtools,
+        useValue: getStoreDevtoolsSpy({
+          liftedState: of(
+            jasmine.createSpyObj<LiftedState>(
+              'liftedState',
+              {},
+              {
+                currentStateIndex: 1,
+                stagedActionIds: [1, 2, 3],
+              },
+            ),
+          ),
+        }),
+      },
+      { provide: DevToolHelper, useValue: devToolHelper },
+    ]);
+
+    store.checkForTimeTravel();
+
+    expect(devToolHelper.setTimeTravelActive).toHaveBeenCalledWith(true);
+  });
+
+  it('should add new component reducers', () => {
+    reducerManager.addReducer.calls.reset();
+    const getLiftestState = (
+      monitorState: LiftedState['monitorState'],
+    ): SpyObj<LiftedState> =>
+      createSpyObj<LiftedState>(
+        {},
+        {
+          monitorState: monitorState,
+        },
+      );
+    const storeDevtools = jasmine.createSpyObj<StoreDevtools>(
+      'storeDevtools',
+      {
+        sweep: undefined,
+      },
+      {
+        liftedState: of(
+          getLiftestState(null),
+          getLiftestState({
+            type: 'IMPORT_STATE',
+            nextLiftedState: {
               stagedActionIds: [1, 2, 3],
-            },
-          ),
-        );
-
-        devToolHelper.setTimeTravelActive.calls.reset();
-
-        getStore().checkForTimeTravel();
-
-        expect(devToolHelper.setTimeTravelActive).toHaveBeenCalledWith(true);
-      });
-    });
-
-    describe('addReducersForImportState', () => {
-      it('should add new component reducers', () => {
-        liftedState$ = of(
-          jasmine.createSpyObj<LiftedState>(
-            'liftedState',
-            {},
-            {
-              monitorState: null,
-            },
-          ),
-          jasmine.createSpyObj<LiftedState>(
-            'liftedState',
-            {},
-            {
-              monitorState: <Partial<LiftedState>>{
-                type: 'IMPORT_STATE',
-                nextLiftedState: {
-                  stagedActionIds: [1, 2, 3],
-                  actionsById: {
-                    1: {
-                      type: 'PERFORM_ACTION',
-                      action: {
-                        type: 'otherStore',
-                      },
-                    },
-                    2: {
-                      type: 'PERFORM_ACTION',
-                      action: {
-                        type: getCustomAction({ storeName: 'oldStore' }).type,
-                      },
-                    },
-                    3: {
-                      type: 'PERFORM_ACTION',
-                      action: {
-                        type: getCustomAction({ storeName: 'NEW_STORE' }).type,
-                      },
-                    },
+              actionsById: {
+                1: {
+                  type: 'PERFORM_ACTION',
+                  action: {
+                    type: 'otherStore',
+                  },
+                },
+                2: {
+                  type: 'PERFORM_ACTION',
+                  action: {
+                    type: getCustomAction({ storeName: 'oldStore' }).type,
+                  },
+                },
+                3: {
+                  type: 'PERFORM_ACTION',
+                  action: {
+                    type: getCustomAction({
+                      storeName: 'NEW_STORE',
+                    }).type,
                   },
                 },
               },
             },
+          }),
+        ),
+      },
+    );
+    const store = getStore([
+      { provide: StoreDevtools, useValue: getStoreDevtoolsSpy() },
+      {
+        provide: StoreDevtools,
+        useValue: storeDevtools,
+      },
+    ]);
+
+    store.addReducersForImportState();
+
+    expect(reducerManager.addReducers).toHaveBeenCalledWith({
+      NEW_STORE: jasmine.any(Function),
+    });
+
+    expect(storeDevtools.sweep).toHaveBeenCalled();
+  });
+
+  it('should show hint for multiple store initialisations', () => {
+    const store = getStore([]);
+    const info = spyOn(console, 'info');
+
+    store.createStoreByStoreType({
+      storeName: 'my-store',
+      defaultState: {},
+      CreatedStore: ComponentStore,
+    });
+    store.createStoreByStoreType({
+      storeName: 'my-store',
+      defaultState: {},
+      CreatedStore: ComponentStore,
+    });
+
+    expect(info).toHaveBeenCalledWith(
+      "A Store with name 'my-store' is currently running, check if you missed to implement ngOnDestroy for this store",
+    );
+  });
+
+  it('should return default initial state', () => {
+    const { state } = getStore().createStoreByStoreType({
+      storeName: 'myStore',
+      plugins: {},
+      defaultState: defaultMyState,
+      CreatedStore: ComponentStore,
+    });
+
+    expect(state()).toEqual(defaultMyState);
+  });
+
+  it('should return state from sessionStorage plugin', () => {
+    const { state } = getStore([
+      {
+        provide: LocalStoragePlugin,
+        useValue: jasmine.createSpyObj<ClientStoragePlugin>({
+          getDefaultState: <MyState>{
+            myState: '',
+            optionalValue: 'testDataFromLocalStorage',
+          },
+          setStateToStorage: undefined,
+        }),
+      },
+    ]).createStoreByStoreType({
+      storeName: 'myStore',
+      defaultState: defaultMyState,
+      plugins: {
+        storage: 'localStoragePlugin',
+      },
+      CreatedStore: ComponentStore,
+    });
+
+    expect(state()).toEqual({
+      ...defaultMyState,
+      optionalValue: 'testDataFromLocalStorage',
+    });
+  });
+
+  describe('ngrxStore', () => {
+    it('should add add for store', () => {
+      reducerManager.addReducer.calls.reset();
+
+      getStore().createStoreByStoreType({
+        storeName: 'testStore',
+        defaultState: defaultMyState,
+        CreatedStore: ComponentStore,
+      });
+
+      expect(reducerManager.addReducer.calls.argsFor(0)[0]).toBe('testStore');
+    });
+
+    it('should not add an existing reducer to store', () => {
+      reducerManager.addReducer.calls.reset();
+
+      getStore().createStoreByStoreType({
+        storeName: 'oldStore',
+        defaultState: defaultMyState,
+        CreatedStore: ComponentStore,
+      });
+
+      expect(reducerManager.addReducer).not.toHaveBeenCalled();
+    });
+
+    describe('add state to ngrx/store', () => {
+      let actionReducer: ActionReducer<unknown, Action>;
+      beforeEach(() => {
+        reducerManager.addReducer.and.callFake((name, callback) => {
+          actionReducer = callback;
+        });
+      });
+      it('should ignore action from other store', () => {
+        getStore().createStoreByStoreType({
+          storeName: 'testStore',
+          defaultState: defaultMyState,
+          CreatedStore: ComponentStore,
+        });
+
+        expect(
+          actionReducer(
+            {},
+            getCustomAction({
+              actionName: 'myAction',
+              storeName: 'otherStore',
+            })({
+              payload: {
+                ...getDefaultComponentLoadingState(),
+              },
+            }),
           ),
-        );
-
-        reducerManager.addReducer.calls.reset();
-
-        getStore().addReducersForImportState();
-
-        expect(reducerManager.addReducers).toHaveBeenCalledWith({
-          NEW_STORE: jasmine.any(Function),
-        });
-
-        expect(storeDevtools.sweep).toHaveBeenCalled();
-      });
-    });
-
-    describe('createStoreByStoreType', () => {
-      describe('initialState', () => {
-        beforeEach(() => {
-          localStoragePlugin.getDefaultState.and.returnValue(<MyState>{
-            ...defaultMyState,
-            optionalValue: 'testDataFromLocalStorage',
-          });
-          sessionStoragePlugin.getDefaultState.and.returnValue(<MyState>{
-            ...defaultMyState,
-            optionalValue: 'testDataFromSessionStorage',
-          });
-        });
-
-        it('should show hint for multiple store initialisations', () => {
-          const store = getStore();
-          const info = spyOn(console, 'info');
-
-          store.createStoreByStoreType({
-            storeName: 'my-store',
-            defaultState: {},
-            CreatedStore: ComponentStore,
-          });
-          store.createStoreByStoreType({
-            storeName: 'my-store',
-            defaultState: {},
-            CreatedStore: ComponentStore,
-          });
-
-          expect(info).toHaveBeenCalledWith(
-            "A Store with name 'my-store' is currently running, check if you missed to implement ngOnDestroy for this store",
-          );
-        });
-
-        it('should return default initial state', () => {
-          const { state } = getStore().createStoreByStoreType({
-            storeName: 'myStore',
-            plugins: {},
-            defaultState: defaultMyState,
-            CreatedStore: ComponentStore,
-          });
-
-          expect(state()).toEqual(defaultMyState);
-        });
-
-        it('should return state from sessionStorage plugin', () => {
-          const { state } = getStore().createStoreByStoreType({
-            storeName: 'myStore',
-            defaultState: defaultMyState,
-            plugins: {
-              storage: 'sessionStoragePlugin',
-            },
-            CreatedStore: ComponentStore,
-          });
-
-          expect(state()).toEqual({
-            ...defaultMyState,
-            optionalValue: 'testDataFromSessionStorage',
-          });
-        });
-
-        it('should return state from localeStorage plugin', () => {
-          const { state } = getStore().createStoreByStoreType({
-            storeName: 'myStore',
-            defaultState: defaultMyState,
-            plugins: {
-              storage: 'localStoragePlugin',
-            },
-            CreatedStore: ComponentStore,
-          });
-
-          expect(state()).toEqual({
-            ...defaultMyState,
-            optionalValue: 'testDataFromLocalStorage',
-          });
-        });
-      });
-    });
-
-    describe('ngrxStore', () => {
-      describe('add store to reducerManager', () => {
-        it('should add add for store', () => {
-          reducerManager.addReducer.calls.reset();
-
-          getStore().createStoreByStoreType({
-            storeName: 'testStore',
-            defaultState: defaultMyState,
-            CreatedStore: ComponentStore,
-          });
-
-          expect(reducerManager.addReducer.calls.argsFor(0)[0]).toBe(
-            'testStore',
-          );
-        });
-        it('should not add an existing reducer to store', () => {
-          reducerManager.addReducer.calls.reset();
-
-          getStore().createStoreByStoreType({
-            storeName: 'oldStore',
-            defaultState: defaultMyState,
-            CreatedStore: ComponentStore,
-          });
-
-          expect(reducerManager.addReducer).not.toHaveBeenCalled();
-        });
+        ).toEqual({});
       });
 
-      describe('add state to ngrx/store', () => {
-        let actionReducer: ActionReducer<unknown, Action>;
-        beforeEach(() => {
-          reducerManager.addReducer.and.callFake((name, callback) => {
-            actionReducer = callback;
-          });
-        });
-        it('should ignore action from other store', () => {
+      describe('action is current store action', () => {
+        it('should set payload', () => {
           getStore().createStoreByStoreType({
             storeName: 'testStore',
             defaultState: defaultMyState,
@@ -383,171 +343,216 @@ describe('Store', () => {
 
           expect(
             actionReducer(
-              {},
+              { item: 'test' },
               getCustomAction({
-                actionName: 'myAction',
-                storeName: 'otherStore',
+                actionName: 'LOAD',
+                storeName: 'testStore',
               })({
-                payload: {
-                  ...getDefaultComponentLoadingState(),
-                },
+                payload: { isLoading: true },
               }),
             ),
-          ).toEqual({});
+          ).toEqual({ isLoading: true });
         });
 
-        describe('action is current store action', () => {
-          it('should set payload', () => {
-            getStore().createStoreByStoreType({
-              storeName: 'testStore',
-              defaultState: defaultMyState,
-              CreatedStore: ComponentStore,
-            });
-
-            expect(
-              actionReducer(
-                { item: 'test' },
-                getCustomAction({
-                  actionName: 'LOAD',
-                  storeName: 'testStore',
-                })({
-                  payload: { isLoading: true },
-                }),
-              ),
-            ).toEqual({ isLoading: true });
+        it('should return merge default state with payload', () => {
+          getStore().createStoreByStoreType({
+            storeName: 'testStore',
+            defaultState: defaultMyState,
+            CreatedStore: ComponentStore,
           });
 
-          it('should return merge default state with payload', () => {
-            getStore().createStoreByStoreType({
-              storeName: 'testStore',
-              defaultState: defaultMyState,
-              CreatedStore: ComponentStore,
-            });
-
-            expect(
-              actionReducer(
-                undefined,
-                getCustomAction({
-                  actionName: 'LOAD',
-                  storeName: 'testStore',
-                })({
-                  payload: defaultMyState,
-                }),
-              ),
-            ).toEqual(defaultMyState);
-          });
+          expect(
+            actionReducer(
+              undefined,
+              getCustomAction({
+                actionName: 'LOAD',
+                storeName: 'testStore',
+              })({
+                payload: defaultMyState,
+              }),
+            ),
+          ).toEqual(defaultMyState);
         });
       });
+    });
 
-      describe('set state from storeDevtools', () => {
-        beforeEach(() => {
-          devToolHelper.isTimeTravelActive.and.returnValue(true);
-          liftedState$ = cold('a', {
-            a: <Partial<LiftedState>>{
-              computedStates: [
-                {
-                  state: {
-                    myStore: <MyState>{
-                      ...defaultMyState,
-                      myState: 'newValue',
+    describe('set state from storeDevtools', () => {
+      let store: Store;
+      beforeEach(() => {
+        store = getStore([
+          {
+            provide: DevToolHelper,
+            useValue: jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
+              isTimeTravelActive: true,
+              setTimeTravelActive: undefined,
+            }),
+          },
+
+          {
+            provide: StoreDevtools,
+            useValue: getStoreDevtoolsSpy({
+              liftedState: cold('a', {
+                a: <Partial<LiftedState>>{
+                  computedStates: [
+                    {
+                      state: {
+                        myStore: <MyState>{
+                          ...defaultMyState,
+                          myState: 'newValue',
+                        },
+                      },
                     },
-                  },
+                  ],
+                  currentStateIndex: 0,
+                  stagedActionIds: [0, 1, 2],
                 },
-              ],
-              currentStateIndex: 0,
-              stagedActionIds: [0, 1, 2],
-            },
-          });
+              }),
+            }),
+          },
+        ]);
+      });
+
+      it('should set stateChanges to store', () => {
+        const { state$ } = store.createStoreByStoreType({
+          storeName: 'myStore',
+          defaultState: defaultMyState,
+          CreatedStore: ComponentStore,
         });
 
-        it('should set stateChanges to store', () => {
-          const { state$ } = getStore().createStoreByStoreType({
-            storeName: 'myStore',
-            defaultState: defaultMyState,
-            CreatedStore: ComponentStore,
-          });
+        expect(state$).toBeObservable(
+          cold('a', {
+            a: {
+              ...defaultMyState,
+              myState: 'newValue',
+            },
+          }),
+        );
+      });
 
-          expect(state$).toBeObservable(
-            cold('a', {
-              a: {
-                ...defaultMyState,
-                myState: 'newValue',
+      it('should not set stateChanges to store for stores with skipLog option', () => {
+        const { state$ } = store.createStoreByStoreType({
+          storeName: 'myStore',
+          defaultState: defaultMyState,
+          CreatedStore: ComponentStore,
+          skipLogForStore: true,
+        });
+
+        expect(state$).toBeObservable(
+          cold('a', {
+            a: defaultMyState,
+          }),
+        );
+      });
+    });
+
+    describe('store state changes to ClientStoragePlugins', () => {
+      it('should return state from sessionStorage plugin', () => {
+        const { state } = getStore([
+          {
+            provide: SessionStoragePlugin,
+            useValue: jasmine.createSpyObj<ClientStoragePlugin>({
+              getDefaultState: <MyState>{
+                myState: '',
+                optionalValue: 'testDataFromSessionStorage',
               },
+              setStateToStorage: undefined,
             }),
-          );
+          },
+        ]).createStoreByStoreType({
+          storeName: 'myStore',
+          defaultState: defaultMyState,
+          plugins: {
+            storage: 'sessionStoragePlugin',
+          },
+          CreatedStore: ComponentStore,
         });
 
-        it('should not set stateChanges to store for stores with skipLog option', () => {
-          const { state$ } = getStore().createStoreByStoreType({
-            storeName: 'myStore',
-            defaultState: defaultMyState,
-            CreatedStore: ComponentStore,
-            skipLogForStore: true,
-          });
-
-          expect(state$).toBeObservable(
-            cold('a', {
-              a: defaultMyState,
-            }),
-          );
+        expect(state()).toEqual({
+          ...defaultMyState,
+          optionalValue: 'testDataFromSessionStorage',
         });
       });
 
-      describe('store state changes to ClientStoragePlugins', () => {
-        it('should store changes to session storage', () => {
-          const myStore = getStore().createStoreByStoreType({
-            storeName: 'testStore',
-            defaultState: defaultMyState,
-            plugins: {
-              storage: 'sessionStoragePlugin',
-            },
-            CreatedStore: ComponentStore,
-          });
-
-          sessionStoragePlugin.setStateToStorage.calls.reset();
-          myStore.setState({ ...defaultMyState, myState: 'test' });
-
-          expect(sessionStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
-            'testStore',
-            { ...defaultMyState, myState: 'test' },
-          );
+      it('should store changes to session storage', () => {
+        const sessionStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>({
+          getDefaultState: <MyState>{
+            myState: '',
+            optionalValue: 'testDataFromSessionStorage',
+          },
+          setStateToStorage: undefined,
+        });
+        const myStore = getStore([
+          {
+            provide: SessionStoragePlugin,
+            useValue: sessionStoragePlugin,
+          },
+        ]).createStoreByStoreType({
+          storeName: 'testStore',
+          defaultState: defaultMyState,
+          plugins: {
+            storage: 'sessionStoragePlugin',
+          },
+          CreatedStore: ComponentStore,
         });
 
-        it('should store changes to localStorage storage', () => {
-          const myStore = getStore().createStoreByStoreType({
-            storeName: 'testStore',
-            defaultState: defaultMyState,
-            plugins: {
-              storage: 'localStoragePlugin',
-            },
-            CreatedStore: ComponentStore,
-          });
+        myStore.setState({ ...defaultMyState, myState: 'test' });
 
-          localStoragePlugin.setStateToStorage.calls.reset();
-
-          myStore.setState({ ...defaultMyState, myState: 'test' });
-
-          expect(localStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
-            'testStore',
-            { ...defaultMyState, myState: 'test' },
-          );
-        });
+        expect(sessionStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
+          'testStore',
+          { ...defaultMyState, myState: 'test' },
+        );
       });
 
-      describe('remove reducer, after destroy', () => {
-        describe('devtools are available', () => {
-          let myStore: ComponentStore<MyState>;
-          beforeEach(() => {
-            reducerManager.removeReducer.calls.reset();
+      it('should store changes to localStorage storage', () => {
+        const localStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>({
+          getDefaultState: <MyState>{
+            myState: '',
+            optionalValue: 'testDataFromSessionStorage',
+          },
+          setStateToStorage: undefined,
+        });
 
-            myStore = getStore().createStoreByStoreType({
-              storeName: 'testStore',
-              defaultState: defaultMyState,
-              CreatedStore: ComponentStore,
-            });
+        const myStore = getStore([
+          {
+            provide: LocalStoragePlugin,
+            useValue: localStoragePlugin,
+          },
+        ]).createStoreByStoreType({
+          storeName: 'testStore',
+          defaultState: defaultMyState,
+          plugins: {
+            storage: 'localStoragePlugin',
+          },
+          CreatedStore: ComponentStore,
+        });
+
+        myStore.setState({ ...defaultMyState, myState: 'test' });
+
+        expect(localStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
+          'testStore',
+          { ...defaultMyState, myState: 'test' },
+        );
+      });
+    });
+
+    describe('remove reducer, after destroy', () => {
+      describe('devtools are available', () => {
+        let getComponentStore = (
+          storeDevTools: StoreDevtools,
+        ): ComponentStore<MyState> =>
+          getStore([
+            { provide: StoreDevtools, useValue: storeDevTools },
+          ]).createStoreByStoreType({
+            storeName: 'testStore',
+            defaultState: defaultMyState,
+            CreatedStore: ComponentStore,
           });
-          it('should not remove the reducer, when store actions included in the liftedState', () => {
-            liftedState$ = cold('a', {
+        beforeEach(() => {
+          reducerManager.removeReducer.calls.reset();
+        });
+        it('should not remove the reducer, when store actions included in the liftedState', () => {
+          const storeDevtools = getStoreDevtoolsSpy({
+            liftedState: cold('a', {
               a: <Partial<LiftedState>>{
                 actionsById: {
                   [1]: {
@@ -558,16 +563,21 @@ describe('Store', () => {
                   },
                 },
               },
-            });
-            myStore.ngOnDestroy();
-            getTestScheduler().run(({ flush }) => {
-              flush();
-              expect(reducerManager.removeReducer).not.toHaveBeenCalled();
-            });
+            }),
           });
 
-          it('should remove the reducer, when no store actions included in the liftedState', () => {
-            liftedState$ = cold('a', {
+          const component = getComponentStore(storeDevtools);
+
+          component.ngOnDestroy();
+          getTestScheduler().run(({ flush }) => {
+            flush();
+            expect(reducerManager.removeReducer).not.toHaveBeenCalled();
+          });
+        });
+
+        it('should remove the reducer, when no store actions included in the liftedState', () => {
+          const storeDevtools = getStoreDevtoolsSpy({
+            liftedState: cold('a', {
               a: <Partial<LiftedState>>{
                 actionsById: {
                   [1]: {
@@ -578,55 +588,34 @@ describe('Store', () => {
                   },
                 },
               },
-            });
-            myStore.ngOnDestroy();
-            getTestScheduler().run(({ flush }) => {
-              flush();
-              expect(reducerManager.removeReducer).toHaveBeenCalledWith(
-                'testStore',
-              );
-              expect(storeDevtools.sweep).toHaveBeenCalled();
-            });
+            }),
           });
-        });
+          const component = getComponentStore(storeDevtools);
 
-        it('should immediately remove the reducer, when devtools are not available', () => {
-          TestBed.overrideProvider(StoreDevtools, { useValue: null });
-
-          const myStore = getStore().createStoreByStoreType({
-            storeName: 'testStore',
-            defaultState: defaultMyState,
-            CreatedStore: ComponentStore,
+          component.ngOnDestroy();
+          getTestScheduler().run(({ flush }) => {
+            flush();
+            expect(reducerManager.removeReducer).toHaveBeenCalledWith(
+              'testStore',
+            );
+            expect(storeDevtools.sweep).toHaveBeenCalled();
           });
-          myStore.ngOnDestroy();
-
-          expect(reducerManager.removeReducer).toHaveBeenCalledWith(
-            'testStore',
-          );
         });
       });
-    });
-  });
 
-  it('should show error Message if @ngrx/store is not imported', () => {
-    TestBed.configureTestingModule({
-      providers: [
-        Store,
-        {
-          provide: ScannedActionsSubject,
-          useValue: {},
-        },
-        {
-          provide: DevToolHelper,
-          useValue: devToolHelper,
-        },
-      ],
-      teardown: { destroyAfterEach: false },
-    });
+      it('should immediately remove the reducer, when devtools are not available', () => {
+        TestBed.overrideProvider(StoreDevtools, { useValue: null });
 
-    expect(() => getStore()).toThrow(
-      '@ngrx/store is not imported. Please install `@ngrx/store` and import `StoreModule.forRoot({})` in your root module',
-    );
+        const myStore = getStore().createStoreByStoreType({
+          storeName: 'testStore',
+          defaultState: defaultMyState,
+          CreatedStore: ComponentStore,
+        });
+        myStore.ngOnDestroy();
+
+        expect(reducerManager.removeReducer).toHaveBeenCalledWith('testStore');
+      });
+    });
   });
 });
 
