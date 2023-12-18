@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  Injector,
-  isDevMode,
-  Optional,
-} from '@angular/core';
+import { inject, Injectable, Injector, isDevMode } from '@angular/core';
 
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import {
@@ -17,11 +11,7 @@ import { ComponentLoadingStore } from './stores/component-loading-store.service'
 
 import { Actions } from '@ngrx/effects';
 import { ActionReducer, Store as NgrxStore, ReducerManager } from '@ngrx/store';
-import {
-  INITIAL_OPTIONS,
-  StoreDevtools,
-  StoreDevtoolsConfig,
-} from '@ngrx/store-devtools';
+import { INITIAL_OPTIONS, StoreDevtools } from '@ngrx/store-devtools';
 import { LiftedActions, LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { filter, map, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { DevToolHelper } from './dev-tool-helper.service';
@@ -43,28 +33,30 @@ export const getStoreState = <STATE extends object>(
 @Injectable({ providedIn: 'root' })
 export class Store {
   private currentRunningStores: string[] = [];
+  private reducerManager = inject(ReducerManager);
+  private ngrxStore = inject(NgrxStore);
+  private actions = inject(Actions);
 
-  constructor(
-    private devToolHelper: DevToolHelper,
-    @Optional() private reducerManager: ReducerManager,
-    @Optional() private ngrxStore: NgrxStore,
-    @Optional() private actions: Actions,
-    @Optional() private storeDevtools: StoreDevtools,
-    @Optional()
-    @Inject(SessionStoragePlugin)
-    private sessionStoragePlugin: ClientStoragePlugin,
-    @Optional()
-    @Inject(LocalStoragePlugin)
-    private localStoragePlugin: ClientStoragePlugin,
-    @Optional() @Inject(INITIAL_OPTIONS) private config: StoreDevtoolsConfig,
-  ) {
+  private sessionStoragePlugin = inject(SessionStoragePlugin, {
+    optional: true,
+  });
+  private localStoragePlugin = inject(LocalStoragePlugin, { optional: true });
+
+  private storeDevtools = inject(StoreDevtools, { optional: true });
+  private devToolHelper = inject(DevToolHelper);
+  private storeDevtoolsConfig = inject(INITIAL_OPTIONS, { optional: true });
+
+  constructor() {
     this.checkNgrxStoreIsInstalled();
     this.showHintForLowDevTool();
   }
 
   private showHintForLowDevTool() {
     const minDevToolLimit = 5;
-    if (this.config?.maxAge && this.config.maxAge < minDevToolLimit) {
+    if (
+      this.storeDevtoolsConfig?.maxAge &&
+      this.storeDevtoolsConfig.maxAge < minDevToolLimit
+    ) {
       console.warn(
         `DevTool maxAge is set to a low value, please increase it to ${minDevToolLimit} or higher. This could lead to problems with the store.`,
       );
@@ -111,7 +103,7 @@ export class Store {
               {},
             ),
           );
-          this.storeDevtools.sweep();
+          this.storeDevtools?.sweep();
         }
       },
     });
@@ -186,8 +178,10 @@ export class Store {
   private getStoragePluginByKey(
     storage?: StoragePluginTypes,
   ): ClientStoragePlugin | undefined {
-    if (storage === 'sessionStoragePlugin') return this.sessionStoragePlugin;
-    if (storage === 'localStoragePlugin') return this.localStoragePlugin;
+    if (this.sessionStoragePlugin && storage === 'sessionStoragePlugin')
+      return this.sessionStoragePlugin;
+    if (this.localStoragePlugin && storage === 'localStoragePlugin')
+      return this.localStoragePlugin;
     return;
   }
 
@@ -271,9 +265,11 @@ export class Store {
             )),
         ),
         filter(() => !this.devToolHelper.isTimeTravelActive()),
-        switchMap(() => this.storeDevtools?.liftedState || of({})),
+        switchMap(
+          () => this.storeDevtools?.liftedState || of({ actionsById: [] }),
+        ),
         filter(() => !this.devToolHelper.isTimeTravelActive()),
-        map(({ actionsById = [] }) => actionsById),
+        map(({ actionsById }) => actionsById),
         filter(
           (actionsById) =>
             !this.hasLiftedStateCurrentStoreActions(actionsById, storeName) &&

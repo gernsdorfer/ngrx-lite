@@ -16,6 +16,11 @@
       "configurations": {
         "production": {
           "devServerTarget": "sample-app:serve:production"
+        },
+        "watch": {
+          "skipServe": true,
+          "baseUrl": "http://localhost:4200",
+          "watch": true
         }
       }
     },
