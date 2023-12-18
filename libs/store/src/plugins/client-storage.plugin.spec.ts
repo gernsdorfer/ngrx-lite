@@ -1,4 +1,5 @@
 import {
+  getWindow,
   localStoragePlugin,
   sessionStoragePlugin,
 } from './client-storage.plugin';
@@ -16,7 +17,11 @@ describe('sessionStorageHandlerForStores', () => {
   beforeEach(() => {
     storage = window.sessionStorage;
   });
-
+  describe('getWindow', () => {
+    it('should return undefined for missing window', () => {
+      expect(getWindow()).toBeUndefined();
+    });
+  });
   describe('getDefaultState', () => {
     describe('load data from storage', () => {
       it('should return default state', () => {
@@ -25,18 +30,18 @@ describe('sessionStorageHandlerForStores', () => {
         spyGetItem.and.returnValue(null);
 
         expect(
-          sessionStoragePlugin.getDefaultState<MyState>('testStore1')
+          sessionStoragePlugin.getDefaultState<MyState>('testStore1'),
         ).toEqual(undefined);
       });
 
       it('should return state from storage', () => {
         const spyGetItem = getSpyGetItem(storage);
         spyGetItem.and.returnValue(
-          JSON.stringify(<MyState>{ myState: 'testValue' })
+          JSON.stringify(<MyState>{ myState: 'testValue' }),
         );
 
         expect(
-          sessionStoragePlugin.getDefaultState<MyState>('testStore1')
+          sessionStoragePlugin.getDefaultState<MyState>('testStore1'),
         ).toEqual({ myState: 'testValue' });
       });
     });
@@ -51,7 +56,7 @@ describe('sessionStorageHandlerForStores', () => {
 
       expect(spySetItem).toHaveBeenCalledWith(
         'testStore1',
-        JSON.stringify(<MyState>{ myState: 'testValue' })
+        JSON.stringify(<MyState>{ myState: 'testValue' }),
       );
     });
   });
@@ -71,18 +76,18 @@ describe('localStorageHandlerForStores', () => {
         spyGetItem.and.returnValue(null);
 
         expect(localStoragePlugin.getDefaultState('testStore1')).toEqual(
-          undefined
+          undefined,
         );
       });
 
       it('should return state from storage', () => {
         const spyGetItem = getSpyGetItem(storage);
         spyGetItem.and.returnValue(
-          JSON.stringify(<MyState>{ myState: 'testValue' })
+          JSON.stringify(<MyState>{ myState: 'testValue' }),
         );
 
         expect(
-          localStoragePlugin.getDefaultState<MyState>('testStore1')
+          localStoragePlugin.getDefaultState<MyState>('testStore1'),
         ).toEqual({
           myState: 'testValue',
         });
@@ -97,7 +102,7 @@ describe('localStorageHandlerForStores', () => {
 
       expect(spySetItem).toHaveBeenCalledWith(
         'testStore1',
-        JSON.stringify({ isLoading: false })
+        JSON.stringify({ isLoading: false }),
       );
     });
   });
