@@ -1,1 +1,4 @@
-export * from './client-storage.plugin';
+export {
+  localStoragePlugin,
+  sessionStoragePlugin,
+} from './client-storage.plugin';
