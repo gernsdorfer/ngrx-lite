@@ -537,7 +537,7 @@ describe('Store', () => {
 
     describe('remove reducer, after destroy', () => {
       describe('devtools are available', () => {
-        let getComponentStore = (
+        const getComponentStore = (
           storeDevTools: StoreDevtools,
         ): ComponentStore<MyState> =>
           getStore([
