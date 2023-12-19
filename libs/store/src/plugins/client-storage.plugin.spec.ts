@@ -1,4 +1,5 @@
 import {
+  currentWindow,
   getWindow,
   localStoragePlugin,
   sessionStoragePlugin,
@@ -18,7 +19,10 @@ describe('sessionStorageHandlerForStores', () => {
     storage = window.sessionStorage;
   });
   describe('getWindow', () => {
-    it('should return undefined for missing window', () => {
+    it('should return handle missing window', () => {
+      spyOn(currentWindow, 'get').and.returnValue(
+        undefined as unknown as ReturnType<(typeof currentWindow)['get']>,
+      );
       expect(getWindow()).toBeUndefined();
     });
   });
