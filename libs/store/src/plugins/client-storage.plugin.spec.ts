@@ -1,6 +1,4 @@
 import {
-  currentWindow,
-  getWindow,
   localStoragePlugin,
   sessionStoragePlugin,
 } from './client-storage.plugin';
@@ -18,14 +16,7 @@ describe('sessionStorageHandlerForStores', () => {
   beforeEach(() => {
     storage = window.sessionStorage;
   });
-  describe('getWindow', () => {
-    it('should return handle missing window', () => {
-      spyOn(currentWindow, 'get').and.returnValue(
-        undefined as unknown as ReturnType<(typeof currentWindow)['get']>,
-      );
-      expect(getWindow()).toBeUndefined();
-    });
-  });
+
   describe('getDefaultState', () => {
     describe('load data from storage', () => {
       it('should return default state', () => {
