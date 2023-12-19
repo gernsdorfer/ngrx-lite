@@ -1,4 +1,5 @@
 import { ClientStoragePlugin } from '../models';
+import { getWindow } from './get-window';
 
 class ClientStorage implements ClientStoragePlugin {
   constructor(private store?: Storage) {}
@@ -13,13 +14,9 @@ class ClientStorage implements ClientStoragePlugin {
     this.store?.setItem(storeName, JSON.stringify(state));
   }
 }
-export const getWindow = (currentWindow?: Window): Window | undefined =>
-  typeof currentWindow === 'object' ? currentWindow : undefined;
 
 export const sessionStoragePlugin = new ClientStorage(
-  getWindow(window)?.sessionStorage,
+  getWindow()?.sessionStorage,
 );
 
-export const localStoragePlugin = new ClientStorage(
-  getWindow(window)?.localStorage,
-);
+export const localStoragePlugin = new ClientStorage(getWindow()?.localStorage);

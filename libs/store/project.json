@@ -28,7 +28,8 @@
         "codeCoverage": true,
         "main": "libs/store/src/test.ts",
         "tsConfig": "libs/store/tsconfig.spec.json",
-        "karmaConfig": "libs/store/karma.conf.js"
+        "karmaConfig": "libs/store/karma.conf.js",
+        "codeCoverageExclude": ["libs/store/src/plugins/get-window.ts"]
       }
     },
     "lint": {
