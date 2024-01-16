@@ -36,7 +36,7 @@ export class MyStore implements OnDestroy {
   constructor(
     private storeFactory: StoreFactory,
     // import your StoreName
-    @Optional() @Inject(MyStoreSuffix) private storeName: string
+    @Optional() @Inject(MyStoreName) private storeName: string,
   ) {}
 
   ngOnDestroy() {
