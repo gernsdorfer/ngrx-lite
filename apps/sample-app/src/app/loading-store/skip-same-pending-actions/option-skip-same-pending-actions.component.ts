@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +15,7 @@ export type MyState = LoadingStoreState<
 
 @Component({
   selector: 'my-app-loading-store-performance',
-  templateUrl: 'performance.html',
+  templateUrl: 'option-skip-same-pending-actions.component.html',
   standalone: true,
   imports: [
     UiCardComponent,
@@ -26,12 +26,13 @@ export type MyState = LoadingStoreState<
     MatInputModule,
   ],
 })
-export class PerformanceComponent implements OnDestroy {
+export class OptionSkipSamePendingActionsComponent implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
   private store = this.storeFactory.createComponentLoadingStore<
     MyState['item'],
     MyState['error']
   >({
-    storeName: 'LOADING_BASIC',
+    storeName: 'OPTION_CAN_CACHE',
   });
 
   public counterState = this.store.state;
@@ -43,10 +44,10 @@ export class PerformanceComponent implements OnDestroy {
         tap(() => this.executeEffect++),
         delay(3000),
       ),
-    { canCache: true },
+    { skipSamePendingActions: true },
   );
 
-  constructor(private storeFactory: StoreFactory) {}
+  constructor() {}
 
   ngOnDestroy() {
     this.store.ngOnDestroy();

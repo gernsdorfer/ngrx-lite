@@ -25,19 +25,45 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   }
   private hasPendingEffect = false;
 
+  private getSkipSamePendingActions({
+    canCache,
+    skipSamePendingActions,
+  }: {
+    canCache: boolean;
+    skipSamePendingActions: boolean;
+  }) {
+    return canCache || skipSamePendingActions;
+  }
+
   loadingEffect = <EFFECT_PARAMS = void>(
     name: string,
     effect: (
       params: EFFECT_PARAMS,
     ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>,
-    { canCache = false }: { canCache?: boolean } = {},
+    {
+      canCache = false,
+      skipSameActions = false,
+      skipSamePendingActions = false,
+    }: {
+      /**
+       * @deprecated Please use skipSamePendingActions instead
+       */
+      canCache?: boolean;
+      skipSamePendingActions?: boolean;
+      skipSameActions?: boolean;
+    } = {},
   ) =>
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
         startWith(undefined as unknown as EFFECT_PARAMS),
         pairwise(),
         filter(([prev, next]) =>
-          !canCache || !this.hasPendingEffect
+          (!this.getSkipSamePendingActions({
+            canCache,
+            skipSamePendingActions,
+          }) ||
+            !this.hasPendingEffect) &&
+          !skipSameActions
             ? true
             : JSON.stringify(prev) !== JSON.stringify(next),
         ),

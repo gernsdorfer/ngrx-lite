@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold } from 'jasmine-marbles';
-import { EMPTY, asapScheduler } from 'rxjs';
+import { EMPTY, asapScheduler, of } from 'rxjs';
 import { EffectStates } from '../../enums';
 import {
   SkipLogForStore,
@@ -161,7 +161,8 @@ describe('LoadingStore', () => {
         ],
       ]);
     });
-    it('should change state while effect is running in cache mode', () => {
+
+    it('should change state while effect is running in cache mode (with option: canCache)', () => {
       const testEffect = store.loadingEffect(
         'testEffect',
         () => cold('-a-|', { a: 'newValue' }),
@@ -184,7 +185,6 @@ describe('LoadingStore', () => {
           b: getDefaultComponentLoadingState({
             item: 'newValue',
           }),
-          c: getDefaultComponentLoadingState({ error: 500 }),
         }),
       );
       asapScheduler.flush();
@@ -215,6 +215,85 @@ describe('LoadingStore', () => {
           }),
         ],
       ]);
+    });
+
+    it('should change state while effect is running in cache mode (with option: skipSamePendingActions)', () => {
+      const testEffect = store.loadingEffect(
+        'testEffect',
+        () => cold('-a-|', { a: 'newValue' }),
+        { skipSamePendingActions: true },
+      );
+      store.patchState({ item: 'oldValue', error: 404 });
+      asapScheduler.flush();
+      mockStore.dispatch.calls.reset();
+
+      testEffect();
+      testEffect();
+
+      expect(store.state$).toBeObservable(
+        cold('ab', {
+          a: getDefaultComponentLoadingState({
+            isLoading: true,
+            item: 'oldValue',
+            error: 404,
+          }),
+          b: getDefaultComponentLoadingState({
+            item: 'newValue',
+          }),
+        }),
+      );
+      asapScheduler.flush();
+
+      expect(mockStore.dispatch.calls.allArgs()).toEqual([
+        [
+          getEffectAction({
+            storeName,
+            effectName: 'testEffect',
+            type: EffectStates.LOAD,
+          })({
+            payload: getDefaultComponentLoadingState({
+              isLoading: true,
+              item: 'oldValue',
+              error: 404,
+            }),
+          }),
+        ],
+        [
+          getEffectAction({
+            storeName,
+            effectName: 'testEffect',
+            type: EffectStates.SUCCESS,
+          })({
+            payload: getDefaultComponentLoadingState({
+              item: 'newValue',
+            }),
+          }),
+        ],
+      ]);
+    });
+
+    it('should skip skip same actions for option skipSameActions', () => {
+      const spyEffectRun = jasmine
+        .createSpy('effectRun')
+        .and.returnValue(of('newValue'));
+      const testEffect = store.loadingEffect(
+        'testEffect',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (_payload: { test: string }) => spyEffectRun(),
+        { skipSameActions: true },
+      );
+      store.patchState({ item: 'oldValue', error: 404 });
+      mockStore.dispatch.calls.reset();
+
+      testEffect({ test: 'value' });
+      testEffect({ test: 'value' });
+
+      expect(store.state()).toEqual(
+        getDefaultComponentLoadingState({
+          item: 'newValue',
+        }),
+      );
+      expect(spyEffectRun.calls.count()).toEqual(1);
     });
   });
 });

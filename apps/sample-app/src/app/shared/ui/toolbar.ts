@@ -69,8 +69,19 @@ import { RouterModule } from '@angular/router';
           routerLink="/loading-with-signal-effects"
           >with Signal Effects</a
         >
-        <a class="menu-link" mat-menu-item routerLink="/performance-loader">
-          Performance Loader
+        <a
+          class="menu-link"
+          mat-menu-item
+          routerLink="/option-skip-same-pending-actions"
+        >
+          Option: skipSamePendingActions
+        </a>
+        <a
+          class="menu-link"
+          mat-menu-item
+          routerLink="/option-skip-same-actions"
+        >
+          Option: skipSameActions
         </a>
       </mat-menu>
       <button [matMenuTriggerFor]="menuFormsComponentStore" mat-button>
