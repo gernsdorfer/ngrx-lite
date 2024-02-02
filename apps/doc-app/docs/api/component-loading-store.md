@@ -31,10 +31,9 @@ export class AppComponent {
 indicator in your ui.
 :::
 
-### Cacheable loadingEffect
+### Option:skipSamePendingActions
 
 Create your custom loadEffect and run an action only once while the effect is running.
-
 
 ```ts title="app.component.ts"
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
@@ -44,7 +43,25 @@ export class AppComponent {
     storeName: 'LOADING_STORE',
   });
 
-  nameEffect = this.store.loadingEffect('LOAD_NAME', (name: string) => of({ name: name }),{ canCache: true });
+  nameEffect = this.store.loadingEffect('LOAD_NAME', (name: string) => of({ name: name }), { skipSamePendingActions: true });
+
+  constructor(private storeFactory: StoreFactory) {}
+}
+```
+
+### Option:skipSameActions
+
+Create your custom loadEffect and run an action only once, after the same action was running.
+
+```ts title="app.component.ts"
+type State = LoadingStoreState<{ counter: number }, { message: string }>;
+
+export class AppComponent {
+  private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
+    storeName: 'LOADING_STORE',
+  });
+
+  nameEffect = this.store.loadingEffect('LOAD_NAME', (name: string) => of({ name: name }), { skipSameActions: true });
 
   constructor(private storeFactory: StoreFactory) {}
 }
@@ -62,6 +79,6 @@ nameEffect = this.store.loadingEffect('LOAD_NAME', (name: string) => of({ name: 
 nameEffect = this.store.loadingEffect('LOAD_NAME', (name: string) =>
   throwError(() => {
     errorCode: 'myError';
-  })
+  }),
 );
 ```

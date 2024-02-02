@@ -2,9 +2,12 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import { MyState, PerformanceComponent } from './performance.component';
+import {
+  MyState,
+  OptionSkipSameActionsComponent,
+} from './option-skip-same-actions.component';
 
-describe('LoadingBasicComponent', () => {
+describe('OptionSkipSameActionsComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [storeTestingFactory()],
@@ -12,8 +15,8 @@ describe('LoadingBasicComponent', () => {
     }).compileComponents();
   });
 
-  const getComponent = (): PerformanceComponent => {
-    const fixture = TestBed.createComponent(PerformanceComponent);
+  const getComponent = (): OptionSkipSameActionsComponent => {
+    const fixture = TestBed.createComponent(OptionSkipSameActionsComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return component;

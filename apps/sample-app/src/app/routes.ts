@@ -44,11 +44,18 @@ export const routes: Routes = [
       ).then((m) => m.LoadingWithSignalEffectsComponent),
   },
   {
-    path: 'performance-loader',
+    path: 'option-skip-same-pending-actions',
     loadComponent: () =>
-      import('./loading-store/performance/performance.component').then(
-        (m) => m.PerformanceComponent,
-      ),
+      import(
+        './loading-store/skip-same-pending-actions/option-skip-same-pending-actions.component'
+      ).then((m) => m.OptionSkipSamePendingActionsComponent),
+  },
+  {
+    path: 'option-skip-same-actions',
+    loadComponent: () =>
+      import(
+        './loading-store/option-skip-same-actions/option-skip-same-actions.component'
+      ).then((m) => m.OptionSkipSameActionsComponent),
   },
   {
     path: 'custom-action',

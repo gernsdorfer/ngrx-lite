@@ -1,11 +1,14 @@
-describe('loading component Store', () => {
+describe('loading component Store::OptionSkipSameActions', () => {
   beforeEach(() => {
     cy.visit('/');
   });
 
   describe('Basic', () => {
     beforeEach(() => {
-      cy.openLinkFromToolbar(' Loading-Component-Store', 'Performance Loader');
+      cy.openLinkFromToolbar(
+        ' Loading-Component-Store',
+        'Option: skipSameActions',
+      );
     });
     it('should show initial state', () => {
       cy.get('#counter').should('have.text', '');
