@@ -47,7 +47,7 @@ export const routes: Routes = [
     path: 'option-skip-same-pending-actions',
     loadComponent: () =>
       import(
-        './loading-store/skip-same-pending-actions/option-skip-same-pending-actions.component'
+        './loading-store/option-skip-same-pending-actions/option-skip-same-pending-actions.component'
       ).then((m) => m.OptionSkipSamePendingActionsComponent),
   },
   {

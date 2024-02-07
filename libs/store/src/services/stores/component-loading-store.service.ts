@@ -25,16 +25,6 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   }
   private hasPendingEffect = false;
 
-  private getSkipSamePendingActions({
-    canCache,
-    skipSamePendingActions,
-  }: {
-    canCache: boolean;
-    skipSamePendingActions: boolean;
-  }) {
-    return canCache || skipSamePendingActions;
-  }
-
   loadingEffect = <EFFECT_PARAMS = void>(
     name: string,
     effect: (
@@ -55,7 +45,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   ) =>
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
-        startWith(undefined as unknown as EFFECT_PARAMS),
+        startWith({} as unknown as EFFECT_PARAMS),
         pairwise(),
         filter(([prev, next]) =>
           (!this.getSkipSamePendingActions({
@@ -65,14 +55,31 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
             !this.hasPendingEffect) &&
           !skipSameActions
             ? true
-            : JSON.stringify(prev) !== JSON.stringify(next),
+            : this.checkEffectPayload(prev, next),
         ),
         switchMap(([, params]) =>
           this.runEffect<EFFECT_PARAMS>(name, params, effect),
         ),
       ),
     );
+  private getSkipSamePendingActions({
+    canCache,
+    skipSamePendingActions,
+  }: {
+    canCache: boolean;
+    skipSamePendingActions: boolean;
+  }) {
+    return canCache || skipSamePendingActions;
+  }
 
+  private checkEffectPayload<EFFECT_PARAMS>(
+    prev?: EFFECT_PARAMS,
+    next?: EFFECT_PARAMS,
+  ) {
+    return !prev && !next
+      ? false
+      : JSON.stringify(prev) !== JSON.stringify(next);
+  }
   private runEffect<EFFECT_PARAMS = void>(
     name: string,
     params: EFFECT_PARAMS,

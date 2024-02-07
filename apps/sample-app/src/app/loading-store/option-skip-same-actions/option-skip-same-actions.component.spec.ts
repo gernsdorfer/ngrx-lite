@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import {
@@ -27,14 +27,13 @@ describe('OptionSkipSameActionsComponent', () => {
   });
 
   describe('increment', () => {
-    it('should increment state', fakeAsync(() => {
+    it('should increment state and run same effect only one times', () => {
       const component = getComponent();
 
       component.increment(1);
-      tick(1000);
+      component.increment(1);
 
       component.increment(2);
-      tick(4000);
       expect(component.counterState()).toEqual(
         getDefaultComponentLoadingState<MyState['item'], MyState['error']>({
           item: {
@@ -42,6 +41,25 @@ describe('OptionSkipSameActionsComponent', () => {
           },
         }),
       );
-    }));
+      expect(component.executeEffect).toBe(2);
+    });
+  });
+  describe('incrementOne', () => {
+    it('should set state to 1 and run effect only one times', () => {
+      const component = getComponent();
+
+      component.incrementOne();
+
+      component.incrementOne();
+
+      expect(component.counterState()).toEqual(
+        getDefaultComponentLoadingState<MyState['item'], MyState['error']>({
+          item: {
+            counter: 1,
+          },
+        }),
+      );
+      expect(component.executeEffect).toBe(1);
+    });
   });
 });

@@ -44,7 +44,11 @@ export class OptionSkipSameActionsComponent implements OnDestroy {
     { skipSameActions: true },
   );
 
-  constructor() {}
+  incrementOne = this.store.loadingEffect(
+    'INCREMENT',
+    () => of({ counter: 1 }).pipe(tap(() => this.executeEffect++)),
+    { skipSameActions: true },
+  );
 
   ngOnDestroy() {
     this.store.ngOnDestroy();
