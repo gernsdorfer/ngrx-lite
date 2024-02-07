@@ -33,5 +33,12 @@ describe('loading component Store::OptionSkipSameActions', () => {
       cy.get('#counter').should('have.text', '2');
       cy.get('#run-effect').should('have.text', '2');
     });
+
+    it('should increment without payload', () => {
+      cy.get('#empty-payload').contains('auto 1').click();
+
+      cy.get('#counter').should('have.text', '1');
+      cy.get('#run-effect').should('have.text', '1');
+    });
   });
 });

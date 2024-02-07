@@ -29,11 +29,12 @@ describe('OptionSkipSamePendingActionsComponent', () => {
   });
 
   describe('increment', () => {
-    it('should increment state', fakeAsync(() => {
+    it('should increment state and skip same pending actions', fakeAsync(() => {
       const component = getComponent();
 
       component.increment(1);
       tick(1000);
+      component.increment(1);
 
       component.increment(2);
       tick(4000);
@@ -44,6 +45,7 @@ describe('OptionSkipSamePendingActionsComponent', () => {
           },
         }),
       );
+      expect(component.executeEffect).toBe(2);
     }));
   });
 });

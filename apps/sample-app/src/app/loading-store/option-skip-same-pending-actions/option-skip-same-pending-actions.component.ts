@@ -47,8 +47,6 @@ export class OptionSkipSamePendingActionsComponent implements OnDestroy {
     { skipSamePendingActions: true },
   );
 
-  constructor() {}
-
   ngOnDestroy() {
     this.store.ngOnDestroy();
   }

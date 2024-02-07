@@ -295,5 +295,29 @@ describe('LoadingStore', () => {
       );
       expect(spyEffectRun.calls.count()).toEqual(1);
     });
+
+    it('should skip skip same actions for option skipSameActions, without payload', () => {
+      const spyEffectRun = jasmine
+        .createSpy('effectRun')
+        .and.returnValue(of('newValue'));
+      const testEffect = store.loadingEffect(
+        'testEffect',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        () => spyEffectRun(),
+        { skipSameActions: true },
+      );
+      store.patchState({ item: 'oldValue', error: 404 });
+      mockStore.dispatch.calls.reset();
+
+      testEffect();
+      testEffect();
+
+      expect(store.state()).toEqual(
+        getDefaultComponentLoadingState({
+          item: 'newValue',
+        }),
+      );
+      expect(spyEffectRun.calls.count()).toEqual(1);
+    });
   });
 });
