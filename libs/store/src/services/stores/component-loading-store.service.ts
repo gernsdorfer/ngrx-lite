@@ -47,7 +47,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       params$.pipe(
         startWith({} as unknown as EFFECT_PARAMS),
         pairwise(),
-        filter(([prev, next]) =>
+        filter(([prev, next], index) =>
           (!this.getSkipSamePendingActions({
             canCache,
             skipSamePendingActions,
@@ -55,7 +55,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
             !this.hasPendingEffect) &&
           !skipSameActions
             ? true
-            : this.checkEffectPayload(prev, next),
+            : this.checkEffectPayload({ prev, next, index }),
         ),
         switchMap(([, params]) =>
           this.runEffect<EFFECT_PARAMS>(name, params, effect),
@@ -72,13 +72,16 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
     return canCache || skipSamePendingActions;
   }
 
-  private checkEffectPayload<EFFECT_PARAMS>(
-    prev?: EFFECT_PARAMS,
-    next?: EFFECT_PARAMS,
-  ) {
-    return !prev && !next
-      ? false
-      : JSON.stringify(prev) !== JSON.stringify(next);
+  private checkEffectPayload<EFFECT_PARAMS>({
+    prev,
+    next,
+    index,
+  }: {
+    prev?: EFFECT_PARAMS;
+    next?: EFFECT_PARAMS;
+    index: number;
+  }) {
+    return index === 0 ? true : JSON.stringify(prev) !== JSON.stringify(next);
   }
   private runEffect<EFFECT_PARAMS = void>(
     name: string,
