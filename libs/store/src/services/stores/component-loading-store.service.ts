@@ -23,7 +23,6 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   constructor(@Inject(StateToken) state: LoadingStoreState<ITEM, ERROR>) {
     super(state);
   }
-  private hasPendingEffect = false;
 
   loadingEffect = <EFFECT_PARAMS = void>(
     name: string,
@@ -52,7 +51,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
             canCache,
             skipSamePendingActions,
           }) ||
-            !this.hasPendingEffect) &&
+            !this.state().isLoading) &&
           !skipSameActions
             ? true
             : this.checkEffectPayload({ prev, next, index }),
@@ -90,7 +89,6 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       params: EFFECT_PARAMS,
     ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>,
   ) {
-    this.hasPendingEffect = true;
     super.patchState(
       (state) => ({ ...state, isLoading: true }),
       getEffectActionName(name, EffectStates.LOAD),
@@ -111,7 +109,6 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
             }),
             getEffectActionName(name, EffectStates.ERROR),
           ),
-        () => (this.hasPendingEffect = false),
       ),
     );
   }
