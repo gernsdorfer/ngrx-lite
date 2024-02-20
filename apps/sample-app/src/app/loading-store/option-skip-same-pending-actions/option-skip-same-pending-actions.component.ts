@@ -4,7 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { delay, of, tap } from 'rxjs';
+import { ofType } from '@ngrx/effects';
+import { delay, of, repeat, tap } from 'rxjs';
 import { UiCardComponent } from '../../shared/ui/card-component';
 import { UiSpinnerComponent } from '../../shared/ui/spinner';
 
@@ -43,6 +44,10 @@ export class OptionSkipSamePendingActionsComponent implements OnDestroy {
       of({ counter: count }).pipe(
         tap(() => this.executeEffect++),
         delay(3000),
+        repeat({
+          delay: () =>
+            this.store.createEffect((action) => action.pipe(ofType())),
+        }),
       ),
     { skipSamePendingActions: true },
   );
