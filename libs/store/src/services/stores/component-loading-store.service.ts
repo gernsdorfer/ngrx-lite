@@ -16,6 +16,9 @@ export const getDefaultComponentLoadingState = <ITEM, ERROR>(
   ...state,
 });
 
+const isObjectEqual = <OBJECT = void>(obj?: OBJECT) =>
+  JSON.stringify(obj, Object.keys(obj || {}).sort());
+
 @Injectable({ providedIn: 'root' })
 export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   LoadingStoreState<ITEM, ERROR>
@@ -81,8 +84,9 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
     next?: EFFECT_PARAMS;
     index: number;
   }) {
-    return index === 0 ? true : JSON.stringify(prev) !== JSON.stringify(next);
+    return index === 0 ? true : isObjectEqual(prev) !== isObjectEqual(next);
   }
+
   private runEffect<EFFECT_PARAMS = void>(
     name: string,
     params: EFFECT_PARAMS,

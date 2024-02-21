@@ -68,8 +68,8 @@ export class StoreFactory {
         takeUntil(store.destroy$),
         filter(
           (state) =>
-            JSON.stringify(state) !== JSON.stringify(formGroup.getRawValue())
-        )
+            JSON.stringify(state) !== JSON.stringify(formGroup.getRawValue()),
+        ),
       )
       .subscribe({
         next: (state) => formGroup.patchValue(state),
