@@ -279,14 +279,14 @@ describe('LoadingStore', () => {
       const testEffect = store.loadingEffect(
         'testEffect',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        (_payload: { test: string }) => spyEffectRun(),
+        (_payload: { key1: string; key2: string }) => spyEffectRun(),
         { skipSameActions: true },
       );
       store.patchState({ item: 'oldValue', error: 404 });
       mockStore.dispatch.calls.reset();
 
-      testEffect({ test: 'value' });
-      testEffect({ test: 'value' });
+      testEffect({ key1: 'value1', key2: 'value2' });
+      testEffect({ key2: 'value2', key1: 'value1' });
 
       expect(store.state()).toEqual(
         getDefaultComponentLoadingState({
