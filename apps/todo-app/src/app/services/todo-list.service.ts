@@ -21,14 +21,17 @@ export class TodoListStore {
   public state = this.store.state;
 
   reload$ = this.store.createEffect((action) =>
-    action.pipe(ofType(updateAction, createAction))
+    action.pipe(ofType(updateAction, createAction)),
   );
 
-  load = this.store.loadingEffect('LOAD', () =>
-    this.http.get<TodoModel[]>(`http://localhost:3000/todos`).pipe(
-      repeat({
-        delay: () => this.reload$,
-      })
-    )
+  load = this.store.loadingEffect(
+    'LOAD',
+    () =>
+      this.http.get<TodoModel[]>(`http://localhost:3000/todos`).pipe(
+        repeat({
+          delay: () => this.reload$,
+        }),
+      ),
+    { skipSamePendingActions: true },
   );
 }
