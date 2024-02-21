@@ -23,6 +23,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   constructor(@Inject(StateToken) state: LoadingStoreState<ITEM, ERROR>) {
     super(state);
   }
+  private hasPendingEffect = false;
 
   loadingEffect = <EFFECT_PARAMS = void>(
     name: string,
@@ -51,7 +52,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
             canCache,
             skipSamePendingActions,
           }) ||
-            !this.state().isLoading) &&
+            !this.hasPendingEffect) &&
           !skipSameActions
             ? true
             : this.checkEffectPayload({ prev, next, index }),
@@ -89,6 +90,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       params: EFFECT_PARAMS,
     ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>,
   ) {
+    this.hasPendingEffect = true;
     super.patchState(
       (state) => ({ ...state, isLoading: true }),
       getEffectActionName(name, EffectStates.LOAD),
@@ -96,20 +98,34 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
     return effect(params).pipe(
       tapResponse(
         (item) =>
-          super.setState(
-            getDefaultComponentLoadingState({
-              item,
-            }),
-            getEffectActionName(name, EffectStates.SUCCESS),
-          ),
+          this.finishEffect({
+            state: { item },
+            effectName: name,
+            type: EffectStates.SUCCESS,
+          }),
         (error: ERROR) =>
-          super.setState(
-            getDefaultComponentLoadingState({
-              error,
-            }),
-            getEffectActionName(name, EffectStates.ERROR),
-          ),
+          this.finishEffect({
+            state: { error },
+            effectName: name,
+            type: EffectStates.ERROR,
+          }),
       ),
     );
+  }
+
+  private finishEffect({
+    state,
+    effectName,
+    type,
+  }: {
+    state: Partial<LoadingStoreState<ITEM, ERROR>>;
+    effectName: string;
+    type: EffectStates;
+  }) {
+    super.setState(
+      getDefaultComponentLoadingState(state),
+      getEffectActionName(effectName, type),
+    );
+    this.hasPendingEffect = false;
   }
 }

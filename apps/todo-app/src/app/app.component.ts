@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { CreateComponent } from './components/create/create.component';
@@ -20,14 +20,14 @@ import { TodoListStore } from './services/todo-list.service';
   ],
   templateUrl: 'app.component.html',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   todoListStore = inject(TodoListStore);
   todoUpdateStore = inject(TodoAdminStore);
   todosState = this.todoListStore.state;
 
-  ngOnInit() {
-    this.todoListStore.load();
-  }
+  private load = effect(() => this.todoListStore.load(), {
+    allowSignalWrites: true,
+  });
 
   changeCompleted(payload: { completed: boolean; todoId: number }) {
     this.todoUpdateStore.changeCompleted(payload);
