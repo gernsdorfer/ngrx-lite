@@ -16,8 +16,22 @@ export const getDefaultComponentLoadingState = <ITEM, ERROR>(
   ...state,
 });
 
-const isObjectEqual = <OBJECT = void>(obj?: OBJECT) =>
-  JSON.stringify(obj, Object.keys(obj || {}).sort());
+const replacer = (
+  key: string,
+  value: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+) =>
+  value instanceof Object && !(value instanceof Array)
+    ? Object.keys(value)
+        .sort()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .reduce((sorted: any, key) => {
+          sorted[key] = value[key];
+          return sorted;
+        }, {})
+    : value;
+
+const isEqual = <OBJECT = void>(obj1?: OBJECT, obj2?: OBJECT) =>
+  JSON.stringify(obj1, replacer) === JSON.stringify(obj2, replacer);
 
 @Injectable({ providedIn: 'root' })
 export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
@@ -84,7 +98,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
     next?: EFFECT_PARAMS;
     index: number;
   }) {
-    return index === 0 ? true : isObjectEqual(prev) !== isObjectEqual(next);
+    return index === 0 ? true : !isEqual(prev, next);
   }
 
   private runEffect<EFFECT_PARAMS = void>(

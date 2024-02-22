@@ -279,14 +279,17 @@ describe('LoadingStore', () => {
       const testEffect = store.loadingEffect(
         'testEffect',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        (_payload: { key1: string; key2: string }) => spyEffectRun(),
+        (_payload: {
+          key1: string;
+          key2: { child: { a: string; b: string } };
+        }) => spyEffectRun(),
         { skipSameActions: true },
       );
       store.patchState({ item: 'oldValue', error: 404 });
       mockStore.dispatch.calls.reset();
 
-      testEffect({ key1: 'value1', key2: 'value2' });
-      testEffect({ key2: 'value2', key1: 'value1' });
+      testEffect({ key1: 'value1', key2: { child: { b: '1', a: '1' } } });
+      testEffect({ key2: { child: { a: '1', b: '1' } }, key1: 'value1' });
 
       expect(store.state()).toEqual(
         getDefaultComponentLoadingState({
@@ -294,6 +297,33 @@ describe('LoadingStore', () => {
         }),
       );
       expect(spyEffectRun.calls.count()).toEqual(1);
+    });
+
+    it('should not skip different actions (with deep Objects) for option skipSameActions', () => {
+      const spyEffectRun = jasmine
+        .createSpy('effectRun')
+        .and.returnValue(of('newValue'));
+      const testEffect = store.loadingEffect(
+        'testEffect',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (_payload: {
+          key1: string;
+          key2: { child: { a: string; b: string } };
+        }) => spyEffectRun(),
+        { skipSameActions: true },
+      );
+      store.patchState({ item: 'oldValue', error: 404 });
+      mockStore.dispatch.calls.reset();
+
+      testEffect({ key1: 'value1', key2: { child: { b: '1', a: '2' } } });
+      testEffect({ key2: { child: { a: '2', b: '2' } }, key1: 'value1' });
+
+      expect(store.state()).toEqual(
+        getDefaultComponentLoadingState({
+          item: 'newValue',
+        }),
+      );
+      expect(spyEffectRun.calls.count()).toEqual(2);
     });
 
     it('should skip skip same actions for option skipSameActions, without payload', () => {
