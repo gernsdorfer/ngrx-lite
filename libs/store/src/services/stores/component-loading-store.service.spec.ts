@@ -18,7 +18,6 @@ import {
   ComponentLoadingStore,
   getDefaultComponentLoadingState,
 } from './component-loading-store.service';
-import Spy = jasmine.Spy;
 
 describe('LoadingStore', () => {
   let store: ComponentLoadingStore<string, number>;
