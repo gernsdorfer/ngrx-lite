@@ -55,7 +55,7 @@ export class OptionRepeatForActionsComponent implements OnDestroy {
   public counterState = this.store.state;
   executeEffect = 0;
 
-  effectAction = this.sideStore.loadingEffect(sideEffectExampleAction, () =>
+  runSideEffect = this.sideStore.loadingEffect(sideEffectExampleAction, () =>
     of(true),
   );
 
