@@ -14,7 +14,7 @@ export type MyState = LoadingStoreState<
 >;
 
 @Component({
-  selector: 'my-app-loading-store-performance',
+  selector: 'my-app-loading-store-option-skip-same-actions',
   templateUrl: 'option-skip-same-actions.component.html',
   standalone: true,
   imports: [

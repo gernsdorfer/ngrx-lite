@@ -1,8 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
+import { createAction } from '@ngrx/store';
+import { Action } from '@ngrx/store/src/models';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold } from 'jasmine-marbles';
-import { EMPTY, asapScheduler, of } from 'rxjs';
+import { EMPTY, Subject, asapScheduler, of, tap } from 'rxjs';
 import { EffectStates } from '../../enums';
 import {
   SkipLogForStore,
@@ -25,6 +27,7 @@ describe('LoadingStore', () => {
   const storeName = 'myStore';
   const devToolHelper = new DevToolHelper();
   const actions = jasmine.createSpyObj<Actions>('Actions', { lift: EMPTY }, {});
+  const action$ = new Subject<Action>();
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -59,6 +62,7 @@ describe('LoadingStore', () => {
       teardown: { destroyAfterEach: false },
     });
     store = TestBed.inject(ComponentLoadingStore);
+    spyOn(store, 'createEffect').and.callFake((effect) => effect(action$));
   });
 
   const getDispatchAction = <ITEM, ERROR>({
@@ -372,6 +376,29 @@ describe('LoadingStore', () => {
         }),
       );
       expect(spyEffectRun.calls.count()).toEqual(1);
+    });
+
+    it('should replay effect', () => {
+      const spyEffectRun = jasmine.createSpy('effectRun');
+
+      const customAction = createAction<string>(`TestAction`);
+
+      const testEffect = store.loadingEffect(
+        'testEffect',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        () => of('newValue').pipe(tap(() => spyEffectRun())),
+        { repeatActions: [customAction] },
+      );
+
+      testEffect();
+      action$.next(customAction);
+
+      expect(store.state()).toEqual(
+        getDefaultComponentLoadingState({
+          item: 'newValue',
+        }),
+      );
+      expect(spyEffectRun.calls.count()).toEqual(2);
     });
   });
 });

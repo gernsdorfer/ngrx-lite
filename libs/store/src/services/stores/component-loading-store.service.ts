@@ -1,6 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
 import { tapResponse } from '@ngrx/component-store';
-import { Observable, filter, pairwise, startWith, switchMap } from 'rxjs';
+import { ofType } from '@ngrx/effects';
+import { ActionCreator } from '@ngrx/store';
+import {
+  Observable,
+  filter,
+  pairwise,
+  repeat,
+  startWith,
+  switchMap,
+} from 'rxjs';
 import { EffectStates } from '../../enums/effect-states.enum';
 import { StateToken } from '../../injection-tokens/state.token';
 import { LoadingStoreState } from '../../models';
@@ -51,6 +60,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       canCache = false,
       skipSameActions = false,
       skipSamePendingActions = false,
+      repeatActions = [],
     }: {
       /**
        * @deprecated Please use skipSamePendingActions instead
@@ -58,6 +68,7 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       canCache?: boolean;
       skipSamePendingActions?: boolean;
       skipSameActions?: boolean;
+      repeatActions?: ActionCreator[];
     } = {},
   ) =>
     this.effect((params$: Observable<EFFECT_PARAMS>) =>
@@ -75,7 +86,14 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
             : this.checkEffectPayload({ prev, next, index }),
         ),
         switchMap(([, params]) =>
-          this.runEffect<EFFECT_PARAMS>(name, params, effect),
+          this.runEffect<EFFECT_PARAMS>(name, params, effect).pipe(
+            repeat({
+              delay: () =>
+                this.createEffect((action) =>
+                  action.pipe(ofType(...repeatActions)),
+                ),
+            }),
+          ),
         ),
       ),
     );

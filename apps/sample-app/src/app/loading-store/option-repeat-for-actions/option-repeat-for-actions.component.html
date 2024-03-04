@@ -1,0 +1,30 @@
+<my-app-ui-card>
+  <h1 title>
+    @if (counterState().isLoading) {
+      <my-app-ui-spinner></my-app-ui-spinner>
+    }
+    Option RepeatForAction
+  </h1>
+  <h2 subtitle>Loading Store</h2>
+
+  <div content>
+    Executed Effect: <b id="run-effect">{{ executeEffect }}</b>
+    <hr />
+    Counter
+    <b id="counter">{{ counterState().item?.counter }}</b>
+    <hr />
+  </div>
+
+  <div actions style="width: 100%">
+    <div
+      id="actions"
+      style="display: flex; justify-content: space-between; width: 100%"
+    >
+      <button class="increment" (click)="increment(1)" mat-fab>1</button>
+      <button class="increment" (click)="increment(2)" mat-fab>2</button>
+      <button class="increment" (click)="runSideEffect()" mat-fab>
+        SideEffect
+      </button>
+    </div>
+  </div>
+</my-app-ui-card>
