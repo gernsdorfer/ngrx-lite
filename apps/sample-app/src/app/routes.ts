@@ -51,6 +51,13 @@ export const routes: Routes = [
       ).then((m) => m.OptionSkipSamePendingActionsComponent),
   },
   {
+    path: 'option-repeat-for-actions',
+    loadComponent: () =>
+      import(
+        './loading-store/option-repeat-for-actions/option-repeat-for-actions.component'
+      ).then((m) => m.OptionRepeatForActionsComponent),
+  },
+  {
     path: 'option-skip-same-actions',
     loadComponent: () =>
       import(

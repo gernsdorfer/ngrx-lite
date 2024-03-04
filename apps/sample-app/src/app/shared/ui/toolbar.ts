@@ -81,7 +81,13 @@ import { RouterModule } from '@angular/router';
           mat-menu-item
           routerLink="/option-skip-same-actions"
         >
-          Option: skipSameActions
+          Option: skipSameActions </a
+        ><a
+          class="menu-link"
+          mat-menu-item
+          routerLink="/option-repeat-for-actions"
+        >
+          Option: RepeatForActions
         </a>
       </mat-menu>
       <button [matMenuTriggerFor]="menuFormsComponentStore" mat-button>

@@ -67,6 +67,24 @@ export class AppComponent {
 }
 ```
 
+### Option:repeatActions
+
+Repeat your effect when action on store was triggered.
+
+```ts title="app.component.ts"
+type State = LoadingStoreState<{ counter: number }, { message: string }>;
+const mySideAction = createAction<string>(`TestAction`);
+export class AppComponent {
+  private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
+    storeName: 'LOADING_STORE',
+  });
+
+  nameEffect = this.store.loadingEffect('LOAD_NAME', (name: string) => of({ name: name }), { repeatActions: [mySideAction] });
+
+  constructor(private storeFactory: StoreFactory) {}
+}
+```
+
 ### Example for a successfully callback Observable
 
 ```ts
