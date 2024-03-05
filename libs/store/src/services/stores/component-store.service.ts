@@ -1,8 +1,8 @@
 import { Inject, inject, Injectable, OnDestroy } from '@angular/core';
 import { ComponentStore as NgrxComponentStore } from '@ngrx/component-store';
-import { Actions } from '@ngrx/effects';
-import { Action, Store as NgrxStore } from '@ngrx/store';
-import { asapScheduler, Observable, Subject, takeUntil } from 'rxjs';
+import { Actions, ofType } from '@ngrx/effects';
+import { Action, ActionCreator, Store as NgrxStore } from '@ngrx/store';
+import { asapScheduler, Observable, Subject, takeUntil, tap } from 'rxjs';
 import {
   SkipLogForStore,
   StateToken,
@@ -50,6 +50,17 @@ export class ComponentStore<STATE extends object>
     );
     effect$.subscribe();
     return effect$;
+  }
+
+  onActions(actions: ActionCreator[]) {
+    return (callback: () => unknown) => {
+      this.createEffect((action) =>
+        action.pipe(
+          ofType(...actions),
+          tap(() => callback()),
+        ),
+      );
+    };
   }
 
   override setState(

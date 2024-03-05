@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
+import { createAction } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { asapScheduler, EMPTY } from 'rxjs';
+import { EMPTY, asapScheduler, of } from 'rxjs';
 import {
   SkipLogForStore,
   StateToken,
@@ -119,6 +120,24 @@ describe('ComponentStore', () => {
       expect(() => getStore().createEffect(() => EMPTY)).toThrowError(
         '@ngrx/effects is not imported. Please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module',
       );
+    });
+  });
+
+  describe('onActions', () => {
+    it('should call callback', () => {
+      const store = getStore();
+      const customAction = createAction<string>(`TestAction`);
+
+      spyOn(store, 'createEffect').and.callFake((effect) => {
+        const effect$ = effect(of(customAction()));
+        effect$.subscribe();
+        return effect$;
+      });
+
+      const callback = jasmine.createSpy('callback');
+      store.onActions([customAction])(callback);
+
+      expect(callback).toHaveBeenCalled();
     });
   });
 

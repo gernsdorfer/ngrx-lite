@@ -292,9 +292,38 @@ class MyClass {
   myEffect = this.store.createEffect((action) =>
     action.pipe(
       ofType(resetAction),
-      tap(() => console.log('do sth.'))
-    )
+      tap(() => console.log('do sth.')),
+    ),
   );
+}
+```
+
+### Listen on actions
+
+listen on custom actions to execute your business logic
+
+```ts title="my-component-store.service.ts"
+export interface MyState {
+  counter: number;
+}
+export const resetAction = createAction('reset');
+
+@Injectable()
+export class MyStore implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+  private store = this.storeFactory.createComponentStore<MyState>({
+    storeName: 'BASIC_COUNTER',
+    defaultState: { counter: 0 },
+  });
+
+  onReset = this.store.onActions([resetAction]);
+}
+```
+
+```ts title="app.component.ts"
+export class AppComponent {
+  private myStore = inject(MyStore);
+  resetEffect = this.myStore.onReset(() => console.log('Reset was triggered'));
 }
 ```
 

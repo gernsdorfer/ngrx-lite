@@ -14,6 +14,7 @@ import {
       <div subtitle>Listen on Global</div>
       <div content>
         <h2 class="counter">{{ counterState().counter }}</h2>
+        <h2 class="counter-reset">Listen on Reset Clicks:{{ counterReset }}</h2>
       </div>
       <div actions>
         <button class="increment" (click)="increment()" mat-fab>+</button>
@@ -32,7 +33,12 @@ import {
 })
 export class DemoAComponent implements OnDestroy {
   title = 'Demo A Component';
-  public counterState = this.counterStore.state;
+  counterState = this.counterStore.state;
+  counterReset = 0;
+
+  private onReset = this.counterStore.onReset(() => {
+    this.counterReset++;
+  });
 
   constructor(private counterStore: MultipleCounterStore) {}
 
