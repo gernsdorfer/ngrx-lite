@@ -21,6 +21,9 @@ describe('component store', () => {
 
       cy.get('.counter').first().should('have.text', '0');
       cy.get('.counter').last().should('have.text', '0');
+      cy.get('.counter-reset')
+        .last()
+        .should('have.text', 'Listen on Reset Clicks:1');
     });
   });
 });

@@ -6,8 +6,6 @@ import {
   Optional,
 } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
-import { ofType } from '@ngrx/effects';
-import { tap } from 'rxjs';
 import { resetAction } from '../actions/reset.action';
 
 export const MultipleCounterStoreName = new InjectionToken('MULTIPLE_COUNTER');
@@ -27,20 +25,17 @@ export class MultipleCounterStore implements OnDestroy {
     private storeFactory: StoreFactory,
     @Optional()
     @Inject(MultipleCounterStoreName)
-    private storeName?: string
+    private storeName?: string,
   ) {}
 
-  reset$ = this.store.createEffect((action) =>
-    action.pipe(
-      ofType(resetAction),
-      tap(() => this.store.setState({ counter: 0 }, 'RESET'))
-    )
-  );
+  onReset = this.store.onActions([resetAction]);
+
+  resetState = this.onReset(() => this.store.setState({ counter: 0 }, 'RESET'));
 
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
-      'INCREMENT'
+      'INCREMENT',
     );
   }
 
