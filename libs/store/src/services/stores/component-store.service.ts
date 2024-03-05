@@ -53,7 +53,7 @@ export class ComponentStore<STATE extends object>
   }
 
   onActions(actions: ActionCreator[]) {
-    return (callback: () => void) => {
+    return (callback: () => unknown) => {
       this.createEffect((action) =>
         action.pipe(
           ofType(...actions),
