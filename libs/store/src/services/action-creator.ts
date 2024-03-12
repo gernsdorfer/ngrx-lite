@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { EffectStates } from '../enums';
 import { LoadingStoreState } from '../models';
-
 export const getEffectActionName = (effectName: string, type: EffectStates) =>
   `${effectName}:${type}`;
 export const getEffectAction = <P extends LoadingStoreState<unknown, unknown>>({
@@ -27,5 +26,5 @@ export const getCustomAction = <P extends object>({
 }) =>
   createAction<string, { payload: P }>(
     `[COMPONENT_STORE][${storeName}] ${actionName}`,
-    props()
+    props(),
   );

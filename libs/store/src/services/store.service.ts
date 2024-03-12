@@ -2,6 +2,7 @@ import { inject, Injectable, Injector, isDevMode } from '@angular/core';
 
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import {
+  DynamicStoreName,
   SkipLogForStore,
   StateToken,
   StoreNameToken,
@@ -128,29 +129,42 @@ export class Store {
     storeName: string;
   }): CREATED_STORE {
     const { storage } = plugins;
+    const dynamicStoreName = inject(DynamicStoreName, {
+      optional: true,
+      self: true,
+    });
+    const fullStoreName = [storeName, dynamicStoreName]
+      .filter((name) => name !== null)
+      .join('');
     const initialState = this.getInitialState<STATE>(
       storeName,
       defaultState,
       storage,
     );
+
     const store = Injector.create({
       providers: [
         { provide: CreatedStore },
         { provide: DevToolHelper, useValue: this.devToolHelper },
         { provide: Actions, useValue: this.actions },
         { provide: NgrxStore, useValue: this.ngrxStore },
-        { provide: StoreNameToken, useValue: storeName },
+        { provide: StoreNameToken, useValue: fullStoreName },
         { provide: StateToken, useValue: initialState },
         { provide: SkipLogForStore, useValue: skipLogForStore },
         ...additionalProviders,
       ],
     }).get(CreatedStore);
 
-    this.addStoreNameToInternalCache(storeName);
-    this.addStoreReducerToNgrx<STATE>(storeName, initialState);
-    this.syncStoreChangesToClientStorage(storeName, store, storage);
-    this.syncNgrxDevtoolStateToStore<STATE>(storeName, store, skipLogForStore);
-    this.removeReducerAfterDestroy<STATE>(storeName, store);
+    this.addStoreNameToInternalCache(fullStoreName);
+    this.addStoreReducerToNgrx<STATE>(fullStoreName, initialState);
+    this.syncStoreChangesToClientStorage(fullStoreName, store, storage);
+    this.syncNgrxDevtoolStateToStore<STATE>(
+      fullStoreName,
+      store,
+      skipLogForStore,
+    );
+    this.removeReducerAfterDestroy<STATE>(fullStoreName, store);
+
     return store;
   }
 

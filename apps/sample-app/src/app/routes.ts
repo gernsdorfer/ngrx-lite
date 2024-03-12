@@ -44,6 +44,13 @@ export const routes: Routes = [
       ).then((m) => m.LoadingWithSignalEffectsComponent),
   },
   {
+    path: 'loading-with-store-function',
+    loadComponent: () =>
+      import('./loading-store/store-function/store-function.component').then(
+        (m) => m.StoreFunctionComponent,
+      ),
+  },
+  {
     path: 'option-skip-same-pending-actions',
     loadComponent: () =>
       import(

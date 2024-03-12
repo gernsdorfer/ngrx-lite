@@ -72,6 +72,13 @@ import { RouterModule } from '@angular/router';
         <a
           class="menu-link"
           mat-menu-item
+          routerLink="/loading-with-store-function"
+        >
+          Store function
+        </a>
+        <a
+          class="menu-link"
+          mat-menu-item
           routerLink="/option-skip-same-pending-actions"
         >
           Option: skipSamePendingActions
@@ -81,8 +88,9 @@ import { RouterModule } from '@angular/router';
           mat-menu-item
           routerLink="/option-skip-same-actions"
         >
-          Option: skipSameActions </a
-        ><a
+          Option: skipSameActions
+        </a>
+        <a
           class="menu-link"
           mat-menu-item
           routerLink="/option-repeat-for-actions"
