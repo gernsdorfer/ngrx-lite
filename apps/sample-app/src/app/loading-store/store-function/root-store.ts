@@ -1,34 +1,37 @@
-import { Injectable, OnDestroy, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   LoadingStoreState,
   StoreFactory,
-  createStoreFn,
+  createStoreAsFn,
 } from '@gernsdorfer/ngrx-lite';
 import { of } from 'rxjs';
+import { storeBSuccessAction } from './dynamic-store';
 
 export type MyState = LoadingStoreState<
   { counter: number },
   { message: string }
 >;
 
-@Injectable()
-class MyFactoryStoreService implements OnDestroy {
+const providedIn = 'root';
+
+@Injectable({ providedIn: providedIn })
+class MyRootFactoryStoreService {
   private storeFactory = inject(StoreFactory);
   private store = this.storeFactory.createComponentLoadingStore<
     MyState['item'],
     MyState['error']
   >({
-    storeName: 'FUNCTION_STORE',
+    storeName: 'FunctionRootStore',
   });
 
   public counterState = this.store.state;
+  onStoreBSuccess = this.store.onActions([storeBSuccessAction]);
 
   increment = this.store.loadingEffect('INCREMENT', (counter: number) =>
     of({ counter: counter }).pipe(),
   );
-
-  ngOnDestroy() {
-    this.store.ngOnDestroy();
-  }
 }
-export const myFactoryStore = createStoreFn(MyFactoryStoreService);
+
+export const myRootStore = createStoreAsFn(MyRootFactoryStoreService, {
+  providedIn: providedIn,
+});

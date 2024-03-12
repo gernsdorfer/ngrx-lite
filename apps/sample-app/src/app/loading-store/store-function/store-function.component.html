@@ -1,4 +1,13 @@
 <my-app-ui-card>
   <div title>Store Function</div>
   <div subtitle>Loading Store with Function</div>
+  <div content>
+    <h2 class="counter">
+      {{ stateB().item?.counter }}
+    </h2>
+  </div>
+  <div actions>
+    Increment Store B
+    <button class="increment" (click)="incrementStoreB()" mat-fab>+</button>
+  </div>
 </my-app-ui-card>

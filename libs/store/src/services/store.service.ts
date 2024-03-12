@@ -15,6 +15,7 @@ import { ActionReducer, Store as NgrxStore, ReducerManager } from '@ngrx/store';
 import { INITIAL_OPTIONS, StoreDevtools } from '@ngrx/store-devtools';
 import { LiftedActions, LiftedState } from '@ngrx/store-devtools/src/reducer';
 import { filter, map, of, switchMap, take, takeUntil, tap } from 'rxjs';
+import { getFullStoreName } from './action-creator';
 import { DevToolHelper } from './dev-tool-helper.service';
 import { ComponentStore } from './stores/component-store.service';
 
@@ -133,9 +134,7 @@ export class Store {
       optional: true,
       self: true,
     });
-    const fullStoreName = [storeName, dynamicStoreName]
-      .filter((name) => name !== null)
-      .join('');
+    const fullStoreName = getFullStoreName(storeName, dynamicStoreName);
     const initialState = this.getInitialState<STATE>(
       storeName,
       defaultState,
