@@ -9,6 +9,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'functional-store',
+    loadComponent: () =>
+      import(
+        './component-store/functional-store/functional-store.component'
+      ).then((m) => m.FunctionalStoreComponent),
+  },
+  {
     path: 'combine-with-entity',
     loadComponent: () =>
       import(
@@ -42,6 +49,13 @@ export const routes: Routes = [
       import(
         './loading-store/with-signal-effects/loading-with-signal-effects.component'
       ).then((m) => m.LoadingWithSignalEffectsComponent),
+  },
+  {
+    path: 'loading-with-functional-store',
+    loadComponent: () =>
+      import(
+        './loading-store/functional-store/functional-loading-store.component'
+      ).then((m) => m.FunctionalLoadingStoreComponent),
   },
   {
     path: 'option-skip-same-pending-actions',

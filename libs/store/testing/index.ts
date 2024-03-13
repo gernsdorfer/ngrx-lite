@@ -4,6 +4,15 @@ import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Subject } from 'rxjs';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type mockCreateStoreAsFn = <INJECTION, STORE>() => {
+  inject: () => STORE;
+};
+
+export type createStoreAsFnTest<
+  CREATOR_FUNCTION extends ReturnType<mockCreateStoreAsFn>,
+> = ReturnType<CREATOR_FUNCTION['inject']>;
+
 export let actions$ = new Subject<Action>();
 export const storeTestingFactory = () => [
   provideMockActions(() => actions$),

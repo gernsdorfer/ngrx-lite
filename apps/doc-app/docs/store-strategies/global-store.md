@@ -8,6 +8,9 @@ sidebar_position: 3
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/global-counter)
 
+:::tip to create multiple instances of a store, you can now use much easier [Functional Store](./functional-store) way.
+:::
+
 A Module Store live in your Application
 
 ## Define the Store as Service
@@ -20,7 +23,7 @@ export interface MyState {
 }
 @Injectable(
   // Define your Store in the global Scope
-  { providedIn: 'root' }
+  { providedIn: 'root' },
 )
 export class MyStore implements OnDestroy {
   private store = this.storeFactory.createComponentStore<MyState>({

@@ -13,6 +13,9 @@ import { RouterModule } from '@angular/router';
       </button>
       <mat-menu #menuComponentStore="matMenu">
         <a class="menu-link" mat-menu-item routerLink="/">Basic</a>
+        <a class="menu-link" mat-menu-item routerLink="/functional-store">
+          Functional Store
+        </a>
         <a class="menu-link" mat-menu-item routerLink="/custom-action"
           >Custom-Action</a
         >
@@ -59,6 +62,13 @@ import { RouterModule } from '@angular/router';
         <a
           class="menu-link"
           mat-menu-item
+          routerLink="/loading-with-functional-store"
+        >
+          Functional Store
+        </a>
+        <a
+          class="menu-link"
+          mat-menu-item
           routerLink="/loading-with-default-values"
         >
           Loading with default values
@@ -69,6 +79,7 @@ import { RouterModule } from '@angular/router';
           routerLink="/loading-with-signal-effects"
           >with Signal Effects</a
         >
+
         <a
           class="menu-link"
           mat-menu-item
@@ -81,8 +92,9 @@ import { RouterModule } from '@angular/router';
           mat-menu-item
           routerLink="/option-skip-same-actions"
         >
-          Option: skipSameActions </a
-        ><a
+          Option: skipSameActions
+        </a>
+        <a
           class="menu-link"
           mat-menu-item
           routerLink="/option-repeat-for-actions"
