@@ -25,7 +25,7 @@ export const storeBSuccessAction = getEffectAction<MyDynamicStoreNames>({
 });
 
 @Injectable()
-export class MyDynamicFactoryStoreService
+class MyDynamicFactoryStoreService
   extends DynamicStore<MyDynamicStoreNames>
   implements OnDestroy
 {

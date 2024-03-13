@@ -1,56 +1,74 @@
-import { DestroyRef, inject, Injector, OnDestroy, Type } from '@angular/core';
+import {
+  DestroyRef,
+  inject,
+  Injectable,
+  Injector,
+  OnDestroy,
+  Type,
+} from '@angular/core';
 import { DynamicStoreName } from '../injection-tokens/state.token';
 
 export class DynamicStore<T extends string = string> {
   dynamicStoryName?: T;
 }
-const loadFromRoot = <STORE>(store: Type<STORE>) =>
-  inject(store, { optional: true });
+type GLOBAL_STORE = Injectable & { providedIn: 'root' | 'platform' };
 
-const createNewStoreInstance = <STORE extends OnDestroy>(
-  store: Type<STORE>,
-  dynamicStoreName?: string,
-) => {
-  const storeInstance = Injector.create({
-    parent: inject(Injector),
-    providers: [
-      store,
-      { provide: DynamicStoreName, useValue: dynamicStoreName },
-    ],
-  }).get(store);
-  const destroy = inject(DestroyRef);
-  destroy.onDestroy(() => storeInstance.ngOnDestroy());
-  return storeInstance;
-};
-
-const storeNotFoundHandling = <STORE extends OnDestroy>(
-  shouldTriggerError: boolean,
-  store: Type<STORE>,
-) => {
-  if (shouldTriggerError) throw new Error(`Store not found: ${store.name}`);
-};
-
-export const createStoreAsFn = <
-  INJECTION extends {
-    providedIn?: Type<unknown> | 'root' | 'platform' | 'any' | null;
-  },
-  STORE extends INJECTION extends {
-    providedIn: 'root' | 'platform' | 'any';
-  }
+class Lars<
+  INJECTION extends Injectable,
+  STORE extends INJECTION extends GLOBAL_STORE
     ? object
     : OnDestroy & DynamicStore,
->(
-  store: Type<STORE>,
-  _injectionOptions?: INJECTION,
-) => ({
-  inject: (
+> {
+  constructor(
+    private store: Type<STORE>,
+    private injectionOptions?: INJECTION,
+  ) {}
+
+  inject(
     dynamicStoreName?: INJECTION extends {
       providedIn: 'root' | 'platform' | 'any';
     }
       ? never
       : STORE['dynamicStoryName'],
-  ) =>
-    loadFromRoot(store) ||
-    storeNotFoundHandling(_injectionOptions?.providedIn === 'root', store) ||
-    createNewStoreInstance(store, dynamicStoreName),
-});
+  ) {
+    return (
+      this.loadFromRoot() ||
+      this.storeNotFoundHandling(
+        this.injectionOptions?.providedIn === 'root',
+      ) ||
+      this.createNewStoreInstance(dynamicStoreName)
+    );
+  }
+
+  private loadFromRoot() {
+    return inject(this.store, { optional: true });
+  }
+
+  private createNewStoreInstance(dynamicStoreName?: string) {
+    const storeInstance = Injector.create({
+      parent: inject(Injector),
+      providers: [
+        this.store,
+        { provide: DynamicStoreName, useValue: dynamicStoreName },
+      ],
+    }).get(this.store);
+    const destroy = inject(DestroyRef);
+    destroy.onDestroy(() => storeInstance.ngOnDestroy());
+    return storeInstance;
+  }
+
+  private storeNotFoundHandling(shouldTriggerError: boolean) {
+    if (shouldTriggerError)
+      throw new Error(`Store not found: ${this.store.name}`);
+  }
+}
+
+export const createStoreAsFn = <
+  INJECTION extends Injectable,
+  STORE extends INJECTION extends GLOBAL_STORE
+    ? object
+    : OnDestroy & DynamicStore,
+>(
+  store: Type<STORE>,
+  _injectionOptions?: INJECTION,
+) => new Lars<INJECTION, STORE>(store, _injectionOptions);
