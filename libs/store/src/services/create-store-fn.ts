@@ -30,7 +30,7 @@ export class CreateStoreAsFn<
     }
       ? never
       : STORE['dynamicStoryName'],
-  ) {
+  ): STORE {
     return (
       this.loadFromRoot() ||
       this.storeNotFoundHandling(
