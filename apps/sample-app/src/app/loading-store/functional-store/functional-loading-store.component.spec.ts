@@ -7,11 +7,11 @@ import {
   storeTestingFactory,
 } from '@gernsdorfer/ngrx-lite/testing';
 import { DynamicState, dynamicStore } from './dynamic-store';
+import { FunctionalLoadingStoreComponent } from './functional-loading-store.component';
 import { rootStore } from './root-store';
-import { StoreFunctionComponent } from './store-function.component';
 import createSpyObj = jasmine.createSpyObj;
 
-describe('LoadingWithSignalEffectsComponent', () => {
+describe('FunctionalLoadingStoreComponent', () => {
   const dynamicState = signal<DynamicState>(
     getDefaultComponentLoadingState({}),
   );
@@ -39,8 +39,8 @@ describe('LoadingWithSignalEffectsComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
-  const getComponent = (): StoreFunctionComponent => {
-    const fixture = TestBed.createComponent(StoreFunctionComponent);
+  const getComponent = (): FunctionalLoadingStoreComponent => {
+    const fixture = TestBed.createComponent(FunctionalLoadingStoreComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     return component;

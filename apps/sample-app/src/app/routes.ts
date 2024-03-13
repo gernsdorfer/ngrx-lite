@@ -44,11 +44,11 @@ export const routes: Routes = [
       ).then((m) => m.LoadingWithSignalEffectsComponent),
   },
   {
-    path: 'loading-with-store-function',
+    path: 'loading-with-functional-store',
     loadComponent: () =>
-      import('./loading-store/store-function/store-function.component').then(
-        (m) => m.StoreFunctionComponent,
-      ),
+      import(
+        './loading-store/functional-store/functional-loading-store.component'
+      ).then((m) => m.FunctionalLoadingStoreComponent),
   },
   {
     path: 'option-skip-same-pending-actions',

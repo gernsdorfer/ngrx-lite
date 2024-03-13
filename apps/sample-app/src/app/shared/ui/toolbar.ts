@@ -59,7 +59,7 @@ import { RouterModule } from '@angular/router';
         <a
           class="menu-link"
           mat-menu-item
-          routerLink="/loading-with-store-function"
+          routerLink="/loading-with-functional-store"
         >
           Functional Store
         </a>

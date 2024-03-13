@@ -6,12 +6,12 @@ import { dynamicStore } from './dynamic-store';
 import { rootStore } from './root-store';
 
 @Component({
-  selector: 'my-app-loading-store-function',
-  templateUrl: 'store-function.component.html',
+  selector: 'my-app-loading-store-functional-store',
+  templateUrl: 'functional-loading-store.component.html',
   standalone: true,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
-export class StoreFunctionComponent {
+export class FunctionalLoadingStoreComponent {
   private dynamicStoreTypeA = dynamicStore.inject('StoreA');
   private rootStore = rootStore.inject();
 
