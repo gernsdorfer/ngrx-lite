@@ -36,3 +36,22 @@ it('should trigger an eaction', () => {
   //check your state
 });
 ```
+
+## Mock Functional Stores
+
+To Test a lazy Functional Store, you can use `createStoreAsFnTest` to create a mock of your store.
+
+:::note Many Test Example you can
+find [here](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/functional-store)
+:::
+
+```ts title="component.spec.ts"
+import { DynamicState, dynamicStore } from './dynamic-store';
+// get store class Interface
+type MyStoreInterface = createStoreAsFnTest<typeof dynamicStore>;
+
+// create store Spy
+const dynamicStoreSpy = createSpyObj<MyStoreInterface>({ increment: undefined });
+// spy on store
+spyOn(dynamicStore, 'inject').and.returnValue(dynamicStoreSpy);
+```

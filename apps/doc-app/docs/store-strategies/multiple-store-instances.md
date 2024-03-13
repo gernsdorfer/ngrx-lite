@@ -8,6 +8,9 @@ sidebar_position: 2
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/muliple-instances)
 
+:::tip to create multiple instances of a store, you can now use much easier [Functional Store](./functional-store) way.
+:::
+
 A Store can live in multiple Components/Module with own Scope
 
 ## Define the Store as Service and a dynamic Store Name
