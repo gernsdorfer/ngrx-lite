@@ -59,6 +59,13 @@ import { RouterModule } from '@angular/router';
         <a
           class="menu-link"
           mat-menu-item
+          routerLink="/loading-with-store-function"
+        >
+          Functional Store
+        </a>
+        <a
+          class="menu-link"
+          mat-menu-item
           routerLink="/loading-with-default-values"
         >
           Loading with default values
@@ -69,13 +76,7 @@ import { RouterModule } from '@angular/router';
           routerLink="/loading-with-signal-effects"
           >with Signal Effects</a
         >
-        <a
-          class="menu-link"
-          mat-menu-item
-          routerLink="/loading-with-store-function"
-        >
-          Store function
-        </a>
+
         <a
           class="menu-link"
           mat-menu-item

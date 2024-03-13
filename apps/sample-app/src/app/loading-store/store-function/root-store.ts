@@ -22,7 +22,7 @@ class RootStoreService {
   });
 
   public state = this.store.state;
-  onDynamicStoreASuccess = this.store.onActions([dynamicStoreASuccessAction]);
+  onLazyStoreBSuccess = this.store.onActions([dynamicStoreASuccessAction]);
 
   increment = this.store.loadingEffect('INCREMENT', (counter: number) =>
     of({ counter: counter }).pipe(),

@@ -15,19 +15,19 @@ describe('LoadingWithSignalEffectsComponent', () => {
   const dynamicState = signal<DynamicState>(
     getDefaultComponentLoadingState({}),
   );
-  let onStoreBSuccess: () => void;
+  let onLazyStoreBSuccess: () => void;
   const dynamicStoreSpy = createSpyObj<
     createStoreAsFnTest<typeof dynamicStore>
   >({ increment: undefined }, { state: dynamicState });
 
   const rootStoreSpy = createSpyObj<createStoreAsFnTest<typeof rootStore>>(
     {
-      onDynamicStoreASuccess: undefined,
+      onLazyStoreBSuccess: undefined,
     },
     {},
   );
-  rootStoreSpy.onDynamicStoreASuccess.and.callFake(
-    (cb: () => void) => (onStoreBSuccess = cb),
+  rootStoreSpy.onLazyStoreBSuccess.and.callFake(
+    (cb: () => void) => (onLazyStoreBSuccess = cb),
   );
   beforeEach(() => {
     spyOn(dynamicStore, 'inject').and.returnValue(dynamicStoreSpy);
@@ -62,12 +62,12 @@ describe('LoadingWithSignalEffectsComponent', () => {
 
   describe('onStoreBSuccess', () => {
     it('should call store.onStoreASuccess', () => {
-      getComponent();
-      const logSpy = spyOn(console, 'log');
-      onStoreBSuccess();
+      const component = getComponent();
 
-      expect(logSpy).toHaveBeenCalledWith(
-        'Root knows the StoreA Increment Successfully',
+      onLazyStoreBSuccess();
+
+      expect(component.lazyStoreBSuccess).toBe(
+        'Root Store knows the StoreA Increment Successfully',
       );
     });
   });

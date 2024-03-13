@@ -16,9 +16,12 @@ export class StoreFunctionComponent {
   private rootStore = rootStore.inject();
 
   stateB = this.dynamicStoreTypeA.state;
+  lazyStoreBSuccess?: string;
 
-  onStoreBSuccess = this.rootStore.onDynamicStoreASuccess(() =>
-    console.log('Root knows the StoreA Increment Successfully'),
+  onLazyStoreBSuccess = this.rootStore.onLazyStoreBSuccess(
+    () =>
+      (this.lazyStoreBSuccess =
+        'Root Store knows the StoreA Increment Successfully'),
   );
 
   incrementStoreB() {
