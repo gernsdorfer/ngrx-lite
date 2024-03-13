@@ -5,33 +5,30 @@ import {
   createStoreAsFn,
 } from '@gernsdorfer/ngrx-lite';
 import { of } from 'rxjs';
-import { storeBSuccessAction } from './dynamic-store';
+import { dynamicStoreASuccessAction } from './dynamic-store';
 
-export type MyState = LoadingStoreState<
-  { counter: number },
-  { message: string }
->;
+export type RootState = LoadingStoreState<{ counter: number }, never>;
 
 const providedIn = 'root';
 
 @Injectable({ providedIn: providedIn })
-class MyRootFactoryStoreService {
+class RootStoreService {
   private storeFactory = inject(StoreFactory);
   private store = this.storeFactory.createComponentLoadingStore<
-    MyState['item'],
-    MyState['error']
+    RootState['item'],
+    RootState['error']
   >({
     storeName: 'FunctionRootStore',
   });
 
-  public counterState = this.store.state;
-  onStoreBSuccess = this.store.onActions([storeBSuccessAction]);
+  public state = this.store.state;
+  onDynamicStoreASuccess = this.store.onActions([dynamicStoreASuccessAction]);
 
   increment = this.store.loadingEffect('INCREMENT', (counter: number) =>
     of({ counter: counter }).pipe(),
   );
 }
 
-export const myRootStore = createStoreAsFn(MyRootFactoryStoreService, {
+export const rootStore = createStoreAsFn(RootStoreService, {
   providedIn: providedIn,
 });

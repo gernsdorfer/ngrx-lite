@@ -9,38 +9,36 @@ import {
 } from '@gernsdorfer/ngrx-lite';
 import { of } from 'rxjs';
 
-export type MyState = LoadingStoreState<
-  { counter: number },
-  { message: string }
->;
+export type DynamicState = LoadingStoreState<{ counter: number }, never>;
 type MyDynamicStoreNames = 'StoreA' | 'StoreB';
 const storeName = 'Function_Store';
 const incrementEffect = 'INCREMENT';
 
-export const storeBSuccessAction = getEffectAction<MyDynamicStoreNames>({
+export const dynamicStoreASuccessAction = getEffectAction<MyDynamicStoreNames>({
   storeName: storeName,
   effectName: incrementEffect,
   type: EffectStates.SUCCESS,
-  dynamicStoreName: 'StoreB',
+  dynamicStoreName: 'StoreA',
 });
 
 @Injectable()
-class MyDynamicFactoryStoreService
+class DynamicStoreService
   extends DynamicStore<MyDynamicStoreNames>
   implements OnDestroy
 {
   private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentLoadingStore<
-    MyState['item'],
-    MyState['error']
+    DynamicState['item'],
+    DynamicState['error']
   >({
     storeName,
   });
 
-  public counterState = this.store.state;
+  public state = this.store.state;
 
   increment = this.store.loadingEffect(incrementEffect, (counter: number) =>
-    of({ counter: counter }).pipe(),
+    of({ counter: counter }),
   );
 
   ngOnDestroy() {
@@ -48,4 +46,4 @@ class MyDynamicFactoryStoreService
   }
 }
 
-export const myFactoryStore = createStoreAsFn(MyDynamicFactoryStoreService);
+export const dynamicStore = createStoreAsFn(DynamicStoreService);

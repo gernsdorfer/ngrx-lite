@@ -13,7 +13,7 @@ export class DynamicStore<T extends string = string> {
 }
 type GLOBAL_STORE = Injectable & { providedIn: 'root' | 'platform' };
 
-class Lars<
+export class CreateStoreAsFn<
   INJECTION extends Injectable,
   STORE extends INJECTION extends GLOBAL_STORE
     ? object
@@ -70,5 +70,5 @@ export const createStoreAsFn = <
     : OnDestroy & DynamicStore,
 >(
   store: Type<STORE>,
-  _injectionOptions?: INJECTION,
-) => new Lars<INJECTION, STORE>(store, _injectionOptions);
+  injectionOptions?: INJECTION,
+) => new CreateStoreAsFn<INJECTION, STORE>(store, injectionOptions);

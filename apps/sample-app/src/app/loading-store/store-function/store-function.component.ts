@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../shared/ui/card-component';
 import { UiSpinnerComponent } from '../../shared/ui/spinner';
-import { myFactoryStore } from './dynamic-store';
-import { myRootStore } from './root-store';
+import { dynamicStore } from './dynamic-store';
+import { rootStore } from './root-store';
 
 @Component({
   selector: 'my-app-loading-store-function',
@@ -12,18 +12,16 @@ import { myRootStore } from './root-store';
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class StoreFunctionComponent {
-  private dynamicStore = myFactoryStore.inject();
-  private dynamicStoreTypeA = myFactoryStore.inject('StoreA');
-  dynamicStoreTypeB = myFactoryStore.inject('StoreB');
-  private rootStore = myRootStore.inject();
+  private dynamicStoreTypeA = dynamicStore.inject('StoreA');
+  private rootStore = rootStore.inject();
 
-  stateB = this.dynamicStoreTypeB.counterState;
+  stateB = this.dynamicStoreTypeA.state;
 
-  onStoreBSuccess = this.rootStore.onStoreBSuccess(() =>
-    console.log('Root knows the StoreB Increment Successfully'),
+  onStoreBSuccess = this.rootStore.onDynamicStoreASuccess(() =>
+    console.log('Root knows the StoreA Increment Successfully'),
   );
 
   incrementStoreB() {
-    this.dynamicStoreTypeB.increment(1);
+    this.dynamicStoreTypeA.increment(1);
   }
 }
