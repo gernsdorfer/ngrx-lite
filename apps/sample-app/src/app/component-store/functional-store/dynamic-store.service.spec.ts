@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { dynamicStore } from './dynamic-store';
-import createSpyObj = jasmine.createSpyObj;
 
 describe('RootStore', () => {
   const store = () =>
