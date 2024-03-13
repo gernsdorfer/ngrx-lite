@@ -55,6 +55,7 @@ describe('Store', () => {
       },
     },
   );
+
   const getStore = (providers: TestModuleMetadata['providers'] = []): Store =>
     TestBed.configureTestingModule({
       providers: [
@@ -78,6 +79,12 @@ describe('Store', () => {
       teardown: { destroyAfterEach: false },
     }).inject(Store);
 
+  const createStoreByStoreType = (
+    store: Store,
+    payload: Parameters<Store['createStoreByStoreType']>[0],
+  ) =>
+    TestBed.runInInjectionContext(() => store.createStoreByStoreType(payload));
+
   it('should not show an Error for checkForTimeTravel', () => {
     expect(() => getStore().checkForTimeTravel()).not.toThrowError();
   });
@@ -88,7 +95,7 @@ describe('Store', () => {
 
   it('should create a componentStore without errors', () => {
     expect(() =>
-      getStore().createStoreByStoreType({
+      createStoreByStoreType(getStore(), {
         storeName: 'myStore',
         plugins: {},
         defaultState: defaultMyState,
@@ -225,12 +232,12 @@ describe('Store', () => {
     const store = getStore([]);
     const info = spyOn(console, 'info');
 
-    store.createStoreByStoreType({
+    createStoreByStoreType(store, {
       storeName: 'my-store',
       defaultState: {},
       CreatedStore: ComponentStore,
     });
-    store.createStoreByStoreType({
+    createStoreByStoreType(store, {
       storeName: 'my-store',
       defaultState: {},
       CreatedStore: ComponentStore,
@@ -242,7 +249,7 @@ describe('Store', () => {
   });
 
   it('should return default initial state', () => {
-    const { state } = getStore().createStoreByStoreType({
+    const { state } = createStoreByStoreType(getStore(), {
       storeName: 'myStore',
       plugins: {},
       defaultState: defaultMyState,
@@ -253,7 +260,7 @@ describe('Store', () => {
   });
 
   it('should return state from sessionStorage plugin', () => {
-    const { state } = getStore([
+    const store = getStore([
       {
         provide: LocalStoragePlugin,
         useValue: jasmine.createSpyObj<ClientStoragePlugin>({
@@ -264,7 +271,8 @@ describe('Store', () => {
           setStateToStorage: undefined,
         }),
       },
-    ]).createStoreByStoreType({
+    ]);
+    const { state } = createStoreByStoreType(store, {
       storeName: 'myStore',
       defaultState: defaultMyState,
       plugins: {
@@ -283,7 +291,7 @@ describe('Store', () => {
     it('should add add for store', () => {
       reducerManager.addReducer.calls.reset();
 
-      getStore().createStoreByStoreType({
+      createStoreByStoreType(getStore(), {
         storeName: 'testStore',
         defaultState: defaultMyState,
         CreatedStore: ComponentStore,
@@ -295,7 +303,7 @@ describe('Store', () => {
     it('should not add an existing reducer to store', () => {
       reducerManager.addReducer.calls.reset();
 
-      getStore().createStoreByStoreType({
+      createStoreByStoreType(getStore(), {
         storeName: 'oldStore',
         defaultState: defaultMyState,
         CreatedStore: ComponentStore,
@@ -312,7 +320,7 @@ describe('Store', () => {
         });
       });
       it('should ignore action from other store', () => {
-        getStore().createStoreByStoreType({
+        createStoreByStoreType(getStore(), {
           storeName: 'testStore',
           defaultState: defaultMyState,
           CreatedStore: ComponentStore,
@@ -335,7 +343,7 @@ describe('Store', () => {
 
       describe('action is current store action', () => {
         it('should set payload', () => {
-          getStore().createStoreByStoreType({
+          createStoreByStoreType(getStore(), {
             storeName: 'testStore',
             defaultState: defaultMyState,
             CreatedStore: ComponentStore,
@@ -355,7 +363,7 @@ describe('Store', () => {
         });
 
         it('should return merge default state with payload', () => {
-          getStore().createStoreByStoreType({
+          createStoreByStoreType(getStore(), {
             storeName: 'testStore',
             defaultState: defaultMyState,
             CreatedStore: ComponentStore,
@@ -413,7 +421,7 @@ describe('Store', () => {
       });
 
       it('should set stateChanges to store', () => {
-        const { state$ } = store.createStoreByStoreType({
+        const { state$ } = createStoreByStoreType(store, {
           storeName: 'myStore',
           defaultState: defaultMyState,
           CreatedStore: ComponentStore,
@@ -430,7 +438,7 @@ describe('Store', () => {
       });
 
       it('should not set stateChanges to store for stores with skipLog option', () => {
-        const { state$ } = store.createStoreByStoreType({
+        const { state$ } = createStoreByStoreType(store, {
           storeName: 'myStore',
           defaultState: defaultMyState,
           CreatedStore: ComponentStore,
@@ -447,7 +455,7 @@ describe('Store', () => {
 
     describe('store state changes to ClientStoragePlugins', () => {
       it('should return state from sessionStorage plugin', () => {
-        const { state } = getStore([
+        const store = getStore([
           {
             provide: SessionStoragePlugin,
             useValue: jasmine.createSpyObj<ClientStoragePlugin>({
@@ -458,7 +466,8 @@ describe('Store', () => {
               setStateToStorage: undefined,
             }),
           },
-        ]).createStoreByStoreType({
+        ]);
+        const { state } = createStoreByStoreType(store, {
           storeName: 'myStore',
           defaultState: defaultMyState,
           plugins: {
@@ -481,12 +490,13 @@ describe('Store', () => {
           },
           setStateToStorage: undefined,
         });
-        const myStore = getStore([
+        const store = getStore([
           {
             provide: SessionStoragePlugin,
             useValue: sessionStoragePlugin,
           },
-        ]).createStoreByStoreType({
+        ]);
+        const createdStore = createStoreByStoreType(store, {
           storeName: 'testStore',
           defaultState: defaultMyState,
           plugins: {
@@ -495,7 +505,7 @@ describe('Store', () => {
           CreatedStore: ComponentStore,
         });
 
-        myStore.setState({ ...defaultMyState, myState: 'test' });
+        createdStore.setState({ ...defaultMyState, myState: 'test' });
 
         expect(sessionStoragePlugin.setStateToStorage).toHaveBeenCalledWith(
           'testStore',
@@ -512,12 +522,13 @@ describe('Store', () => {
           setStateToStorage: undefined,
         });
 
-        const myStore = getStore([
+        const store = getStore([
           {
             provide: LocalStoragePlugin,
             useValue: localStoragePlugin,
           },
-        ]).createStoreByStoreType({
+        ]);
+        const myStore = createStoreByStoreType(store, {
           storeName: 'testStore',
           defaultState: defaultMyState,
           plugins: {
@@ -537,16 +548,16 @@ describe('Store', () => {
 
     describe('remove reducer, after destroy', () => {
       describe('devtools are available', () => {
-        const getComponentStore = (
-          storeDevTools: StoreDevtools,
-        ): ComponentStore<MyState> =>
-          getStore([
+        const getComponentStore = (storeDevTools: StoreDevtools) => {
+          const store = getStore([
             { provide: StoreDevtools, useValue: storeDevTools },
-          ]).createStoreByStoreType({
+          ]);
+          return createStoreByStoreType(store, {
             storeName: 'testStore',
             defaultState: defaultMyState,
             CreatedStore: ComponentStore,
           });
+        };
         beforeEach(() => {
           reducerManager.removeReducer.calls.reset();
         });
@@ -606,7 +617,7 @@ describe('Store', () => {
       it('should immediately remove the reducer, when devtools are not available', () => {
         TestBed.overrideProvider(StoreDevtools, { useValue: null });
 
-        const myStore = getStore().createStoreByStoreType({
+        const myStore = createStoreByStoreType(getStore(), {
           storeName: 'testStore',
           defaultState: defaultMyState,
           CreatedStore: ComponentStore,
