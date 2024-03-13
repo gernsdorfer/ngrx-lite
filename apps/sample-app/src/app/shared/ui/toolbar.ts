@@ -13,6 +13,9 @@ import { RouterModule } from '@angular/router';
       </button>
       <mat-menu #menuComponentStore="matMenu">
         <a class="menu-link" mat-menu-item routerLink="/">Basic</a>
+        <a class="menu-link" mat-menu-item routerLink="/functional-store">
+          Functional Store
+        </a>
         <a class="menu-link" mat-menu-item routerLink="/custom-action"
           >Custom-Action</a
         >

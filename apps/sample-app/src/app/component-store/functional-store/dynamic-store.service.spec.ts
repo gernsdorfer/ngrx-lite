@@ -1,10 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
-import { rootStore } from './root-store';
+import { dynamicStore } from './dynamic-store';
+import createSpyObj = jasmine.createSpyObj;
 
 describe('RootStore', () => {
-  const store = () => TestBed.runInInjectionContext(() => rootStore.inject());
+  const store = () =>
+    TestBed.runInInjectionContext(() => dynamicStore.inject());
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [],
@@ -13,9 +15,13 @@ describe('RootStore', () => {
     }).compileComponents();
   });
 
-  it('should increment state', () => {
-    const service = store();
+  describe('increment', () => {
+    it('should increment state', () => {
+      const service = store();
 
-    expect(service).toBeDefined();
+      service.increment(1);
+
+      expect(service.state()).toEqual({ counter: 1 });
+    });
   });
 });

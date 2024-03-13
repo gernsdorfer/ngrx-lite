@@ -9,6 +9,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'functional-store',
+    loadComponent: () =>
+      import(
+        './component-store/functional-store/functional-store.component'
+      ).then((m) => m.FunctionalStoreComponent),
+  },
+  {
     path: 'combine-with-entity',
     loadComponent: () =>
       import(

@@ -1,23 +1,17 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  LoadingStoreState,
-  StoreFactory,
-  createStoreAsFn,
-} from '@gernsdorfer/ngrx-lite';
+import { StoreFactory, createStoreAsFn } from '@gernsdorfer/ngrx-lite';
 import { dynamicStoreASuccessAction } from './dynamic-store';
 
-export type RootState = LoadingStoreState<{ counter: number }, never>;
+export type RootState = { counter: number };
 
 const providedIn = 'root';
 
 @Injectable({ providedIn: providedIn })
 class RootStoreService {
   private storeFactory = inject(StoreFactory);
-  private store = this.storeFactory.createComponentLoadingStore<
-    RootState['item'],
-    RootState['error']
-  >({
+  private store = this.storeFactory.createComponentStore<RootState>({
     storeName: 'FunctionRootStore',
+    defaultState: { counter: 0 },
   });
 
   public state = this.store.state;
