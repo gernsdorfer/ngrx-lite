@@ -54,9 +54,7 @@ export class CreateStoreAsFn<
       ],
     }).get<StoreType<{ providedIn: null }>>(this.store);
     const destroy = inject(DestroyRef);
-    destroy.onDestroy(() =>
-      storeInstance.ngOnDestroy ? storeInstance.ngOnDestroy() : null,
-    );
+    destroy.onDestroy(() => storeInstance.ngOnDestroy());
     return storeInstance as STORE;
   }
 
