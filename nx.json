@@ -1,11 +1,9 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "affected": {
-    "defaultBase": "master"
-  },
   "cli": {
     "packageManager": "npm"
   },
+  "defaultBase": "master",
   "defaultProject": "ngrx-lite",
   "generators": {
     "@nx/angular:application": {
@@ -46,9 +44,10 @@
       "inputs": ["default", "^production"],
       "cache": true
     },
-    "lint": {
+    "@nx/eslint:lint": {
       "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
       "cache": true
     }
-  }
+  },
+  "useInferencePlugins": false
 }

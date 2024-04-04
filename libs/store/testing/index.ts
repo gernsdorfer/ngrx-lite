@@ -13,7 +13,7 @@ export type createStoreAsFnTest<
   CREATOR_FUNCTION extends ReturnType<mockCreateStoreAsFn>,
 > = ReturnType<CREATOR_FUNCTION['inject']>;
 
-export let actions$ = new Subject<Action>();
+export const actions$ = new Subject<Action>();
 export const storeTestingFactory = () => [
   provideMockActions(() => actions$),
   StoreFactory,

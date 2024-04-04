@@ -68,13 +68,7 @@
       "defaultConfiguration": "development"
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": [
-          "apps/todo-app/src/**/*.ts",
-          "apps/todo-app/src/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "serve:todo-db-server": {
       "executor": "nx:run-commands",

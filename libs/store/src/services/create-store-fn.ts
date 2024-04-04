@@ -12,12 +12,13 @@ export class DynamicStore<T extends string = string> {
   dynamicStoryName?: T;
 }
 type GLOBAL_STORE = Injectable & { providedIn: 'root' | 'platform' };
+type StoreType<STORE extends Injectable> = STORE extends GLOBAL_STORE
+  ? DynamicStore<never>
+  : OnDestroy & DynamicStore;
 
 export class CreateStoreAsFn<
   INJECTION extends Injectable,
-  STORE extends INJECTION extends GLOBAL_STORE
-    ? object
-    : OnDestroy & DynamicStore,
+  STORE extends StoreType<INJECTION>,
 > {
   constructor(
     private store: Type<STORE>,
@@ -44,17 +45,17 @@ export class CreateStoreAsFn<
     return inject(this.store, { optional: true });
   }
 
-  private createNewStoreInstance(dynamicStoreName?: string) {
+  private createNewStoreInstance(dynamicStoreName?: string): STORE {
     const storeInstance = Injector.create({
       parent: inject(Injector),
       providers: [
         this.store,
         { provide: DynamicStoreName, useValue: dynamicStoreName },
       ],
-    }).get(this.store);
+    }).get<StoreType<{ providedIn: null }>>(this.store);
     const destroy = inject(DestroyRef);
     destroy.onDestroy(() => storeInstance.ngOnDestroy());
-    return storeInstance;
+    return storeInstance as STORE;
   }
 
   private storeNotFoundHandling(shouldTriggerError: boolean) {
