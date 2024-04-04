@@ -1,5 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "// targets": "to see all targets run: nx show project doc-app --web",
   "name": "doc-app",
   "projectType": "application",
   "sourceRoot": "apps/doc-app/src",
