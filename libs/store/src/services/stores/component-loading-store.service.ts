@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { tapResponse } from '@ngrx/component-store';
+import { tapResponse } from '@ngrx/operators';
 import { ofType } from '@ngrx/effects';
 import { ActionCreator } from '@ngrx/store';
 import {

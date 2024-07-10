@@ -1,5 +1,5 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
-import { ReducerManager, ScannedActionsSubject } from '@ngrx/store';
+import { ReducerManager, ScannedActionsSubject, Action } from '@ngrx/store';
 import {
   INITIAL_OPTIONS,
   StoreDevtools,
