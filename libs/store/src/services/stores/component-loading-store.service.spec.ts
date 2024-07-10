@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
-import { createAction } from '@ngrx/store';
-import { Action } from '@ngrx/store/src/models';
+import { Action, createAction } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold } from 'jasmine-marbles';
 import { EMPTY, Subject, asapScheduler, of, tap } from 'rxjs';
