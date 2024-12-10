@@ -15,7 +15,6 @@ import { UiToolbarComponent } from './shared/ui/toolbar';
       }
     `,
   ],
-  standalone: true,
   imports: [UiToolbarComponent, RouterModule],
   templateUrl: 'app.component.html',
 })

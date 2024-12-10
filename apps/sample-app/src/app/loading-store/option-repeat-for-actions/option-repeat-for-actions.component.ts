@@ -27,7 +27,6 @@ const sideEffectAction = getEffectAction({
 @Component({
   selector: 'my-app-loading-option-repeat-for-actions',
   templateUrl: 'option-repeat-for-actions.component.html',
-  standalone: true,
   imports: [
     UiCardComponent,
     MatButtonModule,

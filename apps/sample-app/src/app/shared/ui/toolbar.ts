@@ -110,7 +110,6 @@ import { RouterModule } from '@angular/router';
       </mat-menu>
     </mat-toolbar>
   `,
-  standalone: true,
   imports: [MatToolbarModule, MatMenuModule, MatButtonModule, RouterModule],
 })
 export class UiToolbarComponent {}

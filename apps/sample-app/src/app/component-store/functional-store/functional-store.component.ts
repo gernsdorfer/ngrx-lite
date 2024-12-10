@@ -8,7 +8,6 @@ import { rootStore } from './root-store';
 @Component({
   selector: 'my-app-store-functional',
   templateUrl: 'functional-store.component.html',
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class FunctionalStoreComponent {

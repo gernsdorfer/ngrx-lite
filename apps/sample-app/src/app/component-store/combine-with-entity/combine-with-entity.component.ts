@@ -38,7 +38,6 @@ export const mockProducts = [
 @Component({
   selector: 'my-app-entity-app',
   templateUrl: 'combine-with-entity.html',
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

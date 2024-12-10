@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'todo-create',
   templateUrl: 'create.component.html',
-  standalone: true,
   imports: [
     MatInputModule,
     ReactiveFormsModule,

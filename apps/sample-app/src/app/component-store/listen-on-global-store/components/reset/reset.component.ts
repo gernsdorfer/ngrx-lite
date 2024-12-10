@@ -8,7 +8,6 @@ import { resetAction } from '../../actions/reset.action';
   selector: 'my-app-listen-on-global-store-reset',
   template: ` Dispatch Global Actions
     <button class="reset" (click)="reset()" mat-fab>reset</button>`,
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class ResetComponent {

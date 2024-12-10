@@ -16,7 +16,6 @@ import { UiCardComponent } from '../../shared/ui/card-component';
 @Component({
   selector: 'my-app-basic-app',
   templateUrl: 'persist-form.html',
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

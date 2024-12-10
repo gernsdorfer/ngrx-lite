@@ -6,7 +6,6 @@ import { UiCardComponent } from '../../shared/ui/card-component';
 @Component({
   selector: 'my-app-basic-custom-action',
   templateUrl: 'custom-action.html',
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class CustomActionComponent implements OnDestroy {
@@ -24,7 +23,7 @@ export class CustomActionComponent implements OnDestroy {
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
-      'INCREMENT'
+      'INCREMENT',
     );
   }
 

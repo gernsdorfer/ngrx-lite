@@ -6,7 +6,6 @@ import { UiCardComponent } from '../../shared/ui/card-component';
 @Component({
   selector: 'my-app-session',
   templateUrl: 'storage.html',
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class StorageExampleComponent implements OnDestroy {
@@ -27,7 +26,7 @@ export class StorageExampleComponent implements OnDestroy {
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
-      'INCREMENT'
+      'INCREMENT',
     );
   }
 

@@ -6,7 +6,6 @@ import { CounterStore } from './counter-service';
 @Component({
   selector: 'my-app-same-instance-demo-b',
   templateUrl: 'demo.html',
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class DemoBComponent {

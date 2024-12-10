@@ -12,7 +12,6 @@ import { ResetComponent } from './components/reset/reset.component';
     <br />
     <my-app-listen-on-global-store-demo-b></my-app-listen-on-global-store-demo-b>
   `,
-  standalone: true,
   imports: [DemoAComponent, DemoBComponent, ResetComponent],
 })
 export class ListenOnGlobalStoreComponent {}

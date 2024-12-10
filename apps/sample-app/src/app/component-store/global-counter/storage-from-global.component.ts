@@ -6,7 +6,6 @@ import { GlobalCounterStore } from './global-counter.service';
 @Component({
   selector: 'my-app-global-counter',
   templateUrl: 'service-counter.html',
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class StorageFromGlobalComponent {

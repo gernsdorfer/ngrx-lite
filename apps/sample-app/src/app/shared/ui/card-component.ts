@@ -35,7 +35,6 @@ import { MatMenuModule } from '@angular/material/menu';
       </mat-card-actions>
     </mat-card>
   `,
-  standalone: true,
   imports: [MatCardModule, MatMenuModule, MatButtonModule],
 })
 export class UiCardComponent {}

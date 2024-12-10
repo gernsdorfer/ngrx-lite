@@ -6,7 +6,6 @@ import { UiCardComponent } from '../../shared/ui/card-component';
 @Component({
   selector: 'my-app-store-without-loging',
   templateUrl: 'store-without-log.html',
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class StoreWithoutLogComponent implements OnDestroy {

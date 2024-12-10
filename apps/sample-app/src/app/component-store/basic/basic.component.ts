@@ -6,7 +6,6 @@ import { UiCardComponent } from '../../shared/ui/card-component';
 @Component({
   selector: 'my-app-basic-app',
   templateUrl: 'basic.html',
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class BasicComponent implements OnDestroy {

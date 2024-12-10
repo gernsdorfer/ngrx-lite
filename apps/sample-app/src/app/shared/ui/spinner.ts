@@ -16,7 +16,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       <mat-spinner color="warn"></mat-spinner>
     </div>
   `,
-  standalone: true,
   imports: [MatProgressSpinnerModule],
 })
 export class UiSpinnerComponent {}

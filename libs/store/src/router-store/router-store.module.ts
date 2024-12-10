@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import { RouterStore } from './router-service';
 
 const init = (routerStore: RouterStore) => () => routerStore.init();
@@ -7,12 +7,10 @@ const init = (routerStore: RouterStore) => () => routerStore.init();
   imports: [],
   providers: [
     RouterStore,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: init,
-      deps: [RouterStore],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+      const initializerFn = init(inject(RouterStore));
+      return initializerFn();
+    }),
   ],
 })
 export class RouterStoreModule {}
