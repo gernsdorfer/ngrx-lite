@@ -15,7 +15,6 @@ const defaultState: ItemState = { counter: 0 };
 @Component({
   selector: 'my-app-loading-store-with-default-values',
   templateUrl: 'loading-effect.html',
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class LoadingWithDefaultValuesComponent implements OnDestroy {

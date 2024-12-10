@@ -10,7 +10,6 @@ import { DemoBComponent } from './demo-b.component';
     <br />
     <my-app-multi-instance-demo-b></my-app-multi-instance-demo-b>
   `,
-  standalone: true,
   imports: [DemoAComponent, DemoBComponent],
 })
 export class MultipleInstancesComponent {}

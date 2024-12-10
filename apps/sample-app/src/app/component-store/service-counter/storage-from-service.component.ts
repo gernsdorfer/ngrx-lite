@@ -11,7 +11,6 @@ import { DemoBComponent } from './demo-b.component';
     <br />
     <my-app-same-instance-demo-b></my-app-same-instance-demo-b>
   `,
-  standalone: true,
   providers: [CounterStore],
   imports: [DemoAComponent, DemoBComponent],
 })

@@ -17,7 +17,6 @@ export type MyState = LoadingStoreState<
 @Component({
   selector: 'my-app-loading-store-option-skip-same-pending-actions',
   templateUrl: 'option-skip-same-pending-actions.component.html',
-  standalone: true,
   imports: [
     UiCardComponent,
     MatButtonModule,

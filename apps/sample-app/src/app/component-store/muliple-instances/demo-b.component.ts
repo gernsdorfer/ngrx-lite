@@ -16,7 +16,6 @@ import {
       useValue: 'DemoBComponentStore',
     },
   ],
-  standalone: true,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class DemoBComponent implements OnDestroy {

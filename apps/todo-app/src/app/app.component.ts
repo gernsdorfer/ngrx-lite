@@ -10,7 +10,6 @@ import { TodoListStore } from './services/todo-list.service';
 @Component({
   selector: 'todo-app',
   styleUrls: ['./app.scss'],
-  standalone: true,
   imports: [
     RouterModule,
     ListComponent,

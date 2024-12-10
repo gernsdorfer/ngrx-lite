@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgModule, NgZone } from '@angular/core';
+import { NgModule, NgZone, inject, provideAppInitializer } from '@angular/core';
 import { StoreDevtools } from '@ngrx/store-devtools';
 
 declare global {
@@ -17,12 +17,11 @@ const init = (storeDevtools: StoreDevtools, zone: NgZone) => () => {
 @NgModule({
   imports: [],
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: init,
-      deps: [StoreDevtools, NgZone],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+      const initializerFn = init(inject(StoreDevtools), inject(NgZone));
+      initializerFn();
+      return;
+    }),
   ],
 })
 export class ReduxForWindowModule {}
