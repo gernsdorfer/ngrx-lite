@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../shared/ui/card-component';
-import { UiSpinnerComponent } from '../../shared/ui/spinner';
 import { dynamicStore } from './dynamic-store';
 import { rootStore } from './root-store';
 
 @Component({
   selector: 'my-app-store-functional',
   templateUrl: 'functional-store.component.html',
-  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
+  imports: [UiCardComponent, MatButtonModule],
 })
 export class FunctionalStoreComponent {
   private dynamicStoreTypeA = dynamicStore.inject('StoreA');
