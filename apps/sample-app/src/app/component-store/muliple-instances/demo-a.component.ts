@@ -7,16 +7,16 @@ import {
 } from './counter-service';
 
 @Component({
-    selector: 'my-app-multi-instance-demo-a',
-    templateUrl: 'demo.html',
-    providers: [
-        MultipleCounterStore,
-        {
-            provide: MultipleCounterStoreName,
-            useValue: 'DemoAComponentStore',
-        },
-    ],
-    imports: [UiCardComponent, MatButtonModule]
+  selector: 'my-app-multi-instance-demo-a',
+  templateUrl: 'demo.html',
+  providers: [
+    MultipleCounterStore,
+    {
+      provide: MultipleCounterStoreName,
+      useValue: 'DemoAComponentStore',
+    },
+  ],
+  imports: [UiCardComponent, MatButtonModule],
 })
 export class DemoAComponent implements OnDestroy {
   title = 'Demo A Component';

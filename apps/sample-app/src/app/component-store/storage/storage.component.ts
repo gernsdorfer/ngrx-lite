@@ -4,9 +4,9 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
-    selector: 'my-app-session',
-    templateUrl: 'storage.html',
-    imports: [UiCardComponent, MatButtonModule]
+  selector: 'my-app-session',
+  templateUrl: 'storage.html',
+  imports: [UiCardComponent, MatButtonModule],
 })
 export class StorageExampleComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<{ counter: number }>({
@@ -26,7 +26,7 @@ export class StorageExampleComponent implements OnDestroy {
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
-      'INCREMENT'
+      'INCREMENT',
     );
   }
 

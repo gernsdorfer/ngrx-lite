@@ -4,9 +4,9 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
-    selector: 'my-app-basic-app',
-    templateUrl: 'basic.html',
-    imports: [UiCardComponent, MatButtonModule]
+  selector: 'my-app-basic-app',
+  templateUrl: 'basic.html',
+  imports: [UiCardComponent, MatButtonModule],
 })
 export class BasicComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<{

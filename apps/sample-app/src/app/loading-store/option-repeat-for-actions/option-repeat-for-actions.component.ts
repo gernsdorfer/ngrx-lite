@@ -25,16 +25,16 @@ const sideEffectAction = getEffectAction({
   effectName: sideEffectExampleAction,
 });
 @Component({
-    selector: 'my-app-loading-option-repeat-for-actions',
-    templateUrl: 'option-repeat-for-actions.component.html',
-    imports: [
-        UiCardComponent,
-        MatButtonModule,
-        UiSpinnerComponent,
-        FormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-    ]
+  selector: 'my-app-loading-option-repeat-for-actions',
+  templateUrl: 'option-repeat-for-actions.component.html',
+  imports: [
+    UiCardComponent,
+    MatButtonModule,
+    UiSpinnerComponent,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
 })
 export class OptionRepeatForActionsComponent implements OnDestroy {
   private storeFactory = inject(StoreFactory);

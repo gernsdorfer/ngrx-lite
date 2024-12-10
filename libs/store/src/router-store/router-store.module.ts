@@ -8,9 +8,9 @@ const init = (routerStore: RouterStore) => () => routerStore.init();
   providers: [
     RouterStore,
     provideAppInitializer(() => {
-        const initializerFn = (init)(inject(RouterStore));
-        return initializerFn();
-      }),
+      const initializerFn = init(inject(RouterStore));
+      return initializerFn();
+    }),
   ],
 })
 export class RouterStoreModule {}

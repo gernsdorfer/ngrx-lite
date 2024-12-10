@@ -3,9 +3,9 @@ import { RouterModule } from '@angular/router';
 import { UiToolbarComponent } from './shared/ui/toolbar';
 
 @Component({
-    selector: 'my-app',
-    styles: [
-        `
+  selector: 'my-app',
+  styles: [
+    `
       .content {
         height: 100%;
         display: flex;
@@ -14,8 +14,8 @@ import { UiToolbarComponent } from './shared/ui/toolbar';
         text-align: center;
       }
     `,
-    ],
-    imports: [UiToolbarComponent, RouterModule],
-    templateUrl: 'app.component.html'
+  ],
+  imports: [UiToolbarComponent, RouterModule],
+  templateUrl: 'app.component.html',
 })
 export class AppComponent {}

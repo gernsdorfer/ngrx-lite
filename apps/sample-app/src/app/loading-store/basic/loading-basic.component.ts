@@ -11,9 +11,9 @@ export type MyState = LoadingStoreState<
 >;
 
 @Component({
-    selector: 'my-app-loading-store-basic',
-    templateUrl: 'loading-basic.html',
-    imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent]
+  selector: 'my-app-loading-store-basic',
+  templateUrl: 'loading-basic.html',
+  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class LoadingBasicComponent implements OnDestroy {
   private store = this.storeFactory.createComponentLoadingStore<

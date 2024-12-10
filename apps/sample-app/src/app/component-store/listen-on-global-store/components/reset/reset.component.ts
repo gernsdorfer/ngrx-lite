@@ -5,10 +5,10 @@ import { UiCardComponent } from '../../../../shared/ui/card-component';
 import { resetAction } from '../../actions/reset.action';
 
 @Component({
-    selector: 'my-app-listen-on-global-store-reset',
-    template: ` Dispatch Global Actions
+  selector: 'my-app-listen-on-global-store-reset',
+  template: ` Dispatch Global Actions
     <button class="reset" (click)="reset()" mat-fab>reset</button>`,
-    imports: [UiCardComponent, MatButtonModule]
+  imports: [UiCardComponent, MatButtonModule],
 })
 export class ResetComponent {
   constructor(private store: Store) {}

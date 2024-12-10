@@ -5,9 +5,9 @@ import { MatListModule } from '@angular/material/list';
 import { TodoModel } from '../../models/todo.model';
 
 @Component({
-    selector: 'todo-list',
-    templateUrl: 'list.component.html',
-    imports: [AsyncPipe, JsonPipe, MatListModule, MatCheckboxModule]
+  selector: 'todo-list',
+  templateUrl: 'list.component.html',
+  imports: [AsyncPipe, JsonPipe, MatListModule, MatCheckboxModule],
 })
 export class ListComponent {
   @Input() todos?: TodoModel[] = [];

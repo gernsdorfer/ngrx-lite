@@ -16,9 +16,9 @@ export const MyIncrementAction = getCustomAction<MyState>({
 });
 
 @Component({
-    selector: 'my-app-ngrx-lite-counter',
-    templateUrl: 'example.html',
-    imports: [UiCardComponent, MatButtonModule]
+  selector: 'my-app-ngrx-lite-counter',
+  templateUrl: 'example.html',
+  imports: [UiCardComponent, MatButtonModule],
 })
 export default class SharedActionComponent {
   private store = this.storeFactory.createComponentStore<MyState>({
@@ -34,7 +34,7 @@ export default class SharedActionComponent {
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
-      actionName
+      actionName,
     );
   }
 }

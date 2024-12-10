@@ -4,9 +4,9 @@ import { UiCardComponent } from '../../shared/ui/card-component';
 import { CounterStore } from './counter-service';
 
 @Component({
-    selector: 'my-app-same-instance-demo-b',
-    templateUrl: 'demo.html',
-    imports: [UiCardComponent, MatButtonModule]
+  selector: 'my-app-same-instance-demo-b',
+  templateUrl: 'demo.html',
+  imports: [UiCardComponent, MatButtonModule],
 })
 export class DemoBComponent {
   title = 'Demo B Component';
