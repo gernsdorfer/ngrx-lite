@@ -14,17 +14,16 @@ export type MyState = LoadingStoreState<
 >;
 
 @Component({
-  selector: 'my-app-loading-store-option-skip-same-actions',
-  templateUrl: 'option-skip-same-actions.component.html',
-  standalone: true,
-  imports: [
-    UiCardComponent,
-    MatButtonModule,
-    UiSpinnerComponent,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+    selector: 'my-app-loading-store-option-skip-same-actions',
+    templateUrl: 'option-skip-same-actions.component.html',
+    imports: [
+        UiCardComponent,
+        MatButtonModule,
+        UiSpinnerComponent,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+    ]
 })
 export class OptionSkipSameActionsComponent implements OnDestroy {
   private storeFactory = inject(StoreFactory);

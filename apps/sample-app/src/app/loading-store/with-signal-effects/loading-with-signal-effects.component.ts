@@ -13,10 +13,9 @@ export type MyState = LoadingStoreState<
 >;
 
 @Component({
-  selector: 'my-app-loading-store-with-signal-effects',
-  templateUrl: 'loading-effect.html',
-  standalone: true,
-  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
+    selector: 'my-app-loading-store-with-signal-effects',
+    templateUrl: 'loading-effect.html',
+    imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent]
 })
 export class LoadingWithSignalEffectsComponent implements OnDestroy {
   private storeFactory = inject(StoreFactory);

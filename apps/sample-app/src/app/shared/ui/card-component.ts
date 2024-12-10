@@ -4,9 +4,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-  selector: 'my-app-ui-card',
-  styles: [
-    `
+    selector: 'my-app-ui-card',
+    styles: [
+        `
       .demo-card {
         max-width: 400px;
       }
@@ -16,8 +16,8 @@ import { MatMenuModule } from '@angular/material/menu';
         justify-content: space-around;
       }
     `,
-  ],
-  template: `
+    ],
+    template: `
     <mat-card class="demo-card">
       <mat-card-header>
         <mat-card-title>
@@ -35,7 +35,6 @@ import { MatMenuModule } from '@angular/material/menu';
       </mat-card-actions>
     </mat-card>
   `,
-  standalone: true,
-  imports: [MatCardModule, MatMenuModule, MatButtonModule],
+    imports: [MatCardModule, MatMenuModule, MatButtonModule]
 })
 export class UiCardComponent {}

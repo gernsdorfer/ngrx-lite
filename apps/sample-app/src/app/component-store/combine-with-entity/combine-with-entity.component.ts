@@ -36,18 +36,17 @@ export const mockProducts = [
 ];
 
 @Component({
-  selector: 'my-app-entity-app',
-  templateUrl: 'combine-with-entity.html',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    UiCardComponent,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+    selector: 'my-app-entity-app',
+    templateUrl: 'combine-with-entity.html',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        UiCardComponent,
+        MatFormFieldModule,
+        MatInputModule,
+    ]
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
   private store = this.storeFactory.createComponentStore<MyState>({

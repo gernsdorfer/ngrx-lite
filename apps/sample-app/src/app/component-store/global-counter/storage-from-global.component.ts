@@ -4,10 +4,9 @@ import { UiCardComponent } from '../../shared/ui/card-component';
 import { GlobalCounterStore } from './global-counter.service';
 
 @Component({
-  selector: 'my-app-global-counter',
-  templateUrl: 'service-counter.html',
-  standalone: true,
-  imports: [UiCardComponent, MatButtonModule],
+    selector: 'my-app-global-counter',
+    templateUrl: 'service-counter.html',
+    imports: [UiCardComponent, MatButtonModule]
 })
 export class StorageFromGlobalComponent {
   public counterState = this.counterStore.state;

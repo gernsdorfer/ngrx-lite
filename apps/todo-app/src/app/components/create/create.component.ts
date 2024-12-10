@@ -5,15 +5,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'todo-create',
-  templateUrl: 'create.component.html',
-  standalone: true,
-  imports: [
-    MatInputModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-  ],
+    selector: 'todo-create',
+    templateUrl: 'create.component.html',
+    imports: [
+        MatInputModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+    ]
 })
 export class CreateComponent {
   @Output() create = new EventEmitter<{

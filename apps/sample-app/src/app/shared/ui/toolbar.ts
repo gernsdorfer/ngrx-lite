@@ -5,8 +5,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'my-app-ui-toolbar',
-  template: `
+    selector: 'my-app-ui-toolbar',
+    template: `
     <mat-toolbar class="toolbar">
       <button [matMenuTriggerFor]="menuComponentStore" mat-button>
         Component-Store
@@ -110,7 +110,6 @@ import { RouterModule } from '@angular/router';
       </mat-menu>
     </mat-toolbar>
   `,
-  standalone: true,
-  imports: [MatToolbarModule, MatMenuModule, MatButtonModule, RouterModule],
+    imports: [MatToolbarModule, MatMenuModule, MatButtonModule, RouterModule]
 })
 export class UiToolbarComponent {}

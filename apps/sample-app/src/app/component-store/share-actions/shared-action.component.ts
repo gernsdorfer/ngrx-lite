@@ -16,10 +16,9 @@ export const MyIncrementAction = getCustomAction<MyState>({
 });
 
 @Component({
-  selector: 'my-app-ngrx-lite-counter',
-  templateUrl: 'example.html',
-  standalone: true,
-  imports: [UiCardComponent, MatButtonModule],
+    selector: 'my-app-ngrx-lite-counter',
+    templateUrl: 'example.html',
+    imports: [UiCardComponent, MatButtonModule]
 })
 export default class SharedActionComponent {
   private store = this.storeFactory.createComponentStore<MyState>({

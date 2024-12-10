@@ -4,10 +4,9 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
-  selector: 'my-app-store-without-loging',
-  templateUrl: 'store-without-log.html',
-  standalone: true,
-  imports: [UiCardComponent, MatButtonModule],
+    selector: 'my-app-store-without-loging',
+    templateUrl: 'store-without-log.html',
+    imports: [UiCardComponent, MatButtonModule]
 })
 export class StoreWithoutLogComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<{

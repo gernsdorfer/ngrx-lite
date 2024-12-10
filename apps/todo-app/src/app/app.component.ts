@@ -8,17 +8,16 @@ import { TodoAdminStore } from './services/todo-admin.service';
 import { TodoListStore } from './services/todo-list.service';
 
 @Component({
-  selector: 'todo-app',
-  styleUrls: ['./app.scss'],
-  standalone: true,
-  imports: [
-    RouterModule,
-    ListComponent,
-    MatCardModule,
-    CompletedPipe,
-    CreateComponent,
-  ],
-  templateUrl: 'app.component.html',
+    selector: 'todo-app',
+    styleUrls: ['./app.scss'],
+    imports: [
+        RouterModule,
+        ListComponent,
+        MatCardModule,
+        CompletedPipe,
+        CreateComponent,
+    ],
+    templateUrl: 'app.component.html'
 })
 export class AppComponent {
   todoListStore = inject(TodoListStore);

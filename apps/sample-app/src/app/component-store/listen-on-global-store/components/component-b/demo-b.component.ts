@@ -7,8 +7,8 @@ import {
 } from '../../services/counter-service';
 
 @Component({
-  selector: 'my-app-listen-on-global-store-demo-b',
-  template: `
+    selector: 'my-app-listen-on-global-store-demo-b',
+    template: `
     <my-app-ui-card>
       <div title>Component-Store A</div>
       <div subtitle>Listen on Global</div>
@@ -20,15 +20,14 @@ import {
       </div>
     </my-app-ui-card>
   `,
-  providers: [
-    MultipleCounterStore,
-    {
-      provide: MultipleCounterStoreName,
-      useValue: 'DemoBComponentStore',
-    },
-  ],
-  standalone: true,
-  imports: [UiCardComponent, MatButtonModule],
+    providers: [
+        MultipleCounterStore,
+        {
+            provide: MultipleCounterStoreName,
+            useValue: 'DemoBComponentStore',
+        },
+    ],
+    imports: [UiCardComponent, MatButtonModule]
 })
 export class DemoBComponent implements OnDestroy {
   title = 'Demo B Component';

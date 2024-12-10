@@ -4,10 +4,9 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
-  selector: 'my-app-basic-custom-action',
-  templateUrl: 'custom-action.html',
-  standalone: true,
-  imports: [UiCardComponent, MatButtonModule],
+    selector: 'my-app-basic-custom-action',
+    templateUrl: 'custom-action.html',
+    imports: [UiCardComponent, MatButtonModule]
 })
 export class CustomActionComponent implements OnDestroy {
   private store = this.storeFactory.createComponentStore<{

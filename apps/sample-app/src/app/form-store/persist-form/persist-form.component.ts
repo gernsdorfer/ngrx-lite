@@ -14,18 +14,17 @@ import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
 
 @Component({
-  selector: 'my-app-basic-app',
-  templateUrl: 'persist-form.html',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    UiCardComponent,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+    selector: 'my-app-basic-app',
+    templateUrl: 'persist-form.html',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        UiCardComponent,
+        MatFormFieldModule,
+        MatInputModule,
+    ]
 })
 export class PersistFormComponent implements OnDestroy {
   productForm = new FormGroup({
