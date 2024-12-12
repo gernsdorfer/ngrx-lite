@@ -36,8 +36,6 @@ module.exports = [
       files: ['**/*.ts', '**/*.tsx'],
       rules: {
         ...config.rules,
-        '@typescript-eslint/no-extra-semi': 'error',
-        'no-extra-semi': 'off',
       },
     })),
   ...compat
@@ -49,8 +47,6 @@ module.exports = [
       files: ['**/*.js', '**/*.jsx'],
       rules: {
         ...config.rules,
-        '@typescript-eslint/no-extra-semi': 'error',
-        'no-extra-semi': 'off',
       },
     })),
 ];

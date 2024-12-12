@@ -82,12 +82,14 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
   }
 
   storeProduct(product: Product): void {
-    product.id
-      ? this.updateProduct(product)
-      : this.addProduct({
-          ...product,
-          id: selectTotal(this.store.state()) + 1,
-        });
+    if (product.id) {
+      this.updateProduct(product);
+    } else {
+      this.addProduct({
+        ...product,
+        id: selectTotal(this.store.state()) + 1,
+      });
+    }
     this.resetProductForm();
   }
 
