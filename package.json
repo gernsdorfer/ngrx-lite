@@ -55,6 +55,8 @@
     "@angular/cli": "~19.0.0",
     "@angular/compiler-cli": "19.0.3",
     "@angular/language-service": "19.0.3",
+    "@eslint/eslintrc": "^2.1.1",
+    "@eslint/js": "~8.57.0",
     "@nx/cypress": "20.2.1",
     "@nx/eslint": "20.2.1",
     "@nx/eslint-plugin": "20.2.1",
@@ -62,8 +64,6 @@
     "@schematics/angular": "19.0.4",
     "@types/jasmine": "5.1.5",
     "@types/node": "20.14.10",
-    "@typescript-eslint/eslint-plugin": "7.18.0",
-    "@typescript-eslint/parser": "7.18.0",
     "@typescript-eslint/utils": "7.18.0",
     "autoprefixer": "^10.4.20",
     "cypress": "13.16.1",
@@ -88,6 +88,7 @@
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-sort-json": "^4.0.0",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "typescript-eslint": "^8.13.0"
   }
 }

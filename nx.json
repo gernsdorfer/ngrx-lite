@@ -26,7 +26,8 @@
       "!{projectRoot}/**/*.spec.[jt]s",
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/karma.conf.js",
-      "!{projectRoot}/.eslintrc.json"
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.js"
     ]
   },
   "nxCloudAccessToken": "YTFmYTdmMmYtN2Q1My00MWUxLThmN2QtMzgyYjJkN2JhMDE4fHJlYWQtd3JpdGU=",
@@ -45,7 +46,11 @@
       "cache": true
     },
     "@nx/eslint:lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/eslint.config.js"
+      ],
       "cache": true
     }
   },
