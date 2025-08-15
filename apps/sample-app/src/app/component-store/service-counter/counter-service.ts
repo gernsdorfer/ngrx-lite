@@ -19,7 +19,7 @@ export class CounterStore implements OnDestroy {
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
-      'INCREMENT'
+      'INCREMENT',
     );
   }
 

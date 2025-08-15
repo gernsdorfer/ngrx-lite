@@ -14,6 +14,7 @@
     "build:docs": "nx run doc-app:build && nx run sample-app:build:production --baseHref=/ngrx-lite/sample-app/ --outputPath=./dist/apps/doc-app/sample-app",
     "build:release": "nx run store:build:production",
     "format:check": "nx format:check",
+    "format": "nx format",
     "ng": "nx",
     "start": "nx run sample-app:serve",
     "test": "nx test"

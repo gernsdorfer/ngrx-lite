@@ -22,10 +22,10 @@ export class DemoEffect {
               verticalPosition: 'top',
               panelClass: 'snackbar',
               duration: 2000,
-            }
-          )
-        )
+            },
+          ),
+        ),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 }

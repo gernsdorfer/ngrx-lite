@@ -12,7 +12,6 @@ import { resetAction } from '../../actions/reset.action';
 export class ResetComponent {
   private store = inject(Store);
 
-
   reset() {
     this.store.dispatch(resetAction());
   }
