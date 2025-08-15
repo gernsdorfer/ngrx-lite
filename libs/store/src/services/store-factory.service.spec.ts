@@ -78,7 +78,7 @@ describe('StoreFactory', () => {
             { provide: StateToken, useValue: {} },
             { provide: SkipLogForStore, useValue: false },
           ],
-        }).get(CreatedStore) as any,
+        }).get(CreatedStore) as never,
     );
   });
 

@@ -42,7 +42,8 @@ export const getStoreState = <STATE extends object>(
 ): STATE | undefined => {
   try {
     return store.state();
-  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_error) {
     return undefined;
   }
 };
@@ -184,7 +185,6 @@ export class Store {
 
   addStoreNameToInternalCache(storeName: string): void {
     if (isDevMode() && this.isStoreRunning(storeName)) {
-      // eslint-disable-next-line no-restricted-syntax
       console.info(
         `A Store with name '${storeName}' is currently running, check if you missed to implement ngOnDestroy for this store`,
       );

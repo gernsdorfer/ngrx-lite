@@ -335,7 +335,6 @@ describe('LoadingStore', () => {
         .and.returnValue(of('newValue'));
       const testEffect = store.loadingEffect(
         'testEffect',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         () => spyEffectRun(),
         { skipSameActions: true },
       );
@@ -384,7 +383,6 @@ describe('LoadingStore', () => {
 
       const testEffect = store.loadingEffect(
         'testEffect',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         () => of('newValue').pipe(tap(() => spyEffectRun())),
         { repeatActions: [customAction] },
       );

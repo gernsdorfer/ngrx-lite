@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -27,6 +27,8 @@ import { UiCardComponent } from '../../shared/ui/card-component';
   ],
 })
 export class PersistFormComponent implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
   productForm = new FormGroup({
     name: new FormControl('', {
       nonNullable: true,
@@ -48,8 +50,6 @@ export class PersistFormComponent implements OnDestroy {
     formGroup: this.productForm,
     skipLog: true,
   });
-
-  constructor(private storeFactory: StoreFactory) {}
 
   ngOnDestroy() {
     this.store.ngOnDestroy();

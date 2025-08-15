@@ -1,17 +1,15 @@
-import {
-  Inject,
-  Injectable,
-  InjectionToken,
-  OnDestroy,
-  Optional,
-} from '@angular/core';
+import { inject, Injectable, InjectionToken, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-export const MultipleCounterStoreName = new InjectionToken('MULTIPLE_COUNTER');
+export const MultipleCounterStoreName = new InjectionToken<string>(
+  'MULTIPLE_COUNTER',
+);
 
 @Injectable({ providedIn: 'any' })
 export class MultipleCounterStore implements OnDestroy {
-  private store = this.storeFactory.createComponentStore<{
+  storeName = inject(MultipleCounterStoreName, { optional: true });
+
+  private store = inject(StoreFactory).createComponentStore<{
     counter: number;
   }>({
     storeName: this.storeName || 'MULTIPLE_COUNTER_STORE',
@@ -20,17 +18,10 @@ export class MultipleCounterStore implements OnDestroy {
 
   public state = this.store.state;
 
-  constructor(
-    private storeFactory: StoreFactory,
-    @Optional()
-    @Inject(MultipleCounterStoreName)
-    private storeName?: string
-  ) {}
-
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
-      'INCREMENT'
+      'INCREMENT',
     );
   }
 

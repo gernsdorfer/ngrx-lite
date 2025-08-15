@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -49,6 +49,8 @@ export const mockProducts = [
   ],
 })
 export class CombineWithEntityComponent implements OnDestroy, OnInit {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'ENTITY_EXAMPLE',
     defaultState: adapter.getInitialState({}),
@@ -65,8 +67,6 @@ export class CombineWithEntityComponent implements OnDestroy, OnInit {
       validators: [Validators.required],
     }),
   });
-
-  constructor(private storeFactory: StoreFactory) {}
 
   ngOnInit() {
     this.store.setState((state) => adapter.setAll(mockProducts, state));

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../../../shared/ui/card-component';
 import {
@@ -30,10 +30,10 @@ import {
   imports: [UiCardComponent, MatButtonModule],
 })
 export class DemoBComponent implements OnDestroy {
+  private counterStore = inject(MultipleCounterStore);
+
   title = 'Demo B Component';
   public counterState = this.counterStore.state;
-
-  constructor(private counterStore: MultipleCounterStore) {}
 
   increment() {
     this.counterStore.increment();

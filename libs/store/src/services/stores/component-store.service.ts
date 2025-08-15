@@ -22,6 +22,7 @@ export class ComponentStore<STATE extends object>
   protected skipLogForStore = inject(SkipLogForStore);
   protected storeName = inject(StoreNameToken);
 
+  // eslint-disable-next-line @angular-eslint/prefer-inject
   constructor(@Inject(StateToken) state: STATE) {
     super(state);
     if (!this.devToolHelper.isTimeTravelActive()) {

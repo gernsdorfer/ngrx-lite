@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
@@ -9,6 +9,8 @@ import { UiCardComponent } from '../../shared/ui/card-component';
   imports: [UiCardComponent, MatButtonModule],
 })
 export class BasicComponent implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<{
     counter: number;
   }>({
@@ -17,8 +19,6 @@ export class BasicComponent implements OnDestroy {
   });
 
   public counterState = this.store.state;
-
-  constructor(private storeFactory: StoreFactory) {}
 
   increment(counter: number) {
     // patch your state

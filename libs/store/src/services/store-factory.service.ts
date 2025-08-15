@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { filter, takeUntil } from 'rxjs';
 import { LoadingStoreState } from '../models';
@@ -13,9 +13,10 @@ type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 
 @Injectable({ providedIn: 'root' })
 export class StoreFactory {
-  constructor(private store: Store) {
-    store.checkForTimeTravel();
-    store.addReducersForImportState();
+  private store = inject(Store);
+  constructor() {
+    this.store.checkForTimeTravel();
+    this.store.addReducersForImportState();
   }
 
   public createComponentStore<STATE extends object>({

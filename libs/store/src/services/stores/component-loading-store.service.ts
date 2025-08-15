@@ -3,8 +3,8 @@ import { ofType } from '@ngrx/effects';
 import { tapResponse } from '@ngrx/operators';
 import { ActionCreator } from '@ngrx/store';
 import {
-  Observable,
   filter,
+  Observable,
   pairwise,
   repeat,
   startWith,
@@ -46,6 +46,7 @@ const isEqual = <OBJECT = void>(obj1?: OBJECT, obj2?: OBJECT) =>
 export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
   LoadingStoreState<ITEM, ERROR>
 > {
+  // eslint-disable-next-line @angular-eslint/prefer-inject
   constructor(@Inject(StateToken) state: LoadingStoreState<ITEM, ERROR>) {
     super(state);
   }
@@ -133,17 +134,19 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
     );
     return effect(params).pipe(
       tapResponse({
-    next: (item) => this.finishEffect({
-        state: { item },
-        effectName: name,
-        type: EffectStates.SUCCESS,
-    }),
-    error: (error: ERROR) => this.finishEffect({
-        state: { error },
-        effectName: name,
-        type: EffectStates.ERROR,
-    })
-}),
+        next: (item) =>
+          this.finishEffect({
+            state: { item },
+            effectName: name,
+            type: EffectStates.SUCCESS,
+          }),
+        error: (error: ERROR) =>
+          this.finishEffect({
+            state: { error },
+            effectName: name,
+            type: EffectStates.ERROR,
+          }),
+      }),
     );
   }
 
