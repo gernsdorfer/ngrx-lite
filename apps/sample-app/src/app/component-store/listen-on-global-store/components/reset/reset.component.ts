@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Store } from '@ngrx/store';
 import { resetAction } from '../../actions/reset.action';
@@ -10,7 +10,7 @@ import { resetAction } from '../../actions/reset.action';
   imports: [MatButtonModule],
 })
 export class ResetComponent {
-  constructor(private store: Store) {}
+  private store = inject(Store);
 
   reset() {
     this.store.dispatch(resetAction());

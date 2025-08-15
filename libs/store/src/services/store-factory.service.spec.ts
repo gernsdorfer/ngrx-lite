@@ -61,23 +61,24 @@ describe('StoreFactory', () => {
     });
     storeFactory = TestBed.inject(StoreFactory);
 
-    store.createStoreByStoreType.and.callFake(({ CreatedStore }) =>
-      Injector.create({
-        providers: [
-          { provide: Actions, useValue: actions },
-          { provide: CreatedStore },
-          provideMockStore({
-            initialState: {},
-          }),
-          {
-            provide: DevToolHelper,
-            useValue: devToolHelper,
-          },
-          { provide: StoreNameToken, useValue: 'Test' },
-          { provide: StateToken, useValue: {} },
-          { provide: SkipLogForStore, useValue: false },
-        ],
-      }).get(CreatedStore)
+    store.createStoreByStoreType.and.callFake(
+      ({ CreatedStore }) =>
+        Injector.create({
+          providers: [
+            { provide: Actions, useValue: actions },
+            { provide: CreatedStore },
+            provideMockStore({
+              initialState: {},
+            }),
+            {
+              provide: DevToolHelper,
+              useValue: devToolHelper,
+            },
+            { provide: StoreNameToken, useValue: 'Test' },
+            { provide: StateToken, useValue: {} },
+            { provide: SkipLogForStore, useValue: false },
+          ],
+        }).get(CreatedStore) as never,
     );
   });
 
@@ -87,7 +88,7 @@ describe('StoreFactory', () => {
         storeFactory.createComponentStore<MyState>({
           storeName: 'myStore',
           defaultState: defaultMyState,
-        })
+        }),
       ).toBeInstanceOf(ComponentStore);
     });
   });
@@ -96,7 +97,7 @@ describe('StoreFactory', () => {
       expect(
         storeFactory.createComponentLoadingStore({
           storeName: 'myStore',
-        })
+        }),
       ).toBeInstanceOf(ComponentLoadingStore);
     });
   });
@@ -145,7 +146,7 @@ describe('StoreFactory', () => {
             ...defaultFormState,
             myState: 'Test',
           },
-        })
+        }),
       );
     });
 

@@ -1,5 +1,18 @@
 import { inject, Injectable, Injector, isDevMode } from '@angular/core';
 
+import { Actions } from '@ngrx/effects';
+import {
+  Action,
+  ActionReducer,
+  Store as NgrxStore,
+  ReducerManager,
+} from '@ngrx/store';
+import {
+  INITIAL_OPTIONS,
+  LiftedState,
+  StoreDevtools,
+} from '@ngrx/store-devtools';
+import { filter, map, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
 import {
   DynamicStoreName,
@@ -8,16 +21,18 @@ import {
   StoreNameToken,
 } from '../injection-tokens/state.token';
 import { ClientStoragePlugin } from '../models';
-import { ComponentLoadingStore } from './stores/component-loading-store.service';
-
-import { Actions } from '@ngrx/effects';
-import { ActionReducer, Store as NgrxStore, ReducerManager } from '@ngrx/store';
-import { INITIAL_OPTIONS, StoreDevtools } from '@ngrx/store-devtools';
-import { LiftedActions, LiftedState } from '@ngrx/store-devtools/src/reducer';
-import { filter, map, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { getFullStoreName } from './action-creator';
 import { DevToolHelper } from './dev-tool-helper.service';
+import { ComponentLoadingStore } from './stores/component-loading-store.service';
 import { ComponentStore } from './stores/component-store.service';
+
+export interface LiftedAction {
+  type: string;
+  action: Action;
+}
+export interface LiftedActions {
+  [id: number]: LiftedAction;
+}
 
 type StoragePluginTypes = 'sessionStoragePlugin' | 'localStoragePlugin';
 type Stores = typeof ComponentStore | typeof ComponentLoadingStore;
@@ -27,7 +42,8 @@ export const getStoreState = <STATE extends object>(
 ): STATE | undefined => {
   try {
     return store.state();
-  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_error) {
     return undefined;
   }
 };
@@ -141,7 +157,7 @@ export class Store {
       storage,
     );
 
-    const store = Injector.create({
+    const store: ComponentStore<STATE> = Injector.create({
       providers: [
         { provide: CreatedStore },
         { provide: DevToolHelper, useValue: this.devToolHelper },
@@ -152,7 +168,7 @@ export class Store {
         { provide: SkipLogForStore, useValue: skipLogForStore },
         ...additionalProviders,
       ],
-    }).get(CreatedStore);
+    }).get(CreatedStore) as unknown as CREATED_STORE;
 
     this.addStoreNameToInternalCache(fullStoreName);
     this.addStoreReducerToNgrx<STATE>(fullStoreName, initialState);
@@ -164,12 +180,11 @@ export class Store {
     );
     this.removeReducerAfterDestroy<STATE>(fullStoreName, store);
 
-    return store;
+    return store as CREATED_STORE;
   }
 
   addStoreNameToInternalCache(storeName: string): void {
     if (isDevMode() && this.isStoreRunning(storeName)) {
-      // eslint-disable-next-line no-restricted-syntax
       console.info(
         `A Store with name '${storeName}' is currently running, check if you missed to implement ngOnDestroy for this store`,
       );

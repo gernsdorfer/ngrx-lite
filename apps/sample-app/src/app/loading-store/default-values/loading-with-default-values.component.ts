@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
@@ -18,6 +18,8 @@ const defaultState: ItemState = { counter: 0 };
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class LoadingWithDefaultValuesComponent implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentLoadingStore<
     MyState['item'],
     MyState['error']
@@ -35,8 +37,6 @@ export class LoadingWithDefaultValuesComponent implements OnDestroy {
       counter: { ...defaultState, ...this.store.state().item }.counter + 1,
     }).pipe(delay(400)),
   );
-
-  constructor(private storeFactory: StoreFactory) {}
 
   ngOnDestroy() {
     this.store.ngOnDestroy();

@@ -1,8 +1,10 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalCounterStore implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<{
     counter: number;
   }>({
@@ -12,12 +14,10 @@ export class GlobalCounterStore implements OnDestroy {
 
   public state = this.store.state;
 
-  constructor(private storeFactory: StoreFactory) {}
-
   increment() {
     this.store.patchState(
       ({ counter }) => ({ counter: counter + 1 }),
-      'INCREMENT'
+      'INCREMENT',
     );
   }
 

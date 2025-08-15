@@ -1,12 +1,16 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
-import { Action, ReducerManager, ScannedActionsSubject } from '@ngrx/store';
+import {
+  Action,
+  ActionReducer,
+  ReducerManager,
+  ScannedActionsSubject,
+} from '@ngrx/store';
 import {
   INITIAL_OPTIONS,
+  LiftedState,
   StoreDevtools,
   StoreDevtoolsConfig,
 } from '@ngrx/store-devtools';
-import { LiftedState } from '@ngrx/store-devtools/src/reducer';
-import { ActionReducer } from '@ngrx/store/src/models';
 import { provideMockStore } from '@ngrx/store/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { of } from 'rxjs';

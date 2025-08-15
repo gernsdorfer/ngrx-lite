@@ -3,7 +3,8 @@
     "outDir": "../../dist/out-tsc",
     "types": [],
     "target": "ES2022",
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "moduleResolution": "bundler"
   },
   "exclude": ["**/*.test.ts", "**/*.spec.ts"],
   "extends": "./tsconfig.json",

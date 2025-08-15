@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../shared/ui/card-component';
 import { GlobalCounterStore } from './global-counter.service';
@@ -9,9 +9,9 @@ import { GlobalCounterStore } from './global-counter.service';
   imports: [UiCardComponent, MatButtonModule],
 })
 export class StorageFromGlobalComponent {
-  public counterState = this.counterStore.state;
+  private counterStore = inject(GlobalCounterStore);
 
-  constructor(private counterStore: GlobalCounterStore) {}
+  public counterState = this.counterStore.state;
 
   increment() {
     this.counterStore.increment();

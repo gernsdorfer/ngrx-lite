@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { getCustomAction, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
@@ -21,6 +21,8 @@ export const MyIncrementAction = getCustomAction<MyState>({
   imports: [UiCardComponent, MatButtonModule],
 })
 export default class SharedActionComponent {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName,
     defaultState: {
@@ -28,8 +30,6 @@ export default class SharedActionComponent {
     },
   });
   counterState = this.store.state;
-
-  constructor(private storeFactory: StoreFactory) {}
 
   increment() {
     this.store.patchState(
