@@ -132,20 +132,18 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       getEffectActionName(name, EffectStates.LOAD),
     );
     return effect(params).pipe(
-      tapResponse(
-        (item) =>
-          this.finishEffect({
-            state: { item },
-            effectName: name,
-            type: EffectStates.SUCCESS,
-          }),
-        (error: ERROR) =>
-          this.finishEffect({
-            state: { error },
-            effectName: name,
-            type: EffectStates.ERROR,
-          }),
-      ),
+      tapResponse({
+    next: (item) => this.finishEffect({
+        state: { item },
+        effectName: name,
+        type: EffectStates.SUCCESS,
+    }),
+    error: (error: ERROR) => this.finishEffect({
+        state: { error },
+        effectName: name,
+        type: EffectStates.ERROR,
+    })
+}),
     );
   }
 
