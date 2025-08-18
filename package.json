@@ -1,6 +1,6 @@
 {
   "name": "ngrx-lite",
-  "version": "19.0.1",
+  "version": "20.0.0",
   "license": "MIT",
   "workspaces": [
     "apps/doc-app"
