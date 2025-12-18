@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { UiToolbarComponent } from './shared/ui/toolbar';
 
 @Component({
-  selector: 'my-app',
+  selector: 'my-app-root',
   styles: [
     `
       .content {
