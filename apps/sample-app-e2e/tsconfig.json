@@ -4,7 +4,10 @@
     "outDir": "../../dist/out-tsc",
     "allowJs": true,
     "types": ["cypress", "node"],
-    "target": "es2020"
+    "target": "es2020",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "lib": ["dom", "es2022"]
   },
   "extends": "../../tsconfig.base.json",
   "include": ["src/**/*.ts", "src/**/*.js", "cypress.config.ts"]

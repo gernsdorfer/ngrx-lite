@@ -3,7 +3,8 @@
     "outDir": "../../dist/out-tsc",
     "types": ["jasmine", "node"],
     "target": "ES2022",
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "isolatedModules": true
   },
   "extends": "./tsconfig.json",
   "files": ["src/test.ts"],
