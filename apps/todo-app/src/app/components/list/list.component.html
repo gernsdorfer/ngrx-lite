@@ -1,5 +1,5 @@
 <mat-list role="list">
-  @for (todo of todos; track todo.id) {
+  @for (todo of todos(); track todo.id) {
     <mat-list-item>
       <mat-checkbox
         [checked]="todo.completed"
