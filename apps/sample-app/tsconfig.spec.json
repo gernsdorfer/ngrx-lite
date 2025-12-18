@@ -4,7 +4,8 @@
     "types": ["jasmine", "node"],
     "target": "ES2022",
     "useDefineForClassFields": false,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "isolatedModules": true
   },
   "extends": "./tsconfig.json",
   "files": ["src/test.ts"],
