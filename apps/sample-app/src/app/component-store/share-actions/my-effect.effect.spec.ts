@@ -6,13 +6,14 @@ import { cold } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { DemoEffect } from './my-effect.effect';
 import { MyIncrementAction } from './shared-action.component';
-import createSpyObj = jasmine.createSpyObj;
+import { vi } from "vitest";
+import { createVitestSpyObj } from "../../../test-setup";
 
 describe('DemoEffectX', () => {
   let actions$ = new Observable<Action>();
 
-  const matSnackBar = createSpyObj<MatSnackBar>('MatSnackBar', {
-    open: undefined,
+  const matSnackBar = createVitestSpyObj<MatSnackBar>({
+    open: vi.fn()
   });
   beforeEach(() => {
     TestBed.configureTestingModule({

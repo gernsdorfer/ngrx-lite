@@ -14,7 +14,10 @@
     "target": "es2020",
     "module": "preserve",
     "moduleResolution": "bundler",
-    "lib": ["dom", "es2022"]
+    "lib": [
+      "dom",
+      "es2022"
+    ]
   },
   "extends": "../../tsconfig.base.json",
   "files": [],
@@ -25,9 +28,6 @@
     },
     {
       "path": "./tsconfig.spec.json"
-    },
-    {
-      "path": "./tsconfig.editor.json"
     }
   ]
 }

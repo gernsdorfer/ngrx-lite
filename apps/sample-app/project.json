@@ -8,7 +8,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/sample-app",
         "index": "apps/sample-app/src/index.html",
@@ -75,13 +77,11 @@
       "executor": "@nx/eslint:lint"
     },
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
-      "options": {
-        "codeCoverage": true,
-        "main": "apps/sample-app/src/test.ts",
-        "tsConfig": "apps/sample-app/tsconfig.spec.json",
-        "karmaConfig": "apps/sample-app/karma.conf.js"
-      }
+      "executor": "@angular/build:unit-test",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {}
     }
   }
 }

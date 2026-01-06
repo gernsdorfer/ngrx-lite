@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { fakeAsync, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import {
@@ -27,7 +27,7 @@ describe('OptionRepeatForActionsComponent', () => {
   });
 
   describe('increment', () => {
-    it('should increment state and skip same pending actions', fakeAsync(() => {
+    it('should increment state and skip same pending actions', async () => {
       const component = getComponent();
 
       component.increment(1);
@@ -40,6 +40,6 @@ describe('OptionRepeatForActionsComponent', () => {
           },
         }),
       );
-    }));
+    });
   });
 });

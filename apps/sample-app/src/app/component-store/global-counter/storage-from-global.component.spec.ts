@@ -1,18 +1,15 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
+import { createVitestSpyObj } from '../../../test-setup';
 import { GlobalCounterStore } from './global-counter.service';
 import { StorageFromGlobalComponent } from './storage-from-global.component';
-import createSpyObj = jasmine.createSpyObj;
 
 describe('StorageFromGlobalComponent', () => {
-  const globalCounterStore = createSpyObj<GlobalCounterStore>(
-    'GlobalCounterStore',
-    {
-      increment: undefined,
-      state: { counter: 0 },
-    },
-    {}
-  );
+  const globalCounterStore = createVitestSpyObj<GlobalCounterStore>({
+    increment: vi.fn(),
+    state: signal({ counter: 0 }),
+  });
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -35,7 +32,7 @@ describe('StorageFromGlobalComponent', () => {
   describe('increment', () => {
     it('should call increment', () => {
       const component = getComponent();
-      globalCounterStore.increment.calls.reset();
+      globalCounterStore.increment.mockClear();
 
       component.increment();
 

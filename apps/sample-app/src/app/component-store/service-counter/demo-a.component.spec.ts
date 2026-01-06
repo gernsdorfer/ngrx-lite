@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
+import { createVitestSpyObj } from '../../../test-setup';
 import { CounterStore } from './counter-service';
 import { DemoAComponent } from './demo-a.component';
-import createSpyObj = jasmine.createSpyObj;
 
 describe('DemoAComponent', () => {
-  const counterStore = createSpyObj<CounterStore>('CounterStore', {
-    increment: undefined,
-    state: { counter: 0 },
+  const counterStore = createVitestSpyObj<CounterStore>({
+    increment: vi.fn(),
+    state: signal({ counter: 0 }),
   });
 
   const getComponent = (): DemoAComponent => {
@@ -35,7 +36,7 @@ describe('DemoAComponent', () => {
   describe('increment', () => {
     it('should call increment', () => {
       const component = getComponent();
-      counterStore.increment.calls.reset();
+      counterStore.increment.mockClear();
 
       component.increment();
 
