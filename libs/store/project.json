@@ -8,7 +8,9 @@
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
-      "outputs": ["{workspaceRoot}/dist/libs/store"],
+      "outputs": [
+        "{workspaceRoot}/dist/libs/store"
+      ],
       "options": {
         "project": "libs/store/ng-package.json",
         "tsConfig": "libs/store/tsconfig.lib.json"
@@ -22,14 +24,11 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
-      "options": {
-        "codeCoverage": true,
-        "main": "libs/store/src/test.ts",
-        "tsConfig": "libs/store/tsconfig.spec.json",
-        "karmaConfig": "libs/store/karma.conf.js",
-        "codeCoverageExclude": ["libs/store/src/plugins/get-window.ts"]
-      }
+      "executor": "@nx/vitest:test",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {}
     },
     "lint": {
       "executor": "@nx/eslint:lint"

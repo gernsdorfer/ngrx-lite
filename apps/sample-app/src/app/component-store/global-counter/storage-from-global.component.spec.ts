@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { createVitestSpyObj } from '@ngrx-lite/testing';
 import { vi } from 'vitest';
-import { createVitestSpyObj } from '../../../test-setup';
 import { GlobalCounterStore } from './global-counter.service';
 import { StorageFromGlobalComponent } from './storage-from-global.component';
 

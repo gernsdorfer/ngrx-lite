@@ -262,6 +262,7 @@ export class Store {
     this.storeDevtools?.liftedState.pipe(takeUntil(store.destroy$)).subscribe({
       next: ({ computedStates, currentStateIndex }) => {
         const currentStoreState = getStoreState(store);
+        /* v8 ignore start */
         if (
           currentStoreState &&
           JSON.stringify(computedStates[currentStateIndex].state[storeName]) !==
@@ -276,6 +277,7 @@ export class Store {
             },
           );
         }
+        /* v8 ignore stop */
       },
     });
   }
