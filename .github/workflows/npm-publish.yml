@@ -20,7 +20,19 @@ jobs:
       - run: |
           echo '//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}' >> .npmrc
           echo 'registry=https://registry.npmjs.org/' >> .npmrc
-          echo 'always-auth=true' >> .npmrc
-      - run: npm publish dist/libs/store --access public
+      - name: Publish to npm
+        run: |
+          # Extract version from package.json
+          VERSION=$(node -p "require('./dist/libs/store/package.json').version")
+
+          # Determine tag based on version
+          if [[ "$VERSION" =~ -rc|beta|alpha ]]; then
+            TAG="next"
+          else
+            TAG="latest"
+          fi
+
+          echo "Publishing version $VERSION with tag $TAG"
+          npm publish dist/libs/store --access public --tag $TAG
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
