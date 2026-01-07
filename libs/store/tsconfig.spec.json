@@ -1,10 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": [
-      "node",
-      "vitest/globals"
-    ],
+    "types": ["node", "vitest/globals"],
     "target": "ES2022",
     "useDefineForClassFields": false,
     "moduleResolution": "bundler",
@@ -12,9 +9,5 @@
   },
   "extends": "./tsconfig.json",
   "files": ["src/test-setup.ts"],
-  "include": [
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "**/*.d.ts"
-  ]
+  "include": ["**/*.spec.ts", "**/*.test.ts", "**/*.d.ts"]
 }

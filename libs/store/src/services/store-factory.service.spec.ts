@@ -1,11 +1,19 @@
 import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { UntypedFormControl, UntypedFormGroup, Validators, } from '@angular/forms';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { Actions } from '@ngrx/effects';
 import { provideMockStore } from '@ngrx/store/testing';
 import { cold } from 'jasmine-marbles';
 import { EMPTY } from 'rxjs';
-import { SkipLogForStore, StateToken, StoreNameToken, } from '../injection-tokens/state.token';
+import {
+  SkipLogForStore,
+  StateToken,
+  StoreNameToken,
+} from '../injection-tokens/state.token';
 import { DevToolHelper } from './dev-tool-helper.service';
 import { StoreFactory } from './store-factory.service';
 import { Store } from './store.service';
@@ -13,143 +21,169 @@ import { ComponentLoadingStore } from './stores/component-loading-store.service'
 import { ComponentStore } from './stores/component-store.service';
 
 interface MyState {
-    myState: string;
-    optionalValue?: string;
+  myState: string;
+  optionalValue?: string;
 }
 
 const defaultMyState: MyState = { myState: '' };
 
 describe('StoreFactory', () => {
-    const devToolHelper = {
-        isTimeTravelActive: vi.fn().mockName("storeDevtools.isTimeTravelActive").mockReturnValue(false),
-        setTimeTravelActive: vi.fn().mockName("storeDevtools.setTimeTravelActive").mockReturnValue(undefined)
-    };
+  const devToolHelper = {
+    isTimeTravelActive: vi
+      .fn()
+      .mockName('storeDevtools.isTimeTravelActive')
+      .mockReturnValue(false),
+    setTimeTravelActive: vi
+      .fn()
+      .mockName('storeDevtools.setTimeTravelActive')
+      .mockReturnValue(undefined),
+  };
 
-    const store = {
-        createStoreByStoreType: vi.fn().mockName("Store.createStoreByStoreType").mockReturnValue(undefined),
-        addReducersForImportState: vi.fn().mockName("Store.addReducersForImportState").mockReturnValue(undefined),
-        checkForTimeTravel: vi.fn().mockName("Store.checkForTimeTravel").mockReturnValue(undefined)
-    };
-    const actions = {
-        lift: vi.fn().mockName("Actions.lift").mockReturnValue(EMPTY)
-    };
-    let storeFactory: StoreFactory;
+  const store = {
+    createStoreByStoreType: vi
+      .fn()
+      .mockName('Store.createStoreByStoreType')
+      .mockReturnValue(undefined),
+    addReducersForImportState: vi
+      .fn()
+      .mockName('Store.addReducersForImportState')
+      .mockReturnValue(undefined),
+    checkForTimeTravel: vi
+      .fn()
+      .mockName('Store.checkForTimeTravel')
+      .mockReturnValue(undefined),
+  };
+  const actions = {
+    lift: vi.fn().mockName('Actions.lift').mockReturnValue(EMPTY),
+  };
+  let storeFactory: StoreFactory;
 
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        StoreFactory,
+        {
+          provide: Store,
+          useValue: store,
+        },
+        {
+          provide: Actions,
+          useValue: actions,
+        },
+        provideMockStore({
+          initialState: {},
+        }),
+      ],
+      teardown: { destroyAfterEach: false },
+    });
+    storeFactory = TestBed.inject(StoreFactory);
+
+    store.createStoreByStoreType.mockImplementation(
+      ({ CreatedStore }) =>
+        Injector.create({
+          providers: [
+            { provide: Actions, useValue: actions },
+            { provide: CreatedStore },
+            provideMockStore({
+              initialState: {},
+            }),
+            {
+              provide: DevToolHelper,
+              useValue: devToolHelper,
+            },
+            { provide: StoreNameToken, useValue: 'Test' },
+            { provide: StateToken, useValue: {} },
+            { provide: SkipLogForStore, useValue: false },
+          ],
+        }).get(CreatedStore) as never,
+    );
+  });
+
+  describe('createComponentStore', () => {
+    it('should return a componentStore', () => {
+      expect(
+        storeFactory.createComponentStore<MyState>({
+          storeName: 'myStore',
+          defaultState: defaultMyState,
+        }),
+      ).toBeInstanceOf(ComponentStore);
+    });
+  });
+  describe('createComponentLoadingStore', () => {
+    it('should return a createComponentLoadingStore ', () => {
+      expect(
+        storeFactory.createComponentLoadingStore({
+          storeName: 'myStore',
+        }),
+      ).toBeInstanceOf(ComponentLoadingStore);
+    });
+  });
+
+  describe('createFormComponentStore', () => {
+    const myForm = new UntypedFormGroup(<
+      {
+        [index in keyof MyState]: UntypedFormControl;
+      }
+    >{
+      myState: new UntypedFormControl('', [Validators.required]),
+      optionalValue: new UntypedFormControl(''),
+    });
+    const defaultFormState = {
+      ...defaultMyState,
+      optionalValue: '',
+    };
     beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [
-                StoreFactory,
-                {
-                    provide: Store,
-                    useValue: store,
-                },
-                {
-                    provide: Actions,
-                    useValue: actions,
-                },
-                provideMockStore({
-                    initialState: {},
-                }),
-            ],
-            teardown: { destroyAfterEach: false },
-        });
-        storeFactory = TestBed.inject(StoreFactory);
-
-        store.createStoreByStoreType.mockImplementation(({ CreatedStore }) => Injector.create({
-            providers: [
-                { provide: Actions, useValue: actions },
-                { provide: CreatedStore },
-                provideMockStore({
-                    initialState: {},
-                }),
-                {
-                    provide: DevToolHelper,
-                    useValue: devToolHelper,
-                },
-                { provide: StoreNameToken, useValue: 'Test' },
-                { provide: StateToken, useValue: {} },
-                { provide: SkipLogForStore, useValue: false },
-            ],
-        }).get(CreatedStore) as never);
+      myForm.reset({ ...defaultMyState, optionalValue: '' });
     });
 
-    describe('createComponentStore', () => {
-        it('should return a componentStore', () => {
-            expect(storeFactory.createComponentStore<MyState>({
-                storeName: 'myStore',
-                defaultState: defaultMyState,
-            })).toBeInstanceOf(ComponentStore);
+    describe('initialState', () => {
+      beforeEach(() => {
+        myForm.reset({ ...defaultFormState, optionalValue: '' });
+      });
+
+      it('should create  default initial state', () => {
+        const store = storeFactory.createFormComponentStore<MyState>({
+          storeName: 'myStore',
+          formGroup: myForm,
         });
+
+        expect(store).toBeInstanceOf(ComponentStore);
+      });
     });
-    describe('createComponentLoadingStore', () => {
-        it('should return a createComponentLoadingStore ', () => {
-            expect(storeFactory.createComponentLoadingStore({
-                storeName: 'myStore',
-            })).toBeInstanceOf(ComponentLoadingStore);
-        });
+
+    it('should set formChanges to state', () => {
+      const { state$ } = storeFactory.createFormComponentStore<MyState>({
+        storeName: 'myStore',
+        formGroup: myForm,
+      });
+
+      myForm.patchValue({ myState: 'Test' });
+
+      expect(state$).toBeObservable(
+        cold('a', {
+          a: {
+            ...defaultFormState,
+            myState: 'Test',
+          },
+        }),
+      );
     });
 
-    describe('createFormComponentStore', () => {
-        const myForm = new UntypedFormGroup(<{
-            [index in keyof MyState]: UntypedFormControl;
-        }>{
-            myState: new UntypedFormControl('', [Validators.required]),
-            optionalValue: new UntypedFormControl(''),
-        });
-        const defaultFormState = {
-            ...defaultMyState,
-            optionalValue: '',
-        };
-        beforeEach(() => {
-            myForm.reset({ ...defaultMyState, optionalValue: '' });
-        });
+    it('should set stateChanges to form', () => {
+      const store = storeFactory.createFormComponentStore<MyState>({
+        storeName: 'myFormStore',
+        formGroup: myForm,
+      });
 
-        describe('initialState', () => {
-            beforeEach(() => {
-                myForm.reset({ ...defaultFormState, optionalValue: '' });
-            });
+      store.setState(<MyState>{
+        ...defaultFormState,
+        myState: 'newValue',
+      });
 
-            it('should create  default initial state', () => {
-                const store = storeFactory.createFormComponentStore<MyState>({
-                    storeName: 'myStore',
-                    formGroup: myForm,
-                });
-
-                expect(store).toBeInstanceOf(ComponentStore);
-            });
-        });
-
-        it('should set formChanges to state', () => {
-            const { state$ } = storeFactory.createFormComponentStore<MyState>({
-                storeName: 'myStore',
-                formGroup: myForm,
-            });
-
-            myForm.patchValue({ myState: 'Test' });
-
-            expect(state$).toBeObservable(cold('a', {
-                a: {
-                    ...defaultFormState,
-                    myState: 'Test',
-                },
-            }));
-        });
-
-        it('should set stateChanges to form', () => {
-            const store = storeFactory.createFormComponentStore<MyState>({
-                storeName: 'myFormStore',
-                formGroup: myForm,
-            });
-
-            store.setState(<MyState>{
-                ...defaultFormState,
-                myState: 'newValue',
-            });
-
-            expect(myForm.getRawValue()).toEqual({
-                ...defaultFormState,
-                myState: 'newValue',
-            });
-        });
+      expect(myForm.getRawValue()).toEqual({
+        ...defaultFormState,
+        myState: 'newValue',
+      });
     });
+  });
 });
