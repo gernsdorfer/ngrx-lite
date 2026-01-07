@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { createVitestSpyObj } from '@ngrx-lite/testing';
+import { vi } from 'vitest';
 import { MultipleCounterStore } from './counter-service';
 import { DemoAComponent } from './demo-a.component';
-import createSpyObj = jasmine.createSpyObj;
 
 describe('DemoAComponent', () => {
-  const multipleCounterStore = createSpyObj<MultipleCounterStore>(
-    'GlobalCounterStore',
-    {
-      increment: undefined,
-      ngOnDestroy: undefined,
-      state: { counter: 0 },
-    }
-  );
+  const multipleCounterStore = createVitestSpyObj<MultipleCounterStore>({
+    increment: vi.fn(),
+    ngOnDestroy: vi.fn(),
+    state: signal({ counter: 0 }),
+  });
 
   const getComponent = (): DemoAComponent => {
     const fixture = TestBed.overrideComponent(DemoAComponent, {
@@ -39,7 +37,7 @@ describe('DemoAComponent', () => {
   describe('increment', () => {
     it('should call increment', () => {
       const component = getComponent();
-      multipleCounterStore.increment.calls.reset();
+      multipleCounterStore.increment.mockClear();
 
       component.increment();
 

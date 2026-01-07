@@ -3,14 +3,16 @@ import { StoreDevtools } from '@ngrx/store-devtools';
 import { ReduxForWindowModule } from './redux-for-window.service';
 
 describe('ReduxForWindowModule', () => {
-  const storeDevtools = jasmine.createSpyObj<StoreDevtools>(
-    'storeDevtools',
-    {
-      jumpToAction: undefined,
-      importState: undefined,
-    },
-    {}
-  );
+  const storeDevtools = {
+    jumpToAction: vi
+      .fn()
+      .mockName('storeDevtools.jumpToAction')
+      .mockReturnValue(undefined),
+    importState: vi
+      .fn()
+      .mockName('storeDevtools.importState')
+      .mockReturnValue(undefined),
+  };
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ReduxForWindowModule],

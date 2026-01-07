@@ -3,7 +3,8 @@ import { Actions } from '@ngrx/effects';
 import { Action, createAction } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold } from 'jasmine-marbles';
-import { EMPTY, Subject, asapScheduler, of, tap } from 'rxjs';
+import { EMPTY, Subject, of, tap } from 'rxjs';
+import { vi } from 'vitest';
 import { EffectStates } from '../../enums';
 import {
   SkipLogForStore,
@@ -20,12 +21,14 @@ import {
 
 describe('LoadingStore', () => {
   let store: ComponentLoadingStore<string, number>;
-  const mockStore = jasmine.createSpyObj<MockStore>('MockStore', {
-    dispatch: undefined,
-  });
+  const mockStore = {
+    dispatch: vi.fn().mockName('MockStore.dispatch').mockReturnValue(undefined),
+  };
   const storeName = 'myStore';
   const devToolHelper = new DevToolHelper();
-  const actions = jasmine.createSpyObj<Actions>('Actions', { lift: EMPTY }, {});
+  const actions = {
+    lift: vi.fn().mockName('Actions.lift').mockReturnValue(EMPTY),
+  };
   const action$ = new Subject<Action>();
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -61,7 +64,9 @@ describe('LoadingStore', () => {
       teardown: { destroyAfterEach: false },
     });
     store = TestBed.inject(ComponentLoadingStore);
-    spyOn(store, 'createEffect').and.callFake((effect) => effect(action$));
+    vi.spyOn(store, 'createEffect').mockImplementation((effect) =>
+      effect(action$),
+    );
   });
 
   const getDispatchAction = <ITEM, ERROR>({
@@ -79,8 +84,10 @@ describe('LoadingStore', () => {
       },
     });
 
-  it('should send init action after create', () => {
-    asapScheduler.flush();
+  it('should send init action after create', async () => {
+    await vi.waitFor(() => {
+      expect(mockStore.dispatch).toHaveBeenCalled();
+    });
 
     expect(mockStore.dispatch).toHaveBeenCalledWith(
       getDispatchAction({
@@ -99,15 +106,18 @@ describe('LoadingStore', () => {
 
   describe('loadingEffect', () => {
     beforeEach(() => {
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
     });
-    it('should change state while effect is running', () => {
+    it('should change state while effect is running', async () => {
+      vi.useFakeTimers();
       const testEffect = store.loadingEffect('testEffect', () =>
         cold('-a-#', { a: 'newValue' }, 500),
       );
       store.patchState({ item: 'oldValue', error: 404 });
-      asapScheduler.flush();
-      mockStore.dispatch.calls.reset();
+      await vi.waitFor(() => {
+        expect(mockStore.dispatch).toHaveBeenCalled();
+      });
+      mockStore.dispatch.mockClear();
 
       testEffect();
 
@@ -124,9 +134,15 @@ describe('LoadingStore', () => {
           c: getDefaultComponentLoadingState({ error: 500 }),
         }),
       );
-      asapScheduler.flush();
 
-      expect(mockStore.dispatch.calls.allArgs()).toEqual([
+      await vi.waitFor(
+        () => {
+          expect(mockStore.dispatch).toHaveBeenCalledTimes(3);
+        },
+        { timeout: 5000 },
+      );
+
+      expect(vi.mocked(mockStore.dispatch).mock.calls).toEqual([
         [
           getEffectAction({
             storeName,
@@ -163,17 +179,21 @@ describe('LoadingStore', () => {
           }),
         ],
       ]);
+      vi.useRealTimers();
     });
 
-    it('should change state while effect is running in cache mode (with option: canCache)', () => {
+    it('should change state while effect is running in cache mode (with option: canCache)', async () => {
+      vi.useFakeTimers();
       const testEffect = store.loadingEffect(
         'testEffect',
         () => cold('-a-|', { a: 'newValue' }),
         { canCache: true },
       );
       store.patchState({ item: 'oldValue', error: 404 });
-      asapScheduler.flush();
-      mockStore.dispatch.calls.reset();
+      await vi.waitFor(() => {
+        expect(mockStore.dispatch).toHaveBeenCalled();
+      });
+      mockStore.dispatch.mockClear();
 
       testEffect();
       testEffect();
@@ -190,9 +210,15 @@ describe('LoadingStore', () => {
           }),
         }),
       );
-      asapScheduler.flush();
 
-      expect(mockStore.dispatch.calls.allArgs()).toEqual([
+      await vi.waitFor(
+        () => {
+          expect(mockStore.dispatch).toHaveBeenCalledTimes(2);
+        },
+        { timeout: 5000 },
+      );
+
+      expect(vi.mocked(mockStore.dispatch).mock.calls).toEqual([
         [
           getEffectAction({
             storeName,
@@ -218,17 +244,21 @@ describe('LoadingStore', () => {
           }),
         ],
       ]);
+      vi.useRealTimers();
     });
 
-    it('should change state while effect is running in cache mode (with option: skipSamePendingActions)', () => {
+    it('should change state while effect is running in cache mode (with option: skipSamePendingActions)', async () => {
+      vi.useFakeTimers();
       const testEffect = store.loadingEffect(
         'testEffect',
         () => cold('-a-|', { a: 'newValue' }),
         { skipSamePendingActions: true },
       );
       store.patchState({ item: 'oldValue', error: 404 });
-      asapScheduler.flush();
-      mockStore.dispatch.calls.reset();
+      await vi.waitFor(() => {
+        expect(mockStore.dispatch).toHaveBeenCalled();
+      });
+      mockStore.dispatch.mockClear();
 
       testEffect();
       testEffect();
@@ -245,9 +275,15 @@ describe('LoadingStore', () => {
           }),
         }),
       );
-      asapScheduler.flush();
 
-      expect(mockStore.dispatch.calls.allArgs()).toEqual([
+      await vi.waitFor(
+        () => {
+          expect(mockStore.dispatch).toHaveBeenCalledTimes(2);
+        },
+        { timeout: 5000 },
+      );
+
+      expect(vi.mocked(mockStore.dispatch).mock.calls).toEqual([
         [
           getEffectAction({
             storeName,
@@ -276,20 +312,23 @@ describe('LoadingStore', () => {
     });
 
     it('should skip skip same actions for option skipSameActions', () => {
-      const spyEffectRun = jasmine
-        .createSpy('effectRun')
-        .and.returnValue(of('newValue'));
+      const spyEffectRun = vi.fn().mockReturnValue(of('newValue'));
       const testEffect = store.loadingEffect(
         'testEffect',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (_payload: {
           key1: string;
-          key2: { child: { a: string; b: string } };
+          key2: {
+            child: {
+              a: string;
+              b: string;
+            };
+          };
         }) => spyEffectRun(),
         { skipSameActions: true },
       );
       store.patchState({ item: 'oldValue', error: 404 });
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       testEffect({ key1: 'value1', key2: { child: { b: '1', a: '1' } } });
       testEffect({ key2: { child: { a: '1', b: '1' } }, key1: 'value1' });
@@ -299,24 +338,27 @@ describe('LoadingStore', () => {
           item: 'newValue',
         }),
       );
-      expect(spyEffectRun.calls.count()).toEqual(1);
+      expect(vi.mocked(spyEffectRun).mock.calls.length).toEqual(1);
     });
 
     it('should not skip different actions (with deep Objects) for option skipSameActions', () => {
-      const spyEffectRun = jasmine
-        .createSpy('effectRun')
-        .and.returnValue(of('newValue'));
+      const spyEffectRun = vi.fn().mockReturnValue(of('newValue'));
       const testEffect = store.loadingEffect(
         'testEffect',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (_payload: {
           key1: string;
-          key2: { child: { a: string; b: string } };
+          key2: {
+            child: {
+              a: string;
+              b: string;
+            };
+          };
         }) => spyEffectRun(),
         { skipSameActions: true },
       );
       store.patchState({ item: 'oldValue', error: 404 });
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       testEffect({ key1: 'value1', key2: { child: { b: '1', a: '2' } } });
       testEffect({ key2: { child: { a: '2', b: '2' } }, key1: 'value1' });
@@ -326,20 +368,18 @@ describe('LoadingStore', () => {
           item: 'newValue',
         }),
       );
-      expect(spyEffectRun.calls.count()).toEqual(2);
+      expect(vi.mocked(spyEffectRun).mock.calls.length).toEqual(2);
     });
 
     it('should skip skip same actions for option skipSameActions, without payload', () => {
-      const spyEffectRun = jasmine
-        .createSpy('effectRun')
-        .and.returnValue(of('newValue'));
+      const spyEffectRun = vi.fn().mockReturnValue(of('newValue'));
       const testEffect = store.loadingEffect(
         'testEffect',
         () => spyEffectRun(),
         { skipSameActions: true },
       );
       store.patchState({ item: 'oldValue', error: 404 });
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       testEffect();
       testEffect();
@@ -349,13 +389,11 @@ describe('LoadingStore', () => {
           item: 'newValue',
         }),
       );
-      expect(spyEffectRun.calls.count()).toEqual(1);
+      expect(vi.mocked(spyEffectRun).mock.calls.length).toEqual(1);
     });
 
     it('should skip skip same actions for option skipSameActions, without payload', () => {
-      const spyEffectRun = jasmine
-        .createSpy('effectRun')
-        .and.returnValue(of('newValue'));
+      const spyEffectRun = vi.fn().mockReturnValue(of('newValue'));
       const testEffect = store.loadingEffect(
         'testEffect',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -363,7 +401,7 @@ describe('LoadingStore', () => {
         { skipSameActions: true },
       );
       store.patchState({ item: 'oldValue', error: 404 });
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       testEffect({});
       testEffect({});
@@ -373,11 +411,11 @@ describe('LoadingStore', () => {
           item: 'newValue',
         }),
       );
-      expect(spyEffectRun.calls.count()).toEqual(1);
+      expect(vi.mocked(spyEffectRun).mock.calls.length).toEqual(1);
     });
 
     it('should replay effect', () => {
-      const spyEffectRun = jasmine.createSpy('effectRun');
+      const spyEffectRun = vi.fn();
 
       const customAction = createAction<string>(`TestAction`);
 
@@ -395,7 +433,7 @@ describe('LoadingStore', () => {
           item: 'newValue',
         }),
       );
-      expect(spyEffectRun.calls.count()).toEqual(2);
+      expect(vi.mocked(spyEffectRun).mock.calls.length).toEqual(2);
     });
   });
 });

@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import {
@@ -28,7 +28,8 @@ describe('LoadingWithDefaultValuesComponent', () => {
   });
 
   describe('increment', () => {
-    it('should increment state', fakeAsync(() => {
+    it('should increment state', async () => {
+      vi.useFakeTimers();
       const component = getComponent();
 
       expect(component.counterState()).toEqual(
@@ -36,20 +37,23 @@ describe('LoadingWithDefaultValuesComponent', () => {
           item: {
             counter: 0,
           },
-        })
+        }),
       );
 
       component.increment();
-      tick(400);
+      vi.advanceTimersByTime(400);
+      vi.runAllTicks();
       component.increment();
-      tick(400);
+      vi.advanceTimersByTime(400);
+      vi.runAllTicks();
+
       expect(component.counterState()).toEqual(
         getDefaultComponentLoadingState<MyState['item'], MyState['error']>({
           item: {
             counter: 2,
           },
-        })
+        }),
       );
-    }));
+    });
   });
 });

@@ -1,19 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { createVitestSpyObj } from '@ngrx-lite/testing';
+import { vi } from 'vitest';
 import { CounterStore } from './counter-service';
 import { StorageFromServiceComponent } from './storage-from-service.component';
-import createSpyObj = jasmine.createSpyObj;
 
 describe('StorageFromServiceComponent', () => {
-  const counterStore = createSpyObj<CounterStore>(
-    'CounterStore',
-    {
-      increment: undefined,
-      state: undefined,
-    },
-    {}
-  );
+  const counterStore = createVitestSpyObj<CounterStore>({
+    increment: vi.fn(),
+    state: signal({ counter: 0 }),
+  });
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [],

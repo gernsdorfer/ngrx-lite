@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import {
@@ -29,15 +29,20 @@ describe('OptionSkipSamePendingActionsComponent', () => {
   });
 
   describe('increment', () => {
-    it('should increment state and skip same pending actions', fakeAsync(() => {
+    it('should increment state and skip same pending actions', async () => {
       const component = getComponent();
+      vi.useFakeTimers();
 
       component.increment(1);
-      tick(1000);
+      vi.advanceTimersByTime(1000);
+      vi.runAllTicks();
+
       component.increment(1);
 
       component.increment(2);
-      tick(4000);
+      vi.advanceTimersByTime(4000);
+      vi.runAllTicks();
+
       expect(component.counterState()).toEqual(
         getDefaultComponentLoadingState<MyState['item'], MyState['error']>({
           item: {
@@ -46,6 +51,6 @@ describe('OptionSkipSamePendingActionsComponent', () => {
         }),
       );
       expect(component.executeEffect).toBe(2);
-    }));
+    });
   });
 });

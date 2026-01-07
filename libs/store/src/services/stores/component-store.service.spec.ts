@@ -3,6 +3,7 @@ import { Actions } from '@ngrx/effects';
 import { createAction } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { EMPTY, asapScheduler, of } from 'rxjs';
+import { vi } from 'vitest';
 import {
   SkipLogForStore,
   StateToken,
@@ -19,9 +20,9 @@ interface MyState {
 
 describe('ComponentStore', () => {
   const defaultStore: MyState = { myState: '' };
-  const mockStore = jasmine.createSpyObj<MockStore>('MockStore', {
-    dispatch: undefined,
-  });
+  const mockStore = {
+    dispatch: vi.fn().mockName('MockStore.dispatch').mockReturnValue(undefined),
+  };
   const devToolHelper = new DevToolHelper();
   const storeName = 'myStore';
   const actions = EMPTY;
@@ -89,7 +90,7 @@ describe('ComponentStore', () => {
 
     it('should not send init action for SkipLogForStore', () => {
       TestBed.overrideProvider(SkipLogForStore, { useValue: true });
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       getStore();
 
@@ -128,13 +129,13 @@ describe('ComponentStore', () => {
       const store = getStore();
       const customAction = createAction<string>(`TestAction`);
 
-      spyOn(store, 'createEffect').and.callFake((effect) => {
+      vi.spyOn(store, 'createEffect').mockImplementation((effect) => {
         const effect$ = effect(of(customAction()));
         effect$.subscribe();
         return effect$;
       });
 
-      const callback = jasmine.createSpy('callback');
+      const callback = vi.fn();
       store.onActions([customAction])(callback);
 
       expect(callback).toHaveBeenCalled();
@@ -143,7 +144,7 @@ describe('ComponentStore', () => {
 
   describe('setState', () => {
     beforeEach(() => {
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
     });
     it('should set state to store with object', () => {
       getStore().setState({ myState: 'testValue' });
@@ -188,7 +189,7 @@ describe('ComponentStore', () => {
     });
 
     it('should dispatch action with default actionName `SET_STATE`', () => {
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       getStore().setState(defaultStore);
       asapScheduler.flush();
@@ -202,7 +203,7 @@ describe('ComponentStore', () => {
     });
 
     it('should dispatch action with custom actionName', () => {
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       getStore().setState(defaultStore, 'myCustomAction');
       asapScheduler.flush();
@@ -217,7 +218,7 @@ describe('ComponentStore', () => {
 
     it('should not dispatch action for skipLog', () => {
       const store = getStore();
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       store.setState(defaultStore, 'myCustomAction', { skipLog: true });
 
@@ -227,7 +228,7 @@ describe('ComponentStore', () => {
 
   describe('patchState', () => {
     beforeEach(() => {
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
     });
     it('should set state to store with object', () => {
       getStore().patchState({ optionalValue: 'newValue' });
@@ -262,7 +263,7 @@ describe('ComponentStore', () => {
     });
 
     it('should dispatch action with default actionName `PATCH_STATE`', () => {
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
       getStore().patchState({ optionalValue: 'newValue' });
       asapScheduler.flush();
 
@@ -275,7 +276,7 @@ describe('ComponentStore', () => {
     });
 
     it('should dispatch action with custom actionName', () => {
-      mockStore.dispatch.calls.reset();
+      mockStore.dispatch.mockClear();
 
       getStore().patchState({ optionalValue: 'newValue' }, 'myCustomAction');
       asapScheduler.flush();

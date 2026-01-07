@@ -5,30 +5,33 @@ import {
   createStoreAsFnTest,
   storeTestingFactory,
 } from '@gernsdorfer/ngrx-lite/testing';
+import { createVitestSpyObj } from '@ngrx-lite/testing';
+import { vi } from 'vitest';
 import { DynamicState, dynamicStore } from './dynamic-store';
 import { FunctionalStoreComponent } from './functional-store.component';
 import { rootStore } from './root-store';
-import createSpyObj = jasmine.createSpyObj;
 
 describe('FunctionalLoadingStoreComponent', () => {
   const dynamicState = signal<DynamicState>({ counter: 0 });
   let onLazyStoreBSuccess: () => void;
-  const dynamicStoreSpy = createSpyObj<
+  const dynamicStoreSpy = createVitestSpyObj<
     createStoreAsFnTest<typeof dynamicStore>
-  >({ increment: undefined }, { state: dynamicState });
+  >({
+    increment: vi.fn(),
+    state: dynamicState,
+  });
 
-  const rootStoreSpy = createSpyObj<createStoreAsFnTest<typeof rootStore>>(
-    {
-      onLazyStoreBSuccess: undefined,
-    },
-    {},
-  );
-  rootStoreSpy.onLazyStoreBSuccess.and.callFake(
+  const rootStoreSpy = createVitestSpyObj<
+    createStoreAsFnTest<typeof rootStore>
+  >({
+    onLazyStoreBSuccess: vi.fn(),
+  });
+  rootStoreSpy.onLazyStoreBSuccess.mockImplementation(
     (cb: () => void) => (onLazyStoreBSuccess = cb),
   );
   beforeEach(() => {
-    spyOn(dynamicStore, 'inject').and.returnValue(dynamicStoreSpy);
-    spyOn(rootStore, 'inject').and.returnValue(rootStoreSpy);
+    vi.spyOn(dynamicStore, 'inject').mockReturnValue(dynamicStoreSpy);
+    vi.spyOn(rootStore, 'inject').mockReturnValue(rootStoreSpy);
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
@@ -36,6 +39,7 @@ describe('FunctionalLoadingStoreComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
+
   const getComponent = (): FunctionalStoreComponent => {
     const fixture = TestBed.createComponent(FunctionalStoreComponent);
     const component = fixture.componentInstance;

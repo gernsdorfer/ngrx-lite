@@ -3,9 +3,9 @@ import { RouterStore } from './router-service';
 import { RouterStoreModule } from './router-store.module';
 
 describe('RouterStoreModule', () => {
-  const routerStore = jasmine.createSpyObj<RouterStore>('router', {
-    init: undefined,
-  });
+  const routerStore = {
+    init: vi.fn().mockName('router.init').mockReturnValue(undefined),
+  };
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterStoreModule],

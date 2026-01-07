@@ -7,20 +7,18 @@ import { RouterStore } from './router-service';
 
 describe('RouterStore', () => {
   let events$: Router['events'] = EMPTY;
-  const router = jasmine.createSpyObj<Router>(
-    'router',
-    {
-      navigateByUrl: undefined,
-    },
-    {
-      url: '/my-current-curl',
-      events: defer(() => events$),
-    },
-  );
+  const router = {
+    navigateByUrl: vi
+      .fn()
+      .mockName('router.navigateByUrl')
+      .mockReturnValue(undefined),
+    url: '/my-current-curl',
+    events: defer(() => events$),
+  };
 
   let routerStore: RouterStore;
   beforeEach(() => {
-    router.navigateByUrl.and.resolveTo(true);
+    router.navigateByUrl.mockResolvedValue(true);
     TestBed.configureTestingModule({
       providers: [storeTestingFactory(), { provide: Router, useValue: router }],
       teardown: { destroyAfterEach: false },

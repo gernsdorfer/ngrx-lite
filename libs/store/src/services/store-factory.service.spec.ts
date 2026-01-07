@@ -28,17 +28,34 @@ interface MyState {
 const defaultMyState: MyState = { myState: '' };
 
 describe('StoreFactory', () => {
-  const devToolHelper = jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
-    isTimeTravelActive: false,
-    setTimeTravelActive: undefined,
-  });
+  const devToolHelper = {
+    isTimeTravelActive: vi
+      .fn()
+      .mockName('storeDevtools.isTimeTravelActive')
+      .mockReturnValue(false),
+    setTimeTravelActive: vi
+      .fn()
+      .mockName('storeDevtools.setTimeTravelActive')
+      .mockReturnValue(undefined),
+  };
 
-  const store = jasmine.createSpyObj<Store>('Store', {
-    createStoreByStoreType: undefined,
-    addReducersForImportState: undefined,
-    checkForTimeTravel: undefined,
-  });
-  const actions = jasmine.createSpyObj<Actions>('Actions', { lift: EMPTY }, {});
+  const store = {
+    createStoreByStoreType: vi
+      .fn()
+      .mockName('Store.createStoreByStoreType')
+      .mockReturnValue(undefined),
+    addReducersForImportState: vi
+      .fn()
+      .mockName('Store.addReducersForImportState')
+      .mockReturnValue(undefined),
+    checkForTimeTravel: vi
+      .fn()
+      .mockName('Store.checkForTimeTravel')
+      .mockReturnValue(undefined),
+  };
+  const actions = {
+    lift: vi.fn().mockName('Actions.lift').mockReturnValue(EMPTY),
+  };
   let storeFactory: StoreFactory;
 
   beforeEach(() => {
@@ -61,7 +78,7 @@ describe('StoreFactory', () => {
     });
     storeFactory = TestBed.inject(StoreFactory);
 
-    store.createStoreByStoreType.and.callFake(
+    store.createStoreByStoreType.mockImplementation(
       ({ CreatedStore }) =>
         Injector.create({
           providers: [
@@ -104,7 +121,9 @@ describe('StoreFactory', () => {
 
   describe('createFormComponentStore', () => {
     const myForm = new UntypedFormGroup(<
-      { [index in keyof MyState]: UntypedFormControl }
+      {
+        [index in keyof MyState]: UntypedFormControl;
+      }
     >{
       myState: new UntypedFormControl('', [Validators.required]),
       optionalValue: new UntypedFormControl(''),

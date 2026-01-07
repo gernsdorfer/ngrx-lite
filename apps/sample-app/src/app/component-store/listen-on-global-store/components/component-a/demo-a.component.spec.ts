@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { createVitestSpyObj } from '@ngrx-lite/testing';
+import { vi } from 'vitest';
 import { MultipleCounterStore } from '../../services/counter-service';
 import { DemoAComponent } from './demo-a.component';
-import createSpyObj = jasmine.createSpyObj;
 
 describe('DemoAComponent', () => {
   let onReset: () => void;
-  const multipleCounterStore = createSpyObj<MultipleCounterStore>(
-    'GlobalCounterStore',
-    {
-      increment: undefined,
-      ngOnDestroy: undefined,
-      onReset: undefined,
-      state: { counter: 0 },
-    },
+  const multipleCounterStore = createVitestSpyObj<MultipleCounterStore>({
+    increment: vi.fn(),
+    ngOnDestroy: vi.fn(),
+    onReset: vi.fn(),
+    state: signal({ counter: 0 }),
+  });
+  multipleCounterStore.onReset.mockImplementation(
+    (cb: () => void) => (onReset = cb),
   );
-  multipleCounterStore.onReset.and.callFake((cb: () => void) => (onReset = cb));
 
   const getComponent = (): DemoAComponent => {
     const fixture = TestBed.overrideComponent(DemoAComponent, {
@@ -43,7 +43,7 @@ describe('DemoAComponent', () => {
   describe('increment', () => {
     it('should call increment', () => {
       const component = getComponent();
-      multipleCounterStore.increment.calls.reset();
+      multipleCounterStore.increment.mockClear();
 
       component.increment();
 

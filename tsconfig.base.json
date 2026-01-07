@@ -15,7 +15,8 @@
     "baseUrl": ".",
     "paths": {
       "@gernsdorfer/ngrx-lite": ["libs/store/src/index.ts"],
-      "@gernsdorfer/ngrx-lite/testing": ["libs/store/testing/index.ts"]
+      "@gernsdorfer/ngrx-lite/testing": ["libs/store/testing/index.ts"],
+      "@ngrx-lite/testing": ["testing/vitest-helpers.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

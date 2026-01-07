@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { createVitestSpyObj } from '@ngrx-lite/testing';
 import { Store } from '@ngrx/store';
+import { vi } from 'vitest';
 import { resetAction } from '../../actions/reset.action';
 import { ResetComponent } from './reset.component';
-import createSpyObj = jasmine.createSpyObj;
 
 describe('MultipleInstancesComponent', () => {
   beforeEach(() => {
@@ -18,8 +19,8 @@ describe('MultipleInstancesComponent', () => {
       ],
     });
   });
-  const store = createSpyObj<Store>('Store', {
-    dispatch: undefined,
+  const store = createVitestSpyObj<Store>({
+    dispatch: vi.fn(),
   });
   const getComponent = (): ResetComponent => {
     const fixture = TestBed.overrideComponent(ResetComponent, {
@@ -46,7 +47,7 @@ describe('MultipleInstancesComponent', () => {
   describe('reset', () => {
     it('should dispatch reset', () => {
       const component = getComponent();
-      store.dispatch.calls.reset();
+      store.dispatch.mockClear();
 
       component.reset();
 

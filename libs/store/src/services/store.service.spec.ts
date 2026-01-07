@@ -1,4 +1,5 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
+import { createVitestSpyObj } from '@ngrx-lite/testing';
 import {
   Action,
   ActionReducer,
@@ -9,20 +10,19 @@ import {
   INITIAL_OPTIONS,
   LiftedState,
   StoreDevtools,
-  StoreDevtoolsConfig,
 } from '@ngrx/store-devtools';
 import { provideMockStore } from '@ngrx/store/testing';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { of } from 'rxjs';
+import type { MockedObject, vi } from 'vitest';
 import { LocalStoragePlugin, SessionStoragePlugin } from '../injection-tokens';
-import { ClientStoragePlugin } from '../models';
 import { getCustomAction } from '../services/action-creator';
 import { DevToolHelper } from './dev-tool-helper.service';
 import { Store, getStoreState } from './store.service';
 import { getDefaultComponentLoadingState } from './stores/component-loading-store.service';
 import { ComponentStore } from './stores/component-store.service';
-import SpyObj = jasmine.SpyObj;
-import createSpyObj = jasmine.createSpyObj;
+
+import SpyObj = MockedObject;
 
 interface MyState {
   myState: string;
@@ -36,29 +36,28 @@ describe('Store', () => {
     liftedState,
   }: {
     liftedState?: StoreDevtools['liftedState'];
-  } = {}): SpyObj<StoreDevtools> =>
-    jasmine.createSpyObj<StoreDevtools>(
-      {
-        sweep: undefined,
-      },
-      {
-        liftedState: liftedState,
-      },
-    );
+  } = {}): SpyObj<StoreDevtools> => ({
+    sweep: vi.fn().mockReturnValue(undefined),
+    liftedState: liftedState,
+  });
 
-  const reducerManager = jasmine.createSpyObj<ReducerManager>(
-    'ReducerManager',
-    {
-      addReducer: undefined,
-      addReducers: undefined,
-      removeReducer: undefined,
+  const reducerManager = {
+    addReducer: vi
+      .fn()
+      .mockName('ReducerManager.addReducer')
+      .mockReturnValue(undefined),
+    addReducers: vi
+      .fn()
+      .mockName('ReducerManager.addReducers')
+      .mockReturnValue(undefined),
+    removeReducer: vi
+      .fn()
+      .mockName('ReducerManager.removeReducer')
+      .mockReturnValue(undefined),
+    currentReducers: {
+      oldStore: () => undefined,
     },
-    {
-      currentReducers: {
-        oldStore: () => undefined,
-      },
-    },
-  );
+  };
 
   const getStore = (providers: TestModuleMetadata['providers'] = []): Store =>
     TestBed.configureTestingModule({
@@ -109,11 +108,13 @@ describe('Store', () => {
   });
 
   it('should show warning Message if devtool maxAge is too low', () => {
-    const spyWarn = spyOn(console, 'warn');
+    const spyWarn = vi.spyOn(console, 'warn');
     getStore([
       {
         provide: INITIAL_OPTIONS,
-        useValue: jasmine.createSpyObj<StoreDevtoolsConfig>({}, { maxAge: 4 }),
+        useValue: {
+          maxAge: 4,
+        },
       },
     ]);
 
@@ -136,25 +137,25 @@ describe('Store', () => {
   });
 
   it('should set timeTravelActive to false', () => {
-    const devToolHelper = jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
-      isTimeTravelActive: false,
-      setTimeTravelActive: undefined,
-    });
+    const devToolHelper = {
+      isTimeTravelActive: vi
+        .fn()
+        .mockName('storeDevtools.isTimeTravelActive')
+        .mockReturnValue(false),
+      setTimeTravelActive: vi
+        .fn()
+        .mockName('storeDevtools.setTimeTravelActive')
+        .mockReturnValue(undefined),
+    };
 
     const store = getStore([
       {
         provide: StoreDevtools,
         useValue: getStoreDevtoolsSpy({
-          liftedState: of(
-            jasmine.createSpyObj<LiftedState>(
-              'liftedState',
-              {},
-              {
-                currentStateIndex: 1,
-                stagedActionIds: [1, 2, 3],
-              },
-            ),
-          ),
+          liftedState: of({
+            currentStateIndex: 1,
+            stagedActionIds: [1, 2, 3],
+          }),
         }),
       },
       { provide: DevToolHelper, useValue: devToolHelper },
@@ -166,55 +167,47 @@ describe('Store', () => {
   });
 
   it('should add new component reducers', () => {
-    reducerManager.addReducer.calls.reset();
+    reducerManager.addReducer.mockClear();
     const getLiftestState = (
       monitorState: LiftedState['monitorState'],
     ): SpyObj<LiftedState> =>
-      createSpyObj<LiftedState>(
-        {},
-        {
-          monitorState: monitorState,
-        },
-      );
-    const storeDevtools = jasmine.createSpyObj<StoreDevtools>(
-      'storeDevtools',
-      {
-        sweep: undefined,
-      },
-      {
-        liftedState: of(
-          getLiftestState(null),
-          getLiftestState({
-            type: 'IMPORT_STATE',
-            nextLiftedState: {
-              stagedActionIds: [1, 2, 3],
-              actionsById: {
-                1: {
-                  type: 'PERFORM_ACTION',
-                  action: {
-                    type: 'otherStore',
-                  },
+      createVitestSpyObj<LiftedState>({
+        monitorState: monitorState,
+      });
+    const storeDevtools = {
+      sweep: vi.fn().mockName('storeDevtools.sweep').mockReturnValue(undefined),
+      liftedState: of(
+        getLiftestState(null),
+        getLiftestState({
+          type: 'IMPORT_STATE',
+          nextLiftedState: {
+            stagedActionIds: [1, 2, 3],
+            actionsById: {
+              1: {
+                type: 'PERFORM_ACTION',
+                action: {
+                  type: 'otherStore',
                 },
-                2: {
-                  type: 'PERFORM_ACTION',
-                  action: {
-                    type: getCustomAction({ storeName: 'oldStore' }).type,
-                  },
+              },
+              2: {
+                type: 'PERFORM_ACTION',
+                action: {
+                  type: getCustomAction({ storeName: 'oldStore' }).type,
                 },
-                3: {
-                  type: 'PERFORM_ACTION',
-                  action: {
-                    type: getCustomAction({
-                      storeName: 'NEW_STORE',
-                    }).type,
-                  },
+              },
+              3: {
+                type: 'PERFORM_ACTION',
+                action: {
+                  type: getCustomAction({
+                    storeName: 'NEW_STORE',
+                  }).type,
                 },
               },
             },
-          }),
-        ),
-      },
-    );
+          },
+        }),
+      ),
+    };
     const store = getStore([
       { provide: StoreDevtools, useValue: getStoreDevtoolsSpy() },
       {
@@ -226,7 +219,7 @@ describe('Store', () => {
     store.addReducersForImportState();
 
     expect(reducerManager.addReducers).toHaveBeenCalledWith({
-      NEW_STORE: jasmine.any(Function),
+      NEW_STORE: expect.any(Function),
     });
 
     expect(storeDevtools.sweep).toHaveBeenCalled();
@@ -234,7 +227,7 @@ describe('Store', () => {
 
   it('should show hint for multiple store initialisations', () => {
     const store = getStore([]);
-    const info = spyOn(console, 'info');
+    const info = vi.spyOn(console, 'info');
 
     createStoreByStoreType(store, {
       storeName: 'my-store',
@@ -267,13 +260,13 @@ describe('Store', () => {
     const store = getStore([
       {
         provide: LocalStoragePlugin,
-        useValue: jasmine.createSpyObj<ClientStoragePlugin>({
-          getDefaultState: <MyState>{
+        useValue: {
+          getDefaultState: vi.fn().mockReturnValue(<MyState>{
             myState: '',
             optionalValue: 'testDataFromLocalStorage',
-          },
-          setStateToStorage: undefined,
-        }),
+          }),
+          setStateToStorage: vi.fn().mockReturnValue(undefined),
+        },
       },
     ]);
     const { state } = createStoreByStoreType(store, {
@@ -293,7 +286,7 @@ describe('Store', () => {
 
   describe('ngrxStore', () => {
     it('should add add for store', () => {
-      reducerManager.addReducer.calls.reset();
+      reducerManager.addReducer.mockClear();
 
       createStoreByStoreType(getStore(), {
         storeName: 'testStore',
@@ -301,11 +294,13 @@ describe('Store', () => {
         CreatedStore: ComponentStore,
       });
 
-      expect(reducerManager.addReducer.calls.argsFor(0)[0]).toBe('testStore');
+      expect(vi.mocked(reducerManager.addReducer).mock.calls[0][0]).toBe(
+        'testStore',
+      );
     });
 
     it('should not add an existing reducer to store', () => {
-      reducerManager.addReducer.calls.reset();
+      reducerManager.addReducer.mockClear();
 
       createStoreByStoreType(getStore(), {
         storeName: 'oldStore',
@@ -319,7 +314,7 @@ describe('Store', () => {
     describe('add state to ngrx/store', () => {
       let actionReducer: ActionReducer<unknown, Action>;
       beforeEach(() => {
-        reducerManager.addReducer.and.callFake((name, callback) => {
+        reducerManager.addReducer.mockImplementation((name, callback) => {
           actionReducer = callback;
         });
       });
@@ -394,10 +389,16 @@ describe('Store', () => {
         store = getStore([
           {
             provide: DevToolHelper,
-            useValue: jasmine.createSpyObj<DevToolHelper>('storeDevtools', {
-              isTimeTravelActive: true,
-              setTimeTravelActive: undefined,
-            }),
+            useValue: {
+              isTimeTravelActive: vi
+                .fn()
+                .mockName('storeDevtools.isTimeTravelActive')
+                .mockReturnValue(true),
+              setTimeTravelActive: vi
+                .fn()
+                .mockName('storeDevtools.setTimeTravelActive')
+                .mockReturnValue(undefined),
+            },
           },
 
           {
@@ -462,13 +463,13 @@ describe('Store', () => {
         const store = getStore([
           {
             provide: SessionStoragePlugin,
-            useValue: jasmine.createSpyObj<ClientStoragePlugin>({
-              getDefaultState: <MyState>{
+            useValue: {
+              getDefaultState: vi.fn().mockReturnValue(<MyState>{
                 myState: '',
                 optionalValue: 'testDataFromSessionStorage',
-              },
-              setStateToStorage: undefined,
-            }),
+              }),
+              setStateToStorage: vi.fn().mockReturnValue(undefined),
+            },
           },
         ]);
         const { state } = createStoreByStoreType(store, {
@@ -487,13 +488,13 @@ describe('Store', () => {
       });
 
       it('should store changes to session storage', () => {
-        const sessionStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>({
-          getDefaultState: <MyState>{
+        const sessionStoragePlugin = {
+          getDefaultState: vi.fn().mockReturnValue(<MyState>{
             myState: '',
             optionalValue: 'testDataFromSessionStorage',
-          },
-          setStateToStorage: undefined,
-        });
+          }),
+          setStateToStorage: vi.fn().mockReturnValue(undefined),
+        };
         const store = getStore([
           {
             provide: SessionStoragePlugin,
@@ -518,13 +519,13 @@ describe('Store', () => {
       });
 
       it('should store changes to localStorage storage', () => {
-        const localStoragePlugin = jasmine.createSpyObj<ClientStoragePlugin>({
-          getDefaultState: <MyState>{
+        const localStoragePlugin = {
+          getDefaultState: vi.fn().mockReturnValue(<MyState>{
             myState: '',
             optionalValue: 'testDataFromSessionStorage',
-          },
-          setStateToStorage: undefined,
-        });
+          }),
+          setStateToStorage: vi.fn().mockReturnValue(undefined),
+        };
 
         const store = getStore([
           {
@@ -563,7 +564,7 @@ describe('Store', () => {
           });
         };
         beforeEach(() => {
-          reducerManager.removeReducer.calls.reset();
+          reducerManager.removeReducer.mockClear();
         });
         it('should not remove the reducer, when store actions included in the liftedState', () => {
           const storeDevtools = getStoreDevtoolsSpy({
@@ -636,11 +637,9 @@ describe('Store', () => {
 
 describe('getStoreState', () => {
   it('should return state', () => {
-    const store = jasmine.createSpyObj<ComponentStore<{ myState: string }>>(
-      'Store',
-      { state: { myState: '' } },
-      {},
-    );
+    const store = {
+      state: vi.fn().mockName('Store.state').mockReturnValue({ myState: '' }),
+    };
     expect(getStoreState(store)).toEqual({ myState: '' });
   });
 
@@ -652,7 +651,11 @@ describe('getStoreState', () => {
     }
 
     expect(
-      getStoreState(new Store() as unknown as ComponentStore<{ myState: '' }>),
+      getStoreState(
+        new Store() as unknown as ComponentStore<{
+          myState: '';
+        }>,
+      ),
     ).toBeUndefined();
   });
 });
