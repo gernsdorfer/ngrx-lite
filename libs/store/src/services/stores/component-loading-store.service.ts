@@ -62,6 +62,8 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       skipSameActions = false,
       skipSamePendingActions = false,
       repeatActions = [],
+      autoLoad,
+      skipWhen,
     }: {
       /**
        * @deprecated Please use skipSamePendingActions instead
@@ -70,10 +72,13 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
       skipSamePendingActions?: boolean;
       skipSameActions?: boolean;
       repeatActions?: ActionCreator[];
+      autoLoad?: [EFFECT_PARAMS] extends [void] ? boolean : never;
+      skipWhen?: () => boolean;
     } = {},
-  ) =>
-    this.effect((params$: Observable<EFFECT_PARAMS>) =>
+  ) => {
+    const dispatch = this.effect((params$: Observable<EFFECT_PARAMS>) =>
       params$.pipe(
+        filter(() => !skipWhen?.()),
         startWith({} as unknown as EFFECT_PARAMS),
         pairwise(),
         filter(([prev, next], index) =>
@@ -98,6 +103,13 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
         ),
       ),
     );
+
+    if (autoLoad) {
+      queueMicrotask(() => (dispatch as () => void)());
+    }
+
+    return dispatch;
+  };
   private getSkipSamePendingActions({
     canCache,
     skipSamePendingActions,

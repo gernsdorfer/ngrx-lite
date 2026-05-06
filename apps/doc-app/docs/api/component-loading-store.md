@@ -85,6 +85,64 @@ export class AppComponent {
 }
 ```
 
+### Option:autoLoad
+
+Trigger the loader exactly once on the next microtask after the store is constructed. Only available for parameter-free effects — passing `autoLoad: true` to a parameterized effect is a compile-time error (enforced via TypeScript conditional types).
+
+This removes the need for a manual `effect()` block in your component for init loads.
+
+```ts title="config.store.ts"
+@Injectable({ providedIn: 'root' })
+export class ConfigStore {
+  private store = inject(StoreFactory).createComponentLoadingStore<Config, ApiError>({
+    storeName: 'CONFIG',
+  });
+
+  public state = this.store.state;
+
+  public reload = this.store.loadingEffect('LOAD_CONFIG', () => this.api.getConfig(), {
+    autoLoad: true,
+  });
+
+  constructor(private api: ConfigApi) {}
+}
+```
+
+`autoLoad` fires on both server and client (SSR-correct). To suppress the duplicate fetch after hydration, combine it with `skipWhen`.
+
+### Option:skipWhen
+
+A pre-flight callback that is evaluated before every effect run. When it returns `true`, the dispatch is suppressed — applies to `autoLoad`, manual calls, and any other trigger.
+
+Typical use cases:
+
+- **SSR hydration:** skip the client-side re-fetch when state is already restored from `TransferState`.
+- **Cache hits:** skip when the data is already cached.
+- **Feature flags:** gate the call behind a runtime condition.
+
+```ts title="config.store.ts"
+@Injectable({ providedIn: 'root' })
+export class ConfigStore {
+  private store = inject(StoreFactory).createComponentLoadingStore<Config, ApiError>({
+    storeName: 'CONFIG',
+  });
+
+  public state = this.store.state;
+
+  public reload = this.store.loadingEffect('LOAD_CONFIG', () => this.api.getConfig(), {
+    autoLoad: true,
+    skipWhen: () => this.transferState.hasRestored('CONFIG'),
+  });
+
+  constructor(
+    private api: ConfigApi,
+    private transferState: StoreTransferState,
+  ) {}
+}
+```
+
+The library itself stays SSR-agnostic. Server-side fetching, hydration, and `TransferState` integration live in your application code; `skipWhen` is the hook the library exposes for it.
+
 ### Example for a successfully callback Observable
 
 ```ts

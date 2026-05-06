@@ -1,6 +1,6 @@
 # Spec: Reactive Loading & Auto-Load für `ComponentLoadingStore`
 
-> **Status:** Diskussions-Grundlage. Vor der Implementation mit `grill-me` durchgehen oder via `to-prd` in ein formales PRD überführen. Nicht als fertiges Implementations-Briefing lesen — die Designfragen unten sind absichtlich offen.
+> **Status:** Designfragen via `grill-me` durchgegrillt (siehe Abschnitt „Designentscheidungen"). Bereit für Implementation oder Überführung in formales PRD via `to-prd`.
 
 ## Problem
 
@@ -42,6 +42,7 @@ Drei wiederkehrende Schmerzen:
 ### Erweiterung 1: `loadingEffect`-Options um `autoLoad` + `skipWhen`
 
 Aktuelle Signatur:
+
 ```ts
 loadingEffect<P>(name, fn, options?: {
   skipSameActions?: boolean;
@@ -51,6 +52,7 @@ loadingEffect<P>(name, fn, options?: {
 ```
 
 Neu:
+
 ```ts
 loadingEffect<P>(name, fn, options?: {
   ...
@@ -78,6 +80,7 @@ reactiveLoadingEffect<P, ITEM>(
 ```
 
 Aufruf-Site (Wrapper-Store, NICHT Container direkt):
+
 ```ts
 private connect = this.store.reactiveLoadingEffect(
   'load',
@@ -96,6 +99,7 @@ export const ProfessionalList = {
 ```
 
 Implementations-Skizze:
+
 ```ts
 reactiveLoadingEffect(name, loader, options) {
   const dispatch = this.loadingEffect(name, loader, {
@@ -119,37 +123,82 @@ Der Trick: `effect()` greift sich den `DestroyRef` der **Aufrufstelle** (Contain
 
 Aus dem Frontend-Container `professional/feature-search/.../list-container.component.ts`:
 
-| Store | Pattern |
-|---|---|
-| `professionalListStore` (filter+pagination+searchId) | `reactiveLoadingEffect` |
-| `bookmarkSearchResource` (searchId) | `reactiveLoadingEffect` + `skipWhen: !p` |
-| `skillListStore` (param-frei) | `loadingEffect({ autoLoad: true })` |
-| `bookmarkListStore` (param-frei) | `loadingEffect({ autoLoad: true })` |
-| `locationListStore` (Output-Event) | bleibt imperativ |
-| `bookmarkAdminStore` (add/remove) | bleibt imperativ |
+| Store                                                | Pattern                                  |
+| ---------------------------------------------------- | ---------------------------------------- |
+| `professionalListStore` (filter+pagination+searchId) | `reactiveLoadingEffect`                  |
+| `bookmarkSearchResource` (searchId)                  | `reactiveLoadingEffect` + `skipWhen: !p` |
+| `skillListStore` (param-frei)                        | `loadingEffect({ autoLoad: true })`      |
+| `bookmarkListStore` (param-frei)                     | `loadingEffect({ autoLoad: true })`      |
+| `locationListStore` (Output-Event)                   | bleibt imperativ                         |
+| `bookmarkAdminStore` (add/remove)                    | bleibt imperativ                         |
 
 → 4 von 6 Stores ziehen Nutzen, zwei bleiben unverändert. Faustregel:
+
 - **Read mit reaktiver Quelle** → `reactiveLoadingEffect`
 - **Read param-frei beim Mount** → `loadingEffect({ autoLoad: true })`
 - **Mutation oder Event-getriggerter Read** → `loadingEffect` imperativ (heute)
 
-## Offene Designfragen (für `grill-me`)
+## Designentscheidungen
 
-1. **`autoLoad`-Trigger-Mechanismus** — `queueMicrotask` im Constructor? `afterNextRender`? Beim ersten `state()`-Read (lazy)? Trade-off: SSR-Verhalten + Test-Ergonomie + Konsistenz mit existierenden Patterns in der Lib.
+Aus dem `grill-me`-Durchlauf vom 2026-05-06. Entscheidungen sind verbindlich, bevor implementiert wird.
 
-2. **Mehrfacher `connect`-Call** — Was passiert, wenn zwei Container denselben Singleton-Store mit `connect(sourceA)` und `connect(sourceB)` verbinden? Last-wins? Beide aktiv? Fehler? **Wahrscheinlich ein Footgun.** API-Design entscheidet hier über Sicherheit.
+### D1 — Lifecycle & `connect`-Identität (Footgun-Schutz)
 
-3. **`skipSameActions` semantisch** — heute existiert die Option, aber wie wird Equality geprüft? Reference, deep, custom comparator? Für `reactiveLoadingEffect` mit Signal-Source ist die Antwort wichtig (Filter-Objekte werden bei jedem `computed`-Read neu erzeugt → reference-equal ist hier untauglich, deep wäre teuer).
+- **Store** bleibt `providedIn: 'root'` (Singleton pro Store-Name). Kein Bruch mit existierenden Patterns.
+- **Mental Model:** ein **Owner/Driver** ruft `connect(source)` (steuert Loading-Lifecycle), beliebig viele **Consumer** lesen `state()`.
+- **`connect()` ist exklusiv:** zweiter parallel-aktiver Aufruf → `console.error` im `isDevMode()` (konsistent mit `addStoreNameToInternalCache` in `store.service.ts:186`). Im Prod-Build kein Throw.
+- **Cleanup:** `inject(DestroyRef).onDestroy(() => connected = false)` — Owner-Container darf nach Destroy von einem anderen Container ersetzt werden.
+- **Naming:** Lib-Methode heißt `reactiveLoadingEffect`; sie gibt eine Funktion zurück, die der Wrapper-Autor selbst benennt. Konventionsname in der Doku: `connect`.
+- **Multi-Source:** kein API-Knopf. Konsumenten mergen Signal-Sources mit `computed()` außerhalb.
 
-4. **`cancelPending`-Default** — `true` für reaktive Quelle ist intuitiv (alte Antwort verwerfen). Aber: `skipSamePendingActions` heute bedeutet was anderes (skip wenn gleiche Action schon pending). Sind beide Konzepte das gleiche oder unterschiedlich? Naming?
+### D2 — `autoLoad`-Trigger-Mechanismus
 
-5. **`autoLoad` nur für `P extends void`** — Type-Constraint via Conditional Type. Funktioniert das mit der existierenden generischen Signatur ohne TS-Tricks zu brauchen? Fallback: Runtime-Check + Doc.
+- **Mechanismus:** `queueMicrotask(() => dispatch())` im Konstruktor des Wrapper-Stores.
+- **Begründung:** SSR-korrekt (feuert auf Server _und_ Client), async (matcht `asapScheduler`-Pattern in `component-store.service.ts:88`), keine neue SSR-Awareness in der Lib.
+- **Verworfen:** `afterNextRender` (browser-only → bricht SSR-Hydration), sync-Constructor (synchrone Side-Effects vor Konsumenten-Referenz), lazy-on-first-read (zu magisch).
 
-6. **SSR-Skip standardisieren?** — Aktuell muss jeder Wrapper-Store `skipWhen: () => this.ssrState.hasRestored()` selbst angeben. Sollte die Lib das übernehmen, wenn ein `StoreTransferState` injiziert wird? Oder bleibt das im Frontend? (Argument für „bleibt": ngrx-lite kennt `StoreTransferState` nicht, das ist Frontend-Code.)
+### D3 — Equality-Semantik für `skipSameActions`
 
-7. **Versions-Strategie** — Minor-Bump ausreichend? Beide Erweiterungen sind additiv. Falls jemand bereits eine Methode `reactiveLoadingEffect` außerhalb der Lib monkey-patcht: kein Schutz möglich, akzeptables Risiko.
+- **Default-Comparator:** `JSON.stringify` Deep-Equal mit sortierten Keys (übernommen aus `component-loading-store.service.ts:28-43`, kein Drift zu `loadingEffect`).
+- **Keine separate Comparator-Option** in V1 (YAGNI; additiv nachrüstbar).
+- **`skipSameActions` Default = `false`** auch in `reactiveLoadingEffect` (konsistent mit `loadingEffect`). README empfiehlt `true` für reaktive Signal-Sources, weil `computed()`-Werte bei jedem Dependency-Update neue Referenzen erzeugen.
 
-8. **Doku-Stil** — README-Section pro Methode mit Mini-Beispiel? TypeDoc-Kommentare? Konsistent mit existierender Lib-Doku — vor dem ersten Schreibvorgang `README.md` lesen.
+### D4 — `cancelPending` vs. `skipSamePendingActions`
+
+- **Kein neues `cancelPending`-Flag.** Das `switchMap`-Verhalten in `component-loading-store.service.ts:89` cancelt heute schon implizit jeden pending Request bei neuem Param.
+- **`skipSamePendingActions` wird durchgereicht** (für Mutation-artige Reads, falls jemand opt-in will).
+- **Doku** erklärt das implizite `switchMap`-Verhalten und die Differenz zu `skipSamePendingActions`.
+
+### D5 — Type-Constraint `autoLoad` nur bei `P extends void`
+
+- **Conditional Type mit Tuple-Wrap gegen Distributive:**
+  ```ts
+  autoLoad?: [P] extends [void] ? boolean : never;
+  ```
+- Compile-Error bei param-tragenden Effects. **Kein Runtime-Backup** — wer per `@ts-ignore` umgeht, hat sich's verdient.
+- **Type-Tests** (`*.spec-d.ts` oder `expectError`) fixieren das Constraint.
+
+### D6 — `skipWhen`-Scope + SSR-Standardisierung
+
+- **`skipWhen` blockt alle Dispatches** (autoLoad + manuelle Calls + reaktive Trigger). Es ist ein Pre-Flight-Hook für: „Param fehlt", „SSR-Hydration hat State schon befüllt", „Cache-Hit", etc.
+- **Asymmetrische Signatur** (passt zur Realität):
+  - `loadingEffect<P>`: `skipWhen?: () => boolean` (kein Param-Zugriff; bei `P != void` prüft Konsument den Param vor `dispatch()` selbst)
+  - `reactiveLoadingEffect<P>`: `skipWhen?: (p: P) => boolean` (Param-Zugriff, weil intern dispatcht wird)
+- **SSR-Logik bleibt im Frontend.** Lib bleibt SSR-agnostisch (kein `isPlatformBrowser`/`TransferState`-Import). README zeigt das `skipWhen` + `StoreTransferState`-Pattern als Beispiel.
+
+### D7 — Versionierung
+
+- **`21.0.0` → `21.1.0`** (Minor). Beide Erweiterungen sind additiv, keine bestehende Signatur ändert sich. Convention: Major an Angular-Major gekoppelt, Feature-Adds = Minor.
+
+### D8 — Doku-Stil
+
+- **README** (`libs/store/README.md`): neue Section „Auto-Load & Reactive Loading" im bestehenden Stil (Markdown + Emojis + Code-Beispiele).
+- **Sample-App** (`apps/sample-app`): drei neue Demos:
+  1. `autoLoad` — App-Konfiguration beim Mount laden
+  2. `reactiveLoadingEffect` — Suchfeld mit Debounce-Signal als Source
+  3. `skipWhen` — Detail-Lade nur wenn ID gesetzt
+- **CHANGELOG** im bestehenden Stil: ` :rocket: Enhancement` mit PR-Link.
+- **Keine ausführlichen TypeDoc-/JSDoc-Kommentare** auf Methoden (Lib-Konvention: Doku in README, nicht in Code-Kommentaren). Ausnahme: `@deprecated` für ersetzte Optionen — hier nicht zutreffend.
 
 ## Acceptance Criteria (für `to-prd`)
 
@@ -158,8 +207,11 @@ Aus dem Frontend-Container `professional/feature-search/.../list-container.compo
 - [ ] `autoLoad` an einem param-tragenden Effect ist Compile-Fehler (oder klare Runtime-Warnung).
 - [ ] `reactiveLoadingEffect` returnt eine Connect-Funktion, die mit einem `Signal<P>` aufgerufen wird.
 - [ ] Source-Signal-Änderung triggert Loader-Call mit neuen Params.
-- [ ] Identische aufeinanderfolgende Param-Werte triggern keinen Doppel-Call (`skipSameActions: true` Default).
-- [ ] Source-Änderung während Pending-Request verwirft das alte Request (`cancelPending: true` Default).
+- [ ] Identische aufeinanderfolgende Param-Werte triggern keinen Doppel-Call, wenn `skipSameActions: true` gesetzt ist (Default: `false`, README empfiehlt `true` für Signal-Sources).
+- [ ] Source-Änderung während Pending-Request verwirft das alte Request automatisch (`switchMap`-Verhalten, nicht abschaltbar).
+- [ ] Zweiter parallel-aktiver `connect()`-Aufruf am selben Store loggt `console.error` im Dev-Mode.
+- [ ] `skipWhen` blockt `autoLoad`, manuelle Dispatches und reaktive Trigger gleichermaßen.
+- [ ] `autoLoad` feuert via `queueMicrotask` auf Server _und_ Client (SSR-Skip via `skipWhen`).
 - [ ] Component-Destroy räumt `effect()`-Subscription ab, kein Memory-Leak.
 - [ ] Action-Stream / DevTools / `repeatActions` funktionieren identisch zu `loadingEffect`.
 - [ ] CHANGELOG-Eintrag, Minor-Bump, README-Update mit Beispielen.

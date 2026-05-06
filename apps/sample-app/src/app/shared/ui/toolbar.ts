@@ -101,6 +101,12 @@ import { RouterModule } from '@angular/router';
         >
           Option: RepeatForActions
         </a>
+        <a class="menu-link" mat-menu-item routerLink="/option-auto-load">
+          Option: autoLoad
+        </a>
+        <a class="menu-link" mat-menu-item routerLink="/option-skip-when">
+          Option: skipWhen
+        </a>
       </mat-menu>
       <button [matMenuTriggerFor]="menuFormsComponentStore" mat-button>
         Forms-Component-Store

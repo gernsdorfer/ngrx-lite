@@ -435,5 +435,53 @@ describe('LoadingStore', () => {
       );
       expect(vi.mocked(spyEffectRun).mock.calls.length).toEqual(2);
     });
+
+    describe('autoLoad option', () => {
+      it('should trigger loader exactly once on the next microtask when autoLoad: true', async () => {
+        const spyEffectRun = vi.fn().mockReturnValue(of('autoLoadedValue'));
+
+        store.loadingEffect('autoLoadEffect', () => spyEffectRun(), {
+          autoLoad: true,
+        });
+
+        expect(spyEffectRun).not.toHaveBeenCalled();
+
+        await Promise.resolve();
+
+        expect(spyEffectRun).toHaveBeenCalledTimes(1);
+        expect(store.state()).toEqual(
+          getDefaultComponentLoadingState({ item: 'autoLoadedValue' }),
+        );
+      });
+
+      it('should not trigger loader when skipWhen returns true', async () => {
+        const spyEffectRun = vi.fn().mockReturnValue(of('value'));
+
+        store.loadingEffect('autoLoadSkipped', () => spyEffectRun(), {
+          autoLoad: true,
+          skipWhen: () => true,
+        });
+
+        await Promise.resolve();
+
+        expect(spyEffectRun).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('skipWhen option', () => {
+      it('should block manual dispatch when skipWhen returns true', () => {
+        const spyEffectRun = vi.fn().mockReturnValue(of('value'));
+
+        const testEffect = store.loadingEffect(
+          'manualSkipped',
+          () => spyEffectRun(),
+          { skipWhen: () => true },
+        );
+
+        testEffect();
+
+        expect(spyEffectRun).not.toHaveBeenCalled();
+      });
+    });
   });
 });

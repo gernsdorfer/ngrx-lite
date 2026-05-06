@@ -1,0 +1,26 @@
+<my-app-ui-card>
+  <h1 title>
+    @if (configState().isLoading) {
+      <my-app-ui-spinner></my-app-ui-spinner>
+    }
+    Auto Load
+  </h1>
+  <h2 subtitle>Loading Store</h2>
+
+  <div content>
+    Effect runs (incl. mount): <b id="run-effect">{{ executeCount }}</b>
+    <hr />
+    Config: <b id="config">{{ configState().item?.config }}</b>
+    <hr />
+    <small>
+      The store fires the loader exactly once after construction (next
+      microtask). No manual <code>effect()</code> needed in the component.
+    </small>
+  </div>
+
+  <div actions style="width: 100%">
+    <div id="actions">
+      <button class="reload" (click)="reload()" mat-fab>↻</button>
+    </div>
+  </div>
+</my-app-ui-card>

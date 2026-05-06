@@ -215,6 +215,38 @@ After an effect was unsuccessfully executed the `error` key contains the error.
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/error.png)
 
+#### Auto-Load and Skip-Pre-Flight
+
+`loadingEffect` accepts two additional options for declarative one-shot loads on mount and pre-flight skipping:
+
+- **`autoLoad: true`** triggers the loader exactly once on the next microtask after the wrapper-store is constructed. Only valid for parameter-free effects (compile-time constraint via conditional types).
+- **`skipWhen: () => boolean`** is evaluated before every effect run. When it returns `true`, the dispatch is suppressed — applies to `autoLoad`, manual calls, and any other trigger.
+
+`autoLoad` fires on both server and client (SSR-correct), so use `skipWhen` to suppress the duplicate fetch after hydration:
+
+```ts
+@Injectable({ providedIn: 'root' })
+export class ConfigStore {
+  private store = inject(StoreFactory).createComponentLoadingStore<Config, ApiError>({
+    storeName: 'CONFIG',
+  });
+
+  public state = this.store.state;
+
+  public load = this.store.loadingEffect('load', () => this.api.getConfig(), {
+    autoLoad: true,
+    skipWhen: () => this.transferState.hasRestored('CONFIG'),
+  });
+
+  constructor(
+    private api: ConfigApi,
+    private transferState: StoreTransferState,
+  ) {}
+}
+```
+
+The library itself stays SSR-agnostic. Server-side fetching, hydration, and `TransferState` integration live in your application code; `skipWhen` is the hook the library exposes for it.
+
 ### Form Store
 
 ```ts
