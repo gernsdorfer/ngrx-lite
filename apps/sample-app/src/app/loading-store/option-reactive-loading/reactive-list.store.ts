@@ -31,11 +31,7 @@ export class ReactiveListStore {
     'SEARCH',
     (params: SearchParams) =>
       of({
-        hits: [
-          `${params.query}-1`,
-          `${params.query}-2`,
-          `${params.query}-3`,
-        ],
+        hits: [`${params.query}-1`, `${params.query}-2`, `${params.query}-3`],
       }).pipe(delay(150)),
     { skipSameActions: true, skipWhen: (p) => !p.query },
   );
