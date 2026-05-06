@@ -1,3 +1,14 @@
+## 21.1.0 (2026-05-06)
+
+#### :rocket: Enhancement
+
+- [#169](https://github.com/gernsdorfer/ngrx-lite/issues/169) add `autoLoad` and `skipWhen` options to `loadingEffect` ([@gernsdorfer](https://github.com/gernsdorfer))
+- [#169](https://github.com/gernsdorfer/ngrx-lite/issues/169) add `reactiveLoadingEffect` with single-connect guard ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### Committers: 1
+
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 14.2.0 (2022-10-11)
 
 ## 14.1.2 (2022-08-02)
