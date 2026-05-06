@@ -93,6 +93,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'reactive-loading',
+    loadComponent: () =>
+      import('./loading-store/option-reactive-loading/reactive-loading.component').then(
+        (m) => m.ReactiveLoadingComponent,
+      ),
+  },
+  {
     path: 'custom-action',
     loadComponent: () =>
       import('./component-store/custom-actions/custom-action.component').then(

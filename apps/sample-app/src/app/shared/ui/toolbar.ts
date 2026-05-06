@@ -107,6 +107,9 @@ import { RouterModule } from '@angular/router';
         <a class="menu-link" mat-menu-item routerLink="/option-skip-when">
           Option: skipWhen
         </a>
+        <a class="menu-link" mat-menu-item routerLink="/reactive-loading">
+          Reactive Loading
+        </a>
       </mat-menu>
       <button [matMenuTriggerFor]="menuFormsComponentStore" mat-button>
         Forms-Component-Store

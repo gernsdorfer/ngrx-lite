@@ -633,6 +633,49 @@ describe('Store', () => {
       });
     });
   });
+
+  describe('checkConnect', () => {
+    it('should not log when registering a fresh store name', () => {
+      const store = getStore();
+      const error = vi.spyOn(console, 'error').mockReturnValue(undefined);
+      const destroyRef = { onDestroy: vi.fn() };
+
+      store.checkConnect('fresh-store', destroyRef);
+
+      expect(error).not.toHaveBeenCalled();
+    });
+
+    it('should log a console.error when the same store name is connected twice', () => {
+      const store = getStore();
+      const error = vi.spyOn(console, 'error').mockReturnValue(undefined);
+      const destroyRef = { onDestroy: vi.fn() };
+
+      store.checkConnect('duplicated', destroyRef);
+      store.checkConnect('duplicated', destroyRef);
+
+      expect(error).toHaveBeenCalledWith(expect.stringContaining('duplicated'));
+    });
+
+    it('should release the slot after DestroyRef cleanup so the same name can be registered again', () => {
+      const store = getStore();
+      const error = vi
+        .spyOn(console, 'error')
+        .mockReturnValue(undefined)
+        .mockClear();
+      let cleanup: (() => void) | undefined;
+      const destroyRef = {
+        onDestroy: vi.fn().mockImplementation((fn: () => void) => {
+          cleanup = fn;
+        }),
+      };
+
+      store.checkConnect('reusable', destroyRef);
+      cleanup?.();
+      store.checkConnect('reusable', destroyRef);
+
+      expect(error).not.toHaveBeenCalled();
+    });
+  });
 });
 
 describe('getStoreState', () => {

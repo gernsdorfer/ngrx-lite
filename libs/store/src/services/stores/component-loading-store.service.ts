@@ -1,4 +1,11 @@
-import { Inject, Injectable } from '@angular/core';
+import {
+  DestroyRef,
+  effect,
+  Inject,
+  inject,
+  Injectable,
+  Signal,
+} from '@angular/core';
 import { ofType } from '@ngrx/effects';
 import { tapResponse } from '@ngrx/operators';
 import { ActionCreator } from '@ngrx/store';
@@ -14,6 +21,7 @@ import { EffectStates } from '../../enums/effect-states.enum';
 import { StateToken } from '../../injection-tokens/state.token';
 import { LoadingStoreState } from '../../models';
 import { getEffectActionName } from '../action-creator';
+import { Store } from '../store.service';
 import { ComponentStore } from './component-store.service';
 
 export const getDefaultComponentLoadingState = <ITEM, ERROR>(
@@ -109,6 +117,37 @@ export class ComponentLoadingStore<ITEM, ERROR> extends ComponentStore<
     }
 
     return dispatch;
+  };
+
+  reactiveLoadingEffect = <REACTIVE_PARAMS>(
+    name: string,
+    loader: (
+      params: REACTIVE_PARAMS,
+    ) => Observable<LoadingStoreState<ITEM, ERROR>['item']>,
+    options: {
+      skipSameActions?: boolean;
+      skipSamePendingActions?: boolean;
+      skipWhen?: (params: REACTIVE_PARAMS) => boolean;
+      repeatActions?: ActionCreator[];
+    } = {},
+  ): ((source: Signal<REACTIVE_PARAMS>) => void) => {
+    const dispatch = this.loadingEffect<REACTIVE_PARAMS>(name, loader, {
+      skipSameActions: options.skipSameActions,
+      skipSamePendingActions: options.skipSamePendingActions,
+      repeatActions: options.repeatActions,
+    });
+
+    return (source: Signal<REACTIVE_PARAMS>) => {
+      const ngrxLiteStore = inject(Store);
+      const destroyRef = inject(DestroyRef);
+      ngrxLiteStore.checkConnect(this.storeName, destroyRef);
+
+      effect(() => {
+        const params = source();
+        if (options.skipWhen?.(params)) return;
+        dispatch(params);
+      });
+    };
   };
   private getSkipSamePendingActions({
     canCache,

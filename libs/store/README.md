@@ -247,6 +247,59 @@ export class ConfigStore {
 
 The library itself stays SSR-agnostic. Server-side fetching, hydration, and `TransferState` integration live in your application code; `skipWhen` is the hook the library exposes for it.
 
+#### Reactive Loading
+
+`reactiveLoadingEffect` binds a `Signal<P>` source to the loading lifecycle. The container provides the source; the store owns the loading mechanics. Internally it builds on `loadingEffect`, so action stream, DevTools, and `repeatActions` behave identically.
+
+**Mental model — Owner / Driver vs. Consumer**
+
+- **Owner / Driver:** the one container that calls the connect function (typically a route container). Decides when and how loading happens.
+- **Consumer:** any number of components that `inject()` the store and read `state()` — read-only.
+
+The library enforces the convention with a single-connect guard: a second parallel-active connect for the same store name logs `console.error` in development mode (silent in production).
+
+```ts title="professional-list.store.ts"
+@Injectable({ providedIn: 'root' })
+export class ProfessionalListStore {
+  private store = inject(StoreFactory).createComponentLoadingStore<Professional[], ApiError>({
+    storeName: 'PROFESSIONAL_LIST',
+  });
+
+  public state = this.store.state;
+
+  // returns a function the wrapper-author names freely — convention: connect
+  public connect = this.store.reactiveLoadingEffect('load', (params: SearchParams) => this.api.search(params), { skipSameActions: true });
+
+  constructor(private api: ProfessionalApi) {}
+}
+```
+
+```ts title="search-page.component.ts"
+// Owner / Driver: drives the loading lifecycle
+@Component({ ... })
+export class SearchPageComponent {
+  private filter = signal({ ... });
+
+  constructor() {
+    inject(ProfessionalListStore).connect(this.filter);
+  }
+}
+```
+
+```ts title="result-list.component.ts"
+// Consumer: read-only, can be used in many places
+@Component({
+  template: `<div *ngFor="let p of store.state().item">...</div>`,
+})
+export class ResultListComponent {
+  protected store = inject(ProfessionalListStore);
+}
+```
+
+A new source value during a pending loader call cancels the in-flight request automatically (`switchMap` behavior — not configurable). The `DestroyRef` of the calling injection context tears down the effect and frees the connect slot when the component unmounts.
+
+For multi-source binding, merge upstream signals with `computed()` before passing one signal to `connect` — there is no API knob for it.
+
 ### Form Store
 
 ```ts

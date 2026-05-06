@@ -1,3 +1,4 @@
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
 import { Action, createAction } from '@ngrx/store';
@@ -482,6 +483,103 @@ describe('LoadingStore', () => {
 
         expect(spyEffectRun).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('reactiveLoadingEffect', () => {
+    beforeEach(() => {
+      mockStore.dispatch.mockClear();
+    });
+
+    it('should call the loader with the current source value when connected', () => {
+      const spyEffectRun = vi.fn().mockReturnValue(of('reactiveValue'));
+
+      const connect = store.reactiveLoadingEffect(
+        'reactiveEffect',
+        (params: { id: string }) => spyEffectRun(params),
+      );
+
+      const source = signal({ id: 'first' });
+      TestBed.runInInjectionContext(() => connect(source));
+      TestBed.tick();
+
+      expect(spyEffectRun).toHaveBeenCalledWith({ id: 'first' });
+    });
+
+    it('should re-trigger the loader when the source signal changes', () => {
+      const spyEffectRun = vi.fn().mockReturnValue(of('value'));
+
+      const connect = store.reactiveLoadingEffect(
+        'reactiveChange',
+        (params: { id: string }) => spyEffectRun(params),
+      );
+
+      const source = signal({ id: 'first' });
+      TestBed.runInInjectionContext(() => connect(source));
+      TestBed.tick();
+
+      source.set({ id: 'second' });
+      TestBed.tick();
+
+      expect(spyEffectRun).toHaveBeenCalledTimes(2);
+      expect(spyEffectRun).toHaveBeenLastCalledWith({ id: 'second' });
+    });
+
+    it('should block the dispatch when skipWhen returns true for the current params', () => {
+      const spyEffectRun = vi.fn().mockReturnValue(of('value'));
+      const spySkipWhen = vi
+        .fn()
+        .mockImplementation((p: { id?: string }) => !p.id);
+
+      const connect = store.reactiveLoadingEffect(
+        'reactiveSkip',
+        (params: { id?: string }) => spyEffectRun(params),
+        { skipWhen: spySkipWhen },
+      );
+
+      const source = signal<{ id?: string }>({});
+      TestBed.runInInjectionContext(() => connect(source));
+      TestBed.tick();
+      expect(spyEffectRun).not.toHaveBeenCalled();
+      expect(spySkipWhen).toHaveBeenCalledWith({});
+
+      source.set({ id: 'now-set' });
+      TestBed.tick();
+      expect(spyEffectRun).toHaveBeenCalledWith({ id: 'now-set' });
+    });
+
+    it('should not re-trigger the loader for deep-equal params when skipSameActions is true', () => {
+      const spyEffectRun = vi.fn().mockReturnValue(of('value'));
+
+      const connect = store.reactiveLoadingEffect(
+        'reactiveSkipSame',
+        (params: { id: string }) => spyEffectRun(params),
+        { skipSameActions: true },
+      );
+
+      const source = signal({ id: 'a' });
+      TestBed.runInInjectionContext(() => connect(source));
+      TestBed.tick();
+
+      source.set({ id: 'a' });
+      TestBed.tick();
+
+      expect(spyEffectRun).toHaveBeenCalledTimes(1);
+    });
+
+    it('should warn via console.error when the same store is connected twice in parallel', () => {
+      const error = vi
+        .spyOn(console, 'error')
+        .mockReturnValue(undefined)
+        .mockClear();
+      const connect = store.reactiveLoadingEffect('reactiveDoubleConnect', () =>
+        of('value'),
+      );
+
+      TestBed.runInInjectionContext(() => connect(signal(undefined)));
+      TestBed.runInInjectionContext(() => connect(signal(undefined)));
+
+      expect(error).toHaveBeenCalledWith(expect.stringContaining(storeName));
     });
   });
 });

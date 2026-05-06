@@ -143,6 +143,84 @@ export class ConfigStore {
 
 The library itself stays SSR-agnostic. Server-side fetching, hydration, and `TransferState` integration live in your application code; `skipWhen` is the hook the library exposes for it.
 
+## reactiveLoadingEffect
+
+`reactiveLoadingEffect` binds a `Signal<P>` source to the loading lifecycle. The container provides the source; the store owns the loading mechanics. It is built on top of `loadingEffect`, so action stream, DevTools, and `repeatActions` behave identically.
+
+### Mental model: Owner / Driver vs. Consumer
+
+- **Owner / Driver:** the one container that calls the connect function (typically a route container). Decides when and how loading happens.
+- **Consumer:** any number of components that `inject()` the store and read `state()` — read-only.
+
+The library enforces the convention with a single-connect guard: a second parallel-active connect for the same store name logs `console.error` in development mode (silent in production).
+
+### Owner store
+
+```ts title="professional-list.store.ts"
+@Injectable({ providedIn: 'root' })
+export class ProfessionalListStore {
+  private store = inject(StoreFactory).createComponentLoadingStore<Professional[], ApiError>({
+    storeName: 'PROFESSIONAL_LIST',
+  });
+
+  public state = this.store.state;
+
+  public connect = this.store.reactiveLoadingEffect('load', (params: SearchParams) => this.api.search(params), { skipSameActions: true });
+
+  constructor(private api: ProfessionalApi) {}
+}
+```
+
+### Owner / Driver component
+
+```ts title="search-page.component.ts"
+@Component({
+  /* ... */
+})
+export class SearchPageComponent {
+  private filter = signal<SearchParams>({
+    /* ... */
+  });
+
+  constructor() {
+    inject(ProfessionalListStore).connect(this.filter);
+  }
+}
+```
+
+### Consumer component
+
+```ts title="result-list.component.ts"
+@Component({
+  template: `<div *ngFor="let p of store.state().item">{{ p.name }}</div>`,
+})
+export class ResultListComponent {
+  protected store = inject(ProfessionalListStore);
+}
+```
+
+### Behavior notes
+
+- A new source value during a pending loader call **cancels the in-flight request automatically** (`switchMap` behavior — not configurable).
+- `DestroyRef` of the calling injection context tears down the effect and frees the connect slot when the component unmounts.
+- Default `skipSameActions: false` — pass `true` for signal sources where `computed()`-derived values produce new object references on every dependency update.
+- For multi-source binding, merge upstream signals with `computed()` before passing one signal to `connect` — there is no API knob for it.
+
+### Options
+
+```ts
+reactiveLoadingEffect<P>(
+  name: string,
+  loader: (params: P) => Observable<ITEM>,
+  options?: {
+    skipSameActions?: boolean;          // default false; recommend true for signal sources
+    skipSamePendingActions?: boolean;   // default false
+    skipWhen?: (params: P) => boolean;  // pre-flight skip with param access
+    repeatActions?: ActionCreator[];    // re-fire when any of these actions dispatch
+  },
+): (source: Signal<P>) => void
+```
+
 ### Example for a successfully callback Observable
 
 ```ts

@@ -51,6 +51,7 @@ export const getStoreState = <STATE extends object>(
 @Injectable({ providedIn: 'root' })
 export class Store {
   private currentRunningStores: string[] = [];
+  private connectedStoreNames = new Set<string>();
   private reducerManager = inject(ReducerManager);
   private ngrxStore = inject(NgrxStore);
   private actions = inject(Actions);
@@ -181,6 +182,19 @@ export class Store {
     this.removeReducerAfterDestroy<STATE>(fullStoreName, store);
 
     return store as CREATED_STORE;
+  }
+
+  checkConnect(
+    storeName: string,
+    destroyRef: { onDestroy: (cb: () => void) => void },
+  ): void {
+    if (this.connectedStoreNames.has(storeName) && isDevMode()) {
+      console.error(
+        `A reactiveLoadingEffect for store '${storeName}' is already connected. Only one source should drive a store at a time. If you need multi-source input, merge sources with computed() before connect.`,
+      );
+    }
+    this.connectedStoreNames.add(storeName);
+    destroyRef.onDestroy(() => this.connectedStoreNames.delete(storeName));
   }
 
   addStoreNameToInternalCache(storeName: string): void {
