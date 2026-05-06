@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { ReactiveLoadingComponent } from './reactive-loading.component';
 
@@ -27,4 +27,18 @@ describe('ReactiveLoadingComponent', () => {
 
     expect(component.listStore.state()).toBeDefined();
   });
+
+  it('should populate hits when the query signal is set', fakeAsync(() => {
+    const component = getComponent();
+
+    component.query.set('foo');
+    TestBed.tick();
+    tick(200);
+
+    expect(component.listStore.state().item?.hits).toEqual([
+      'foo-1',
+      'foo-2',
+      'foo-3',
+    ]);
+  }));
 });
