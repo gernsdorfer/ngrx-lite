@@ -21,8 +21,5 @@ export class ReactiveLoadingComponent {
   protected listStore = inject(ReactiveListStore);
   protected query = signal('');
   private params = computed(() => ({ query: this.query() }));
-
-  constructor() {
-    this.listStore.connect(this.params);
-  }
+  private connected = this.listStore.connect(this.params);
 }

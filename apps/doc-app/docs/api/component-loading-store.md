@@ -181,10 +181,7 @@ export class SearchPageComponent {
   private filter = signal<SearchParams>({
     /* ... */
   });
-
-  constructor() {
-    inject(ProfessionalListStore).connect(this.filter);
-  }
+  private connected = inject(ProfessionalListStore).connect(this.filter);
 }
 ```
 

@@ -279,10 +279,7 @@ export class ProfessionalListStore {
 @Component({ ... })
 export class SearchPageComponent {
   private filter = signal({ ... });
-
-  constructor() {
-    inject(ProfessionalListStore).connect(this.filter);
-  }
+  private connected = inject(ProfessionalListStore).connect(this.filter);
 }
 ```
 
