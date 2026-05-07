@@ -11,16 +11,16 @@ export const routes: Routes = [
   {
     path: 'functional-store',
     loadComponent: () =>
-      import(
-        './component-store/functional-store/functional-store.component'
-      ).then((m) => m.FunctionalStoreComponent),
+      import('./component-store/functional-store/functional-store.component').then(
+        (m) => m.FunctionalStoreComponent,
+      ),
   },
   {
     path: 'combine-with-entity',
     loadComponent: () =>
-      import(
-        './component-store/combine-with-entity/combine-with-entity.component'
-      ).then((m) => m.CombineWithEntityComponent),
+      import('./component-store/combine-with-entity/combine-with-entity.component').then(
+        (m) => m.CombineWithEntityComponent,
+      ),
   },
   {
     path: 'persist-form',
@@ -39,44 +39,65 @@ export const routes: Routes = [
   {
     path: 'loading-with-default-values',
     loadComponent: () =>
-      import(
-        './loading-store/default-values/loading-with-default-values.component'
-      ).then((m) => m.LoadingWithDefaultValuesComponent),
+      import('./loading-store/default-values/loading-with-default-values.component').then(
+        (m) => m.LoadingWithDefaultValuesComponent,
+      ),
   },
   {
     path: 'loading-with-signal-effects',
     loadComponent: () =>
-      import(
-        './loading-store/with-signal-effects/loading-with-signal-effects.component'
-      ).then((m) => m.LoadingWithSignalEffectsComponent),
+      import('./loading-store/with-signal-effects/loading-with-signal-effects.component').then(
+        (m) => m.LoadingWithSignalEffectsComponent,
+      ),
   },
   {
     path: 'loading-with-functional-store',
     loadComponent: () =>
-      import(
-        './loading-store/functional-store/functional-loading-store.component'
-      ).then((m) => m.FunctionalLoadingStoreComponent),
+      import('./loading-store/functional-store/functional-loading-store.component').then(
+        (m) => m.FunctionalLoadingStoreComponent,
+      ),
   },
   {
     path: 'option-skip-same-pending-actions',
     loadComponent: () =>
-      import(
-        './loading-store/option-skip-same-pending-actions/option-skip-same-pending-actions.component'
-      ).then((m) => m.OptionSkipSamePendingActionsComponent),
+      import('./loading-store/option-skip-same-pending-actions/option-skip-same-pending-actions.component').then(
+        (m) => m.OptionSkipSamePendingActionsComponent,
+      ),
   },
   {
     path: 'option-repeat-for-actions',
     loadComponent: () =>
-      import(
-        './loading-store/option-repeat-for-actions/option-repeat-for-actions.component'
-      ).then((m) => m.OptionRepeatForActionsComponent),
+      import('./loading-store/option-repeat-for-actions/option-repeat-for-actions.component').then(
+        (m) => m.OptionRepeatForActionsComponent,
+      ),
   },
   {
     path: 'option-skip-same-actions',
     loadComponent: () =>
-      import(
-        './loading-store/option-skip-same-actions/option-skip-same-actions.component'
-      ).then((m) => m.OptionSkipSameActionsComponent),
+      import('./loading-store/option-skip-same-actions/option-skip-same-actions.component').then(
+        (m) => m.OptionSkipSameActionsComponent,
+      ),
+  },
+  {
+    path: 'option-auto-load',
+    loadComponent: () =>
+      import('./loading-store/option-auto-load/option-auto-load.component').then(
+        (m) => m.OptionAutoLoadComponent,
+      ),
+  },
+  {
+    path: 'option-skip-when',
+    loadComponent: () =>
+      import('./loading-store/option-skip-when/option-skip-when.component').then(
+        (m) => m.OptionSkipWhenComponent,
+      ),
+  },
+  {
+    path: 'reactive-loading',
+    loadComponent: () =>
+      import('./loading-store/option-reactive-loading/reactive-loading.component').then(
+        (m) => m.ReactiveLoadingComponent,
+      ),
   },
   {
     path: 'custom-action',
@@ -95,37 +116,37 @@ export const routes: Routes = [
   {
     path: 'storage-from-service',
     loadComponent: () =>
-      import(
-        './component-store/service-counter/storage-from-service.component'
-      ).then((m) => m.StorageFromServiceComponent),
+      import('./component-store/service-counter/storage-from-service.component').then(
+        (m) => m.StorageFromServiceComponent,
+      ),
   },
   {
     path: 'store-without-log',
     loadComponent: () =>
-      import(
-        './component-store/store-without-loging/store-without-log.component'
-      ).then((m) => m.StoreWithoutLogComponent),
+      import('./component-store/store-without-loging/store-without-log.component').then(
+        (m) => m.StoreWithoutLogComponent,
+      ),
   },
   {
     path: 'multiple-storage-instances',
     loadComponent: () =>
-      import(
-        './component-store/muliple-instances/multiple-instances.component'
-      ).then((m) => m.MultipleInstancesComponent),
+      import('./component-store/muliple-instances/multiple-instances.component').then(
+        (m) => m.MultipleInstancesComponent,
+      ),
   },
   {
     path: 'storage-from-global-service',
     loadComponent: () =>
-      import(
-        './component-store/global-counter/storage-from-global.component'
-      ).then((m) => m.StorageFromGlobalComponent),
+      import('./component-store/global-counter/storage-from-global.component').then(
+        (m) => m.StorageFromGlobalComponent,
+      ),
   },
   {
     path: 'listen-on-global-store',
     loadComponent: () =>
-      import(
-        './component-store/listen-on-global-store/listen-on-global-store.component'
-      ).then((m) => m.ListenOnGlobalStoreComponent),
+      import('./component-store/listen-on-global-store/listen-on-global-store.component').then(
+        (m) => m.ListenOnGlobalStoreComponent,
+      ),
   },
 
   {

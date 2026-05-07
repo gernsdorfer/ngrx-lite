@@ -215,6 +215,88 @@ After an effect was unsuccessfully executed the `error` key contains the error.
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/error.png)
 
+#### Auto-Load and Skip-Pre-Flight
+
+`loadingEffect` accepts two additional options for declarative one-shot loads on mount and pre-flight skipping:
+
+- **`autoLoad: true`** triggers the loader exactly once on the next microtask after the wrapper-store is constructed. Only valid for parameter-free effects (compile-time constraint via conditional types).
+- **`skipWhen: () => boolean`** is evaluated before every effect run. When it returns `true`, the dispatch is suppressed — applies to `autoLoad`, manual calls, and any other trigger.
+
+`autoLoad` fires on both server and client (SSR-correct), so use `skipWhen` to suppress the duplicate fetch after hydration:
+
+```ts
+@Injectable({ providedIn: 'root' })
+export class ConfigStore {
+  private store = inject(StoreFactory).createComponentLoadingStore<Config, ApiError>({
+    storeName: 'CONFIG',
+  });
+
+  public state = this.store.state;
+
+  public load = this.store.loadingEffect('load', () => this.api.getConfig(), {
+    autoLoad: true,
+    skipWhen: () => this.transferState.hasRestored('CONFIG'),
+  });
+
+  constructor(
+    private api: ConfigApi,
+    private transferState: StoreTransferState,
+  ) {}
+}
+```
+
+The library itself stays SSR-agnostic. Server-side fetching, hydration, and `TransferState` integration live in your application code; `skipWhen` is the hook the library exposes for it.
+
+#### Reactive Loading
+
+`reactiveLoadingEffect` binds a `Signal<P>` source to the loading lifecycle. The container provides the source; the store owns the loading mechanics. Internally it builds on `loadingEffect`, so action stream, DevTools, and `repeatActions` behave identically.
+
+**Mental model — Owner / Driver vs. Consumer**
+
+- **Owner / Driver:** the one container that calls the connect function (typically a route container). Decides when and how loading happens.
+- **Consumer:** any number of components that `inject()` the store and read `state()` — read-only.
+
+The library enforces the convention with a single-connect guard: a second parallel-active connect for the same store name logs `console.error` in development mode (silent in production).
+
+```ts title="professional-list.store.ts"
+@Injectable({ providedIn: 'root' })
+export class ProfessionalListStore {
+  private store = inject(StoreFactory).createComponentLoadingStore<Professional[], ApiError>({
+    storeName: 'PROFESSIONAL_LIST',
+  });
+
+  public state = this.store.state;
+
+  // returns a function the wrapper-author names freely — convention: connect
+  public connect = this.store.reactiveLoadingEffect('load', (params: SearchParams) => this.api.search(params), { skipSameActions: true });
+
+  constructor(private api: ProfessionalApi) {}
+}
+```
+
+```ts title="search-page.component.ts"
+// Owner / Driver: drives the loading lifecycle
+@Component({ ... })
+export class SearchPageComponent {
+  private filter = signal({ ... });
+  private connected = inject(ProfessionalListStore).connect(this.filter);
+}
+```
+
+```ts title="result-list.component.ts"
+// Consumer: read-only, can be used in many places
+@Component({
+  template: `<div *ngFor="let p of store.state().item">...</div>`,
+})
+export class ResultListComponent {
+  protected store = inject(ProfessionalListStore);
+}
+```
+
+A new source value during a pending loader call cancels the in-flight request automatically (`switchMap` behavior — not configurable). The `DestroyRef` of the calling injection context tears down the effect and frees the connect slot when the component unmounts.
+
+For multi-source binding, merge upstream signals with `computed()` before passing one signal to `connect` — there is no API knob for it.
+
 ### Form Store
 
 ```ts

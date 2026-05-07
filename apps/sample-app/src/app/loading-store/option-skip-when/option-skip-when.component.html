@@ -1,0 +1,35 @@
+<my-app-ui-card>
+  <h1 title>
+    @if (state().isLoading) {
+      <my-app-ui-spinner></my-app-ui-spinner>
+    }
+    Skip When
+  </h1>
+  <h2 subtitle>Loading Store</h2>
+
+  <div content>
+    Effect runs: <b id="run-effect">{{ executeCount }}</b>
+    <hr />
+    Value: <b id="value">{{ state().item?.value }}</b>
+    <hr />
+    Skip flag: <b id="skip-flag">{{ skipFlag }}</b>
+    <hr />
+    <small>
+      <code>skipWhen</code> is a pre-flight check that blocks every dispatch
+      while it returns <code>true</code> — useful for SSR-hydration, missing
+      params, or cache-hits.
+    </small>
+  </div>
+
+  <div actions style="width: 100%">
+    <div
+      id="actions"
+      style="display: flex; justify-content: space-between; width: 100%"
+    >
+      <button class="load" (click)="load()" mat-fab>load</button>
+      <button class="toggle-skip" (click)="toggleSkip()" mat-fab>
+        toggle skip
+      </button>
+    </div>
+  </div>
+</my-app-ui-card>

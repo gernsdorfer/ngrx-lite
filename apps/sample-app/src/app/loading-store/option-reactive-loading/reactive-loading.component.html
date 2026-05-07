@@ -1,0 +1,36 @@
+<my-app-ui-card>
+  <h1 title>
+    @if (listStore.state().isLoading) {
+      <my-app-ui-spinner></my-app-ui-spinner>
+    }
+    Reactive Loading Effect
+  </h1>
+  <h2 subtitle>Loading Store</h2>
+
+  <div content>
+    <mat-form-field>
+      <mat-label>Search query</mat-label>
+      <input
+        id="query"
+        [ngModel]="query()"
+        (ngModelChange)="query.set($event)"
+        matInput
+        type="text"
+      />
+    </mat-form-field>
+    <hr />
+    <div>
+      <strong>Hits:</strong>
+      @for (hit of listStore.state().item?.hits; track hit) {
+        <div class="hit">{{ hit }}</div>
+      } @empty {
+        <em id="empty">no results — try typing</em>
+      }
+    </div>
+    <hr />
+    <small>
+      Owner: this component is the driver and calls <code>connect</code>.
+      Consumers are read-only.
+    </small>
+  </div>
+</my-app-ui-card>
