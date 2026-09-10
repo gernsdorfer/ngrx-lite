@@ -1,4 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +15,7 @@ import { ReactiveListStore } from './reactive-list.store';
 @Component({
   selector: 'my-app-reactive-loading',
   templateUrl: 'reactive-loading.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     UiCardComponent,
     UiSpinnerComponent,

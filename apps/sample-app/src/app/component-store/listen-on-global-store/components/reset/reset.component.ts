@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Store } from '@ngrx/store';
 import { resetAction } from '../../actions/reset.action';
@@ -7,6 +7,7 @@ import { resetAction } from '../../actions/reset.action';
   selector: 'my-app-listen-on-global-store-reset',
   template: ` Dispatch Global Actions
     <button class="reset" (click)="reset()" mat-fab>reset</button>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatButtonModule],
 })
 export class ResetComponent {

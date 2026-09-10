@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../shared/ui/card-component';
 import { GlobalCounterStore } from './global-counter.service';
@@ -6,6 +6,7 @@ import { GlobalCounterStore } from './global-counter.service';
 @Component({
   selector: 'my-app-global-counter',
   templateUrl: 'service-counter.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class StorageFromGlobalComponent {

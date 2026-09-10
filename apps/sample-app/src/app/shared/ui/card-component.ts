@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -35,6 +35,7 @@ import { MatMenuModule } from '@angular/material/menu';
       </mat-card-actions>
     </mat-card>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatCardModule, MatMenuModule, MatButtonModule],
 })
 export class UiCardComponent {}

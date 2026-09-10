@@ -1,4 +1,12 @@
 {
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  },
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "declaration": true,

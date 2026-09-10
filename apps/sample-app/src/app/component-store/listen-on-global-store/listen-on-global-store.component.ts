@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DemoAComponent } from './components/component-a/demo-a.component';
 import { DemoBComponent } from './components/component-b/demo-b.component';
 import { ResetComponent } from './components/reset/reset.component';
@@ -12,6 +12,7 @@ import { ResetComponent } from './components/reset/reset.component';
     <br />
     <my-app-listen-on-global-store-demo-b></my-app-listen-on-global-store-demo-b>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DemoAComponent, DemoBComponent, ResetComponent],
 })
 export class ListenOnGlobalStoreComponent {}
