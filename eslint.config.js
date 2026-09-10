@@ -1,13 +1,9 @@
-const { FlatCompat } = require('@eslint/eslintrc');
-const js = require('@eslint/js');
 const nxEslintPlugin = require('@nx/eslint-plugin');
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
-
 module.exports = [
+  // Flat eslint configs require each other across project roots by relative
+  // path, which @nx/enforce-module-boundaries flags as an external import.
+  { ignores: ['**/eslint.config.js'] },
   { plugins: { '@nx': nxEslintPlugin } },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
@@ -27,26 +23,18 @@ module.exports = [
       ],
     },
   },
-  ...compat
-    .config({
-      extends: ['plugin:@nx/typescript'],
-    })
-    .map((config) => ({
-      ...config,
-      files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
-      rules: {
-        ...config.rules,
-      },
-    })),
-  ...compat
-    .config({
-      extends: ['plugin:@nx/javascript'],
-    })
-    .map((config) => ({
-      ...config,
-      files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
-      rules: {
-        ...config.rules,
-      },
-    })),
+  ...nxEslintPlugin.configs['flat/typescript'].map((config) => ({
+    ...config,
+    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
+    rules: {
+      ...config.rules,
+    },
+  })),
+  ...nxEslintPlugin.configs['flat/javascript'].map((config) => ({
+    ...config,
+    files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
+    rules: {
+      ...config.rules,
+    },
+  })),
 ];

@@ -1,4 +1,9 @@
-import { Component, effect, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { CreateComponent } from './components/create/create.component';
@@ -17,6 +22,7 @@ import { TodoListStore } from './services/todo-list.service';
     CompletedPipe,
     CreateComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: 'app.component.html',
 })
 export class AppComponent {

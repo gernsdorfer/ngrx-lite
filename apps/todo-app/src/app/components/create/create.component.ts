@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'todo-create',
   templateUrl: 'create.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatInputModule,
     ReactiveFormsModule,

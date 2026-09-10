@@ -1,4 +1,9 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  inject,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
@@ -15,6 +20,7 @@ const defaultState: ItemState = { counter: 0 };
 @Component({
   selector: 'my-app-loading-store-with-default-values',
   templateUrl: 'loading-effect.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class LoadingWithDefaultValuesComponent implements OnDestroy {

@@ -1,4 +1,9 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { of, tap } from 'rxjs';
@@ -10,6 +15,7 @@ export type MyState = LoadingStoreState<{ value: string }, { message: string }>;
 @Component({
   selector: 'my-app-loading-store-option-skip-when',
   templateUrl: 'option-skip-when.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class OptionSkipWhenComponent implements OnDestroy {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UiToolbarComponent } from './shared/ui/toolbar';
 
@@ -16,6 +16,7 @@ import { UiToolbarComponent } from './shared/ui/toolbar';
     `,
   ],
   imports: [UiToolbarComponent, RouterModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: 'app.component.html',
 })
 export class AppComponent {}

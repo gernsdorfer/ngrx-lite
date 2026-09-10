@@ -1,4 +1,9 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { of, tap } from 'rxjs';
@@ -13,6 +18,7 @@ export type MyState = LoadingStoreState<
 @Component({
   selector: 'my-app-loading-store-option-auto-load',
   templateUrl: 'option-auto-load.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class OptionAutoLoadComponent implements OnDestroy {
