@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { CounterStore } from './counter-service';
 import { DemoAComponent } from './demo-a.component';
 import { DemoBComponent } from './demo-b.component';
@@ -12,7 +12,6 @@ import { DemoBComponent } from './demo-b.component';
     <my-app-same-instance-demo-b></my-app-same-instance-demo-b>
   `,
   providers: [CounterStore],
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DemoAComponent, DemoBComponent],
 })
 export class StorageFromServiceComponent {}

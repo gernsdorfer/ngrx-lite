@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-} from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { of, tap } from 'rxjs';
@@ -18,7 +13,6 @@ export type MyState = LoadingStoreState<
 @Component({
   selector: 'my-app-loading-store-option-auto-load',
   templateUrl: 'option-auto-load.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class OptionAutoLoadComponent implements OnDestroy {
@@ -31,13 +25,13 @@ export class OptionAutoLoadComponent implements OnDestroy {
   });
 
   public configState = this.store.state;
-  public executeCount = 0;
+  public executeCount = signal(0);
 
   public reload = this.store.loadingEffect(
     'LOAD_CONFIG',
     () =>
       of({ config: `loaded at ${new Date().toLocaleTimeString()}` }).pipe(
-        tap(() => this.executeCount++),
+        tap(() => this.executeCount.update((count) => count + 1)),
       ),
     { autoLoad: true },
   );

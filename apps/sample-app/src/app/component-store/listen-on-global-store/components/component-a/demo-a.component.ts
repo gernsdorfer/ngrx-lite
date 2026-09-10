@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  inject,
-} from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../../../shared/ui/card-component';
 import {
@@ -33,7 +28,6 @@ import {
       useValue: 'DemoAComponentStore',
     },
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class DemoAComponent implements OnDestroy {

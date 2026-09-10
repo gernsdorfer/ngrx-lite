@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { DemoAComponent } from './demo-a.component';
 import { DemoBComponent } from './demo-b.component';
 
@@ -10,7 +10,6 @@ import { DemoBComponent } from './demo-b.component';
     <br />
     <my-app-multi-instance-demo-b></my-app-multi-instance-demo-b>
   `,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DemoAComponent, DemoBComponent],
 })
 export class MultipleInstancesComponent {}

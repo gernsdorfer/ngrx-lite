@@ -8,11 +8,11 @@
   <h2 subtitle>Loading Store</h2>
 
   <div content>
-    Effect runs: <b id="run-effect">{{ executeCount }}</b>
+    Effect runs: <b id="run-effect">{{ executeCount() }}</b>
     <hr />
     Value: <b id="value">{{ state().item?.value }}</b>
     <hr />
-    Skip flag: <b id="skip-flag">{{ skipFlag }}</b>
+    Skip flag: <b id="skip-flag">{{ skipFlag() }}</b>
     <hr />
     <small>
       <code>skipWhen</code> is a pre-flight check that blocks every dispatch

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UiCardComponent } from '../../shared/ui/card-component';
 import { dynamicStore } from './dynamic-store';
@@ -7,7 +7,6 @@ import { rootStore } from './root-store';
 @Component({
   selector: 'my-app-loading-store-functional-store',
   templateUrl: 'functional-loading-store.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule],
 })
 export class FunctionalLoadingStoreComponent {
@@ -16,12 +15,12 @@ export class FunctionalLoadingStoreComponent {
   private rootStore = rootStore.inject();
 
   stateB = this.dynamicStoreTypeA.state;
-  lazyStoreBSuccess?: string;
+  lazyStoreBSuccess = signal<string | undefined>(undefined);
 
-  onLazyStoreBSuccess = this.rootStore.onLazyStoreBSuccess(
-    () =>
-      (this.lazyStoreBSuccess =
-        'Root Store knows the StoreA Increment Successfully'),
+  onLazyStoreBSuccess = this.rootStore.onLazyStoreBSuccess(() =>
+    this.lazyStoreBSuccess.set(
+      'Root Store knows the StoreA Increment Successfully',
+    ),
   );
 
   incrementStoreB() {

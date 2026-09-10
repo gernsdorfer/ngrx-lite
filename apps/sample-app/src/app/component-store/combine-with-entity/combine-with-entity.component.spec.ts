@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import {
   CombineWithEntityComponent,
@@ -10,7 +9,6 @@ describe('CombineWithEntityComponent', () => {
   const getComponent = (): CombineWithEntityComponent => {
     const fixture = TestBed.configureTestingModule({
       providers: [storeTestingFactory()],
-      imports: [BrowserAnimationsModule],
     }).createComponent(CombineWithEntityComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();

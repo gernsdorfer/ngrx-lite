@@ -69,7 +69,7 @@ describe('FunctionalLoadingStoreComponent', () => {
 
       onLazyStoreBSuccess();
 
-      expect(component.lazyStoreBSuccess).toBe(
+      expect(component.lazyStoreBSuccess()).toBe(
         'Root Store knows the StoreA Increment Successfully',
       );
     });

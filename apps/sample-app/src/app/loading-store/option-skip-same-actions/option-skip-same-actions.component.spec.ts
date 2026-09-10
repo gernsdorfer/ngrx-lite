@@ -41,7 +41,7 @@ describe('OptionSkipSameActionsComponent', () => {
           },
         }),
       );
-      expect(component.executeEffect).toBe(2);
+      expect(component.executeEffect()).toBe(2);
     });
   });
   describe('incrementOne', () => {
@@ -59,7 +59,7 @@ describe('OptionSkipSameActionsComponent', () => {
           },
         }),
       );
-      expect(component.executeEffect).toBe(1);
+      expect(component.executeEffect()).toBe(1);
     });
   });
 });

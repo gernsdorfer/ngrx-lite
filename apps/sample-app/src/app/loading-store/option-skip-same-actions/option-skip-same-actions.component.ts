@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-} from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,7 +16,6 @@ export type MyState = LoadingStoreState<
 @Component({
   selector: 'my-app-loading-store-option-skip-same-actions',
   templateUrl: 'option-skip-same-actions.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     UiCardComponent,
     MatButtonModule,
@@ -41,17 +35,22 @@ export class OptionSkipSameActionsComponent implements OnDestroy {
   });
 
   public counterState = this.store.state;
-  executeEffect = 0;
+  executeEffect = signal(0);
   increment = this.store.loadingEffect(
     'INCREMENT',
     (count: number) =>
-      of({ counter: count }).pipe(tap(() => this.executeEffect++)),
+      of({ counter: count }).pipe(
+        tap(() => this.executeEffect.update((count) => count + 1)),
+      ),
     { skipSameActions: true },
   );
 
   incrementOne = this.store.loadingEffect(
     'INCREMENT',
-    () => of({ counter: 1 }).pipe(tap(() => this.executeEffect++)),
+    () =>
+      of({ counter: 1 }).pipe(
+        tap(() => this.executeEffect.update((count) => count + 1)),
+      ),
     { skipSameActions: true },
   );
 
