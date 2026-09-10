@@ -27,7 +27,7 @@ describe('OptionSkipWhenComponent', () => {
 
     component.load();
 
-    expect(component.executeCount).toBe(1);
+    expect(component.executeCount()).toBe(1);
     expect(component.state().item?.value).toBe('loaded #1');
   });
 
@@ -37,7 +37,7 @@ describe('OptionSkipWhenComponent', () => {
 
     component.load();
 
-    expect(component.executeCount).toBe(0);
+    expect(component.executeCount()).toBe(0);
     expect(component.state().item).toBeUndefined();
   });
 
@@ -49,6 +49,6 @@ describe('OptionSkipWhenComponent', () => {
 
     component.load();
 
-    expect(component.executeCount).toBe(1);
+    expect(component.executeCount()).toBe(1);
   });
 });

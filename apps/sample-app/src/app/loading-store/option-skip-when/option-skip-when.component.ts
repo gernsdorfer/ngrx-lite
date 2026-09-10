@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-} from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { of, tap } from 'rxjs';
@@ -15,7 +10,6 @@ export type MyState = LoadingStoreState<{ value: string }, { message: string }>;
 @Component({
   selector: 'my-app-loading-store-option-skip-when',
   templateUrl: 'option-skip-when.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class OptionSkipWhenComponent implements OnDestroy {
@@ -28,20 +22,20 @@ export class OptionSkipWhenComponent implements OnDestroy {
   });
 
   public state = this.store.state;
-  public executeCount = 0;
-  public skipFlag = false;
+  public executeCount = signal(0);
+  public skipFlag = signal(false);
 
   public load = this.store.loadingEffect(
     'LOAD',
     () =>
-      of({ value: `loaded #${this.executeCount + 1}` }).pipe(
-        tap(() => this.executeCount++),
+      of({ value: `loaded #${this.executeCount() + 1}` }).pipe(
+        tap(() => this.executeCount.update((count) => count + 1)),
       ),
-    { skipWhen: () => this.skipFlag },
+    { skipWhen: () => this.skipFlag() },
   );
 
   toggleSkip() {
-    this.skipFlag = !this.skipFlag;
+    this.skipFlag.update((skip) => !skip);
   }
 
   ngOnDestroy() {

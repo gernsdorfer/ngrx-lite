@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  inject,
-} from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { delay, of } from 'rxjs';
@@ -18,7 +13,6 @@ export type MyState = LoadingStoreState<
 @Component({
   selector: 'my-app-loading-store-basic',
   templateUrl: 'loading-basic.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
 })
 export class LoadingBasicComponent implements OnDestroy {

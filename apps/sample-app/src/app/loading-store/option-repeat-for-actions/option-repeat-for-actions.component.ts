@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-} from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,7 +27,6 @@ const sideEffectAction = getEffectAction({
 @Component({
   selector: 'my-app-loading-option-repeat-for-actions',
   templateUrl: 'option-repeat-for-actions.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     UiCardComponent,
     MatButtonModule,
@@ -58,7 +52,7 @@ export class OptionRepeatForActionsComponent implements OnDestroy {
     storeName: sideEffectStoreName,
   });
   public counterState = this.store.state;
-  executeEffect = 0;
+  executeEffect = signal(0);
 
   runSideEffect = this.sideStore.loadingEffect(sideEffectExampleAction, () =>
     of(true),
@@ -67,7 +61,9 @@ export class OptionRepeatForActionsComponent implements OnDestroy {
   increment = this.store.loadingEffect(
     'INCREMENT',
     (count: number) =>
-      of({ counter: count }).pipe(tap(() => this.executeEffect++)),
+      of({ counter: count }).pipe(
+        tap(() => this.executeEffect.update((count) => count + 1)),
+      ),
     { repeatActions: [sideEffectAction] },
   );
 

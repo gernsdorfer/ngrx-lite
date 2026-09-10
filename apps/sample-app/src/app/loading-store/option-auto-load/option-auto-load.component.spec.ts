@@ -27,7 +27,7 @@ describe('OptionAutoLoadComponent', () => {
 
     await Promise.resolve();
 
-    expect(component.executeCount).toBe(1);
+    expect(component.executeCount()).toBe(1);
     expect(component.configState().item?.config).toMatch(/loaded at/);
   });
 
@@ -37,6 +37,6 @@ describe('OptionAutoLoadComponent', () => {
 
     component.reload();
 
-    expect(component.executeCount).toBe(2);
+    expect(component.executeCount()).toBe(2);
   });
 });

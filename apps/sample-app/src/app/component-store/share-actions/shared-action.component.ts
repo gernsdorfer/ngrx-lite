@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { getCustomAction, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { UiCardComponent } from '../../shared/ui/card-component';
@@ -18,7 +18,6 @@ export const MyIncrementAction = getCustomAction<MyState>({
 @Component({
   selector: 'my-app-ngrx-lite-counter',
   templateUrl: 'example.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UiCardComponent, MatButtonModule],
 })
 export default class SharedActionComponent {

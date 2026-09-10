@@ -39,10 +39,6 @@ module.exports = [
     files: ['**/*.ts'],
     rules: {
       '@angular-eslint/prefer-standalone': 'off',
-      // Newly enabled by the angular-eslint v22 recommended set. The Angular 22
-      // migration kept these components on the pre-v22 default change detection
-      // (ChangeDetectionStrategy.Eager); moving them to OnPush is a separate change.
-      '@angular-eslint/prefer-on-push-component-change-detection': 'off',
     },
   },
 ];

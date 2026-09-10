@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -119,7 +119,6 @@ import { RouterModule } from '@angular/router';
       </mat-menu>
     </mat-toolbar>
   `,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatToolbarModule, MatMenuModule, MatButtonModule, RouterModule],
 })
 export class UiToolbarComponent {}

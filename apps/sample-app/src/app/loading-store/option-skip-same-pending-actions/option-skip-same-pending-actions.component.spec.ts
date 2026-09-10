@@ -50,7 +50,7 @@ describe('OptionSkipSamePendingActionsComponent', () => {
           },
         }),
       );
-      expect(component.executeEffect).toBe(2);
+      expect(component.executeEffect()).toBe(2);
     });
   });
 });
