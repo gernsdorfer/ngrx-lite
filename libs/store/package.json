@@ -4,7 +4,6 @@
   "peerDependencies": {
     "@angular/core": ">= 22.0.0",
     "@angular/forms": ">= 22.0.0",
-    "@angular/platform-browser-dynamic": ">= 22.0.0",
     "@angular/router": ">= 22.0.0",
     "@ngrx/component-store": ">= 22.0.0",
     "@ngrx/effects": ">= 22.0.0",

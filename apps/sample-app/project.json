@@ -7,13 +7,16 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath.base}"],
+      "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/sample-app",
+        "outputPath": {
+          "base": "dist/apps/sample-app",
+          "browser": ""
+        },
         "index": "apps/sample-app/src/index.html",
-        "main": "apps/sample-app/src/main.ts",
-        "polyfills": "apps/sample-app/src/polyfills.ts",
+        "polyfills": ["apps/sample-app/src/polyfills.ts"],
         "tsConfig": "apps/sample-app/tsconfig.app.json",
         "assets": [
           "apps/sample-app/src/favicon.ico",
@@ -23,7 +26,8 @@
           "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
           "apps/sample-app/src/styles.css"
         ],
-        "scripts": []
+        "scripts": [],
+        "browser": "apps/sample-app/src/main.ts"
       },
       "configurations": {
         "production": {
@@ -48,18 +52,17 @@
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "continuous": true,
       "configurations": {
         "production": {
           "buildTarget": "sample-app:build:production"
@@ -67,9 +70,7 @@
         "development": {
           "buildTarget": "sample-app:build:development"
         }
-      },
-      "defaultConfiguration": "development",
-      "continuous": true
+      }
     },
     "lint": {
       "executor": "@nx/eslint:lint"
