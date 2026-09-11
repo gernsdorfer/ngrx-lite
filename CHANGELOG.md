@@ -1,3 +1,18 @@
+## 22.0.0-rc.0 (2026-09-11)
+
+#### :boom: Breaking Change
+
+- [#174](https://github.com/gernsdorfer/ngrx-lite/pull/174) require Angular 22 and NgRx 22 — peer dependencies move from `>= 21.0.0` to `>= 22.0.0`, Angular 21 is no longer supported ([@gernsdorfer](https://github.com/gernsdorfer))
+- [#175](https://github.com/gernsdorfer/ngrx-lite/pull/175) drop the unused `@angular/platform-browser-dynamic` peer dependency ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :memo: Note
+
+The library source is unchanged since 21.1.0 — no runtime API was added, removed or altered. This release only moves the supported framework range and rebuilds the package with TypeScript 6 and ng-packagr 22.
+
+#### Committers: 1
+
+- Lars Wiedemann ([@gernsdorfer](https://github.com/gernsdorfer))
+
 ## 21.1.0 (2026-05-06)
 
 #### :rocket: Enhancement
