@@ -7,7 +7,7 @@
 
 # NgRxLite
 
-> A small Angular state mangement based on [NgRx](https://github.com/ngrx/platform) ComponentStore, with some benefits 😎
+> A small Angular state management based on [NgRx](https://github.com/ngrx/platform) ComponentStore, with some benefits 😎
 
 ## Synopsis
 
@@ -15,7 +15,7 @@ The current [@ngrx/component-store](https://ngrx.io/guide/component-store) imple
 store. Unfortunately, there is no connection to the global [@ngrx/store](https://ngrx.io/guide/store) or
 the [@ngrx/store-devtools](https://ngrx.io/guide/store-devtools).
 
-This Library connects your [@ngrx/component-store](https://ngrx.io/guide/component-store) with
+This library connects your [@ngrx/component-store](https://ngrx.io/guide/component-store) with
 the [@ngrx/store](https://ngrx.io/guide/store) to share and debug
 the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 
@@ -24,17 +24,18 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 - 🤝 same API as [@ngrx/component-store](https://ngrx.io/guide/component-store) with optional parameters
 - ⏱ fast and easy creation of a dynamic Redux store
 - ⏳ optional integrated loading state for effects
-- 🤯 debuging of application state across different routes
-- ⚒️ Redux DevTools support for NgRxLite ComponentsStore for
+- 🤯 debugging of application state across different routes
+- ⚒️ Redux DevTools support for NgRxLite ComponentStores for
   - `patchState`
   - `setState`
-  - `createdLoadingEffects`
+  - `loadingEffect`
 - 💽 supports session storage and local storage
-- 🏘 freedom to decide where the store is located: root, module or in the component scope
+- 🏘 freedom to decide where the store is located: root, a scope, or the component
 - 🔛 share the state changes and actions in the NgRx store
-- 📑 store the form data for persistance and debugging
+- 📑 store the form data for persistence and debugging
 - 👂 create effects for global storage
-- ✍️ write the tests is much easier
+- 🚦 signal-driven loading with `reactiveLoadingEffect`, `autoLoad` and `skipWhen`
+- ✍️ writing tests is much easier
 
 <hr />
 
@@ -42,52 +43,69 @@ the [@ngrx/actions](https://ngrx.io/guide/store/actions) and store.
 - ▶️ Play with a [Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/)
 - 📖 read the [docs](http://gernsdorfer.github.io/ngrx-lite/)
 
+## Version compatibility
+
+| ngrx-lite | Angular | NgRx |
+| --------- | ------- | ---- |
+| 22.x      | 22.x    | 22.x |
+| 21.x      | 21.x    | 21.x |
+
 ## Install
 
 ### Yarn
 
 ```bash
-yarn add @ngrx/store @ngrx/effects @ngrx/component-store @ngrx/store-devtools @gernsdorfer/ngrx-lite
+yarn add @gernsdorfer/ngrx-lite @ngrx/store @ngrx/effects @ngrx/component-store @ngrx/operators @ngrx/store-devtools
 ```
 
 ### NPM
 
 ```bash
-npm install @ngrx/store @ngrx/effects @ngrx/component-store @ngrx/store-devtools @gernsdorfer/ngrx-lite
+npm install @gernsdorfer/ngrx-lite @ngrx/store @ngrx/effects @ngrx/component-store @ngrx/operators @ngrx/store-devtools
 ```
 
 ## Usage
 
-1. import the `StoreModule` from [NgRx](https://github.com/ngrx/platform) to the root module
+1. provide the [NgRx](https://github.com/ngrx/platform) store in your `ApplicationConfig`
 
-```ts
-@NgModule({
-  // ...
-  imports: [StoreModule.forRoot({})]
-// ...
+```ts title="app.config.ts"
+import { ApplicationConfig } from '@angular/core';
+import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideStore({}), provideEffects([])],
+};
 ```
 
 2. create the store with the same API as [@ngrx/component-store](https://ngrx.io/guide/component-store)
 
 ```ts
+import { Component, inject, OnDestroy } from '@angular/core';
+import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+
 export interface MyState {
   counter: number;
 }
 
 @Component({
   selector: 'my-component',
-  template: '<button (click)="load(\'test\')">',
+  template: `
+    <h2>{{ counterState().counter }}</h2>
+    <button (click)="increment(counterState().counter + 1)">+</button>
+  `,
 })
 class MyComponent implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
   // create a componentStore
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
     defaultState: { counter: 0 },
   });
-  // read the state
-  public counterState$: Observable<MyState> = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {}
+  // read the state — state is a Signal
+  public counterState = this.store.state;
 
   increment(counter: number) {
     // patch your state
@@ -95,7 +113,7 @@ class MyComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    // destory the store
+    // destroy the store
     this.store.ngOnDestroy();
   }
 }
@@ -107,24 +125,26 @@ That's it 🥳
 
 ### DevTools support
 
-Install and import [ngrx/store-devtools](https://ngrx.io/guide/store-devtools) und have all the features from the
+Install and register [ngrx/store-devtools](https://ngrx.io/guide/store-devtools) and have all the features of the
 DevTools for your component store.
 
 It's important to set the `monitor` property in your `StoreDevtoolsOptions`, otherwise a state import is not possible.
 
-```ts app.module
-@NgModule({
-  imports: [
-    StoreDevtoolsModule.instrument({
+```ts title="app.config.ts"
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideStore({}),
+    provideStoreDevtools({
       name: 'ngrx-lite-demo',
       maxAge: 25,
       logOnly: false,
       // set the monitor property here
       monitor: (state, action) => action,
     }),
-
   ],
-})
+};
 ```
 
 Let's take a look at Redux DevTools and what happens in the example above.
@@ -137,54 +157,60 @@ After the store is initialized you can find the store in the `@ngrx/devtools`.
 
 #### Patch state
 
-After patch state you see this in your Redux DevTools. It's possbile to define an custom action name for your patch/set
-state.
+After patching the state you see this in your Redux DevTools. It's possible to define a custom action name for your
+patch/set state.
 
 ![State-Init](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/component-store-devtools-patch.png)
 
 ### Router store
 
-Import the `RouterStoreModule` into your main application to debug your state across all visited URLs. This module
-stores related URLs to the current store.
+Register the `RouterStoreModule` in your application to debug your state across all visited URLs. This module
+stores related URLs with the current store.
 
 So it's possible to replay your state changes by revisiting the related url.
 
-```ts
-@NgModule({
-  //...
-  imports: [RouterStoreModule]
-//...
+```ts title="app.config.ts"
+import { importProvidersFrom } from '@angular/core';
+import { RouterStoreModule } from '@gernsdorfer/ngrx-lite';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideStore({}), importProvidersFrom(RouterStoreModule)],
+};
 ```
 
 ### Loading store
 
-Create ComponentLoadingStore to set a Loader State while an Effect is running. You have the same API
-as `createComponentStore` with an extra method `loadingEffect`.
+Create a `ComponentLoadingStore` to set a loading state while an effect is running. You have the same API
+as `createComponentStore` plus `loadingEffect`.
 
 ```ts
+import { Component, inject, OnDestroy } from '@angular/core';
+import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { of } from 'rxjs';
+
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
 @Component({
-  selector: 'my-app-basic-app',
+  selector: 'my-app-loading-effect',
   templateUrl: 'loading-effect.html',
 })
 export class LoadingEffectComponent implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
   // create your loading store
   private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
     storeName: 'LOADING_STORE',
   });
 
   // read the state
-  public counterState$: Observable<State> = this.store.state$;
+  public counterState = this.store.state;
 
   // define your loadingEffect to change the state
-  public increment = this.store.loadingEffect('increment', (counter: number = 0) => of(counter + 1));
-
-  constructor(private storeFactory: StoreFactory) {}
+  public increment = this.store.loadingEffect('increment', (counter: number) => of({ counter: counter + 1 }));
 
   ngOnDestroy() {
-    // destory the store
-    this.counterStore.ngOnDestroy();
+    // destroy the store
+    this.store.ngOnDestroy();
   }
 }
 ```
@@ -199,7 +225,7 @@ After the store is initialized you can find the store in the `@ngrx/devtools`.
 
 #### Loader state `isLoading` changed
 
-For a running Effect `isLoading` is true and you can show a spinner in your UI.
+For a running effect `isLoading` is true and you can show a spinner in your UI.
 
 ![State-Loading](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/load.png)
 
@@ -215,53 +241,158 @@ After an effect was unsuccessfully executed the `error` key contains the error.
 
 ![State-Success](https://raw.githubusercontent.com/gernsdorfer/ngrx-lite/master/screens/error.png)
 
+#### Load once on start — `autoLoad`
+
+For parameter-free effects, `autoLoad` triggers the loader once after the store is created, so you don't need a
+manual `effect()` block in your component.
+
+```ts
+public reload = this.store.loadingEffect('LOAD_CONFIG', () => this.api.getConfig(), {
+  autoLoad: true,
+});
+```
+
+#### Skip a run — `skipWhen`
+
+`skipWhen` is evaluated before every run and suppresses the dispatch when it returns `true` — useful for cache hits,
+feature flags, or skipping the client re-fetch after SSR hydration.
+
+```ts
+public reload = this.store.loadingEffect('LOAD_CONFIG', () => this.api.getConfig(), {
+  autoLoad: true,
+  skipWhen: () => this.transferState.hasRestored('CONFIG'),
+});
+```
+
+### Reactive loading from a signal
+
+`reactiveLoadingEffect` binds a `Signal` source to the loading lifecycle. One container owns the source and calls
+`connect`; every other component injects the store and reads `state()` read-only. A new source value cancels an
+in-flight request automatically.
+
+```ts title="professional-list.store.ts"
+@Injectable({ providedIn: 'root' })
+export class ProfessionalListStore {
+  private api = inject(ProfessionalApi);
+
+  private store = inject(StoreFactory).createComponentLoadingStore<Professional[], ApiError>({
+    storeName: 'PROFESSIONAL_LIST',
+  });
+
+  public state = this.store.state;
+
+  public connect = this.store.reactiveLoadingEffect('load', (params: SearchParams) => this.api.search(params), {
+    skipSameActions: true,
+  });
+}
+```
+
+```ts title="search-page.component.ts"
+export class SearchPageComponent {
+  private filter = signal<SearchParams>({ query: '' });
+  private connected = inject(ProfessionalListStore).connect(this.filter);
+}
+```
+
+### Functional store
+
+Create a store as a function and inject it without knowing how it is provided. Root stores live as long as the
+application; lazy stores are created on demand and can exist multiple times under different names.
+
+```ts title="dynamic-store.ts"
+import { inject, Injectable, OnDestroy } from '@angular/core';
+import { createStoreAsFn, DynamicStore, StoreFactory } from '@gernsdorfer/ngrx-lite';
+
+type MyDynamicStoreNames = 'StoreA' | 'StoreB';
+
+@Injectable()
+class DynamicStoreService extends DynamicStore<MyDynamicStoreNames> implements OnDestroy {
+  private store = inject(StoreFactory).createComponentStore<{ counter: number }>({
+    storeName: 'Function_Store',
+    defaultState: { counter: 0 },
+  });
+
+  public state = this.store.state;
+
+  increment(counter: number) {
+    this.store.setState({ counter }, 'INCREMENT');
+  }
+
+  ngOnDestroy() {
+    this.store.ngOnDestroy();
+  }
+}
+
+export const dynamicStore = createStoreAsFn(DynamicStoreService);
+```
+
+```ts title="counter.component.ts"
+export class CounterComponent {
+  private store = dynamicStore.inject('StoreA');
+
+  public state = this.store.state;
+}
+```
+
 ### Form Store
 
 ```ts
+import { Component, inject, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+
 interface Product {
   name: string;
+  lastName: string;
 }
 
 @Component({
-  selector: 'my-app-basic-app',
+  selector: 'my-app-persist-form',
   templateUrl: 'persist-form.html',
 })
 export class PersistFormComponent implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
   productForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', [Validators.required]),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    lastName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
+
   private store = this.storeFactory.createFormComponentStore<Product>({
     storeName: 'PRODUCT_FORM',
+    formGroup: this.productForm,
     plugins: {
       storage: 'sessionStoragePlugin',
     },
-    formGroup: this.productForm,
   });
+
+  ngOnDestroy() {
+    this.store.ngOnDestroy();
+  }
 }
 ```
 
 ### Session/Local Storage
 
-#### Register Session/Locale storage service
+1. Register the session/local storage plugin in your `ApplicationConfig`
 
-1. Register Session/Locale storage in your root module
+```ts title="app.config.ts"
+import { LocalStoragePlugin, localStoragePlugin, SessionStoragePlugin, sessionStoragePlugin } from '@gernsdorfer/ngrx-lite';
 
-```ts
-@NgModule({
-  // ...
+export const appConfig: ApplicationConfig = {
   providers: [
-    {provide: SessionStoragePlugin, useValue: sessionStoragePlugin},
-    {provide: LocalStoragePlugin, useValue: localStoragePlugin}
-  ]
-  // ...
-})
+    { provide: SessionStoragePlugin, useValue: sessionStoragePlugin },
+    { provide: LocalStoragePlugin, useValue: localStoragePlugin },
+  ],
+};
 ```
 
-1. Create new store with a session storage sync option
+2. Create a new store with a storage sync option
 
 ```ts
 class MyClass {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<{ counter: number }>({
     storeName: 'SESSION_COUNTER',
     defaultState: {
@@ -276,12 +407,20 @@ class MyClass {
 
 ### Create Effects
 
-For Using `createEffect`, please install `@ngrx/effects` and import `EffectsModule.forRoot([])` in your root module
+To use `createEffect`, install `@ngrx/effects` and add `provideEffects([])` to your `ApplicationConfig`.
 
 ```ts
+import { inject } from '@angular/core';
+import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { ofType } from '@ngrx/effects';
+import { createAction } from '@ngrx/store';
+import { tap } from 'rxjs';
+
 export const resetAction = createAction('reset');
 
 class MyClass {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<{ counter: number }>({
     storeName: 'SESSION_COUNTER',
     defaultState: {
@@ -300,17 +439,19 @@ class MyClass {
 
 ### Listen on actions
 
-listen on custom actions to execute your business logic
+Listen for custom actions to execute your business logic.
 
 ```ts title="my-component-store.service.ts"
 export interface MyState {
   counter: number;
 }
+
 export const resetAction = createAction('reset');
 
 @Injectable()
-export class MyStore implements OnDestroy {
+export class MyStore {
   private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
     defaultState: { counter: 0 },
@@ -323,6 +464,7 @@ export class MyStore implements OnDestroy {
 ```ts title="app.component.ts"
 export class AppComponent {
   private myStore = inject(MyStore);
+
   resetEffect = this.myStore.onReset(() => console.log('Reset was triggered'));
 }
 ```
@@ -330,13 +472,14 @@ export class AppComponent {
 ### Testing
 
 Import `storeTestingFactory` and write your tests. A minimal example can be
-found [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts)
-.
+found [here](https://github.com/gernsdorfer/ngrx-lite/blob/master/apps/sample-app/src/app/component-store/basic/basic.component.spec.ts).
 
 ```ts
+import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
+
 TestBed.configureTestingModule({
-  //...
+  // standalone components go into imports
+  imports: [MyComponent],
   providers: [storeTestingFactory()],
-  //..
 });
 ```

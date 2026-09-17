@@ -1,57 +1,110 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 ---
 
 # Testing
 
-Import `storeTestingFactory` as a provider in your test, to mock the redux store.
+Add `storeTestingFactory` to your providers to mock the redux store.
 
 ```ts title="component.spec.ts"
 import { TestBed } from '@angular/core/testing';
 import { storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
 import { MyComponent } from './my.component';
 
-TestBed.configureTestingModule({
-  declarations: [MyComponent],
-  providers: [storeTestingFactory()],
+describe('MyComponent', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      // standalone components go into imports
+      imports: [MyComponent],
+      providers: [storeTestingFactory()],
+    });
+  });
+
+  it('should patch the state', () => {
+    const fixture = TestBed.createComponent(MyComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.increment(2);
+
+    // state is a Signal
+    expect(component.counterState()).toEqual({ counter: 2 });
+  });
 });
 ```
 
-:::note Many Test Example you can
+`storeTestingFactory()` provides `provideMockStore`, `provideMockActions` and the real `StoreFactory`.
+
+:::note Many test examples you can
 find [here](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app)
 :::
 
-## test createEffects
+## Assert on a loading store
+
+Use [`getDefaultComponentLoadingState`](/docs/api/component-loading-store#getdefaultcomponentloadingstate) so you
+don't have to spell out `isLoading` and `error` in every expectation.
 
 ```ts title="component.spec.ts"
-import { TestBed } from '@angular/core/testing';
-import { storeTestingFactory, actions$ } from '@gernsdorfer/ngrx-lite/testing';
-import { MyComponent } from './my.component';
+import { getDefaultComponentLoadingState } from '@gernsdorfer/ngrx-lite';
 
-export const resetAction = createAction('reset');
+it('should load the item', () => {
+  const component = getComponent();
 
-it('should trigger an eaction', () => {
-  actions$.next(resetAction());
+  component.load('my name');
 
-  //check your state
+  expect(component.state()).toEqual(
+    getDefaultComponentLoadingState<State['item'], State['error']>({
+      item: { name: 'my name' },
+    }),
+  );
 });
 ```
 
-## Mock Functional Stores
+## Test `createEffect`
 
-To Test a lazy Functional Store, you can use `createStoreAsFnTest` to create a mock of your store.
+The exported `actions$` subject is how you dispatch into an effect.
 
-:::note Many Test Example you can
+```ts title="component.spec.ts"
+import { actions$, storeTestingFactory } from '@gernsdorfer/ngrx-lite/testing';
+import { createAction } from '@ngrx/store';
+
+export const resetAction = createAction('reset');
+
+it('should react on the reset action', () => {
+  const component = getComponent();
+
+  actions$.next(resetAction());
+
+  expect(component.counterState()).toEqual({ counter: 0 });
+});
+```
+
+## Mock functional stores
+
+To test a lazy functional store, use `createStoreAsFnTest` to derive the store interface, then mock `inject`.
+
+:::note Many test examples you can
 find [here](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/functional-store)
 :::
 
 ```ts title="component.spec.ts"
-import { DynamicState, dynamicStore } from './dynamic-store';
-// get store class Interface
+import { createStoreAsFnTest } from '@gernsdorfer/ngrx-lite/testing';
+import { vi } from 'vitest';
+import { dynamicStore } from './dynamic-store';
+
+// get the store class interface
 type MyStoreInterface = createStoreAsFnTest<typeof dynamicStore>;
 
-// create store Spy
-const dynamicStoreSpy = createSpyObj<MyStoreInterface>({ increment: undefined });
-// spy on store
-spyOn(dynamicStore, 'inject').and.returnValue(dynamicStoreSpy);
+// create a store mock
+const dynamicStoreSpy = {
+  increment: vi.fn(),
+} as unknown as MyStoreInterface;
+
+// mock the injection
+vi.spyOn(dynamicStore, 'inject').mockReturnValue(dynamicStoreSpy);
 ```
+
+:::note
+This repository runs on [Vitest](https://vitest.dev). If your project uses Jasmine or Jest, replace `vi.fn()` and
+`vi.spyOn(…).mockReturnValue(…)` with the equivalents of your runner.
+:::

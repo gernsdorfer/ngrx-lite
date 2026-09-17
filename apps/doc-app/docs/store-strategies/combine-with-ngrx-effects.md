@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 6
 ---
 
 # Share Action events for ngrx
@@ -8,109 +8,141 @@ sidebar_position: 4
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/share-actions)
 
-Create a [ngrx Action](https://ngrx.io/guide/store/actions) to share your State Change Event.
+Every state change of an ngrx-lite store is dispatched as a real [NgRx action](https://ngrx.io/guide/store/actions),
+so you can listen for it in a global `@ngrx/effects` effect.
 
-## Share PATCH/SET Action's
+:::note
+Add `provideEffects([])` to your `ApplicationConfig` — see [Installation](/docs/installation).
+:::
+
+## Share `setState` / `patchState` actions
+
+Build the action with [`getCustomAction`](/docs/api/actions#getcustomaction) and pass the same action name to
+`patchState`:
 
 ```ts title="my-counter.component.ts"
-import { Component } from '@angular/core';
-import { EffectStates, getCustomAction, LoadingStoreState } from '@gernsdorfer/ngrx-lite';
+import { Component, inject } from '@angular/core';
+import { getCustomAction, StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-const storeName = 'COUNTER';
-const actionName = 'INCREMENT';
+const storeName = 'SHARED_ACTIONS';
+const actionName = 'increment';
 
 interface MyState {
-  myValue: string;
+  counter: number;
 }
-// Get Success Action for increment Effect
-export const MyIncrementAction = getCustomAction<{ counter: number }>({
-  storeName: storeName,
-  actionName: actionName,
+
+export const MyIncrementAction = getCustomAction<MyState>({
+  storeName,
+  actionName,
 });
 
-@Component({})
+@Component({
+  selector: 'my-app-counter',
+  template: `<button (click)="increment()">+</button>`,
+})
 export class CounterComponent {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<MyState>({
-    storeName: 'BASIC_COUNTER',
+    storeName,
     defaultState: { counter: 0 },
   });
 
+  public counterState = this.store.state;
+
   increment() {
+    // the action name connects the state change to MyIncrementAction
     this.store.patchState(({ counter }) => ({ counter: counter + 1 }), actionName);
   }
 }
 ```
 
-### Listen in Global Effect
-
-Listen in [@ngrx/Effects](https://ngrx.io/guide/store/actions) for Counter Success Action
+### Listen in a global effect
 
 ```ts title="my-effect.effect.ts"
-import { Actions, createLoadingEffect, ofType } from '@ngrx/effects';
-import { MyIncrementAction } from './my-counter.component.ts';
+import { inject, Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { tap } from 'rxjs';
+import { MyIncrementAction } from './my-counter.component';
 
 @Injectable()
 export class DemoEffect {
-  constructor(private actions$: Actions) {}
+  private actions$ = inject(Actions);
 
-  logActions$ = createLoadingEffect(
+  logActions$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(MyIncrementAction),
-        tap((data) => console.log(data))
+        tap(({ payload }) => console.log('counter is now', payload.counter)),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 }
 ```
 
-## Share Loader Effect Action's
+:::note
+`createEffect` comes from `@ngrx/effects`. Don't confuse it with `createEffect` on the ngrx-lite store, which is
+described in [ComponentStore](/docs/api/component-store#createeffect).
+:::
+
+## Share `loadingEffect` actions
+
+A `loadingEffect` dispatches three actions — `LOAD`, `SUCCESS` and `ERROR`. Build them with
+[`getEffectAction`](/docs/api/actions#geteffectaction):
 
 ```ts title="my-counter.component.ts"
-import { Component } from '@angular/core';
-import { EffectStates, getEffectAction, LoadingStoreState } from '@gernsdorfer/ngrx-lite';
+import { Component, inject } from '@angular/core';
+import { EffectStates, getEffectAction, LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
+import { of } from 'rxjs';
 
-const storeName = 'counter';
+const storeName = 'COUNTER';
 const incrementEffectName = 'increment';
 
 type State = LoadingStoreState<{ counter: number }, { message: string }>;
 
-// Get Success Action (Load/Success/Error) for increment Effect
-export const MyIncrementSuccessAction = getCustomAction<LoadingStoreState<number, never>>({
-  storeName: storeName,
+// get the SUCCESS action for the increment effect
+export const MyIncrementSuccessAction = getEffectAction({
+  storeName,
   effectName: incrementEffectName,
   type: EffectStates.SUCCESS,
 });
 
-@Component({})
+@Component({
+  selector: 'my-app-counter',
+  template: `<button (click)="incrementEffect(1)">+</button>`,
+})
 export class CounterComponent {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentLoadingStore<State['item'], State['error']>({
-    storeName: 'LOADING_STORE',
+    storeName,
   });
 
-  incrementEffect = this.counterStore.createLoadingEffect(incrementEffectName, (counter: number) => of(counter + 1));
+  public counterState = this.store.state;
+
+  incrementEffect = this.store.loadingEffect(incrementEffectName, (counter: number) => of({ counter: counter + 1 }));
 }
 ```
 
-### Listen in Global Effect
-
-Listen in [@ngrx/Effects](https://ngrx.io/guide/store/actions) for Store Success Action
+### Listen in a global effect
 
 ```ts title="my-effect.effect.ts"
-import { Actions, createLoadingEffect, ofType } from '@ngrx/effects';
-import { MyIncrementSuccessAction } from './my-counter.component.ts';
+import { inject, Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { tap } from 'rxjs';
+import { MyIncrementSuccessAction } from './my-counter.component';
 
 @Injectable()
 export class DemoEffect {
-  constructor(private actions$: Actions) {}
+  private actions$ = inject(Actions);
 
-  logActions$ = createLoadingEffect(
+  logActions$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(MyIncrementSuccessAction),
-        tap((data) => console.log(data))
+        tap((data) => console.log(data)),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 }
 ```

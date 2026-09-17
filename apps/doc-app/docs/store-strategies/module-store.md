@@ -2,77 +2,101 @@
 sidebar_position: 2
 ---
 
-# Module Store
+# Scoped Store
 
 [Demo](https://gernsdorfer.github.io/ngrx-lite/sample-app/#/storage-from-service)
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/service-counter)
 
-A Module Store live in Your Module Scope.
+A scoped store lives in the injector it is provided in — a route, a component subtree, or a lazy-loaded feature —
+and is shared by every component inside that scope.
 
-## Define the Store as Service
+## Define the store as a service
 
-```ts title="my-component-store.service.ts"
+```ts title="my-store.service.ts"
+import { inject, Injectable, OnDestroy } from '@angular/core';
+import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+
 export interface MyState {
   counter: number;
 }
 
-@Injectable({ providedIn: 'any' })
+@Injectable()
 export class MyStore implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
     defaultState: { counter: 0 },
   });
-  public counterState$ = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {}
+  public counterState = this.store.state;
+
+  increment() {
+    this.store.patchState(({ counter }) => ({ counter: counter + 1 }), 'INCREMENT');
+  }
 
   ngOnDestroy() {
-    this.myStore.ngOnDestroy();
+    this.store.ngOnDestroy();
   }
 }
 ```
 
-:::note It's necessary to destroy your store after your component destroyed, to avoid side effects. Here you muss call
-the `ngOnDestroy`.
+:::note
+It's necessary to destroy your store after the scope is destroyed, to avoid side effects.
+Call `ngOnDestroy` on the store.
 :::
 
-## Provide your Store in your Module
+## Provide the store for a scope
 
-```ts title="my-app.module.ts"
-import {BrowserModule} from '@angular/platform-browser';
-import {MyStore} from './my-store.service';
-import {MyComponent} from './my-component.component';
+Provide it on a route, so every component of that route shares one instance:
 
-@NgModule({
-  imports: [
-    BrowserModule,
-  ],
-  providers: [
-    // Provide your Store
-    MyStore
-  ],
-  declarations: [
-    MyComponent
-  ]
-})
-```
-
-## Consume your Store in your Component
-
-```ts title="my-component.component.ts"
-import { Component, OnDestroy } from '@angular/core';
+```ts title="routes.ts"
+import { Routes } from '@angular/router';
 import { MyStore } from './my-store.service';
 
-@Component()
-export class CounterComponent implements OnDestroy {
-  public myStoreState$ = this.myStore.counterState$;
+export const routes: Routes = [
+  {
+    path: 'counter',
+    providers: [MyStore],
+    loadComponent: () => import('./counter.component').then((m) => m.CounterComponent),
+  },
+];
+```
 
-  constructor(private myStore: MyStore) {}
+…or on a component, so the instance lives with that component and its children:
+
+```ts title="parent.component.ts"
+@Component({
+  selector: 'my-app-parent',
+  providers: [MyStore],
+  imports: [ChildAComponent, ChildBComponent],
+  template: `
+    <my-app-child-a />
+    <my-app-child-b />
+  `,
+})
+export class ParentComponent {}
+```
+
+## Consume the store
+
+```ts title="counter.component.ts"
+import { Component, inject } from '@angular/core';
+import { MyStore } from './my-store.service';
+
+@Component({
+  selector: 'my-app-counter',
+  template: `<h2>{{ counterState().counter }}</h2>`,
+})
+export class CounterComponent {
+  private myStore = inject(MyStore);
+
+  public counterState = this.myStore.counterState;
 }
 ```
 
-:::note if you provide your store in Multiple Modules create your Store with a dynamic storeName. How you define a
-dynamic storeName you can find [here](/docs/store-strategies/multiple-store-instances)
-
+:::note
+If you provide your store in multiple scopes at the same time, create it with a dynamic store name — otherwise both
+instances write to the same key. See [Multiple Store instances](/docs/store-strategies/multiple-store-instances).
 :::

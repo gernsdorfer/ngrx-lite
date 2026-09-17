@@ -1,38 +1,57 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 # Installation
 
-Install the library using Yarn or NPM
+## Install the packages
+
+`@gernsdorfer/ngrx-lite` declares the NgRx packages below as peer dependencies, so install them alongside the library.
 
 yarn
 
 ```shell
-yarn add @ngrx/store @ngrx/effects @ngrx/component-store @gernsdorfer/ngrx-lite
+yarn add @gernsdorfer/ngrx-lite @ngrx/store @ngrx/effects @ngrx/component-store @ngrx/operators @ngrx/store-devtools
 ```
 
 npm
 
 ```shell
-npm install @ngrx/store @ngrx/effects @ngrx/component-store @gernsdorfer/ngrx-lite
+npm install @gernsdorfer/ngrx-lite @ngrx/store @ngrx/effects @ngrx/component-store @ngrx/operators @ngrx/store-devtools
 ```
 
-# Import StoreModule
+:::note
+Version 22 requires Angular 22 and NgRx 22. For Angular 21 use `@gernsdorfer/ngrx-lite@21`.
+:::
 
-Import the `StoreModule` in your root module
+## Provide the store
 
-```ts title="app.module.ts"
-import { NgModule } from '@angular/core';
-import { StoreModule } from '@ngrx/store';
+Every component store registers itself in the global `@ngrx/store` tree, so the root store has to exist.
+Add the providers to your `ApplicationConfig`:
 
-@NgModule({
-  imports: [
-    //...
-    StoreModule.forRoot({}),
-    // ...
+```ts title="app.config.ts"
+import { ApplicationConfig } from '@angular/core';
+import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideStore({}),
+    // required if you use createEffect or repeatActions
+    provideEffects([]),
   ],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
+};
 ```
+
+```ts title="main.ts"
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
+
+bootstrapApplication(AppComponent, appConfig);
+```
+
+:::tip
+To inspect your stores in the Redux DevTools, add `provideStoreDevtools` as described in
+[Store Devtools](/docs/dev-tools). The `monitor` option is mandatory there.
+:::
