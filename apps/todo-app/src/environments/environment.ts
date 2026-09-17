@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  // the json-server started by `nx run todo-app:serve:todo-db-server`
+  apiUrl: 'http://localhost:3000',
 };
 
 /*
