@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 5
 ---
 
 # Functional Store
@@ -8,95 +8,146 @@ sidebar_position: 3
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/functional-store)
 
-Store can now create as a function and can be used as a root store or as a lazy store.
+A store can be created as a function and used either as a root store or as a lazy store. `createStoreAsFn` returns an
+object with an `inject()` method, so consumers don't need to know how the store is provided.
 
 ## Root Stores
 
-Root Stores are created once and live as long as the application lives.
-So you can create a store for a component and use it in every other component.
+Root stores are created once and live as long as the application does, so you can use the same instance in every
+component.
 
-### Define the Store as Root
+### Define the store as root
 
-Define your Service providedIn in `root`
+```ts title="root-store.ts"
+import { inject, Injectable } from '@angular/core';
+import { createStoreAsFn, StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-```ts title="my-component-store.service.ts"
-export interface MyState {
-  counter: number;
-}
+export type RootState = { counter: number };
+
 const providedIn = 'root';
 
 @Injectable({ providedIn })
-class RootStore implements OnDestroy {
+class RootStoreService {
   private storeFactory = inject(StoreFactory);
-  private store = this.storeFactory.createComponentStore<MyState>({
-    storeName: 'BASIC_COUNTER',
+
+  private store = this.storeFactory.createComponentStore<RootState>({
+    storeName: 'FunctionRootStore',
     defaultState: { counter: 0 },
   });
-  public state$ = this.store.state$;
+
+  public state = this.store.state;
+
+  increment(counter: number) {
+    this.store.setState({ counter }, 'INCREMENT');
+  }
 }
-export const rootStore = createStoreAsFn(RootStore, {
-  providedIn: providedIn,
-});
+
+export const rootStore = createStoreAsFn(RootStoreService, { providedIn });
 ```
 
-### Consume your Root Store in your Component
+### Consume your root store
 
-```ts title="my-component.component.ts"
-import { Component, OnDestroy } from '@angular/core';
-import { rootStore } from './my-store.service';
+```ts title="counter.component.ts"
+import { Component } from '@angular/core';
+import { rootStore } from './root-store';
 
-@Component()
+@Component({
+  selector: 'my-app-counter',
+  template: `<h2>{{ state().counter }}</h2>`,
+})
 export class CounterComponent {
   private rootStore = rootStore.inject();
-  public state$ = this.rootStore.counterState$;
+
+  public state = this.rootStore.state;
 }
 ```
+
+:::note
+A root store is never destroyed, so it does not implement `OnDestroy`.
+:::
 
 ## Lazy Stores
 
-Lazy Stores are created on demand and are destroyed when not used anymore.
-So you can create a store for a component and destroy it when the component is destroyed.
-It's necassary to implement the `OnDestroy` interface to destroy the store.
+Lazy stores are created on demand and destroyed when they are no longer used. Extend `DynamicStore` with your store
+names so each instance gets its own key, and implement `OnDestroy` to tear the store down.
 
-### Define the Store as Root
+### Define the store as lazy
 
-Define your Lazy Service providedIn in `root`
+```ts title="dynamic-store.ts"
+import { inject, Injectable, OnDestroy } from '@angular/core';
+import { createStoreAsFn, DynamicStore, StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-```ts title="my-component-store.service.ts"
-export interface MyState {
-  counter: number;
-}
+export type DynamicState = { counter: number };
 type MyDynamicStoreNames = 'StoreA' | 'StoreB';
 
-const providedIn = null;
-
-@Injectable({ providedIn })
-class LazyStore extends DynamicStore<MyDynamicStoreNames> implements OnDestroy {
+@Injectable()
+class DynamicStoreService extends DynamicStore<MyDynamicStoreNames> implements OnDestroy {
   private storeFactory = inject(StoreFactory);
-  private store = this.storeFactory.createComponentStore<MyState>({
-    storeName: 'BASIC_COUNTER',
+
+  private store = this.storeFactory.createComponentStore<DynamicState>({
+    storeName: 'Function_Store',
     defaultState: { counter: 0 },
   });
-  public state$ = this.store.state$;
+
+  public state = this.store.state;
+
+  increment(counter: number) {
+    this.store.setState({ counter }, 'INCREMENT');
+  }
 
   ngOnDestroy() {
     this.store.ngOnDestroy();
   }
 }
-export const lazyStore = createStoreAsFn(LazyStore, {
-  providedIn: providedIn,
+
+export const dynamicStore = createStoreAsFn(DynamicStoreService);
+```
+
+:::note
+A lazy store is declared with a plain `@Injectable()` — no `providedIn` — and `createStoreAsFn` is called without
+the second argument. The library creates and provides the instance for you.
+:::
+
+### Consume your lazy store
+
+Pass the instance name to `inject()`. Each name is a separate store instance:
+
+```ts title="counter.component.ts"
+import { Component } from '@angular/core';
+import { dynamicStore } from './dynamic-store';
+
+@Component({
+  selector: 'my-app-counter',
+  template: `<h2>{{ state().counter }}</h2>`,
+})
+export class CounterComponent {
+  private store = dynamicStore.inject('StoreA');
+
+  public state = this.store.state;
+
+  increment() {
+    this.store.increment(this.state().counter + 1);
+  }
+}
+```
+
+## Share actions of a lazy store
+
+Use [`getCustomActionWithDynamicStore`](/docs/api/actions#getcustomactionwithdynamicstore) to build an action for a
+specific instance — `getCustomAction` does not support dynamic store names.
+
+```ts title="dynamic-store.ts"
+import { getCustomActionWithDynamicStore } from '@gernsdorfer/ngrx-lite';
+
+export const dynamicStoreASuccessAction = getCustomActionWithDynamicStore<MyDynamicStoreNames>({
+  storeName: 'Function_Store',
+  dynamicStoreName: 'StoreA',
+  actionName: 'INCREMENT',
 });
 ```
 
-### Consume your Root Store in your Component
+Another store can then react to it with [`onActions`](/docs/api/component-store#onactions):
 
-```ts title="my-component.component.ts"
-import { Component, OnDestroy } from '@angular/core';
-import { lazyStore } from './my-store.service';
-
-@Component()
-export class CounterComponent {
-  private rootStore = lazyStore.inject();
-  public state$ = this.rootStore.state$;
-}
+```ts title="root-store.ts"
+onLazyStoreASuccess = this.store.onActions([dynamicStoreASuccessAction]);
 ```

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Multiple Store instances
@@ -8,39 +8,45 @@ sidebar_position: 2
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/muliple-instances)
 
-:::tip to create multiple instances of a store, you can now use much easier [Functional Store](./functional-store) way.
+:::tip
+To create multiple instances of a store, the [Functional Store](./functional-store) is the easier way.
 :::
 
-A Store can live in multiple Components/Module with own Scope
+The same store class can be instantiated several times, as long as each instance gets its own store name — the name
+is the key in the global store, so two instances sharing it would overwrite each other.
 
-## Define the Store as Service and a dynamic Store Name
+## Define the store with a dynamic store name
 
-```ts title="my-component-store.service.ts"
-import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
-import { of } from 'rxjs';
+Provide the name through an `InjectionToken` and read it with `inject(token, { optional: true })`:
+
+```ts title="my-store.service.ts"
+import { inject, Injectable, InjectionToken, OnDestroy } from '@angular/core';
 import { StoreFactory } from '@gernsdorfer/ngrx-lite';
 
-// define an InjectionToken for your StoreName
-export const MyStoreName = new InjectionToken('MyStoreName');
+// define an InjectionToken for your store name
+export const MyStoreName = new InjectionToken<string>('MyStoreName');
+
 export interface MyState {
   counter: number;
 }
 
 @Injectable()
 export class MyStore implements OnDestroy {
+  private storeFactory = inject(StoreFactory);
+
+  // read the provided store name, fall back to a default
+  private storeName = inject(MyStoreName, { optional: true });
+
   private store = this.storeFactory.createComponentStore<MyState>({
-    // use the provided StoreName
     storeName: this.storeName || 'BASIC_COUNTER',
     defaultState: { counter: 0 },
   });
 
-  public counterState$ = this.store.state$;
+  public counterState = this.store.state;
 
-  constructor(
-    private storeFactory: StoreFactory,
-    // import your StoreName
-    @Optional() @Inject(MyStoreName) private storeName: string,
-  ) {}
+  increment() {
+    this.store.patchState(({ counter }) => ({ counter: counter + 1 }), 'INCREMENT');
+  }
 
   ngOnDestroy() {
     this.store.ngOnDestroy();
@@ -48,29 +54,40 @@ export class MyStore implements OnDestroy {
 }
 ```
 
-:::note It's necessary to destroy your store after your component destroyed, to avoid side effects. Here you muss call
-the `ngOnDestroy`.
+:::note
+Read the token with `inject()` in a field initializer, not via a constructor parameter — field initializers run
+before the constructor body, so a constructor-injected name would still be `undefined` when the store is created.
 :::
 
-## Consume and provide your Store in your Component
+## Provide and consume the store per component
 
-```ts title="my-component.component.ts"
-import { Component, OnDestroy } from '@angular/core';
+Each component provides the store together with its own name:
+
+```ts title="counter-a.component.ts"
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MyStore, MyStoreName } from './my-store.service';
 
 @Component({
+  selector: 'my-app-counter-a',
+  template: `<h2>{{ counterState().counter }}</h2>`,
   providers: [
     MyStore,
-    // Define a Dynamic StoreName
+    // define a dynamic store name for this instance
     {
       provide: MyStoreName,
-      useValue: 'counterStore',
+      useValue: 'counterStoreA',
     },
   ],
 })
-export class CounterComponent implements OnDestroy {
-  public myStoreState$ = this.myStore.counterState$;
+export class CounterAComponent implements OnDestroy {
+  private myStore = inject(MyStore);
 
-  constructor(private myStore: MyStore) {}
+  public counterState = this.myStore.counterState;
+
+  ngOnDestroy() {
+    this.myStore.ngOnDestroy();
+  }
 }
 ```
+
+A second component does the same with a different name, and both appear as separate entries in the DevTools.

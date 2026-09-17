@@ -1,29 +1,54 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 # Store Devtools
 
-For Debug the State with the [Redux Devtools Extension](https://github.com/zalmoxisus/redux-devtools-extension/), it's
-only necessary to install and register the [@ngrx/store-devtools](https://ngrx.io/guide/store-devtools) in your root Module.
+To debug your state with the [Redux Devtools Extension](https://github.com/reduxjs/redux-devtools), install and
+register [@ngrx/store-devtools](https://ngrx.io/guide/store-devtools).
 
-```ts title="app.module.ts"
-import { NgModule } from '@angular/core';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+```ts title="app.config.ts"
+import { ApplicationConfig, isDevMode } from '@angular/core';
+import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
-@NgModule({
-  imports: [
-    StoreDevtoolsModule.instrument({
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideStore({}),
+    provideEffects([]),
+    provideStoreDevtools({
       name: 'ngrx-lite-demo',
       maxAge: 25,
-      logOnly: false,
-      // define the monitor Property here
+      logOnly: !isDevMode(),
+      // define the monitor property here
       monitor: (state, action) => action,
     }),
   ],
-})
-export class AppModule {}
+};
 ```
 
-:::note It's important to set the `monitor` property in your devToolConfig, otherwise an State Import is not possible.
+:::caution
+It's important to set the `monitor` property in your devtools config, otherwise importing a state is not possible.
+The library reads the monitored actions to re-register reducers for stores that are not currently mounted.
 :::
+
+:::note
+`maxAge` should be `5` or higher. With a lower value the library warns on the console, because too few retained
+actions break the time-travel sync.
+:::
+
+## What it looks like
+
+### Store is initialized
+
+After the store is created you find it in the Redux DevTools:
+
+![Component store in the DevTools after initialization](../../../screens/component-store-devtools-init.png)
+
+### After a state change
+
+`setState` and `patchState` show up as regular actions. Pass a custom action name as the second
+argument to make them easy to spot:
+
+![Component store in the DevTools after patchState](../../../screens/component-store-devtools-patch.png)

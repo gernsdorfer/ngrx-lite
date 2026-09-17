@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Global Store
@@ -8,44 +8,69 @@ sidebar_position: 3
 
 [Demo-Code](https://github.com/gernsdorfer/ngrx-lite/tree/master/apps/sample-app/src/app/component-store/global-counter)
 
-:::tip to create multiple instances of a store, you can now use much easier [Functional Store](./functional-store) way.
+:::tip
+To create multiple instances of a store, the [Functional Store](./functional-store) is the easier way.
 :::
 
-A Module Store live in your Application
+A global store lives as long as your application does and is shared by every component.
 
-## Define the Store as Service
+## Define the store as a service
 
-Define your Service providedIn in `root`
+Provide your service in `root`:
 
-```ts title="my-component-store.service.ts"
+```ts title="my-store.service.ts"
+import { inject, Injectable } from '@angular/core';
+import { StoreFactory } from '@gernsdorfer/ngrx-lite';
+
 export interface MyState {
   counter: number;
 }
+
 @Injectable(
-  // Define your Store in the global Scope
+  // define your store in the global scope
   { providedIn: 'root' },
 )
-export class MyStore implements OnDestroy {
+export class MyStore {
+  private storeFactory = inject(StoreFactory);
+
   private store = this.storeFactory.createComponentStore<MyState>({
     storeName: 'BASIC_COUNTER',
     defaultState: { counter: 0 },
   });
-  public counterState$ = this.store.state$;
 
-  constructor(private storeFactory: StoreFactory) {}
+  public counterState = this.store.state;
+
+  increment() {
+    this.store.patchState(({ counter }) => ({ counter: counter + 1 }), 'INCREMENT');
+  }
 }
 ```
 
-## Consume your Store in your Component
+:::note
+A store provided in `root` is never destroyed, so it does **not** implement `OnDestroy` — unlike a
+[component](/docs/store-strategies/component-store) or [scoped](/docs/store-strategies/module-store) store.
+:::
 
-```ts title="my-component.component.ts"
-import { Component, OnDestroy } from '@angular/core';
+## Consume the store in your component
+
+```ts title="counter.component.ts"
+import { Component, inject } from '@angular/core';
 import { MyStore } from './my-store.service';
 
-@Component()
-export class CounterComponent implements OnDestroy {
-  public counterState$ = this.myStore.counterState$;
+@Component({
+  selector: 'my-app-counter',
+  template: `
+    <h2>{{ counterState().counter }}</h2>
+    <button (click)="increment()">+</button>
+  `,
+})
+export class CounterComponent {
+  private myStore = inject(MyStore);
 
-  constructor(private myStore: MyStore) {}
+  public counterState = this.myStore.counterState;
+
+  increment() {
+    this.myStore.increment();
+  }
 }
 ```
