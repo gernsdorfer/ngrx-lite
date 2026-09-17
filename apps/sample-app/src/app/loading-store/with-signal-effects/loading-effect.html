@@ -5,7 +5,17 @@
     } Loading-Store
   </div>
   <div subtitle>Loading Store with Signal effects</div>
-  <div content><h2 class="counter">{{ counterState().item?.counter }}</h2></div>
+  <div content>
+    <h2 class="counter">{{ counterState().item?.counter }}</h2>
+    <hr />
+    <small>
+      This wires a signal source to a <code>loadingEffect</code> with a manual
+      <code>effect()</code>. For a signal driven loader, prefer
+      <a class="reactive-link" routerLink="/reactive-loading"
+        >reactiveLoadingEffect</a
+      >.
+    </small>
+  </div>
   <div actions>
     <button class="increment" (click)="increment()" mat-fab>+</button>
   </div>

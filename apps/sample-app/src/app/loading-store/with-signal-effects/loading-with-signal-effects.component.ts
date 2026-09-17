@@ -1,7 +1,7 @@
 import { Component, effect, inject, OnDestroy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoadingStoreState, StoreFactory } from '@gernsdorfer/ngrx-lite';
 import { of } from 'rxjs';
 import { UiCardComponent } from '../../shared/ui/card-component';
@@ -15,7 +15,7 @@ export type MyState = LoadingStoreState<
 @Component({
   selector: 'my-app-loading-store-with-signal-effects',
   templateUrl: 'loading-effect.html',
-  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent],
+  imports: [UiCardComponent, MatButtonModule, UiSpinnerComponent, RouterLink],
 })
 export class LoadingWithSignalEffectsComponent implements OnDestroy {
   private storeFactory = inject(StoreFactory);
@@ -38,15 +38,13 @@ export class LoadingWithSignalEffectsComponent implements OnDestroy {
     of({ counter }),
   );
 
-  autoIncrement = effect(
-    () => {
-      const counter = this.queryParams()?.['counter'] || 0;
-      this.incrementEffect(parseInt(counter, 10));
-    },
-    {
-      allowSignalWrites: true,
-    },
-  );
+  // This bridges a signal source to a loadingEffect by hand. For a signal
+  // driven loader, reactiveLoadingEffect does this for you — see the
+  // "Reactive Loading" demo.
+  autoIncrement = effect(() => {
+    const counter = this.queryParams()?.['counter'] || 0;
+    this.incrementEffect(parseInt(counter, 10));
+  });
 
   increment() {
     this.router.navigate([], {

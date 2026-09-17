@@ -7,6 +7,7 @@ import {
   StoreFactory,
 } from '@gernsdorfer/ngrx-lite';
 import { map } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { TodoModel } from '../models/todo.model';
 
 export type TodoListState = LoadingStoreState<boolean, never>;
@@ -41,18 +42,18 @@ export class TodoAdminStore {
     effectUpdateName,
     ({ todoId, completed }: { todoId: number; completed: boolean }) =>
       this.http
-        .patch(`http://localhost:3000/todos/${todoId}`, { completed })
-        .pipe(map(() => true))
+        .patch(`${environment.apiUrl}/todos/${todoId}`, { completed })
+        .pipe(map(() => true)),
   );
 
   create = this.store.loadingEffect(
     effectCreateName,
     ({ title }: { title: string }) =>
       this.http
-        .post(`http://localhost:3000/todos/`, <TodoModel>{
+        .post(`${environment.apiUrl}/todos/`, <TodoModel>{
           title,
           completed: false,
         })
-        .pipe(map(() => true))
+        .pipe(map(() => true)),
   );
 }
