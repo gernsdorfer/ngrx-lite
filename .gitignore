@@ -56,3 +56,6 @@ vitest.config.*.timestamp*
 .claude/settings.local.json
 .nx/self-healing
 .nx/migrate-runs
+
+# this repo uses yarn — npm lockfiles would drift and trigger false dependabot alerts
+package-lock.json
