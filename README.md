@@ -1,7 +1,7 @@
 [![npm](https://img.shields.io/npm/v/@gernsdorfer/ngrx-lite)](https://www.npmjs.com/package/@gernsdorfer/ngrx-lite)
 [![npm next](https://img.shields.io/npm/v/@gernsdorfer/ngrx-lite/next?label=next)](https://www.npmjs.com/package/@gernsdorfer/ngrx-lite?activeTab=versions)
 [![CI](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/gernsdorfer/ngrx-lite/actions/workflows/ci.yml)
-[![license](https://img.shields.io/npm/l/@gernsdorfer/ngrx-lite)](https://www.npmjs.com/package/@gernsdorfer/ngrx-lite)
+[![license](https://img.shields.io/npm/l/@gernsdorfer/ngrx-lite)](https://github.com/gernsdorfer/ngrx-lite/blob/master/LICENSE)
 
 # NgRxLite
 
