@@ -1,13 +1,23 @@
-## 22.0.0-rc.0 (2026-09-11)
+## 22.0.0 (2026-09-17)
 
 #### :boom: Breaking Change
 
 - [#174](https://github.com/gernsdorfer/ngrx-lite/pull/174) require Angular 22 and NgRx 22 — peer dependencies move from `>= 21.0.0` to `>= 22.0.0`, Angular 21 is no longer supported ([@gernsdorfer](https://github.com/gernsdorfer))
 - [#175](https://github.com/gernsdorfer/ngrx-lite/pull/175) drop the unused `@angular/platform-browser-dynamic` peer dependency ([@gernsdorfer](https://github.com/gernsdorfer))
 
+#### :memo: Documentation
+
+- [#176](https://github.com/gernsdorfer/ngrx-lite/pull/176) rewrite the documentation for Angular 22 — standalone providers, `inject()`, the signal-based `state`, and Vitest instead of Jasmine ([@gernsdorfer](https://github.com/gernsdorfer))
+- [#176](https://github.com/gernsdorfer/ngrx-lite/pull/176) turn the README into a landing page that links into the docs, instead of duplicating them ([@gernsdorfer](https://github.com/gernsdorfer))
+
+#### :house: Internal
+
+- [#176](https://github.com/gernsdorfer/ngrx-lite/pull/176) ship the MIT `LICENSE` with the published package ([@gernsdorfer](https://github.com/gernsdorfer))
+- [#181](https://github.com/gernsdorfer/ngrx-lite/pull/181) modernize the demo apps — `autoLoad` in the todo app, drop the deprecated `allowSignalWrites` flag ([@gernsdorfer](https://github.com/gernsdorfer))
+
 #### :memo: Note
 
-The library source is unchanged since 21.1.0 — no runtime API was added, removed or altered. This release only moves the supported framework range and rebuilds the package with TypeScript 6 and ng-packagr 22.
+The library source is unchanged since 21.1.0 — no runtime API was added, removed or altered. This release moves the supported framework range and rebuilds the package with TypeScript 6 and ng-packagr 22.
 
 #### Committers: 1
 
