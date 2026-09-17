@@ -53,6 +53,26 @@ export class AppComponent {
 Every effect sets `isLoading` to `true` while it runs, so you can show a loading indicator in your UI.
 :::
 
+### The effect lifecycle in the DevTools
+
+Each `loadingEffect` dispatches up to three actions. This is what they look like:
+
+**Store is initialized**
+
+![Loading store in the DevTools after initialization](../../../../screens/init.png)
+
+**Effect is running — `isLoading` is true**
+
+![Loading store while the effect is running](../../../../screens/load.png)
+
+**Effect succeeded — `item` is set**
+
+![Loading store after a successful effect](../../../../screens/success.png)
+
+**Effect failed — `error` is set**
+
+![Loading store after a failed effect](../../../../screens/error.png)
+
 ### Option:skipSamePendingActions
 
 Run an action only once while the effect is still running.

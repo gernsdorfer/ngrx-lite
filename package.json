@@ -12,12 +12,13 @@
     "affected:e2e": "nx affected --target=e2e",
     "build": "nx build",
     "build:docs": "nx run doc-app:build && nx run sample-app:build:production --baseHref=/ngrx-lite/sample-app/ --outputPath.base=./dist/apps/doc-app/sample-app",
-    "build:release": "nx run store:build:production",
+    "build:release": "yarn sync:readme && nx run store:build:production",
     "format:check": "nx format:check",
     "format": "nx format",
     "ng": "nx",
     "start": "nx run sample-app:serve",
-    "test": "nx test"
+    "test": "nx test",
+    "sync:readme": "node -e \"require('fs').copyFileSync('README.md','libs/store/README.md')\""
   },
   "private": true,
   "repository": {

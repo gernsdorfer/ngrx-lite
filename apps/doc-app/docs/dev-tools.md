@@ -37,3 +37,18 @@ The library reads the monitored actions to re-register reducers for stores that 
 `maxAge` should be `5` or higher. With a lower value the library warns on the console, because too few retained
 actions break the time-travel sync.
 :::
+
+## What it looks like
+
+### Store is initialized
+
+After the store is created you find it in the Redux DevTools:
+
+![Component store in the DevTools after initialization](../../../screens/component-store-devtools-init.png)
+
+### After a state change
+
+`setState` and `patchState` show up as regular actions. Pass a custom action name as the second
+argument to make them easy to spot:
+
+![Component store in the DevTools after patchState](../../../screens/component-store-devtools-patch.png)
